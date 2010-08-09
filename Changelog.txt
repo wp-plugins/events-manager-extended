@@ -1,0 +1,48 @@
+20100731
+- fix for green screen caused by newlines in the location balloon
+- fix for rsvp contact mail (new: #_PLAIN_CONTACTEMAIL)
+- #_BOOKEDSEATS en #_AVAILABLESEATS are deprecated, in favor of #_RESERVEDSPACES and #_AVAILABLESPACES
+- the "add booking form" now shows only the number of available seats, not just the number 10
+- in order to not show a dropdown of 1000, we limit the number of seats you can book to a max of 10
+- default settings were not being set when activating the plugin, fixed
+
+20100801
+- event_id, person_id in bookings table are not tinyints, also removed the
+limit of tinyint for the number of seats
+- no seats available anymore? Then no booking form as well.
+- now an error is returned to the user if on a booking form not all required fields are filled in
+- captcha added for booking form
+- the shortcode [locations_map] once again works, failure was also due to newlines in the location balloon (fix in function dbem_global_map_json in dbem_people.php)
+
+20100802
+- some html issues in the widget edit screen were fixed. Next up is a rewrite of the widgets to the api used from wordpress 2.8 onwards, resulting in cleaner code and multi-instance widgets
+
+20100803
+- rewrite of the widgets to the api used from wordpress 2.8 onwards, resulting in cleaner code and multi-instance widgets
+- some html cleanup for w3 markup validation
+- after booking for an event, we jump to the message for the event, not the
+form itself
+- if the location name is empty: we don't show the map for the event
+
+20100804
+- you can now use normal placeholders in custom attribute values. Eg, in a template, you just add
+#_{MYOWNDATE}
+to the template
+And then in the event, you can define this attribute with the value "#l #F #j, #Y" or with a complete string to your liking.
+- you can now use custom attributes in email templates as well (eg. for different payment options per event).
+- AM/PM notation now correct when using #_12HSTARTTIME and #_12HENDTIME as placeholders
+
+20100805
+- you can now have custom email settings and custom page formats per event, very convenient if the default is not ok for a special event.
+
+20100806
+- recursion has been made a bit more complete: you can now have recursion based on the current day of the month. This makes it now possible to have eg. yearly recursion for a birthday or so (just start on the correct day and choose 12 months for recursion).
+- some change to the DB for recursion description to be correct (recurrence_byday is in fact a comma-seperated string containing the days of the week this event happens on)
+
+20100807
+- the shortcode [locations_map] once again accepts "scope" as a parameter. Eg. [locations_map eventful=true scope=future] 
+- submenu pagename cleanup, html cleanup
+- small category fix on the event overview/edit page (the event_id was used instead of event_category_id)
+
+20100808
+- some recurrence fixes, should cover all cases of recurrence now
