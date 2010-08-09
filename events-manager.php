@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: Events Manager
-Version: 2.2.2
-Plugin URI: http://davidebenini.it/wordpress-plugins/events-manager/
+Plugin Name: Events Manager Extended
+Version: 3.0.0
+Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, Province, etc).
-Author: Davide Benini
-Author URI: http://www.davidebenini.it/blog
+Author: Franky Van Liedekerke
+Author URI: http://www.e-dynamics.be/wordpress
 */
 
 /*
