@@ -1,26 +1,28 @@
-=== Events Manager ===  
-Contributors: nutsmuggler, netweblogic    
-Donate link: http://davidebenini.it  
+=== Events Manager Extended ===  
+Contributors: liedekef
+Donate link: http://www.e-dynamics.be
 Tags: events, manager, calendar, gigs, concert, maps, geotagging  
-Requires at least: 2.7   
-Tested up to: 2.9.2   
-Stable tag: 2.2.2   
+Requires at least: 2.8   
+Tested up to: 3.0.1
+Stable tag: 3.0.0
 
 Manage events and display them in your blog. Includes recurring events, location management, calendar, Google map integration, RSVP. 
              
 == Description ==
 
-Events Manager 2.0 is a full-featured event management solution for Wordpress. Events Manager supports recurring events, venues data, RSVP and maps. With Events Manager you can plan and publish your tour, or let people reserve spaces for your weekly meetings. You can then add events list, calendars and description to your blog using a sidebar widget or shortcodes; if you’re web designer you can simply employ the template tags provided by Events Manager. 
+Events Manager Extended is based on Events Manager (http://davidebenini.it)
 
-Events Manager integrates with Google Maps; thanks the geocoding, Events Manager can find the location of your events, and accordingly display a map. To enable Google Maps integration, you need a Google maps API key, which you can obtain freely at the [Google Maps API Signup Page](http://code.google.com/apis/maps/signup.html).
+Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports recurring events, venues data, RSVP and maps. With Events Manager Extended you can plan and publish your tour, or let people reserve spaces for your weekly meetings. You can then add events list, calendars and description to your blog using a sidebar widget or shortcodes; if you’re web designer you can simply employ the template tags provided by Events Manager Extended. 
 
-Events Manager provides also a RSS feed, to keep your subscribers updated about the events you're organising.
+Events Manager Extended integrates with Google Maps; thanks the geocoding, Events Manager Extended can find the location of your events, and accordingly display a map. To enable Google Maps integration, you need a Google maps API key, which you can obtain freely at the [Google Maps API Signup Page](http://code.google.com/apis/maps/signup.html).
 
-Events manager is fully customisable; you can customise the amount of data displayed and their format in events lists, pages and in the RSS feed. You can choose to show or hide the events page, and change its title.   
+Events Manager Extended provides also a RSS feed, to keep your subscribers updated about the events you're organising.
 
-Events Manager is fully localisable and already localised in Italian, Spanish, German and Swedish.
+Events Manager Extended is fully customisable; you can customise the amount of data displayed and their format in events lists, pages and in the RSS feed. You can choose to show or hide the events page, and change its title.   
 
-For more information visit the [Documentation Page](http://davidebenini.it/wordpress-plugins/events-manager/) and [Support Forum](http://davidebenini.it/events-manager-forum/).
+Events Manager Extended is fully localisable and already partially localised in Italian, Spanish, German and Swedish.
+
+For more information visit the [Documentation Page](http://www.e-dynamics.be/wordpress/) and [Support Forum](http://www.e-dynamics.be/bbpress/).
 
 == Installation ==
 
@@ -28,18 +30,11 @@ For more information visit the [Documentation Page](http://davidebenini.it/wordp
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Add events list or calendars following the instructions in the Usage section.
 
-Events Manager 1.* adopters should:
-
-1. backup the Wordpress database. 
-2. deactivate Events Manager 1.*
-3. delete Events Managers 1.* and upload Events Manager 2.* to the server
-4. activate Events Manager 2.*
-
-Events Manager should take care of your events database migration automatically, but since this is a beta release it's much better to perform a database backup, as previously suggested.
+Events Manager Extended should take care of your events database migration automatically, but it's always advised to perform a database backup, as previously suggested.
 
 == Usage == 
 
-After the installation, Events Manager add a top level "Events" menu to your Wordpress Administration.
+After the installation, Events Manager Extended add a top level "Events" menu to your Wordpress Administration.
 
 *  The *Events* page lets you edit or delete the events. The *Add new* page lets you insert a new event.  
 	In the event edit page you can specify the number of spaces available for your event. Yuo just need to turn on RSVP for the event and specify the spaces available in the right sidebar box.  
@@ -48,7 +43,7 @@ After the installation, Events Manager add a top level "Events" menu to your Wor
 *  The *People* page serves as a gathering point for the information about the people who reserved a space in your events.
 *  The *Settings* page allows a fine-grained control over the plugin. Here you can set the [format](#formatting-events) of events in the Events page.
 
-Events list and calendars can be added to your blogs through widgets, shortcodes and template tags. See the full documentation at the [Events Manager Support Page](http://davidebenini.it/wordpress-plugins/events-manager/).
+Events list and calendars can be added to your blogs through widgets, shortcodes and template tags. See the full documentation at the [Events Manager Extended Support Page](http://davidebenini.it/wordpress-plugins/events-manager/).
  
 == Frequently Asked Questions ==
 
@@ -80,9 +75,9 @@ Sure, you can do that by editing the page and changing its [template](http://cod
 
 Yes, you can use css to match the id and classes of the events markup.
 
-= How does Events Manager work? =   
+= How does Events Manager Extended work? =   
 
-When installed, events Manager creates a special "Events" page. This page is used for the dynamic content of the events. All the events link actually link to this page, which gets rendered differently for each event.
+When installed, Events Manager Extended creates a special "Events" page. This page is used for the dynamic content of the events. All the events link actually link to this page, which gets rendered differently for each event.
 
 = Are events posts? =
 
@@ -93,15 +88,15 @@ Events aren't posts. They are stored in a different table and have no relationsh
 I decided to treat events as a separate class because my priority was the usability of the user interface in the administration; I wanted my users to have a simple, straightforward way of inserting the events, without confusing them with posts. I wanted to make my own simple event form.  
 If you need to treat events like posts, you should use one of the other excellent events plugin.
 
-= Is Events Manager available in my language? = 
+= Is Events Manager Extended available in my language? = 
 
-At this stage, Events Manager is only available in English and Italian. Yet, the plugin is fully localisable; I will welcome any translator willing to add to this package a translation of Events Manager into his mother tongue.
+At this stage, Events Manager Extended is only available in English and Italian. Yet, the plugin is fully localisable; I will welcome any translator willing to add to this package a translation of Events Manager Extended into his mother tongue.
 
 == Screenshots ==
 
 1. A default event page with a map automatically pulled from Google Maps through the #_MAP placeholder.
 2. The events management page.
-3. The Events Manager Options page.
+3. The Events Manager Extended Options page.
 
 == Change Log ==
 
@@ -218,3 +213,29 @@ newtweblogic fixed a bug in the install routine
 
 2.2.2
 small fix that stopped custom fields from showing up in events lists.
+
+3.0.0
+Bugfix: Fix for green screen caused by newlines in the location balloon
+Bugfix: Fix for rsvp contact mail (new: #_PLAIN_CONTACTEMAIL)
+Change: #_BOOKEDSEATS en #_AVAILABLESEATS are deprecated, in favor of #_RESERVEDSPACES and #_AVAILABLESPACES
+Change: The "add booking form" now shows only the number of available seats, not just the number 10
+Change: In order to not show a dropdown of 1000, we limit the number of seats you can book to a max of 10 default settings were not being set when activating the plugin
+Bugfix: Event_id, person_id in bookings table are not tinyints, also removed the
+Bugfix: Limit of tinyint for the number of seats
+Change: No seats available anymore? Then no booking form as well.
+Change: Now an error is returned to the user if on a booking form not all required fields are filled in
+Feature: Captcha added for booking form
+Bugfix: The shortcode [locations_map] once again works, failure was also due to newlines in the location balloon (fix in function dbem_global_map_json in dbem_people.php)
+Rewrite of the widgets to the api used from wordpress 2.8 onwards, resulting in cleaner code and multi-instance widgets
+Bugfix: Some html cleanup for w3 markup validation
+Change: If the location name is empty: we don't show the map for the event
+Feature: You can now use normal placeholders in custom attribute values. Eg, in a template, you just add #_{MYOWNDATE} to the template. And then in the event, you can define this attribute with the value "#l #F #j, #Y" or with a complete string to your liking.
+Feature: You can now use custom attributes in email templates as well (eg. for different payment options per event).
+Bugfix: AM/PM notation now correct when using #_12HSTARTTIME and #_12HENDTIME as placeholders
+Feature: You can now have custom email settings and custom page formats per event, very convenient if the default is not ok for a special event.
+Feature: Recursion has been made a bit more complete: you can now have recursion based on the current day of the month. This makes it now possible to have eg. yearly recursion for a birthday or so (just start on the correct day and choose 12 months for recursion).
+Bugfix: Some change to the DB for recursion description to be correct (recurrence_byday is in fact a comma-seperated string containing the days of the week this event happens on)
+Bugfix: the shortcode [locations_map] once again accepts "scope" as a parameter. Eg. [locations_map eventful=true scope=future]
+Change: submenu pagename cleanup, html cleanup
+Bugfix: small category fix on the event overview/edit page (the event_id was used instead of event_category_id)
+
