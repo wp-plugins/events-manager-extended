@@ -12,7 +12,7 @@ Manage events and display them in your blog. Includes recurring events, location
 
 Events Manager Extended is based on Events Manager (http://davidebenini.it)
 
-Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports recurring events, venues data, RSVP and maps. With Events Manager Extended you can plan and publish your tour, or let people reserve spaces for your weekly meetings. You can then add events list, calendars and description to your blog using a sidebar widget or shortcodes; if you’re web designer you can simply employ the template tags provided by Events Manager Extended. 
+Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports recurring events, venues data, RSVP and maps. With Events Manager Extended you can plan and publish your tour, or let people reserve spaces for your weekly meetings. You can then add events list, calendars and description to your blog using a sidebar widget or shortcodes; if you’re a web designer you can simply employ the template tags provided by Events Manager Extended. 
 
 Events Manager Extended integrates with Google Maps; thanks the geocoding, Events Manager Extended can find the location of your events, and accordingly display a map. To enable Google Maps integration, you need a Google maps API key, which you can obtain freely at the [Google Maps API Signup Page](http://code.google.com/apis/maps/signup.html).
 
@@ -26,7 +26,7 @@ For more information visit the [Documentation Page](http://www.e-dynamics.be/wor
 
 == Installation ==
 
-1. Upload the `events-manager` folder to the `/wp-content/plugins/` directory
+1. Upload the `events-manager-extended` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Add events list or calendars following the instructions in the Usage section.
 
