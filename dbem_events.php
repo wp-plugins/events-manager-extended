@@ -946,7 +946,7 @@ function dbem_hello_to_new_user() {
 	$advice = sprintf ( __ ( "<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager</strong>! We hope you like it around here.</p> 
 	<p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>
 	<p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>
-	<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'dbem' ), $current_user->display_name, get_bloginfo ( 'url' ) . '/wp-admin/widgets.php', 'http://davidebenini.it/wordpress-plugins/events-manager#template-tags', 'http://davidebenini.it/wordpress-plugins/events-manager#shortcodes', get_bloginfo ( 'url' ) . '/wp-admin/admin.php?page=events-manager-options', get_bloginfo ( 'url' ) . '/wp-admin/admin.php?page=events-manager&disable_hello_to_user=true' );
+	<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'dbem' ), $current_user->display_name, get_bloginfo ( 'url' ) . '/wp-admin/widgets.php', 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', get_bloginfo ( 'url' ) . '/wp-admin/admin.php?page=events-manager-options', get_bloginfo ( 'url' ) . '/wp-admin/admin.php?page=events-manager&disable_hello_to_user=true' );
 	?>
 <div id="message" class="updated">
 		<?php
@@ -1672,7 +1672,7 @@ function _dbem_is_time_valid($time) {
 // Enqueing jQuery script to make sure it's loaded
 function dbem_enque_scripts() {
 	wp_enqueue_script ( 'jquery' );
-	// wp_enqueue_script('datepicker','/wp-content/plugins/events-manager/jquery-ui-datepicker/jquery-ui-personalized-1.6b.js', array('jquery') );
+	// wp_enqueue_script('datepicker','/wp-content/plugins/events-manager-extended/jquery-ui-datepicker/jquery-ui-personalized-1.6b.js', array('jquery') );
 }
 add_action ( 'template_redirect', 'dbem_enque_scripts' );
 
@@ -1694,17 +1694,17 @@ function dbem_admin_general_script() {
 <script
 	src="<?php
 	bloginfo ( 'wpurl' );
-	?>/wp-content/plugins/events-manager/dbem.js"
+	?>/wp-content/plugins/events-manager-extended/dbem.js"
 	type="text/javascript"></script>
 <script
 	src="<?php
 	bloginfo ( 'wpurl' );
-	?>/wp-content/plugins/events-manager/js/jquery-ui-datepicker/ui.datepicker.js"
+	?>/wp-content/plugins/events-manager-extended/js/jquery-ui-datepicker/ui.datepicker.js"
 	type="text/javascript"></script>
 <script
 	src="<?php
 	bloginfo ( 'wpurl' );
-	?>/wp-content/plugins/events-manager/js/timeentry/jquery.timeentry.js"
+	?>/wp-content/plugins/events-manager-extended/js/timeentry/jquery.timeentry.js"
 	type="text/javascript"></script>   
 <?php
 	
@@ -1716,13 +1716,13 @@ function dbem_admin_general_script() {
 	if (preg_match ( "/en|sk|zh|us|uk/", $locale_code ))
 		$show24Hours = 'false';
 	
-	$locale_file = get_bloginfo ( 'wpurl' ) . "/wp-content/plugins/events-manager/js/jquery-ui-datepicker/i18n/ui.datepicker-$locale_code.js";
+	$locale_file = get_bloginfo ( 'wpurl' ) . "/wp-content/plugins/events-manager-extended/js/jquery-ui-datepicker/i18n/ui.datepicker-$locale_code.js";
 	if (url_exists ( $locale_file )) {
 		?>
 <script
 	src="<?php
 		bloginfo ( 'wpurl' );
-		?>/wp-content/plugins/events-manager/js/jquery-ui-datepicker/i18n/ui.datepicker-<?php
+		?>/wp-content/plugins/events-manager-extended/js/jquery-ui-datepicker/i18n/ui.datepicker-<?php
 		echo $locale_code;
 		?>.js"
 	type="text/javascript"></script>
@@ -1735,7 +1735,7 @@ function dbem_admin_general_script() {
 @import
 	"<?php
 	bloginfo ( 'wpurl' );
-	?>/wp-content/plugins/events-manager/js/jquery-ui-datepicker/ui.datepicker.css"
+	?>/wp-content/plugins/events-manager-extended/js/jquery-ui-datepicker/ui.datepicker.css"
 	;
 </style>
 <script type="text/javascript">
@@ -2195,7 +2195,7 @@ function substitute_rss($data) {
 }
 function dbem_general_css() {
 	$base_url = get_bloginfo ( 'wpurl' );
-	echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager/events_manager.css' type='text/css'/>";
+	echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/events_manager.css' type='text/css'/>";
 
 }
 add_action ( 'wp_head', 'dbem_general_css' );
