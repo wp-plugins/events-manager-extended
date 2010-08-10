@@ -41,7 +41,7 @@ function dbem_add_booking_form($event_id) {
 			}
 		$module .= "</select></td></tr>
 				<tr><th scope='row'>".__('Comment', 'dbem').":</th><td><textarea name='bookerComment'></textarea></td></tr>
-				<tr><th scope='row'>".__('Please fill in the code displayed here', 'dbem').":</th><td><img src='$base_url/wp-content/plugins/events-manager/captcha.php'><br>
+				<tr><th scope='row'>".__('Please fill in the code displayed here', 'dbem').":</th><td><img src='$base_url/wp-content/plugins/events-manager-extended/captcha.php'><br>
 				      <input type='text' name='captcha_check'></td></tr>
 		</table>
 		<p>".__('(* marks a required field)', 'dbem')."</p>   
@@ -286,7 +286,7 @@ function dbem_bookings_compact_table($event_id) {
 						</tfoot>
 						<tbody>" ;
 			foreach ($bookings as $booking) {  
-				($booking['booking_comment']) ? $baloon = " <img src='../wp-content/plugins/events-manager/images/baloon.png' title='".__('Comment:','dbem')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";  
+				($booking['booking_comment']) ? $baloon = " <img src='../wp-content/plugins/events-manager-extended/images/baloon.png' title='".__('Comment:','dbem')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";  
 				$table .= 
 				"<tr id='booking-".$booking['booking_id']."'> 
 					<td><a id='booking-check-".$booking['booking_id']."' class='bookingdelbutton'>X</a></td>

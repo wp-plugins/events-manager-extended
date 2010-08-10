@@ -499,7 +499,7 @@ function dbem_global_map($atts) {
 		location_infos = '$location_infos'
 	//-->
 	</script>";
-	$result .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager/dbem_global_map.js' type='text/javascript'></script>";
+	$result .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_global_map.js' type='text/javascript'></script>";
 	$result .= "<ol id='dbem_locations_list'></ol>"; 
 	
 	} else {
@@ -597,7 +597,7 @@ function dbem_single_location_map($location) {
   		map_text = '$map_text';
 		//-->
 		</script>";
-		$map_div .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager/dbem_single_location_map.js' type='text/javascript'></script>";
+		$map_div .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_single_location_map.js' type='text/javascript'></script>";
 	} else {
 		$map_div = "";
 	}
@@ -621,11 +621,11 @@ add_action ('admin_head', 'dbem_locations_autocomplete');
 function dbem_locations_autocomplete() {     
 	if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
 		?>
-		<link rel="stylesheet" href="../wp-content/plugins/events-manager/js/jquery-autocomplete/jquery.autocomplete.css" type="text/css"/>
+		<link rel="stylesheet" href="../wp-content/plugins/events-manager-extended/js/jquery-autocomplete/jquery.autocomplete.css" type="text/css"/>
     
-		<script src="../wp-content/plugins/events-manager/js/jquery-autocomplete/lib/jquery.bgiframe.min.js" type="text/javascript"></script>
-		<script src="../wp-content/plugins/events-manager/js/jquery-autocomplete/lib/jquery.ajaxQueue.js" type="text/javascript"></script> 
-		<script src="../wp-content/plugins/events-manager/js/jquery-autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
+		<script src="../wp-content/plugins/events-manager-extended/js/jquery-autocomplete/lib/jquery.bgiframe.min.js" type="text/javascript"></script>
+		<script src="../wp-content/plugins/events-manager-extended/js/jquery-autocomplete/lib/jquery.ajaxQueue.js" type="text/javascript"></script> 
+		<script src="../wp-content/plugins/events-manager-extended/js/jquery-autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
 		//<![CDATA[
@@ -635,7 +635,7 @@ function dbem_locations_autocomplete() {
 			var gmap_enabled = <?php echo get_option('dbem_gmap_is_active'); ?>; 
 		    
 		   <?php if(!get_option('dbem_use_select_for_locations')) :?>
-			$j("input#location-name").autocomplete("../wp-content/plugins/events-manager/locations-search.php", {
+			$j("input#location-name").autocomplete("../wp-content/plugins/events-manager-extended/locations-search.php", {
 				width: 260,
 				selectFirst: false,
 				formatItem: function(row) {
@@ -662,7 +662,7 @@ function dbem_locations_autocomplete() {
 			});  
 			<?php else : ?>
 			$j('#location-select-id').change(function() {
-				$j.getJSON("/../wp-content/plugins/events-manager/locations-search.php",{id: $j(this).val()}, function(data){
+				$j.getJSON("/../wp-content/plugins/events-manager-extended/locations-search.php",{id: $j(this).val()}, function(data){
 					eventLocation = data.name;
 					eventAddress = data.address;
 					eventTown = data.town;

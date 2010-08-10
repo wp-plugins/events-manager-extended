@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.0.0
+Version: 3.0.1
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, Province, etc).
 Author: Franky Van Liedekerke
@@ -468,7 +468,7 @@ function dbem_create_events_page(){
 add_action('admin_menu','dbem_create_events_submenu');     
 function dbem_create_events_submenu () {
 	  if(function_exists('add_submenu_page')) {
-	  	add_object_page(__('Events', 'dbem'),__('Events', 'dbem'),MIN_CAPABILITY,'events-manager','dbem_events_subpanel', '../wp-content/plugins/events-manager/images/calendar-16.png');
+	  	add_object_page(__('Events', 'dbem'),__('Events', 'dbem'),MIN_CAPABILITY,'events-manager','dbem_events_subpanel', '../wp-content/plugins/events-manager-extended/images/calendar-16.png');
 	   	// Add a submenu to the custom top-level menu: 
 		$plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),MIN_CAPABILITY,'events-manager','dbem_events_subpanel');
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
