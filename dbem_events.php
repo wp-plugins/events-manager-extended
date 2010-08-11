@@ -558,7 +558,7 @@ function dbem_filter_get_pages($data) {
 			if ($data [$i]->ID == $events_page_id) {
 				$list_events_page = get_option ( 'dbem_list_events_page' );
 				if ($list_events_page) {
-					$data [$i]->post_title = get_option ( 'dbem_events_page_title' ) . "&nbsp;";
+					$data [$i]->post_title = get_option ( 'dbem_events_page_title' );
 					$output [] = $data [$i];
 				}
 			} else {
