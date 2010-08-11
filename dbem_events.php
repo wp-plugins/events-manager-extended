@@ -785,18 +785,18 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 	if ($location_id != "")
 		$conditions [] = " location_id = $location_id";
 		
-	/* Marcus Begin Edit */
-	if ($category != '' && is_numeric($category)){
+	if(get_option('dbem_categories_enabled')) {
+	   if ($category != '' && is_numeric($category)){
 		$conditions [] = " event_category_id = $category";
-	}elseif( preg_match('/^([0-9],?)+$/', $category) ){
+	   }elseif( preg_match('/^([0-9],?)+$/', $category) ){
 		$category = explode(',', $category);
 		$category_conditions = array();
 		foreach($category as $cat){
 			$category_conditions[] = " event_category_id = $cat";
 		}
 		$conditions [] = "(".implode(' OR', $category_conditions).")";
+	   }
 	}
-	/* Marcus End Edit */
 	
 	$where = implode ( " AND ", $conditions );
 	if ($where != "")

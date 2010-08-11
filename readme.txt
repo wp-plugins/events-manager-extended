@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be
 Tags: events, manager, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 
 Manage events and display them in your blog. Includes recurring events, location management, calendar, Google map integration, RSVP. 
              
@@ -135,3 +135,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.0.1 =
 * Feature: now you can choose a category in the events widget, so only events of that category are shown
+
+= 3.0.2 =
+* Feature (for real now): now you can choose a category in the events widget, so only events of that category are shown  
+  If you disable categories, the widget will show all events again as well.
