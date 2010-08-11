@@ -12,11 +12,12 @@ class WP_Widget_dbem_list extends WP_Widget {
 		$limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
 		$scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
 		$order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
+		$category = empty( $instance['category'] ) ? '' : $instance['category'];
 		$format = empty( $instance['format'] ) ? DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT : $instance['format'];
 		echo $before_widget;
 		if ( $title)
 			echo $before_title . $title . $after_title;
-		$events_list = dbem_get_events_list($limit,$scope,$order,$format,false);
+		$events_list = dbem_get_events_list($limit,$scope,$order,$format,false,$category);
 		if ($events_list == __('No events', 'dbem'))
 			$events_list = "<li>$events_list</li>";
 		echo "<ul>$events_list</ul>";
@@ -36,6 +37,7 @@ class WP_Widget_dbem_list extends WP_Widget {
 		} else {
 			$instance['order'] = 'ASC';
 		}
+		$instance['category'] = $new_instance['category'];
 		$instance['format'] = $new_instance['format'];
 		return $instance;
 	}
@@ -46,6 +48,8 @@ class WP_Widget_dbem_list extends WP_Widget {
 		$limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
 		$scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
 		$order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
+		$category = empty( $instance['category'] ) ? '' : $instance['category'];
+   		$categories = dbem_get_categories();
 		$format = empty( $instance['format'] ) ? DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT : $instance['format'];
 ?>
   <p>
@@ -64,13 +68,32 @@ class WP_Widget_dbem_list extends WP_Widget {
    		<option value="past" <?php selected( $scope, 'past' ); ?>><?php _e('Past events','dbem'); ?>:</option>
     </select>
   </p>
-	<p>
+  <p>
     <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order of the events','dbem'); ?>:</label><br/>
   	<select id="<?php echo $this->get_field_id('order'); ?>" name="<?php echo $this->get_field_name('order'); ?>">
    		<option value="ASC" <?php selected( $order, 'ASC' ); ?>><?php _e('Ascendant','dbem'); ?></option>
    		<option value="DESC" <?php selected( $order, 'DESC' ); ?>><?php _e('Descendant','dbem'); ?>:</option>
  </select>
   </p>
+<?php
+  if(get_option('dbem_categories_enabled')) {
+?>
+  <p>
+    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','dbem'); ?>:</label><br/>
+  	<select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
+		<option value=""><?php _e ( 'Select...', 'dbem' ); ?>   </option>
+                <?php
+                    foreach ( $categories as $my_category ){
+		?>
+   		<option value="<?php echo $my_category['category_id']; ?>" <?php selected( $category,$my_category['category_id']); ?>><?php echo $my_category['category_name']; ?></option>
+		<?php
+		    }
+		?>
+ </select>
+  </p>
+<?php
+  }
+?>
   <p>
     <label for="<?php echo $this->get_field_id('format'); ?>"><?php _e('List item format','dbem'); ?>:</label>
     <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo htmlspecialchars($format);?></textarea>
