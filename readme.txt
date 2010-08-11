@@ -37,9 +37,12 @@ Events Manager Extended should take care of your events database migration autom
 After the installation, Events Manager Extended add a top level "Events" menu to your Wordpress Administration.
 
 *  The *Events* page lets you edit or delete the events. The *Add new* page lets you insert a new event.  
-	In the event edit page you can specify the number of spaces available for your event. Yuo just need to turn on RSVP for the event and specify the spaces available in the right sidebar box.  
-	When a visitor responds to your events, the box sill show you his reservation. You can remoe reservation by clicking on the *x* button or view the respondents data in a printable page.
+	In the event edit page you can specify the number of spaces available for your event. You just need to turn on RSVP for the event and specify the spaces available in the right sidebar box.  
+	When a visitor responds to your events, the box sill show you his reservation. You can remove reservation by clicking on the *x* button or view the respondents data in a printable page.
+	You can also specify the category the event is in, if you activated the Categories support in the Settings page.  
+	Also fine grained control of the RSVP mails and the event layout are possible here, if the defaults you configured in the Settings page are not ok for this specific event.  
 *  The *Locations* page lets you add, delete and edit locations directly. Locations are automatically added with events if not present, but this interface lets you customise your locations data and add a picture. 
+*  The *Categories* page lets you add, delete and edit categories (if Categories are activated in the Settings page). 
 *  The *People* page serves as a gathering point for the information about the people who reserved a space in your events.
 *  The *Settings* page allows a fine-grained control over the plugin. Here you can set the [format](#formatting-events) of events in the Events page.
 
@@ -73,7 +76,8 @@ Sure, you can do that by editing the page and changing its [template](http://cod
 
 = Can I customise the event lists, etc? = 
 
-Yes, you can use css to match the id and classes of the events markup.
+Yes, you can use css to match the id and classes of the events markup.  
+See the include file events_manager.css to get started (or change that file, but remeber it gets overwritten with any update).
 
 = How does Events Manager Extended work? =   
 
@@ -97,6 +101,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 1. A default event page with a map automatically pulled from Google Maps through the #_MAP placeholder.
 2. The events management page.
 3. The Events Manager Extended Options page.
+4. The Events Manager Extended Menu.
 
 == Changelog ==
 
