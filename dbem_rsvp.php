@@ -6,15 +6,8 @@ function dbem_add_booking_form($event_id) {
 	$base_url = get_bloginfo ( 'wpurl' );
 	//$message = dbem_catch_rsvp();
  
-	if(!empty($form_add_message)) {
-		$destination = "?".$_SERVER['QUERY_STRING']."#dbem-rsvp-message";
-	} else {
-		$destination = "?".$_SERVER['QUERY_STRING']."#dbem-rsvp-form";
-	}
-	$module = "<h3>".__('Book now!','dbem')."</h3><br/>";
-	if(!empty($form_add_message))
-		$module .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
-	$booked_places_options = array();
+	$destination = "?".$_SERVER['QUERY_STRING']."#dbem-rsvp-message";
+
 	// you can book the available number of seats, with a max of 10 per time
 	$max = dbem_get_available_seats($event_id);
 	if ($max > 10) {
@@ -25,20 +18,24 @@ function dbem_add_booking_form($event_id) {
 		$ret_string = "";
 		if(!empty($form_add_message))
 			$ret_string .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
-		 return $ret_string."<div class='dbem-rsvp-message'>".__('Bookings no longer possible – no seats available anymore', 'dbem')."</div>";
+		 return $ret_string."<div class='dbem-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'dbem')."</div>";
 	}
+
+	$module = "<h3>".__('Book now!','dbem')."</h3><br/>";
+	$module .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
+	$booked_places_options = array();
 	for ( $i = 1; $i <= $max; $i++) 
 		array_push($booked_places_options, "<option value='$i'>$i</option>");
 	
-	$module  .= "<form id='dbem-rsvp-form' name='booking-form' method='post' action='$destination'>
+		$module  .= "<form id='dbem-rsvp-form' name='booking-form' method='post' action='$destination'>
 			<table class='dbem-rsvp-form'>
 				<tr><th scope='row'>".__('Name', 'dbem')."*:</th><td><input type='text' name='bookerName' value=''/></td></tr>
 				<tr><th scope='row'>".__('E-Mail', 'dbem')."*:</th><td><input type='text' name='bookerEmail' value=''/></td></tr>
 				<tr><th scope='row'>".__('Phone number', 'dbem')."*:</th><td><input type='text' name='bookerPhone' value=''/></td></tr>
 				<tr><th scope='row'>".__('Seats', 'dbem')."*:</th><td><select name='bookedSeats' >";
-		  foreach($booked_places_options as $option) {
-				$module .= $option."\n";                  
-			}
+		foreach($booked_places_options as $option) {
+			$module .= $option."\n";                  
+		}
 		$module .= "</select></td></tr>
 				<tr><th scope='row'>".__('Comment', 'dbem').":</th><td><textarea name='bookerComment'></textarea></td></tr>
 				<tr><th scope='row'>".__('Please fill in the code displayed here', 'dbem').":</th><td><img src='$base_url/wp-content/plugins/events-manager-extended/captcha.php'><br>
@@ -116,16 +113,14 @@ function dbem_catch_rsvp() {
 	
 }   
 add_action('init','dbem_catch_rsvp');  
-
-
  
 function dbem_book_seats() {
 	$bookerName = dbem_sanitize_request($_POST['bookerName']);
 	$bookerEmail = dbem_sanitize_request($_POST['bookerEmail']);
 	$bookerPhone = dbem_sanitize_request($_POST['bookerPhone']); 
-	$bookedSeats = dbem_sanitize_request($_POST['bookedSeats']);
+	$bookedSeats = intval($_POST['bookedSeats']);
 	$bookerComment = dbem_sanitize_request($_POST['bookerComment']);   
-	$event_id = dbem_sanitize_request($_GET['event_id']);
+	$event_id = intval($_GET['event_id']);
 	$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
 	
 	// if any of name, email, phone or bookedseats are empty: return an error
@@ -146,15 +141,12 @@ function dbem_book_seats() {
 		if($mailing_is_active) {
 			dbem_email_rsvp_booking();
 		} 
-		
 	   }	else {
 		 $result = __('Booking cannot be made – not enough seats available!', 'dbem');
 	   }  
 	}  
 	return $result;
 }
-
-         
 
 function dbem_get_booking_by_person_id($person_id) {
 	global $wpdb; 
@@ -345,7 +337,7 @@ function dbem_intercept_bookings_delete() {
 	
 	if (isset($bookings)) {
 		foreach($bookings as $booking_id) {
-			dbem_delete_booking($booking_id);
+			dbem_delete_booking(intval($booking_id));
 		}
 	}
 }
@@ -356,11 +348,10 @@ function dbem_email_rsvp_booking(){
 	$bookerName = dbem_sanitize_request($_POST['bookerName']);
 	$bookerEmail = dbem_sanitize_request($_POST['bookerEmail']);
 	$bookerPhone = dbem_sanitize_request($_POST['bookerPhone']);    
-	$bookedSeats = dbem_sanitize_request($_POST['bookedSeats']);
+	$bookedSeats = intval($_POST['bookedSeats']);
 	$bookerComment = dbem_sanitize_request($_POST['bookerComment']);      
-	$event_id = dbem_sanitize_request($_GET['event_id']);
+	$event_id = intval($_GET['event_id']);
 
-	
 	$event = dbem_get_event($event_id);
 	$available_seats = dbem_get_available_seats($event_id);
 	$reserved_seats = dbem_get_booked_seats($event_id);
@@ -386,7 +377,7 @@ function dbem_email_rsvp_booking(){
 		$booker_body= str_replace($key, $value, $booker_body);
 	}
 	dbem_send_mail(__("New booking",'dbem'), $contact_body, $contact_email);
-    dbem_send_mail(__('Reservation confirmed','dbem'),$booker_body, $bookerEmail);
+	dbem_send_mail(__('Reservation confirmed','dbem'),$booker_body, $bookerEmail);
 
 } 
    
@@ -413,7 +404,7 @@ function dbem_ascii_encode($e)
 
 function dbem_is_event_rsvpable() {
 	if (dbem_is_single_event_page()) {
-		$event = dbem_get_event(dbem_sanitize_request($_GET['event_id']));
+		$event = dbem_get_event(intval($_GET['event_id']));
 		if($event)
 			return $event['event_rsvp']; 
 	} 

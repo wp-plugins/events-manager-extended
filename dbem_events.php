@@ -7,32 +7,30 @@ function dbem_new_event_page() {
 
 function dbem_events_subpanel() {
 	global $wpdb;
-	$action = $_GET ['action'];
-	$action2 = $_GET ['action2'];
-	$event_ID = $_GET ['event_id'];
-	$recurrence_ID = $_GET ['recurrence_id'];
-	$scope = $_GET ['scope'];
-	$offset = $_GET ['offset'];
-	$order = $_GET ['order'];
-	$selectedEvents = $_GET ['events'];
+	$action = isset($_GET ['action']) ? $_GET ['action'] : '';
+	$action2 = isset($_GET ['action2']) ? $_GET ['action2'] : '';
+	$event_ID = isset($_GET ['event_id']) ? intval($_GET ['event_id']) : '';
+	$recurrence_ID = isset($_GET ['recurrence_id']) ? intval($_GET ['recurrence_id']) : '';
+	$scope = isset($_GET ['scope']) ? $_GET ['scope'] : '';
+	$offset = isset($_GET ['offset']) ? intval($_GET ['offset']) : '';
+	$order = isset($_GET ['order']) ? $_GET ['order'] : '';
+	$selectedEvents = isset($_GET ['events']) ? $_GET ['events'] : '';
 	
 	// Disable Hello to new user if requested
 	if (isset ( $_GET ['disable_hello_to_user'] ) && $_GET ['disable_hello_to_user'] == 'true')
 		update_option ( 'dbem_hello_to_user', 0 );
 	
-	if ($order == "")
+	if ($order != "DESC")
 		$order = "ASC";
 	if ($offset == "")
 		$offset = "0";
 	$event_table_name = $wpdb->prefix . EVENTS_TBNAME;
 	// Debug code, to make sure I get the correct page
 	
-
 	// DELETE action
 	if ($action == 'deleteEvents') {
 		//  $sql="DELETE FROM ".$event_table_name." WHERE event_id='"."$event_ID"."'";
 		
-
 		// TODO eventual error if ID in non-existant
 		//$wpdb->query($sql);
 		foreach ( $selectedEvents as $event_ID ) {
@@ -53,60 +51,61 @@ function dbem_events_subpanel() {
 		
 		$event = array ();
 		$location = array ();
-		$event ['event_name'] = stripslashes ( $_POST ["event_name"] );
+		$event ['event_name'] = isset($_POST ['event_name']) ? stripslashes ( $_POST ['event_name'] ) : '';
 		// Set event end time to event time if not valid
 		// if (!_dbem_is_date_valid($event['event_end_date']))
 		// 	$event['event_end_date'] = $event['event-date'];  
-		$event ['event_start_date'] = $_POST ["event_date"];
-		$event ['event_end_date'] = $_POST ["event_end_date"];
+		$event ['event_start_date'] = isset($_POST ['event_date']) ? $_POST ['event_date'] : '';
+		$event ['event_end_date'] = isset($_POST ['event_end_date']) ? $_POST ['event_end_date'] : '';
 		// Trying to fix Alex's trouble
 		if ($event ['event_end_date'] == '') 
 			$event['event_end_date'] = $event['event_start_date'];     
 		// End of Alex's fix
 		//$event['event_start_time'] = $_POST[event_hh].":".$_POST[event_mm].":00";
 		//$event['event_end_time'] = $_POST[event_end_hh].":".$_POST[event_end_mm].":00";         
-		$event ['event_start_time'] = date ( "G:i:00", strtotime ( $_POST ['event_start_time'] ) );
-		$event ['event_end_time'] = date ( "G:i:00", strtotime ( $_POST ['event_end_time'] ) );
+		$event ['event_start_time'] = isset($_POST ['event_start_time']) ? $_POST ['event_start_time'] : '';
+		$event ['event_start_time'] = date ( "G:i:00", strtotime ( $event ['event_start_time'] ) );
+		$event ['event_end_time'] = isset($_POST ['event_end_time']) ? $_POST ['event_end_time'] : '';
+		$event ['event_end_time'] = date ( "G:i:00", strtotime ( $event ['event_end_time'] ) );
 		$recurrence ['recurrence_name'] = $event ['event_name'];
 		$recurrence ['recurrence_start_date'] = $event ['event_start_date'];
 		$recurrence ['recurrence_end_date'] = $event ['event_end_date'];
 		$recurrence ['recurrence_start_time'] = $event ['event_start_time'];
 		$recurrence ['recurrence_end_time'] = $event ['event_end_time'];
-		$recurrence ['recurrence_id'] = $_POST [recurrence_id];
-		$recurrence ['recurrence_freq'] = $_POST [recurrence_freq];
-		$recurrence ['recurrence_freq'] == 'weekly' ? $recurrence [recurrence_byday] = implode ( ",", $_POST ['recurrence_bydays'] ) : $recurrence ['recurrence_byday'] = $_POST [recurrence_byday];
-		$_POST ['recurrence_interval'] == "" ? $recurrence ['recurrence_interval'] = 1 : $recurrence ['recurrence_interval'] = $_POST ['recurrence_interval'];
-		$recurrence ['recurrence_byweekno'] = $_POST [recurrence_byweekno];
+		$recurrence ['recurrence_id'] = isset($_POST ['recurrence_id']) ? $_POST['recurrence_id'] : '';
+		$recurrence ['recurrence_freq'] = isset($_POST['recurrence_freq']) ? $_POST['recurrence_freq'] : '';
+		$recurrence ['recurrence_freq'] == 'weekly' ? $recurrence [recurrence_byday] = implode ( ",", $_POST['recurrence_bydays'] ) : $recurrence ['recurrence_byday'] = $_POST['recurrence_byday'];
+		$recurrence ['recurrence_interval'] = isset($_POST['recurrence_interval']) ? $_POST['recurrence_interval'] : 1;
+		$recurrence ['recurrence_byweekno'] = isset($_POST['recurrence_byweekno']) ? $_POST ['recurrence_byweekno'] : '';
 		
-		$event ['event_rsvp'] = (is_numeric($_POST ['event_rsvp'])) ? $_POST ['event_rsvp']:0;
-		$event ['event_seats'] = (is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
+		$event ['event_rsvp'] = (isset ($_POST ['event_rsvp']) && is_numeric($_POST ['event_rsvp'])) ? $_POST ['event_rsvp']:0;
+		$event ['event_seats'] = (isset ($_POST ['event_seats']) && is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
 		
 		if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '' && $_POST ['event_contactperson_id'] != '-1') {
-			
 			$event ['event_contactperson_id'] = $_POST ['event_contactperson_id'];
 			$recurrence ['event_contactperson_id'] = $_POST ['event_contactperson_id'];
 		}
 		
-		if (! _dbem_is_time_valid ( $event_end_time ))
-			$event_end_time = $event_time;
+		//if (! _dbem_is_time_valid ( $event_end_time ))
+		//	$event_end_time = $event_time;
 		
-		$location ['location_name'] = $_POST [location_name];
-		$location ['location_address'] = $_POST [location_address];
-		$location ['location_town'] = $_POST [location_town];
-		$location ['location_latitude'] = $_POST [location_latitude];
-		$location ['location_longitude'] = $_POST [location_longitude];
+		$location ['location_name'] = isset($_POST ['location_name']) ? $_POST ['location_name'] : '';
+		$location ['location_address'] = isset($_POST ['location_address']) ? $_POST ['location_address'] : '';
+		$location ['location_town'] = isset($_POST ['location_town']) ? $_POST ['location_town'] : '';
+		$location ['location_latitude'] = isset($_POST ['location_latitude']) ? $_POST ['location_latitude'] : '';
+		$location ['location_longitude'] = isset($_POST ['location_longitude']) ? $_POST ['location_longitude'] : '';
 		$location ['location_description'] = "";
 		/* Marcus Begin Edit */
 		//switched to WP TinyMCE field
-		//$event ['event_notes'] = stripslashes ( $_POST [event_notes] );
-		$event ['event_notes'] = stripslashes ( $_POST ['content'] );
+		//$event ['event_notes'] = stripslashes ( $_POST ['event_notes'] );
+		$event ['event_notes'] = isset($_POST ['content']) ? stripslashes($_POST ['content']) : '';
 		/* Marcus End Edit */
 		$event ['event_page_title_format'] = stripslashes ( $_POST ['event_page_title_format'] );
 		$event ['event_single_event_format'] = stripslashes ( $_POST ['event_single_event_format'] );
 		$event ['event_contactperson_email_body'] = stripslashes ( $_POST ['event_contactperson_email_body'] );
 		$event ['event_respondent_email_body'] = stripslashes ( $_POST ['event_respondent_email_body'] );
 		$recurrence ['recurrence_notes'] = $event ['event_notes'];
-                if( is_numeric($_POST['event_category_id']) ){
+                if(isset ($_POST['event_category_id']) && is_numeric($_POST['event_category_id']) ){
                         $event ['event_category_id'] = $_POST ['event_category_id'];
                         $recurrence ['event_category_id'] = $_POST ['event_category_id'];
                 }
@@ -115,7 +114,7 @@ function dbem_events_subpanel() {
 		
 		/* Marcus Begin Edit */
 		$event_attributes = array();
-		for($i=1 ; trim($_POST["mtm_{$i}_ref"])!='' ; $i++ ){
+		for($i=1 ; isset($_POST["mtm_{$i}_ref"]) && trim($_POST["mtm_{$i}_ref"])!='' ; $i++ ){
 	 		if(trim($_POST["mtm_{$i}_name"]) != ''){
 		 		$event_attributes[$_POST["mtm_{$i}_ref"]] = $_POST["mtm_{$i}_name"];
 	 		}
@@ -144,7 +143,7 @@ function dbem_events_subpanel() {
 			}
 			if (! $event_ID && ! $recurrence_ID) {
 				// there isn't anything
-				if ($_POST ['repeated_event']) {
+				if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
 					//insert new recurrence
 					dbem_insert_recurrent_event ( $event, $recurrence );
 					$feedback_message = __ ( 'New recurrent event inserted!', 'dbem' );
@@ -209,7 +208,7 @@ function dbem_events_subpanel() {
 	}
 	/* Marcus End Edit */
 	if ($action == 'edit_recurrence') {
-		$event_ID = $_GET ['recurrence_id'];
+		$event_ID = intval($_GET ['recurrence_id']);
 		$recurrence = dbem_get_recurrence ( $event_ID );
 		$sql = "SELECT event_rsvp,event_seats FROM $event_table_name WHERE recurrence_id = '$event_ID' LIMIT 1;";
 		$rsvp = $wpdb->get_row($sql);
@@ -423,17 +422,14 @@ function dbem_options_subpanel() {
 function dbem_events_page_content() {
 	global $wpdb;
 	if (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] |= '') {
-		
-		$location = dbem_get_location ( dbem_sanitize_request($_REQUEST ['location_id']));
+		$location = dbem_get_location ( intval($_REQUEST ['location_id']));
 		$single_location_format = get_option ( 'dbem_single_location_format' );
 		$page_body = dbem_replace_locations_placeholders ( $single_location_format, $location );
 		return $page_body;
 	}
 	if (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') {
 		// single event page
-		$event_ID = dbem_sanitize_request($_REQUEST ['event_id']);      
-		// measure against blind sql attack suggested by Danilo Massa 
-		settype($event_ID, "int");
+		$event_ID = intval($_REQUEST ['event_id']);      
 		$event = dbem_get_event ( $event_ID );
 		$single_event_format = ( $event['event_single_event_format'] != '' ) ? $event['event_single_event_format'] : get_option ( 'dbem_single_event_format' );
 		//$page_body = dbem_replace_placeholders ( $single_event_format, $event, 'stop' );
@@ -508,13 +504,13 @@ function dbem_events_page_title($data) {
 	$events_page_title = $events_page->post_title;
 	
 	if (($data == $events_page_title) && (is_page ( $events_page_id ))) {
-		if (isset ( $_REQUEST ['calendar_day'] ) && $_REQUEST ['calendar_day'] != '') {
+		if (isset ( $_REQUEST['calendar_day'] ) && $_REQUEST['calendar_day'] != '') {
 			
-			$date = dbem_sanitize_request($_REQUEST ['calendar_day']);
+			$date = dbem_sanitize_request($_REQUEST['calendar_day']);
 			$events_N = dbem_events_count_for ( $date );
 			
 			if ($events_N == 1) {
-				$events = dbem_get_events ( "", dbem_sanitize_request($_REQUEST ['calendar_day']));
+				$events = dbem_get_events ( "", dbem_sanitize_request($_REQUEST['calendar_day']));
 				$event = $events [0];
 				$stored_page_title_format = ( $event['event_page_title_format'] != '' ) ? $event['event_page_title_format'] : get_option ( 'dbem_event_page_title_format' );
 				$page_title = dbem_replace_placeholders ( $stored_page_title_format, $event );
@@ -522,17 +518,15 @@ function dbem_events_page_title($data) {
 			}
 		}
 		
-		if (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] |= '') {
-			$location = dbem_get_location ( dbem_sanitize_request($_REQUEST ['location_id']) );
+		if (isset ( $_REQUEST['location_id'] ) && $_REQUEST['location_id'] |= '') {
+			$location = dbem_get_location ( intval($_REQUEST['location_id']));
 			$stored_page_title_format = get_option ( 'dbem_location_page_title_format' );
 			$page_title = dbem_replace_locations_placeholders ( $stored_page_title_format, $location );
 			return $page_title;
 		}
-		if (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') {
+		if (isset ( $_REQUEST['event_id'] ) && $_REQUEST['event_id'] != '') {
 			// single event page
-			$event_ID = dbem_sanitize_request($_REQUEST ['event_id']);
-			// measure against blind sql attack suggested by Danilo Massa 
-			settype($event_ID, "int");
+			$event_ID = intval($_REQUEST['event_id']);
 			$event = dbem_get_event ( $event_ID );
 			$stored_page_title_format = ( $event['event_page_title_format'] != '' ) ? $event['event_page_title_format'] : get_option ( 'dbem_event_page_title_format' );
 			$page_title = dbem_replace_placeholders ( $stored_page_title_format, $event );
@@ -749,13 +743,16 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
   
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
 	if ($limit != "")
-		$limit = "LIMIT $limit";
+		$limit = "LIMIT ".intval($limit);
 	if ($offset != "")
-		$offset = "OFFSET $offset";
-	if ($order == "")
+		$offset = "OFFSET ".intval($offset);
+	if ($order != "DESC")
 		$order = "ASC";
 	
-	date_default_timezone_set ( get_option('timezone_string') );
+	$tzstring = get_option('timezone_string');
+	if (!empty($tzstring) ) {
+		@date_default_timezone_set ($tzstring);
+	}
 	$timestamp = time ();
 	$date_time_array = getdate ( $timestamp );
 	$hours = $date_time_array ['hours'];
@@ -783,7 +780,7 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 	}    
 	
 	if ($location_id != "")
-		$conditions [] = " location_id = $location_id";
+		$conditions [] = " location_id = ".intval($location_id);
 		
 	if(get_option('dbem_categories_enabled')) {
 	   if ($category != '' && is_numeric($category)){
@@ -917,7 +914,7 @@ function dbem_duplicate_event($event_id) {
 	$eventArray = $wpdb->get_row("SELECT * FROM {$event_table_name} WHERE event_id={$event_id}", ARRAY_A );
 	unset($eventArray['event_id']);
 	$result = $wpdb->insert($event_table_name, $eventArray);
-	if($result !== false){
+	if( $result !== false) {
 		//Get the ID of the new item
 		$event_ID = $wpdb->insert_id;
 		$event = dbem_get_event ( $event_id );
@@ -926,14 +923,14 @@ function dbem_duplicate_event($event_id) {
 		$title = __ ( "Edit Event", 'dbem' ) . " '" . $event ['event_name'] . "'";
 		echo "<div id='message' class='updated below-h2'>You are now editing the duplicated event.</div>";
 		dbem_event_form ( $event, $title, $event_id );
-	}else{
+	} else {
 		echo "<div class='error'><p>There was an error duplicating the event. Try again maybe? Here are the errors:</p>";
-		foreach($EZSQL_ERROR as $errorArray){
+		foreach ($EZSQL_ERROR as $errorArray) {
 			echo "<p>{$errorArray['error_str']}</p>";
 		}	
 		echo "</div>";
 		$scope = $_GET ['scope'];
-		$offset = $_GET ['offset'];
+		$offset = intval($_GET ['offset']);
 		$order = $_GET ['order'];
 		$limit = 20;
 		$events = dbem_get_events ( $limit, $scope, $order, $offset );
@@ -957,16 +954,10 @@ function dbem_hello_to_new_user() {
 }
 
 function dbem_events_table($events, $limit, $title) {
-	if (isset ( $_GET ['scope'] ))
-		$scope = $_GET ['scope'];
-	else
-		$scope = "future";
-	if (($scope != "past") && ($scope != "all"))
-		$scope = "future";
+	$scope = isset($_GET ['scope']) ? $_GET ['scope'] : "future";
 	$events_count = count ( dbem_get_events ( "", $scope ) );
 	
-	if (isset ( $_GET ['offset'] ))
-		$offset = $_GET ['offset'];
+	$offset = isset($_GET ['offset']) ? intval($_GET ['offset']) : 0;
 	
 	$use_events_end = get_option ( 'dbem_use_event_end' );
 	
@@ -975,11 +966,8 @@ function dbem_events_table($events, $limit, $title) {
 <div class="wrap">
 <div id="icon-events" class="icon32"><br />
 </div>
-<h2><?php
-	echo $title;
-	?></h2>
-		 		
-		<?php
+<h2><?php echo $title; ?></h2>
+	<?php
 	$say_hello = get_option ( 'dbem_hello_to_user' );
 	if ($say_hello == 1)
 		dbem_hello_to_new_user ();
@@ -1649,7 +1637,7 @@ function dbem_validate_event($event) {
 	$error_message = "";
 	if (count ( $errors ) > 0)
 		$error_message = __ ( 'Missing fields: ' ) . implode ( ", ", $errors ) . ". ";
-	if ($_POST ['repeated_event'] == "1" && $_POST ['event_end_date'] == "")
+	if (isset($_POST ['repeated_event']) && $_POST ['repeated_event'] == "1" && (!isset($_POST ['event_end_date']) || $_POST ['event_end_date'] == ""))
 		$error_message .= __ ( 'Since the event is repeated, you must specify an event date.', 'dbem' );
 	if ($error_message != "")
 		return $error_message;

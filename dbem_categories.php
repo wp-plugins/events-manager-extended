@@ -167,7 +167,7 @@ function dbem_categories_table_layout($message = "") {
 }
 
 function dbem_categories_edit_layout($message = "") {
-	$category_id = $_GET['category_ID'];
+	$category_id = intval($_GET['category_ID']);
 	$category = dbem_get_category($category_id);
 	$layout = "
 	<div class='wrap'>

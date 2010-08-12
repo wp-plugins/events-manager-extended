@@ -1,7 +1,6 @@
 <?php  
 $feedback_message = "";
  
-$location_required_fields = array("location_name" => __('The location name', 'dbem'), "location_address" => __('The location address', 'dbem'), "location_town" => __('The location town', 'dbem'));
 
 add_action('init', 'dbem_intercept_locations_actions');
 function dbem_intercept_locations_actions() {
@@ -319,7 +318,11 @@ function dbem_get_locations($eventful = false, $scope="all") {
 	$locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;
 
-        date_default_timezone_set ( get_option('timezone_string') );
+	$tzstring = get_option('timezone_string');
+	if (!empty($tzstring) ) {
+		@date_default_timezone_set ($tzstring);
+	}
+
         $timestamp = time ();
         $date_time_array = getdate ( $timestamp );
         $hours = $date_time_array ['hours'];

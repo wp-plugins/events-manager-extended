@@ -26,7 +26,7 @@ function dbem_ajax_actions() {
 	}  
 	if(isset($_GET['action']) && $_GET['action'] == 'printable'){
 		if(isset($_GET['event_id']))
-			dbem_printable_booking_report($_GET['event_id']);
+			dbem_printable_booking_report(intval($_GET['event_id']));
 	}
 	
 	if(isset($_GET['query']) && $_GET['query'] == 'GlobalMapData') { 
@@ -36,12 +36,10 @@ function dbem_ajax_actions() {
 }   
 
 function dbem_global_map_json($eventful = false, $scope = "all") {
-
 	$json = '{"locations":[';
 	$locations = dbem_get_locations($eventful,$scope);
 	$json_locations = array();
 	foreach($locations as $location) {
-
 		$json_location = array();
 		foreach($location as $key => $value) {
 		 	$json_location[] = '"'.$key.'":"'.$value.'"';  

@@ -70,7 +70,15 @@ define('DEFAULT_CATEGORIES_ENABLED', false);
 // if you are hacking this plugin, set to TRUE, a log will show in admin pages
 define('DEBUG', false);     
 
-// INCLUDES   
+// fix all superglobals
+if (get_magic_quotes_gpc()) {
+    $_GET = array_map('stripslashes_deep', $_GET);
+    $_POST = array_map('stripslashes_deep', $_POST);
+    $_COOKIE = array_map('stripslashes_deep', $_COOKIE);
+    $_REQUEST = array_map('stripslashes_deep', $_REQUEST);
+}
+
+// INCLUDES
 include("dbem_events.php");
 include("dbem_calendar.php");      
 include("dbem_widgets.php");
@@ -88,8 +96,10 @@ require_once("phpmailer/dbem_phpmailer.php") ;
   
 // Localised date formats as in the jquery UI datepicker plugin
 $localised_date_formats = array("am" => "dd.mm.yy","ar" => "dd/mm/yy", "bg" => "dd.mm.yy", "ca" => "mm/dd/yy", "cs" => "dd.mm.yy", "da" => "dd-mm-yy", "de" =>"dd.mm.yy", "es" => "dd/mm/yy", "en" => "mm/dd/yy", "fi" => "dd.mm.yy", "fr" => "dd/mm/yy", "he" => "dd/mm/yy", "hu" => "yy-mm-dd", "hy" => "dd.mm.yy", "id" => "dd/mm/yy", "is" => "dd/mm/yy", "it" => "dd/mm/yy", "ja" => "yy/mm/dd", "ko" => "yy-mm-dd", "lt" => "yy-mm-dd", "lv" => "dd-mm-yy", "nl" => "dd.mm.yy", "no" => "yy-mm-dd", "pl" => "yy-mm-dd", "pt" => "dd/mm/yy", "ro" => "mm/dd/yy", "ru" => "dd.mm.yy", "sk" => "dd.mm.yy", "sv" => "yy-mm-dd", "th" => "dd/mm/yy", "tr" => "dd.mm.yy", "ua" => "dd.mm.yy", "uk" => "dd.mm.yy", "us" => "mm/dd/yy", "CN" => "yy-mm-dd", "TW" => "yy/mm/dd");
+
 //required fields
 $required_fields = array('event_name'); 
+$location_required_fields = array("location_name" => __('The location name', 'dbem'), "location_address" => __('The location address', 'dbem'), "location_town" => __('The location town', 'dbem'));
 
 $thisDir = dirname( plugin_basename( __FILE__ ) );
 load_plugin_textdomain('dbem', false, $thisDir.'/langs'); 
@@ -118,8 +128,6 @@ add_filter('dbem_notes_rss', 'ent2ncr', 8);
 add_filter('dbem_notes_map', 'convert_chars', 8);
 add_filter('dbem_notes_map', 'js_escape');
       
-
-
 /* Creating the wp_events table to store event data*/
 function dbem_install() {
  	// Creates the events table if necessary
@@ -168,9 +176,7 @@ function dbem_create_events_table() {
 		    
 		$sql = "ALTER TABLE $old_table_name RENAME $table_name;";
 		$wpdb->query($sql); 
-		  
 	}
-	 
  
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
 		// check the user is allowed to make changes
@@ -227,7 +233,7 @@ function dbem_create_events_table() {
 				VALUES ('Orality in James Joyce Conference', '$in_one_week', '16:00:00', '18:00:00', 1)");
 		$wpdb->query("INSERT INTO ".$table_name." (event_name, event_start_date, event_start_time, event_end_time, location_id)
 				VALUES ('Traditional music session', '$in_four_weeks', '20:00:00', '22:00:00', 2)");
-	  $wpdb->query("INSERT INTO ".$table_name." (event_name, event_start_date, event_start_time, event_end_time, location_id)
+		$wpdb->query("INSERT INTO ".$table_name." (event_name, event_start_date, event_start_time, event_end_time, location_id)
 					VALUES ('6 Nations, Italy VS Ireland', '$in_one_year','22:00:00', '24:00:00', 3)");
 	} else {  
 		// eventual maybe_add_column() for later versions
@@ -784,8 +790,8 @@ function dbem_date_to_unix_time($date) {
 		return $unix_time;   
 }   
 function dbem_sanitize_request( $value ) {
-	if( get_magic_quotes_gpc() ) 
-		$value = stripslashes( $value );
+#	if( get_magic_quotes_gpc() ) 
+#		$value = stripslashes( $value );
 
 	//check if this function exists
 	if( function_exists( "mysql_real_escape_string" ) ) {
