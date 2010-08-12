@@ -124,6 +124,8 @@ function dbem_events_subpanel() {
 			}
 		}
 		$recurrence ['recurrence_interval'] = isset($_POST['recurrence_interval']) ? $_POST['recurrence_interval'] : 1;
+		if ($recurrence ['recurrence_interval'] ==0)
+			$recurrence['recurrence_interval']=1;
 		$recurrence ['recurrence_byweekno'] = isset($_POST['recurrence_byweekno']) ? $_POST ['recurrence_byweekno'] : '';
 		
 		$event ['event_rsvp'] = (isset ($_POST ['event_rsvp']) && is_numeric($_POST ['event_rsvp'])) ? $_POST ['event_rsvp']:0;
@@ -131,8 +133,10 @@ function dbem_events_subpanel() {
 		
 		if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '' && $_POST ['event_contactperson_id'] != '-1') {
 			$event ['event_contactperson_id'] = $_POST ['event_contactperson_id'];
-			$recurrence ['event_contactperson_id'] = $_POST ['event_contactperson_id'];
+		} else {
+			$event ['event_contactperson_id'] = 0;
 		}
+		$recurrence ['event_contactperson_id'] = $_POST ['event_contactperson_id'];
 		
 		//if (! _dbem_is_time_valid ( $event_end_time ))
 		//	$event_end_time = $event_time;

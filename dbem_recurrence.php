@@ -64,11 +64,11 @@ function dbem_get_recurrence_events($recurrence){
 	$start_date = mktime(0, 0, 0, substr($recurrence['recurrence_start_date'],5,2), substr($recurrence['recurrence_start_date'],8,2), substr($recurrence['recurrence_start_date'],0,4));
 	$end_date = mktime(0, 0, 0, substr($recurrence['recurrence_end_date'],5,2), substr($recurrence['recurrence_end_date'],8,2), substr($recurrence['recurrence_end_date'],0,4));     
  
-	$every_keys = array('every' => 1, 'every_second' => 2, 'every_third' => 3, 'every_fourth' => 4);  
-	$every_N = $every_keys[$recurrence['recurrence_modifier']]; 
+//	$every_keys = array('every' => 1, 'every_second' => 2, 'every_third' => 3, 'every_fourth' => 4);  
+//	$every_N = $every_keys[$recurrence['recurrence_modifier']]; 
  	
-	$month_position_keys = array('first_of_month'=>1, 'second_of_month' => 2, 'third_of_month' => 3, 'fourth_of_month' => 4);
-	$month_position = $month_position_keys[$recurrence['recurrence_modifier']]; 
+//	$month_position_keys = array('first_of_month'=>1, 'second_of_month' => 2, 'third_of_month' => 3, 'fourth_of_month' => 4);
+//	$month_position = $month_position_keys[$recurrence['recurrence_modifier']]; 
 	
 	$last_week_start = array(25, 22, 25, 24, 25, 24, 25, 25, 24, 25, 24, 25);
 	
