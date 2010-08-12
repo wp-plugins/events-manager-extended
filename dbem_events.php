@@ -2,7 +2,43 @@
 
 function dbem_new_event_page() {
 	$title = __ ( "Insert New Event", 'dbem' );
-	dbem_event_form ( $event, $title, $element );
+	$event = array (
+    "event_id" => '',
+    "event_name" => '',
+    "event_date" => '',
+    "event_day" => '',
+    "event_month" => '',
+    "event_year" => '',
+    "event_end_date" => '',
+    "event_start_date" => '',
+    "event_start_time" => '',
+    "event_start_12h_time" => '',
+    "event_end_time" => '',
+    "event_end_12h_time" => '',
+    "event_notes" => '',
+    "event_rsvp" => 0,
+    "event_seats" => 0,
+    "event_freq" => '',
+    "location_id" => 0,
+    "event_contactperson_id" => 0,
+    "event_category_id" => 0,
+    "event_attributes" => '',
+    "event_page_title_format" => '',
+    "event_single_event_format" => '',
+    "event_contactperson_email_body" => '',
+    "event_respondent_email_body" => '',
+    "recurrence_id" => 0,
+    "recurrence_interval" => '',
+    "recurrence_byweekno" => '',
+    "recurrence_byday" => '',
+    "location_name" => '',
+    "location_address" => '',
+    "location_town" => '',
+    "location_latitude" => '',
+    "location_longitude" => '',
+    "location_image_url" => ''
+	);
+	dbem_event_form ( $event, $title, '' );
 }
 
 function dbem_events_subpanel() {
@@ -1135,10 +1171,16 @@ function dbem_event_form($event, $title, $element) {
 	
 	global $localised_date_formats;               
 	$use_select_for_locations = get_option('dbem_use_select_for_locations');
+	$saved_bydays = array();
 	// change prefix according to event/recurrence
-	$_GET ['action'] == "edit_recurrence" ? $pref = "recurrence_" : $pref = "event_";
-	
-	$_GET ['action'] == "edit_recurrence" ? $form_destination = "admin.php?page=events-manager&action=update_recurrence&recurrence_id=" . $element : $form_destination = "admin.php?page=events-manager&action=update_event&event_id=" . $element;
+	if (isset($_GET ['action']) && $_GET ['action'] == "edit_recurrence") {
+		$pref = "recurrence_";
+		$form_destination = "admin.php?page=events-manager&action=update_recurrence&recurrence_id=" . $element;
+		$saved_bydays = explode ( ",", $event ['recurrence_byday'] );
+	} else {
+		$pref = "event_";
+		$form_destination = "admin.php?page=events-manager&action=update_event&event_id=" . $element;
+	}
 	
 	$locale_code = substr ( get_locale (), 0, 2 );
 	$localised_date_format = $localised_date_formats [$locale_code];
@@ -1175,7 +1217,6 @@ function dbem_event_form($event, $title, $element) {
 
 	$freq_options = array ("daily" => __ ( 'Daily', 'dbem' ), "weekly" => __ ( 'Weekly', 'dbem' ), "monthly" => __ ( 'Monthly', 'dbem' ) );
 	$days_names = array (1 => __ ( 'Mon' ), 2 => __ ( 'Tue' ), 3 => __ ( 'Wed' ), 4 => __ ( 'Thu' ), 5 => __ ( 'Fri' ), 6 => __ ( 'Sat' ), 7 => __ ( 'Sun' ) );
-	$saved_bydays = explode ( ",", $event ['recurrence_byday'] );
 	$weekno_options = array ("1" => __ ( 'first', 'dbem' ), '2' => __ ( 'second', 'dbem' ), '3' => __ ( 'third', 'dbem' ), '4' => __ ( 'fourth', 'dbem' ), '-1' => __ ( 'last', 'dbem' ), "none" => __('Start day') );
 	
 	$event [$pref . 'rsvp'] ? $event_RSVP_checked = "checked='checked'" : $event_RSVP_checked = '';
@@ -1224,6 +1265,7 @@ function dbem_event_form($event, $title, $element) {
 							<div class="inside">
 								<?php if (! $event ['event_id']) { ?>
 								<?php
+									$recurrence_YES = "";
 									if ($event ['recurrence_id'] != "")
 										$recurrence_YES = "checked='checked'";
 								?>

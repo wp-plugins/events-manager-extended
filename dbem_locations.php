@@ -44,7 +44,7 @@ function dbem_locations_page() {
 				dbem_upload_location_picture($location);
 			$message = __('The location has been updated.', 'dbem');
 			$locations = dbem_get_locations();
-			dbem_locations_table_layout($locations, $message);
+			dbem_locations_table_layout($locations, $location, $message);
 		} else {
 			$message = $validation_result;   
 			dbem_locations_edit_layout($location, $message);
@@ -76,7 +76,7 @@ function dbem_locations_page() {
 	} else {  
 		// no action, just a locations list
 		$locations = dbem_get_locations();
-		dbem_locations_table_layout($locations, $message);
+		dbem_locations_table_layout($locations, null, "");
 	}
 }  
 
@@ -177,7 +177,16 @@ function dbem_locations_edit_layout($location, $message = "") {
 
 function dbem_locations_table_layout($locations, $new_location, $message = "") {
 	$destination = get_bloginfo('wpurl')."/wp-admin/admin.php";
-	$new_location = (is_array($new_location)) ? $new_location : array();
+	if (!is_array($new_location)) {
+		$location = array();
+		$location['location_name'] = '';
+		$location['location_address'] = '';
+		$location['location_town'] = '';
+		$location['location_latitude'] = '';
+		$location['location_longitude'] = '';
+		$location['location_description'] = '';
+	}
+
 	ob_start();
 	?>
 		<div class='wrap nosubsub'>

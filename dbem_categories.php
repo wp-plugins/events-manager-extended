@@ -28,6 +28,7 @@ function dbem_categories_subpanel() {
 	} else {
 		// Insert/Update/Delete Record
 		$categories_table = $wpdb->prefix.DBEM_CATEGORIES_TBNAME;
+		$validation_result = '';
 		if( isset($_POST['action']) && $_POST['action'] == "edit" ) {
 			// category update required  
 			$category = array();
@@ -152,7 +153,7 @@ function dbem_categories_table_layout($message = "") {
 							 	<input type='hidden' name='action' value='add' />
 							    <div class='form-field form-required'>
 							    	<label for='category_name'>".__('Category name', 'dbem')."</label>
-								 	<input id='category-name' name='category_name' id='category_name' type='text' value='".$new_category['category_name']."' size='40' />
+								 	<input id='category-name' name='category_name' id='category_name' type='text' value='' size='40' />
 								    <p>".__('The name of the category', 'dbem').".</p>
 								 </div>
 								 <p class='submit'><input type='submit' class='button' name='submit' value='".__('Add category', 'dbem')."' /></p>
