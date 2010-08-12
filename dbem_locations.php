@@ -206,7 +206,6 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 				 	 <form id='bookings-filter' method='get' action='<?php echo $destination ?>'>
 						<input type='hidden' name='page' value='locations'/>
 						<input type='hidden' name='action' value='edit_location'/>
-						<input type='hidden' name='event_id' value='<?php echo $event_id ?>'/>
 						
 						<?php if (count($locations)>0) : ?>
 						<table class='widefat'>
@@ -364,10 +363,22 @@ function dbem_get_locations($eventful = false, $scope="all") {
 
 function dbem_get_location($location_id) { 
 	global $wpdb;
-	$locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
-	$sql = "SELECT * FROM $locations_table WHERE location_id ='$location_id'";   
-	$location = $wpdb->get_row($sql, ARRAY_A);
-	$location['location_image_url'] = dbem_image_url_for_location_id($location['location_id']);
+
+	$location=array();
+	if (!$location_id) {
+		$location ['location_id']='';
+		$location ['location_name']='';
+		$location ['location_address']='';
+		$location ['location_town']='';
+		$location ['location_latitude']='';
+		$location ['location_longitude']='';
+		$location ['location_image_url']='';
+	} else {
+		$locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
+		$sql = "SELECT * FROM $locations_table WHERE location_id ='$location_id'";   
+		$location = $wpdb->get_row($sql, ARRAY_A);
+		$location['location_image_url'] = dbem_image_url_for_location_id($location['location_id']);
+	}
 	return $location;  
 }
 

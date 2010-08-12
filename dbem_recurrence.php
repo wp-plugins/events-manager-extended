@@ -226,15 +226,15 @@ function dbem_get_recurrence($recurrence_id) {
 	global $wpdb;
 	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 	$sql = "SELECT *,
-								DATE_FORMAT(recurrence_start_time, '%k') AS 'recurrence_hh',
-						  	DATE_FORMAT(recurrence_start_time, '%i') AS 'recurrence_mm',
-								DATE_FORMAT(recurrence_start_time, '%h:%i%p') AS 'recurrence_start_12h_time', 
-								DATE_FORMAT(recurrence_start_time, '%H:%i') AS 'recurrence_start_24h_time', 
-						    DATE_FORMAT(recurrence_end_time, '%Y-%m-%e') AS 'event_end_date', 
-								DATE_FORMAT(recurrence_end_time, '%k') AS 'recurrence_end_hh',
-					  		DATE_FORMAT(recurrence_end_time, '%i') AS 'recurrence_end_mm',
-					 			DATE_FORMAT(recurrence_end_time, '%h:%i%p') AS 'recurrence_end_12h_time', 
-								DATE_FORMAT(recurrence_end_time, '%H:%i') AS 'recurrence_end_24h_time'
+		DATE_FORMAT(recurrence_start_time, '%k') AS 'recurrence_hh',
+		DATE_FORMAT(recurrence_start_time, '%i') AS 'recurrence_mm',
+		DATE_FORMAT(recurrence_start_time, '%h:%i%p') AS 'recurrence_start_12h_time', 
+		DATE_FORMAT(recurrence_start_time, '%H:%i') AS 'recurrence_start_24h_time', 
+		DATE_FORMAT(recurrence_end_time, '%Y-%m-%e') AS 'event_end_date', 
+		DATE_FORMAT(recurrence_end_time, '%k') AS 'recurrence_end_hh',
+		DATE_FORMAT(recurrence_end_time, '%i') AS 'recurrence_end_mm',
+		DATE_FORMAT(recurrence_end_time, '%h:%i%p') AS 'recurrence_end_12h_time', 
+		DATE_FORMAT(recurrence_end_time, '%H:%i') AS 'recurrence_end_24h_time'
 	       FROM $recurrence_table WHERE recurrence_id = $recurrence_id;";
 	$recurrence = $wpdb->get_row($sql, ARRAY_A);                       
 	$location = dbem_get_location($recurrence['location_id']);

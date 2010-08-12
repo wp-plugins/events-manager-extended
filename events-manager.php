@@ -281,12 +281,20 @@ function dbem_create_recurrence_table() {
 			recurrence_byweekno tinyint NOT NULL,
 			event_contactperson_id mediumint(9) NULL,
   			event_category_id int(11) default NULL,
+  			event_page_title_format text NULL, 
+  			event_single_event_format text NULL, 
+  			event_contactperson_email_body text NULL, 
+  			event_respondent_email_body text NULL, 
 			UNIQUE KEY (recurrence_id)
 			);";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 	} else {
 		maybe_add_column($table_name, 'event_category_id', "alter table $table_name add event_category_id int(11) default NULL;");    
+		maybe_add_column($table_name, 'event_page_title_format', "alter table $table_name add event_page_title_format text NULL;"); 
+		maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
+		maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
+		maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
 		// Fix buggy columns
 		$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
 	}

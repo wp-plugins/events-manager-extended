@@ -110,7 +110,19 @@ function dbem_events_subpanel() {
 		$recurrence ['recurrence_end_time'] = $event ['event_end_time'];
 		$recurrence ['recurrence_id'] = isset($_POST ['recurrence_id']) ? $_POST['recurrence_id'] : '';
 		$recurrence ['recurrence_freq'] = isset($_POST['recurrence_freq']) ? $_POST['recurrence_freq'] : '';
-		$recurrence ['recurrence_freq'] == 'weekly' ? $recurrence [recurrence_byday] = implode ( ",", $_POST['recurrence_bydays'] ) : $recurrence ['recurrence_byday'] = $_POST['recurrence_byday'];
+		if ($recurrence ['recurrence_freq'] == 'weekly') {
+			if (isset($_POST['recurrence_bydays'])) {
+				$recurrence ['recurrence_byday'] = implode ( ",", $_POST['recurrence_bydays']);
+			} else {
+				$recurrence ['recurrence_byday'] = '';
+			}
+		} else {
+			if (isset($_POST['recurrence_byday'])) {
+				$recurrence ['recurrence_byday'] = $_POST['recurrence_byday'];
+			} else {
+				$recurrence ['recurrence_byday'] = '';
+			}
+		}
 		$recurrence ['recurrence_interval'] = isset($_POST['recurrence_interval']) ? $_POST['recurrence_interval'] : 1;
 		$recurrence ['recurrence_byweekno'] = isset($_POST['recurrence_byweekno']) ? $_POST ['recurrence_byweekno'] : '';
 		
@@ -140,6 +152,10 @@ function dbem_events_subpanel() {
 		$event ['event_single_event_format'] = stripslashes ( $_POST ['event_single_event_format'] );
 		$event ['event_contactperson_email_body'] = stripslashes ( $_POST ['event_contactperson_email_body'] );
 		$event ['event_respondent_email_body'] = stripslashes ( $_POST ['event_respondent_email_body'] );
+		$recurrence ['event_page_title_format'] = $event ['event_page_title_format'];
+		$recurrence ['event_single_event_format'] = $event ['event_single_event_format'];
+		$recurrence ['event_contactperson_email_body'] = $event ['event_contactperson_email_body'];
+		$recurrence ['event_respondent_email_body'] = $event ['event_respondent_email_body'];
 		$recurrence ['recurrence_notes'] = $event ['event_notes'];
                 if(isset ($_POST['event_category_id']) && is_numeric($_POST['event_category_id']) ){
                         $event ['event_category_id'] = $_POST ['event_category_id'];
@@ -868,10 +884,12 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 		$inflated_events = array ();
 		foreach ( $events as $this_event ) {
 			
-			$this_location = dbem_get_location ( $this_event ['location_id'] );
-			$this_event ['location_name'] = $this_location ['location_name'];
-			$this_event ['location_address'] = $this_location ['location_address'];
-			$this_event ['location_town'] = $this_location ['location_town'];
+			if ($this_event ['location_id'] ) {
+				$this_location = dbem_get_location ( $this_event ['location_id'] );
+				$this_event ['location_name'] = $this_location ['location_name'];
+				$this_event ['location_address'] = $this_location ['location_address'];
+				$this_event ['location_town'] = $this_location ['location_town'];
+			}
 			/* Marcus Begin Edit */
 			//I also edited the SQL
 			$this_event ['event_attributes'] = @unserialize($this_event ['event_attributes']);
@@ -1119,7 +1137,7 @@ function dbem_events_table($events, $limit, $title) {
 			<td>
 				 <?php
 				if ($event ['recurrence_id']) {
-					$recurrence = dbem_get_recurrence ( $event [recurrence_id] );
+					$recurrence = dbem_get_recurrence ( $event ['recurrence_id'] );
 				?>
 					<b><?php echo $recurrence ['recurrence_description']; ?>
 				<br />
@@ -1263,7 +1281,7 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( "Recurrence", 'dbem' ); ?>
 								</span></h3>
 							<div class="inside">
-								<?php if (! $event ['event_id']) { ?>
+								<?php if (!isset($event ['event_id']) || ! $event ['event_id']) { ?>
 								<?php
 									$recurrence_YES = "";
 									if ($event ['recurrence_id'] != "")
@@ -1964,12 +1982,15 @@ function dbem_admin_map_script() {
 			// single event page    
 			
 
-			$event_ID = $_REQUEST ['event_id'];
+			if (isset($_REQUEST ['event_id']))
+				$event_ID = intval($_REQUEST ['event_id']);
+			else
+				$event_ID =0;
 			$event = dbem_get_event ( $event_ID );
 			
-			if ($event ['location_town'] != '' || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] = 'events-manager-locations')) {
+			if ((isset($event ['location_town']) && $event ['location_town'] != '') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] = 'events-manager-locations')) {
 				$gmap_key = get_option ( 'dbem_gmap_key' );
-				if ($event ['location_address'] != "") {
+				if (isset($event ['location_address']) && $event ['location_address'] != "") {
 					$search_key = $event ['location_address'] . ", " . $event ['location_town'];
 				} else {
 					$search_key = $event ['location_name'] . ", " . $event ['location_town'];

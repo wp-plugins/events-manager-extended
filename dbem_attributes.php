@@ -88,7 +88,7 @@ function dbem_attributes_form($event) {
 								<a href="#" rel="<?php echo $count ?>">Remove</a>
 							</td>
 							<td>
-								<input type="text" size="40" name="mtm_<?php echo $count ?>_name" value="<?php echo $value ?>" />
+								<input type="text" size="40" name="mtm_<?php echo $count ?>_name" value="" />
 							</td>
 						</tr>
 						<?php
