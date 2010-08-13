@@ -21,13 +21,22 @@ function loadMapScript(key) {
 
 function loadGMap() {
 	if (GBrowserIsCompatible()) {
-		map = new GMap2(document.getElementById("dbem-location-map"));
-		map.addControl(new GLargeMapControl3D());
-		point = new GLatLng(latitude, longitude);
-		mapCenter= new GLatLng(point.lat()+0.005, point.lng()-0.003);
-        map.setCenter(mapCenter, 14);
-        var marker = new GMarker(point);
-        map.addOverlay(marker);
-		marker.openInfoWindowHtml(map_text);
+		var divs = document.getElementsByTagName('div');
+		for (var i = 0; i < divs.length; i++){                      
+			var divname = divs[i].id; 
+			if(divname.indexOf("dbem-location-map-") == 0) { 
+		//		map = new GMap2(document.getElementById("dbem-location-map"));
+				map_id = divname.replace("dbem-location-map-","");
+				map = new GMap2(divs[i]);
+				map.addControl(new GLargeMapControl3D());
+				point = new GLatLng(latitude+map_id, longitude+map_id);
+				//point = new GLatLng(latitude,longitude);
+				mapCenter= new GLatLng(point.lat()+0.005, point.lng()-0.003);
+				map.setCenter(mapCenter, 14);
+				var marker = new GMarker(point);
+				map.addOverlay(marker);
+				marker.openInfoWindowHtml(map_text);
+      			}//if
+		}
 	}
 }

@@ -610,12 +610,17 @@ function dbem_single_location_map($location) {
 	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
 	if ($gmap_is_active && !empty($location['location_name'])) {  
+		$id="dbem-location-map-".$location['location_id'];
+		$latitude_string="latitude".$location['location_id'];
+		$longitude_string="longitude".$location['location_id'];
+		#$latitude_string="latitude";
+		#$longitude_string="longitude";
    		$gmaps_key = get_option('dbem_gmap_key');
-   		$map_div = "<div id='dbem-location-map' style=' background: green; width: 400px; height: 300px'></div>" ;
+   		$map_div = "<div id='$id' style=' background: green; width: 400px; height: 300px'></div>" ;
    		$map_div .= "<script type='text/javascript'>
   			<!--// 
-  		latitude = parseFloat('".$location['location_latitude']."');
-  		longitude = parseFloat('".$location['location_longitude']."');
+  		$latitude_string = parseFloat('".$location['location_latitude']."');
+  		$longitude_string = parseFloat('".$location['location_longitude']."');
   		GMapsKey = '$gmaps_key';
   		map_text = '$map_text';
 		//-->
