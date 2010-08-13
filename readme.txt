@@ -139,3 +139,10 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.0.2 =
 * Feature (for real now): now you can choose a category in the events widget, so only events of that category are shown  
   If you disable categories, the widget will show all events again as well.
+
+= 3.0.3
+* Change: now the single event formatting works also for recurring events
+* Change: lots of code cleanups and extra checks
+* Bugfix: editing a recurrence instance now changes it to a normal event as expected
+* Bugfix: settings dbem_small_calendar_event_title_format and dbem_small_calendar_event_title_seperator are no longer ignored
+
