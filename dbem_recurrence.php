@@ -157,9 +157,11 @@ function dbem_insert_recurrent_event($event, $recurrence ){
 			
 			$wpdb->insert($recurrence_table, $recurrence);
 			//print_r($recurrence);
+
 		 	$recurrence['recurrence_id'] = mysql_insert_id();
 		 	$recurrence['recurrence_rsvp'] = $event['event_rsvp'];
 		 	$recurrence['recurrence_seats'] = $event['event_seats'];
+
 			$output = "<h2>Recurring</h2>";
 			//echo "recurrence_id = $recurrence_id<br/>";  
 			dbem_insert_events_for_recurrence($recurrence);
@@ -184,6 +186,11 @@ function dbem_insert_events_for_recurrence($recurrence) {
 		$new_event['event_category_id'] = $recurrence['event_category_id'];
 		$new_event['event_start_date'] = date("Y-m-d", $day); 
 		$new_event['event_contactperson_id'] = $recurrence['event_contactperson_id'];
+		$new_event['event_page_title_format'] = $recurrence['event_page_title_format'];
+		$new_event['event_single_event_format'] = $recurrence['event_single_event_format'];
+		$new_event['event_contactperson_email_body'] = $recurrence['event_contactperson_email_body'];
+		$new_event['event_respondent_email_body'] = $recurrence['event_respondent_email_body'];
+
 		//print_r($new_event);
 		$wpdb->insert($events_table, $new_event);
 		if(DEBUG) 

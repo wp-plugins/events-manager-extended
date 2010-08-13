@@ -22,7 +22,8 @@ function dbem_add_booking_form($event_id) {
 	}
 
 	$module = "<h3>".__('Book now!','dbem')."</h3><br/>";
-	$module .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
+	if(!empty($form_add_message))
+		$module .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
 	$booked_places_options = array();
 	for ( $i = 1; $i <= $max; $i++) 
 		array_push($booked_places_options, "<option value='$i'>$i</option>");
