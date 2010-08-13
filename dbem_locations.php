@@ -49,7 +49,7 @@ function dbem_locations_page() {
 			$message = $validation_result;   
 			dbem_locations_edit_layout($location, $message);
 		}
-	} elseif(isset($_POST['action']) && $_POST['action'] == "addlocation") {    
+	} elseif(isset($_POST['action']) && $_POST['action'] == "addlocation") {
 		$location = array();
 		$location['location_name'] = $_POST['location_name'];
 		$location['location_address'] = $_POST['location_address'];
@@ -204,7 +204,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 				<div id='col-right'>
 			 	 <div class='col-wrap'>       
 				 	 <form id='bookings-filter' method='get' action='<?php echo $destination ?>'>
-						<input type='hidden' name='page' value='locations'/>
+						<input type='hidden' name='page' value='events-manager-locations'/>
 						<input type='hidden' name='action' value='edit_location'/>
 						
 						<?php if (count($locations)>0) : ?>
@@ -610,9 +610,10 @@ function dbem_single_location_map($location) {
 	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
 	if ($gmap_is_active && !empty($location['location_name'])) {  
-		$id="dbem-location-map-".$location['location_id'];
-		$latitude_string="latitude".$location['location_id'];
-		$longitude_string="longitude".$location['location_id'];
+		$id="dbem-location-map_".$location['location_id'];
+		$latitude_string="latitude_".$location['location_id'];
+		$longitude_string="longitude_".$location['location_id'];
+		$map_text_string="map_text_".$location['location_id'];
 		#$latitude_string="latitude";
 		#$longitude_string="longitude";
    		$gmaps_key = get_option('dbem_gmap_key');
@@ -622,10 +623,10 @@ function dbem_single_location_map($location) {
   		$latitude_string = parseFloat('".$location['location_latitude']."');
   		$longitude_string = parseFloat('".$location['location_longitude']."');
   		GMapsKey = '$gmaps_key';
-  		map_text = '$map_text';
+  		$map_text_string = '$map_text';
 		//-->
 		</script>";
-		$map_div .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_single_location_map.js' type='text/javascript'></script>";
+		#$map_div .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_single_location_map.js' type='text/javascript'></script>";
 	} else {
 		$map_div = "";
 	}
