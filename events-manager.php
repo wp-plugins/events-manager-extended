@@ -534,7 +534,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_EDITEVENTLINK/', $result)) { 
 			$link = "";
 			if(is_user_logged_in())
-				$link = "<a href=' ".get_bloginfo('url')."/wp-admin/admin.php?page=events-manager&action=edit_event&event_id=".$event['event_id']."'>".__('Edit')."</a>";
+				$link = "<a href=' ".get_bloginfo('wpurl')."/wp-admin/admin.php?page=events-manager&action=edit_event&event_id=".$event['event_id']."'>".__('Edit')."</a>";
 			$event_string = str_replace($result, $link , $event_string );		
 		}
 		if (preg_match('/#_24HSTARTTIME/', $result)) { 

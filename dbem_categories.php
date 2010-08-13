@@ -74,7 +74,7 @@ function dbem_categories_subpanel() {
 
 function dbem_categories_table_layout($message = "") {
 	$categories = dbem_get_categories();
-	$destination = get_bloginfo('url')."/wp-admin/admin.php"; 
+	$destination = get_bloginfo('wpurl')."/wp-admin/admin.php"; 
 	$table = "
 		<div class='wrap nosubsub'>\n
 			<div id='icon-edit' class='icon32'>
