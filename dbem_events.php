@@ -1730,18 +1730,6 @@ function dbem_enque_scripts() {
 }
 add_action ( 'template_redirect', 'dbem_enque_scripts' );
 
-function url_exists($url) {
-	
-	if ((strpos ( $url, "http" )) === false)
-		$url = "http://" . $url;
-		// FIXME ripristina la linea seguente e VEDI DI SISTEMARE!!!!
-	// if (is_array(@get_headers($url))) {
-	if (true)
-		return true;
-	else
-		return false;
-}
-
 // General script to make sure hidden fields are shown when containing data
 function dbem_admin_general_script() {
 	?>
@@ -1771,7 +1759,8 @@ function dbem_admin_general_script() {
 		$show24Hours = 'false';
 	
 	$locale_file = get_bloginfo ( 'wpurl' ) . "/wp-content/plugins/events-manager-extended/js/jquery-ui-datepicker/i18n/ui.datepicker-$locale_code.js";
-	if (url_exists ( $locale_file )) {
+	// for english, no translation code is needed
+	if ($locale_code != "en") {
 		?>
 <script
 	src="<?php
