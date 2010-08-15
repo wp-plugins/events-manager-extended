@@ -1,13 +1,13 @@
-$j=jQuery.noConflict();   
+$dbem=jQuery.noConflict();   
 // console.log("eventful: " + eventful + " scope " + scope);
 
-$j(document.body).unload(function() {
+$dbem(document.body).unload(function() {
 	if (GBrowserIsCompatible()) {
 		GUnload();
 	}
 });
 
-$j(document).ready(function() {
+$dbem(document).ready(function() {
 	if (typeof GMapsKey != "undefined") {
 		loadMapScript(GMapsKey);
 	}
@@ -19,7 +19,7 @@ function loadGMap() {
 		// first the global map (if present)
 		if (document.getElementById("dbem_global_map")) {
 			var locations;
-			$j.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
+			$dbem.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
 				locations = data.locations;    
 				var latitudes = new Array();
 				var longitudes = new Array();
@@ -35,7 +35,7 @@ function loadGMap() {
 				map.addControl(new GMapTypeControl());
 				map.setCenter(new GLatLng(45.4213477,10.952397), 3);
 
-				$j.each(locations, function(i, item) {
+				$dbem.each(locations, function(i, item) {
 					latitudes.push(item.location_latitude);
 					longitudes.push(item.location_longitude);
 					if (parseFloat(item.location_latitude) > max_latitude)
@@ -67,7 +67,7 @@ function loadGMap() {
 				var letters = new Array('A','B','C','D','E','F','G','H');
 				var customIcon = new GIcon(G_DEFAULT_ICON);
 
-				$j.each(locations, function(i, item) {
+				$dbem.each(locations, function(i, item) {
 					var letter = letters[i];
 
 					customIcon.image = "http://www.google.com/mapfiles/marker" + letter + ".png";
@@ -77,8 +77,8 @@ function loadGMap() {
 					var marker = new GMarker(point, markerOption);
 					map.addOverlay(marker);
 					var li_element = "<li id='location-"+item.location_id+"' style='list-style-type: upper-alpha'><a >"+ item.location_name+"</a></li>";
-					$j('ol#dbem_locations_list').append(li_element);
-					$j('li#location-'+item.location_id+' a').click(function() {
+					$dbem('ol#dbem_locations_list').append(li_element);
+					$dbem('li#location-'+item.location_id+' a').click(function() {
 						displayLocationInfo(marker, item);
 					});
 					GEvent.addListener(marker, "click", function() {
