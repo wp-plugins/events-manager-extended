@@ -1784,94 +1784,81 @@ function dbem_admin_general_script() {
 <script type="text/javascript">
  	//<![CDATA[        
    // TODO: make more general, to support also latitude and longitude (when added)
-$j=jQuery.noConflict();   
+$j_dbem_event=jQuery.noConflict();   
 
 function updateIntervalDescriptor () { 
-	$j(".interval-desc").hide();
+	$j_dbem_event(".interval-desc").hide();
 	var number = "-plural";
-	if ($j('input#recurrence-interval').val() == 1 || $j('input#recurrence-interval').val() == "")
+	if ($j_dbem_event('input#recurrence-interval').val() == 1 || $j_dbem_event('input#recurrence-interval').val() == "")
 	number = "-singular"
-	var descriptor = "span#interval-"+$j("select#recurrence-frequency").val()+number;
-	$j(descriptor).show();
+	var descriptor = "span#interval-"+$j_dbem_event("select#recurrence-frequency").val()+number;
+	$j_dbem_event(descriptor).show();
 }
 function updateIntervalSelectors () {
-	$j('p.alternate-selector').hide();   
-	$j('p#'+ $j('select#recurrence-frequency').val() + "-selector").show();
-	//$j('p.recurrence-tip').hide();
-	//$j('p#'+ $j(this).val() + "-tip").show();
+	$j_dbem_event('p.alternate-selector').hide();   
+	$j_dbem_event('p#'+ $j_dbem_event('select#recurrence-frequency').val() + "-selector").show();
+	//$j_dbem_event('p.recurrence-tip').hide();
+	//$j_dbem_event('p#'+ $j_dbem_event(this).val() + "-tip").show();
 }
 function updateShowHideRecurrence () {
-	if($j('input#event-recurrence').attr("checked")) {
-		$j("#event_recurrence_pattern").fadeIn();
+	if($j_dbem_event('input#event-recurrence').attr("checked")) {
+		$j_dbem_event("#event_recurrence_pattern").fadeIn();
 		/* Marcus Begin Edit */
 		//Edited this and the one below so dates always can have an end date
-		//$j("input#localised-end-date").fadeIn();
+		//$j_dbem_event("input#localised-end-date").fadeIn();
 		/* Marcus End Edit */ 
-		$j("#event-date-explanation").hide();
-		$j("#recurrence-dates-explanation").show();
-		$j("h3#recurrence-dates-title").show();
-		$j("h3#event-date-title").hide();     
+		$j_dbem_event("#event-date-explanation").hide();
+		$j_dbem_event("#recurrence-dates-explanation").show();
+		$j_dbem_event("h3#recurrence-dates-title").show();
+		$j_dbem_event("h3#event-date-title").hide();     
 	} else {
-		$j("#event_recurrence_pattern").hide();
+		$j_dbem_event("#event_recurrence_pattern").hide();
 		/* Marcus Begin Edit */
-		//$j("input#localised-end-date").hide();
+		//$j_dbem_event("input#localised-end-date").hide();
 		/* Marcus End Edit */ 
-		$j("#recurrence-dates-explanation").hide();
-		$j("#event-date-explanation").show();
-		$j("h3#recurrence-dates-title").hide();
-		$j("h3#event-date-title").show();   
+		$j_dbem_event("#recurrence-dates-explanation").hide();
+		$j_dbem_event("#event-date-explanation").show();
+		$j_dbem_event("h3#recurrence-dates-title").hide();
+		$j_dbem_event("h3#event-date-title").show();   
 	}
 }
 
 function updateShowHideRsvp () {
-	if($j('input#rsvp-checkbox').attr("checked")) {
-		$j("div#rsvp-data").fadeIn();
+	if($j_dbem_event('input#rsvp-checkbox').attr("checked")) {
+		$j_dbem_event("div#rsvp-data").fadeIn();
 	} else {
-		$j("div#rsvp-data").hide();
+		$j_dbem_event("div#rsvp-data").hide();
 	}
 }
 
-$j(document).ready( function() {
+$j_dbem_event(document).ready( function() {
 	locale_format = "ciao";
  
-	$j("#recurrence-dates-explanation").hide();
-	$j("#localised-date").show();
+	$j_dbem_event("#recurrence-dates-explanation").hide();
+	$j_dbem_event("#localised-date").show();
 	/* Marcus Begin Edit */
-	$j("#localised-end-date").show();
+	$j_dbem_event("#localised-end-date").show();
 	/* Marcus End Edit */
 
-	$j("#date-to-submit").hide();
-	$j("#end-date-to-submit").hide(); 
-	$j("#localised-date").datepicker($j.extend({},
-		($j.datepicker.regional["it"], 
+	$j_dbem_event("#date-to-submit").hide();
+	$j_dbem_event("#end-date-to-submit").hide(); 
+	$j_dbem_event("#localised-date").datepicker($j_dbem_event.extend({},
+		($j_dbem_event.datepicker.regional["<?php echo $locale_code; ?>"], 
 		{altField: "#date-to-submit", 
 		altFormat: "yy-mm-dd"})));
-	$j("#localised-end-date").datepicker($j.extend({},
-		($j.datepicker.regional["it"], 
+	$j_dbem_event("#localised-end-date").datepicker($j_dbem_event.extend({},
+		($j_dbem_event.datepicker.regional["<?php echo $locale_code; ?>"], 
 		{altField: "#end-date-to-submit", 
 		altFormat: "yy-mm-dd"})));
 
+ 	$j_dbem_event("#start-time").timeEntry({spinnerImage: '', show24Hours: <?php echo $show24Hours; ?> });
+	$j_dbem_event("#end-time").timeEntry({spinnerImage: '', show24Hours: <?php echo $show24Hours; ?>});
 
-
-
-
-  
- 	$j("#start-time").timeEntry({spinnerImage: '', show24Hours: <?php
-	echo $show24Hours;
-	?> });
-  $j("#end-time").timeEntry({spinnerImage: '', show24Hours: <?php
-	echo $show24Hours;
-	?>});
-
-
-
-
-
-	$j('input.select-all').change(function(){
-	 	if($j(this).is(':checked'))
-	 	$j('input.row-selector').attr('checked', true);
+	$j_dbem_event('input.select-all').change(function(){
+	 	if($j_dbem_event(this).is(':checked'))
+	 	$j_dbem_event('input.row-selector').attr('checked', true);
 	 	else
-	 	$j('input.row-selector').attr('checked', false);
+	 	$j_dbem_event('input.row-selector').attr('checked', false);
 	}); 
 	// TODO: NOT WORKING FOR SOME REASON, val() gives me 2 instead of 'smtp'...
 	// console.log($j('select[name:dbem_rsvp_mail_send_method]').val());
@@ -1901,12 +1888,12 @@ $j(document).ready( function() {
 	 updateIntervalSelectors();
 	 updateShowHideRecurrence();  
 	 updateShowHideRsvp();
-	 $j('input#event-recurrence').change(updateShowHideRecurrence);  
-	 $j('input#rsvp-checkbox').change(updateShowHideRsvp);   
+	 $j_dbem_event('input#event-recurrence').change(updateShowHideRecurrence);  
+	 $j_dbem_event('input#rsvp-checkbox').change(updateShowHideRsvp);   
 	 // recurrency elements   
-	 $j('input#recurrence-interval').keyup(updateIntervalDescriptor);
-	 $j('select#recurrence-frequency').change(updateIntervalDescriptor);
-	 $j('select#recurrence-frequency').change(updateIntervalSelectors);
+	 $j_dbem_event('input#recurrence-interval').keyup(updateIntervalDescriptor);
+	 $j_dbem_event('select#recurrence-frequency').change(updateIntervalDescriptor);
+	 $j_dbem_event('select#recurrence-frequency').change(updateIntervalSelectors);
     
 	 // hiding or showing notes according to their content	
 	 jQuery('.postbox h3').prepend('<a class="togbox">+</a> ');
@@ -1920,7 +1907,7 @@ $j(document).ready( function() {
    // users cannot submit the event form unless some fields are filled
    	function validateEventForm(){
    		errors = "";
-		var recurring = $j("input[@name=repeated_event]:checked").val();
+		var recurring = $j_dbem_event("input[@name=repeated_event]:checked").val();
 		requiredFields= new Array('event_name', 'localised_event_date', 'location_name','location_address','location_town');
 		var localisedRequiredFields = {'event_name':"<?php
 	_e ( 'Name', 'dbem' )?>", 'localised_event_date':"<?php
@@ -1931,28 +1918,25 @@ $j(document).ready( function() {
 		
 		missingFields = new Array;
 		for (var i in requiredFields) {
-			if ($j("input[@name=" + requiredFields[i]+ "]").val() == 0) {
+			if ($j_dbem_event("input[@name=" + requiredFields[i]+ "]").val() == 0) {
 				missingFields.push(localisedRequiredFields[requiredFields[i]]);
-				$j("input[@name=" + requiredFields[i]+ "]").css('border','2px solid red');
+				$j_dbem_event("input[@name=" + requiredFields[i]+ "]").css('border','2px solid red');
 			} else {
-				$j("input[@name=" + requiredFields[i]+ "]").css('border','1px solid #DFDFDF');
+				$j_dbem_event("input[@name=" + requiredFields[i]+ "]").css('border','1px solid #DFDFDF');
 				
 			}
 				
 	   	}
 	
-		// 	alert('ciao ' + recurring+ " end: " + $j("input[@name=localised_event_end_date]").val());     
+		// 	alert('ciao ' + recurring+ " end: " + $j_dbem_event("input[@name=localised_event_end_date]").val());     
 	   	if (missingFields.length > 0) {
-	
-		    errors = "<?php
-	echo _e ( 'Some required fields are missing:', 'dbem' )?> " + missingFields.join(", ") + ".\n";
+		    errors = "<?php echo _e ( 'Some required fields are missing:', 'dbem' )?> " + missingFields.join(", ") + ".\n";
 		}
-		if(recurring && $j("input[@name=localised_event_end_date]").val() == "") {
-			errors = errors +  "<?php
-	_e ( 'Since the event is repeated, you must specify an end date', 'dbem' )?>."; 
-			$j("input[@name=localised_event_end_date]").css('border','2px solid red');
+		if(recurring && $j_dbem_event("input[@name=localised_event_end_date]").val() == "") {
+			errors = errors +  "<?php _e ( 'Since the event is repeated, you must specify an end date', 'dbem' )?>."; 
+			$j_dbem_event("input[@name=localised_event_end_date]").css('border','2px solid red');
 		} else {
-			$j("input[@name=localised_event_end_date]").css('border','1px solid #DFDFDF');
+			$j_dbem_event("input[@name=localised_event_end_date]").css('border','1px solid #DFDFDF');
 		}
 		if(errors != "") {
 			alert(errors);
@@ -1961,9 +1945,8 @@ $j(document).ready( function() {
 		return true; 
    }
    
-   $j('#eventForm').bind("submit", validateEventForm);
+   $j_dbem_event('#eventForm').bind("submit", validateEventForm);
    	
-  
 });
 //]]>
 </script>
@@ -2000,20 +1983,16 @@ function dbem_admin_map_script() {
 					width: 50%;
 				}     */
 </style>
-<script
-	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php
-				echo $gmap_key;
-				?>"
-	type="text/javascript"></script>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php echo $gmap_key; ?>" type="text/javascript"></script>
 <script type="text/javascript">
 			//<![CDATA[
-		   	$j=jQuery.noConflict();
+		   	$j_dbem_admin=jQuery.noConflict();
 		
 			function loadMap(location, town, address) {
-	      		if (GBrowserIsCompatible()) {
-	        		var map = new GMap2(document.getElementById("event-map"));
-	        	//	map.addControl(new GScaleControl()); 
-							//map.setCenter(new GLatLng(37.4419, -122.1419), 13);   
+	      			if (GBrowserIsCompatible()) {
+	        			var map = new GMap2(document.getElementById("event-map"));
+	        		//	map.addControl(new GScaleControl()); 
+				//	map.setCenter(new GLatLng(37.4419, -122.1419), 13);   
 					var geocoder = new GClientGeocoder();
 					if (address !="") {
 						searchKey = address + ", " + town;
@@ -2021,76 +2000,70 @@ function dbem_admin_map_script() {
 						searchKey =  location + ", " + town;
 					}
 					
-					var search = "<?php
-				echo $search_key?>" ;
+					var search = "<?php echo $search_key?>" ;
 					geocoder.getLatLng(
 					    searchKey,
 					    function(point) {
-					      if (!point) {
-					       	$j("#event-map").hide();
-							$j('#map-not-found').show();
-					      } else {
+						if (!point) {
+							$j_dbem_admin("#event-map").hide();
+							$j_dbem_admin('#map-not-found').show();
+						} else {
 							mapCenter= new GLatLng(point.lat()+0.01, point.lng()+0.005);
-						    map.setCenter(mapCenter, 13);
-					        var marker = new GMarker(point);
-					        map.addOverlay(marker);
-					        marker.openInfoWindowHtml('<strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p>'); 
-							$j('input#location-latitude').val(point.y);
-					    $j('input#location-longitude').val(point.x);   
-							$j("#event-map").show();
-							$j('#map-not-found').hide();
-							}
+							map.setCenter(mapCenter, 13);
+					     		var marker = new GMarker(point);
+							map.addOverlay(marker);
+							marker.openInfoWindowHtml('<strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p>'); 
+							$j_dbem_admin('input#location-latitude').val(point.y);
+							$j_dbem_admin('input#location-longitude').val(point.x);   
+							$j_dbem_admin("#event-map").show();
+							$j_dbem_admin('#map-not-found').hide();
+						}
 					    }
-					  );   
-	      	 //	map.addControl(new GSmallMapControl());
-					 // map.addControl(new GMapTypeControl());
-					
-					 }
-	    	}
+					);   
+	      	 		//	map.addControl(new GSmallMapControl());
+				//	map.addControl(new GMapTypeControl());
+				}
+	    		}
    
-			$j(document).ready(function() {
+			$j_dbem_admin(document).ready(function() {
 	  			<?php if(get_option('dbem_use_select_for_locations')) : ?>
-				eventLocation = $j("input[name='location-select-name']").val(); 
-			  	eventTown = $j("input[name='location-select-town']").val();  
-				eventAddress = $j("input[name='location-select-address']").val(); 
+				eventLocation = $j_dbem_admin("input[name='location-select-name']").val(); 
+			  	eventTown = $j_dbem_admin("input[name='location-select-town']").val();  
+				eventAddress = $j_dbem_admin("input[name='location-select-address']").val(); 
 	
    				<?php else: ?>
-				eventLocation = $j("input#location-name").val(); 
-			  	eventTown = $j("input#location-town").val(); 
-				eventAddress = $j("input#location-address").val();
-		        <?php endif; ?>
+				eventLocation = $j_dbem_admin("input#location-name").val(); 
+			  	eventTown = $j_dbem_admin("input#location-town").val(); 
+				eventAddress = $j_dbem_admin("input#location-address").val();
+		        	<?php endif; ?>
 				
 				loadMap(eventLocation, eventTown, eventAddress);
 			
-				$j("input#location-name").blur(function(){
-						newEventLocation = $j("input#location-name").val();  
+				$j_dbem_admin("input#location-name").blur(function(){
+						newEventLocation = $j_dbem_admin("input#location-name").val();  
 						if (newEventLocation !=eventLocation) {                
 							loadMap(newEventLocation, eventTown, eventAddress); 
 							eventLocation = newEventLocation;
-					   
 						}
 				});
-				$j("input#location-town").blur(function(){
-						newEventTown = $j("input#location-town").val(); 
+				$j_dbem_admin("input#location-town").blur(function(){
+						newEventTown = $j_dbem_admin("input#location-town").val(); 
 						if (newEventTown !=eventTown) {  
 							loadMap(eventLocation, newEventTown, eventAddress); 
 							eventTown = newEventTown;
-							} 
+						} 
 				});
-				$j("input#location-address").blur(function(){
-						newEventAddress = $j("input#location-address").val(); 
+				$j_dbem_admin("input#location-address").blur(function(){
+						newEventAddress = $j_dbem_admin("input#location-address").val(); 
 						if (newEventAddress != eventAddress) {
 							loadMap(eventLocation, eventTown, newEventAddress);
 						 	eventAddress = newEventAddress; 
 						}
 				});
-			  
-			
-		 
-		   }); 
-		   $j(document).unload(function() {
+		   	}); 
+		   	$j_dbem_admin(document).unload(function() {
 				GUnload();
-		   });
+			});
 		    //]]>
 		</script>
 <?php
@@ -2110,39 +2083,29 @@ function dbem_admin_options_script() {
 		?>
 <script type="text/javascript">
 	//<![CDATA[
-		$j=jQuery.noConflict();
+		jQuery.noConflict();
 		 
-		 $j(document).ready(function() {   
-				
+		jQuery(document).ready(function($) {   
 	  		// users cannot enable Google Maps without an api key
-				function verifyOptionsForm(){
-				   	var gmap_is_active = $j("input[@name=dbem_gmap_is_active]:checked").val();
-						var gmap_key = $j("input[@name=dbem_gmap_key]").val();
-				  	if(gmap_is_active == '1' && (gmap_key == '')){
-					    alert("<?php
-		_e ( 'You cannot enable Google Maps integration without setting an appropriate API key.' );
-		?>");
-							$j("input[@name='dbem_gmap_is_active']:nth(1)").attr("checked","checked");
-					
-						return false;
-					} else {
-						return true;
-					}
+			function verifyOptionsForm() {
+			   	var gmap_is_active = $("input[@name=dbem_gmap_is_active]:checked").val();
+				var gmap_key = $("input[@name=dbem_gmap_key]").val();
+			  	if(gmap_is_active == '1' && (gmap_key == '')){
+					alert("<?php _e ( 'You cannot enable Google Maps integration without setting an appropriate API key.' ); ?>");
+					$("input[@name='dbem_gmap_is_active']:nth(1)").attr("checked","checked");
+					return false;
+				} else {
+					return true;
 				}
-				
-        $j('#dbem_options_form').bind("submit", verifyOptionsForm);
-
-
-		   });
-	
+			}
+        		$('#dbem_options_form').bind("submit", verifyOptionsForm);
+		 });
 		
-		//]]>
-	</script>
+	//]]>
+</script>
 
 <?php
-	
 	}
-
 }
 add_action ( 'admin_head', 'dbem_admin_options_script' );
 

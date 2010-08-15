@@ -658,13 +658,13 @@ function dbem_locations_autocomplete() {
 
 		<script type="text/javascript">
 		//<![CDATA[
-		$j=jQuery.noConflict();
+		jQuery.noConflict();
 
-		$j(document).ready(function() {
+		jQuery(document).ready(function($) {
 			var gmap_enabled = <?php echo get_option('dbem_gmap_is_active'); ?>; 
 		    
 		   <?php if(!get_option('dbem_use_select_for_locations')) :?>
-			$j("input#location-name").autocomplete("../wp-content/plugins/events-manager-extended/locations-search.php", {
+			$("input#location-name").autocomplete("../wp-content/plugins/events-manager-extended/locations-search.php", {
 				width: 260,
 				selectFirst: false,
 				formatItem: function(row) {
@@ -677,33 +677,31 @@ function dbem_locations_autocomplete() {
 				} 
 
 			});
-			$j('input#location-name').result(function(event,data,formatted) {       
+			$('input#location-name').result(function(event,data,formatted) {       
 				item = eval("(" + data + ")"); 
-				$j('input#location-address').val(item.address);
-				$j('input#location-town').val(item.town);
+				$('input#location-address').val(item.address);
+				$('input#location-town').val(item.town);
 				if(gmap_enabled) {   
-					eventLocation = $j("input#location-name").val(); 
-			    eventTown = $j("input#location-town").val(); 
-					eventAddress = $j("input#location-address").val();
-					
+					eventLocation = $("input#location-name").val(); 
+					eventTown = $("input#location-town").val(); 
+					eventAddress = $("input#location-address").val();
 					loadMap(eventLocation, eventTown, eventAddress)
 				} 
 			});  
 			<?php else : ?>
-			$j('#location-select-id').change(function() {
-				$j.getJSON("/../wp-content/plugins/events-manager-extended/locations-search.php",{id: $j(this).val()}, function(data){
+			$('#location-select-id').change(function() {
+				$.getJSON("/../wp-content/plugins/events-manager-extended/locations-search.php",{id: $(this).val()}, function(data){
 					eventLocation = data.name;
 					eventAddress = data.address;
 					eventTown = data.town;
-					$j("input[name='location-select-name']").val(eventLocation);  
-					$j("input[name='location-select-address']").val(eventAddress); 
-					$j("input[name='location-select-town']").val(eventTown); 
+					$("input[name='location-select-name']").val(eventLocation);  
+					$("input[name='location-select-address']").val(eventAddress); 
+					$("input[name='location-select-town']").val(eventTown); 
 					loadMap(eventLocation, eventTown, eventAddress)
 					
 			   	})
 			});  
 			<?php endif; ?>
-
 		});	
 		//]]> 
 
