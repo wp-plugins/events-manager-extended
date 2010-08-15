@@ -8,7 +8,9 @@ $j(document.body).unload(function() {
 });
 
 $j(document).ready(function() {
-	loadMapScript(GMapsKey);
+	if (typeof GMapsKey != "undefined") {
+		loadMapScript(GMapsKey);
+	}
 });
 
 function loadGMap() {
@@ -25,7 +27,9 @@ function loadGMap() {
 			var min_longitude = 500.1;    
 
 			map = new GMap2(document.getElementById("dbem_global_map"));
-	                map.addControl(new GLargeMapControl3D());
+			map.addControl(new GSmallMapControl());
+			map.removeMapType(G_HYBRID_MAP);
+			map.addControl(new GMapTypeControl());
 			map.setCenter(new GLatLng(45.4213477,10.952397), 3);
 
 			$j.each(locations, function(i, item) {
@@ -86,21 +90,24 @@ function loadGMap() {
 		// this would cause a page with both a "all locations map" and a normal map to get
 		// a green screen for the normal map (since this javascript is loaded after dbem_single_location_map.js)
 		var divs = document.getElementsByTagName('div');
+		var maps=new Array();
 		for (var i = 0; i < divs.length; i++){                      
-			var divname = divs[i].id; 
+			divname = divs[i].id; 
 			if(divname.indexOf("dbem-location-map_") == 0) { 
 				var map_id = divname.replace("dbem-location-map_","");
-				var lat_id = eval('latitude_'+map_id); 
-				var lon_id = eval('longitude_'+map_id); 
-				var map_text_id = eval('map_text_'+map_id); 
-				var map = new GMap2(divs[i]);
-				map.addControl(new GLargeMapControl3D());
-				point = new GLatLng(lat_id, lon_id);
-				//point = new GLatLng(latitude,longitude);
-				mapCenter= new GLatLng(point.lat()+0.005, point.lng()-0.003);
-				map.setCenter(mapCenter, 14);
-				var marker = new GMarker(point);
-				map.addOverlay(marker);
+				var lat_id = window['latitude_'+map_id]; 
+				var lon_id = window['longitude_'+map_id]; 
+				var map_text_id = window['map_text_'+map_id]; 
+				maps[i] = new GMap2(divs[i]);
+				maps[i].addControl(new GSmallMapControl());
+				maps[i].removeMapType(G_HYBRID_MAP);
+				maps[i].addControl(new GMapTypeControl());
+				var point = new GLatLng(lat_id, lon_id);
+				var mapCenter= new GLatLng(point.lat()+0.005, point.lng()-0.003);
+				maps[i].setCenter(mapCenter, 14);
+				marker = new GMarker(point);
+				marker.clickable=false;
+				maps[i].addOverlay(marker);
 				marker.openInfoWindowHtml(map_text_id);
       			}//if
 		}

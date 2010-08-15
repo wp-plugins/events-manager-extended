@@ -522,7 +522,7 @@ function dbem_global_map($atts) {
 		location_infos = '$location_infos'
 	//-->
 	</script>";
-	$result .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_global_map.js' type='text/javascript'></script>";
+	//$result .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_global_map.js' type='text/javascript'></script>";
 	$result .= "<ol id='dbem_locations_list'></ol>"; 
 	
 	} else {
@@ -626,7 +626,7 @@ function dbem_single_location_map($location) {
   		$map_text_string = '$map_text';
 		//-->
 		</script>";
-		#$map_div .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_single_location_map.js' type='text/javascript'></script>";
+		// $map_div .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_single_location_map.js' type='text/javascript'></script>";
 	} else {
 		$map_div = "";
 	}
