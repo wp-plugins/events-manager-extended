@@ -140,10 +140,14 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature (for real now): now you can choose a category in the events widget, so only events of that category are shown  
   If you disable categories, the widget will show all events again as well.
 
-= 3.0.3
+= 3.0.3 =
 * Change: now the single event formatting works also for recurring events
 * Change: lots of code cleanups and extra checks
 * Bugfix: editing a recurrence instance now changes it to a normal event as expected
 * Bugfix: settings dbem_small_calendar_event_title_format and dbem_small_calendar_event_title_seperator are no longer ignored
 * Bugfix: location deletion works again
 * Bugfix/feature: more than one map on one page is now possible (for single/global maps mixed as well)
+
+= 3.0.4 =
+* Improvement: add Dutch translation
+* Feature: use google maps API v3, no more API key needed
