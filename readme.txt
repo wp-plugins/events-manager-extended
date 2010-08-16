@@ -149,5 +149,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix/feature: more than one map on one page is now possible (for single/global maps mixed as well)
 
 = 3.0.4 =
-* Improvement: add Dutch translation
+* Improvement: add Dutch translation (thanks to Paul Jonker)
 * Feature: use google maps API v3, no more API key needed
