@@ -9,6 +9,11 @@ $j_dbem_locations(document).ready(function() {
 	loadMapScript();
 });
 
+// these 2 need to be global variables, otherwise they are not accessible in
+// the click.function() calls
+var infowindow;
+var location_info;
+
 function loadGMap() {
 		// first the global map (if present)
 	if (document.getElementById("dbem_global_map")) {
@@ -76,17 +81,20 @@ function loadGMap() {
 					image: customIcon
 				});
 				var li_element = "<li id='location-"+item.location_id+"' style='list-style-type: upper-alpha'><a >"+ item.location_name+"</a></li>";
-				var location_info = "<div class=\"dbem-location-balloon\"><strong>"+ item.location_name +"</strong><br/>" + item.location_address + ", " + item.location_town + "<br/><small><a href='" + events_page + "&location_id=" + item.location_id + "'>Details<a></div>";
+				location_info = "<div class=\"dbem-location-balloon\"><strong>"+ item.location_name +"</strong><br/>" + item.location_address + ", " + item.location_town + "<br/><small><a href='" + events_page + "&location_id=" + item.location_id + "'>Details<a></div>";
 				var pixoff = new google.maps.Size(0,-32);
-				var infowindow = new google.maps.InfoWindow({
-						content: location_info,
-						pixelOffset: pixoff
-				});
+				infowindow = new google.maps.InfoWindow();
+				//var infowindow = new google.maps.InfoWindow({
+				//		content: location_info,
+				//		pixelOffset: pixoff
+				//});
 				$j_dbem_locations('ol#dbem_locations_list').append(li_element);
 				$j_dbem_locations('li#location-'+item.location_id+' a').click(function() {
+					infowindow.setContent(location_info);
 					infowindow.open(map,marker);
 				});
 				google.maps.event.addListener(marker, "click", function() {
+					infowindow.setContent(location_info);
 					infowindow.open(map,marker);
 				});
 			});
@@ -112,15 +120,15 @@ function loadGMap() {
 				},
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			}
-			var map = new google.maps.Map(divs[i], myOptions);
-			var infowindow = new google.maps.InfoWindow({
+			var s_map = new google.maps.Map(divs[i], myOptions);
+			var s_infowindow = new google.maps.InfoWindow({
 				content: map_text_id,
 			});
-			var marker = new google.maps.Marker({
+			var s_marker = new google.maps.Marker({
 				position: point,
-				map: map
+				map: s_map
 			});
-			infowindow.open(map,marker);
+			s_infowindow.open(s_map,s_marker);
       		}
 	}
 }
