@@ -1983,46 +1983,47 @@ function dbem_admin_map_script() {
 					width: 50%;
 				}     */
 </style>
-<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php echo $gmap_key; ?>" type="text/javascript"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
 <script type="text/javascript">
 			//<![CDATA[
 		   	$j_dbem_admin=jQuery.noConflict();
 		
 			function loadMap(location, town, address) {
-	      			if (GBrowserIsCompatible()) {
-	        			var map = new GMap2(document.getElementById("event-map"));
-	        		//	map.addControl(new GScaleControl()); 
-				//	map.setCenter(new GLatLng(37.4419, -122.1419), 13);   
-					var geocoder = new GClientGeocoder();
-					if (address !="") {
-						searchKey = address + ", " + town;
-					} else {
-						searchKey =  location + ", " + town;
-					}
-					
-					var search = "<?php echo $search_key?>" ;
-					geocoder.getLatLng(
-					    searchKey,
-					    function(point) {
-						if (!point) {
-							$j_dbem_admin("#event-map").hide();
-							$j_dbem_admin('#map-not-found').show();
-						} else {
-							mapCenter= new GLatLng(point.lat()+0.01, point.lng()+0.005);
-							map.setCenter(mapCenter, 13);
-					     		var marker = new GMarker(point);
-							map.addOverlay(marker);
-							marker.openInfoWindowHtml('<strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p>'); 
-							$j_dbem_admin('input#location-latitude').val(point.y);
-							$j_dbem_admin('input#location-longitude').val(point.x);   
-							$j_dbem_admin("#event-map").show();
-							$j_dbem_admin('#map-not-found').hide();
-						}
-					    }
-					);   
-	      	 		//	map.addControl(new GSmallMapControl());
-				//	map.addControl(new GMapTypeControl());
+				var latlng = new google.maps.LatLng(-34.397, 150.644);
+				var myOptions = {
+					zoom: 13,
+					center: latlng,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
 				}
+				var map = new google.maps.Map(document.getElementById("event-map"), myOptions);
+				var geocoder = new google.maps.Geocoder();
+				if (address !="") {
+					searchKey = address + ", " + town;
+				} else {
+					searchKey =  location + ", " + town;
+				}
+					
+				var search = "<?php echo $search_key?>" ;
+				geocoder.geocode( { 'address': searchKey}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						map.setCenter(results[0].geometry.location);
+						var marker = new google.maps.Marker({
+							map: map, 
+							position: results[0].geometry.location
+						});
+						var infowindow = new google.maps.InfoWindow({
+							content: '<strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p>',
+						});
+						infowindow.open(map,marker);
+						$j_dbem_admin('input#location-latitude').val(results[0].geometry.location.lat());
+						$j_dbem_admin('input#location-longitude').val(results[0].geometry.location.lng());   
+						$j_dbem_admin("#event-map").show();
+						$j_dbem_admin('#map-not-found').hide();
+					} else {
+						$j_dbem_admin("#event-map").hide();
+						$j_dbem_admin('#map-not-found').show();
+					}
+				});
 	    		}
    
 			$j_dbem_admin(document).ready(function() {
