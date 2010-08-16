@@ -617,13 +617,14 @@ function dbem_single_location_map($location) {
 		#$latitude_string="latitude";
 		#$longitude_string="longitude";
    		$gmaps_key = get_option('dbem_gmap_key');
-   		$map_div = "<div id='$id' style=' background: green; width: 400px; height: 300px'></div>" ;
+   		//$map_div = "<div id='$id' style=' background: green; width: 400px; height: 300px'></div>" ;
+   		$map_div = "<div id='$id' class=\"dbem-location-map\"></div>" ;
    		$map_div .= "<script type='text/javascript'>
   			<!--// 
   		$latitude_string = parseFloat('".$location['location_latitude']."');
   		$longitude_string = parseFloat('".$location['location_longitude']."');
   		GMapsKey = '$gmaps_key';
-  		$map_text_string = '$map_text';
+  		$map_text_string = '<div class=\"dbem-location-balloon\">$map_text</div>';
 		//-->
 		</script>";
 		// $map_div .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_single_location_map.js' type='text/javascript'></script>";

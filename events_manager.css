@@ -97,9 +97,16 @@ table#dbem-location-data th {
 	text-align: right;
 	width: 50px;
 }
-#dbem-location-map img {
+.dbem-location-map {
+	background: green;
+	width: 400px;
+	height: 300px;
 	max-width: none;
 	background: none !important;
+}
+.dbem-location-balloon {
+	font-size: 70%;  
+	height: 80px;
 }
 
 table.dbem-calendar-table td {
