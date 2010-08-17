@@ -105,8 +105,8 @@ table#dbem-location-data th {
 	background: none !important;
 }
 .dbem-location-balloon {
-	font-size: 80%;  
-	height: 80px
+	font-size: 85%;  
+	height: 100px;
 }
 
 table.dbem-calendar-table td {

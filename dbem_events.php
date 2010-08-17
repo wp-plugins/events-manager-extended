@@ -1983,7 +1983,7 @@ function dbem_admin_map_script() {
 					width: 50%;
 				}     */
 </style>
-<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+<script src="http://maps.google.com/maps/api/js?v=3.1&sensor=false" type="text/javascript"></script>
 <script type="text/javascript">
 			//<![CDATA[
 		   	$j_dbem_admin=jQuery.noConflict();

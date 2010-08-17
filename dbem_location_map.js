@@ -83,7 +83,7 @@ function loadGMap() {
 					map: map,
 					image: customIcon,
 					infowindow: infowindow,
-					infowindowcontent: location_info,
+					infowindowcontent: location_info
 				});
 				//var pixoff = new google.maps.Size(0,-32);
 				//infowindow = new google.maps.InfoWindow();
@@ -130,7 +130,7 @@ function loadGMap() {
 			}
 			var s_map = new google.maps.Map(divs[i], myOptions);
 			var s_infowindow = new google.maps.InfoWindow({
-				content: "<div class=\"dbem-location-balloon\">"+map_text_id+"</div>",
+				content: "<div class=\"dbem-location-balloon\">"+map_text_id+"</div>"
 			});
 			// we add the infowinfow object to the marker object, then we can call it in the 
 			// google.maps.event.addListener and it always has the correct content
@@ -155,6 +155,6 @@ function loadMapScript() {
 //	script.setAttribute("type", "text/javascript");
 //	document.documentElement.firstChild.appendChild(script);
 	script.type = "text/javascript";
-	script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=loadGMap";
+	script.src = "http://maps.google.com/maps/api/js?v=3.1&sensor=false&callback=loadGMap";
 	document.body.appendChild(script);
 }
