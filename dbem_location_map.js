@@ -10,7 +10,7 @@ $j_dbem_locations(document).ready(function() {
 });
 
 function loadGMap() {
-		// first the global map (if present)
+	// first the global map (if present)
 	if (document.getElementById("dbem_global_map")) {
 		var locations;
 		$j_dbem_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
@@ -69,16 +69,23 @@ function loadGMap() {
 			$j_dbem_locations.each(locations, function(i, item) {
 				var letter = letters[i];
 
+				var li_element = "<li id='location-"+item.location_id
+						 + "' style='list-style-type: upper-alpha'><a >"
+						 + item.location_name+"</a></li>";
+				var location_info = "<div class=\"dbem-location-balloon\"><strong>"+ item.location_name
+						    + "</strong><br/>" + item.location_address + ", "
+						    + item.location_town + "<br/><small><a href='" + events_page
+						    + "&location_id=" + item.location_id + "'>Details<a></div>";
 				customIcon = "http://www.google.com/mapfiles/marker" + letter + ".png";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
 				var marker = new google.maps.Marker({
 					position: point,
 					map: map,
-					image: customIcon
+					image: customIcon,
+					infowindow: infowindow,
+					infowindowcontent: location_info,
 				});
-				var li_element = "<li id='location-"+item.location_id+"' style='list-style-type: upper-alpha'><a >"+ item.location_name+"</a></li>";
-				var location_info = "<div class=\"dbem-location-balloon\"><strong>"+ item.location_name +"</strong><br/>" + item.location_address + ", " + item.location_town + "<br/><small><a href='" + events_page + "&location_id=" + item.location_id + "'>Details<a></div>";
-				var pixoff = new google.maps.Size(0,-32);
+				//var pixoff = new google.maps.Size(0,-32);
 				//infowindow = new google.maps.InfoWindow();
 				//var infowindow = new google.maps.InfoWindow({
 				//		content: location_info,
@@ -90,12 +97,17 @@ function loadGMap() {
 					infowindow.open(map,marker);
 				});
 				google.maps.event.addListener(marker, "click", function() {
-					infowindow.setContent(location_info);
-					infowindow.open(map,marker);
+					// This also works, but relies on global variables:
+					// infowindow.setContent(location_info);
+					// infowindow.open(map,marker);
+					// the content of marker is available via "this"
+					this.infowindow.setContent(this.infowindowcontent);
+					this.infowindow.open(this.map,this);
 				});
 			});
 		});
 	}
+
 	// and now for the normal maps (if any)
 	var divs = document.getElementsByTagName('div');
 	for (var i = 0; i < divs.length; i++){                      
@@ -130,6 +142,7 @@ function loadGMap() {
 			});
 			s_infowindow.open(s_map,s_marker);
 			google.maps.event.addListener(s_marker, "click", function() {
+				// the content of s_marker is available via "this"
 				this.infowindow.open(this.map,this);
 			});
       		}
