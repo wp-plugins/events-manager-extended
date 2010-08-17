@@ -9,11 +9,6 @@ $j_dbem_locations(document).ready(function() {
 	loadMapScript();
 });
 
-// these 2 need to be global variables, otherwise they are not accessible in
-// the click.function() calls
-var infowindow;
-var location_info;
-
 function loadGMap() {
 		// first the global map (if present)
 	if (document.getElementById("dbem_global_map")) {
@@ -38,6 +33,7 @@ function loadGMap() {
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			}
 			var map = new google.maps.Map(document.getElementById("dbem_global_map"), myOptions);
+			var infowindow = new google.maps.InfoWindow();
 
 			$j_dbem_locations.each(locations, function(i, item) {
 				latitudes.push(item.location_latitude);
@@ -81,9 +77,9 @@ function loadGMap() {
 					image: customIcon
 				});
 				var li_element = "<li id='location-"+item.location_id+"' style='list-style-type: upper-alpha'><a >"+ item.location_name+"</a></li>";
-				location_info = "<div class=\"dbem-location-balloon\"><strong>"+ item.location_name +"</strong><br/>" + item.location_address + ", " + item.location_town + "<br/><small><a href='" + events_page + "&location_id=" + item.location_id + "'>Details<a></div>";
+				var location_info = "<div class=\"dbem-location-balloon\"><strong>"+ item.location_name +"</strong><br/>" + item.location_address + ", " + item.location_town + "<br/><small><a href='" + events_page + "&location_id=" + item.location_id + "'>Details<a></div>";
 				var pixoff = new google.maps.Size(0,-32);
-				infowindow = new google.maps.InfoWindow();
+				//infowindow = new google.maps.InfoWindow();
 				//var infowindow = new google.maps.InfoWindow({
 				//		content: location_info,
 				//		pixelOffset: pixoff
@@ -122,13 +118,20 @@ function loadGMap() {
 			}
 			var s_map = new google.maps.Map(divs[i], myOptions);
 			var s_infowindow = new google.maps.InfoWindow({
-				content: map_text_id,
+				content: "<div class=\"dbem-location-balloon\">"+map_text_id+"</div>",
 			});
+			// we add the infowinfow object to the marker object, then we can call it in the 
+			// google.maps.event.addListener and it always has the correct content
+			// we do this because we have multiple maps as well ...
 			var s_marker = new google.maps.Marker({
 				position: point,
-				map: s_map
+				map: s_map,
+				infowindow: s_infowindow
 			});
 			s_infowindow.open(s_map,s_marker);
+			google.maps.event.addListener(s_marker, "click", function() {
+				this.infowindow.open(this.map,this);
+			});
       		}
 	}
 }
