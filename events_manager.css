@@ -1,3 +1,8 @@
+/* for google maps to work ok in IE, we need at least 690px as max-width */
+#content img {
+	max-width: 790px;
+}
+
 table#dbem-bookings-table tfoot td.booking-result {
 	font-weight: bold;
    	background:#6D6D6D url(../../../wp-admin/images/menu-bits.gif) repeat-x scroll left top;      
@@ -32,7 +37,7 @@ div.dbem-rsvp-message {
 
 a.bookingdelbutton {
 	background: url("../../../wp-admin/images/xit.gif") no-repeat;  
-    font-size: 11px;
+	font-size: 11px;
 	text-indent: -9999px;
 	height: 10px;   
 	width: 10px;
