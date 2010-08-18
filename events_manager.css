@@ -1,6 +1,6 @@
 /* for google maps to work ok in IE, we need at least 690px as max-width */
 #content img {
-	max-width: 790px;
+	max-width: 690px;
 }
 
 table#dbem-bookings-table tfoot td.booking-result {
@@ -110,7 +110,7 @@ table#dbem-location-data th {
 	background: none !important;
 }
 .dbem-location-balloon {
-	font-size: 85%;  
+	font-size: 95%;  
 	height: 100px;
 }
 

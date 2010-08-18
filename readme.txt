@@ -156,3 +156,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: add Dutch translation (thanks to Paul Jonker)
 * Feature: use google maps API v3, no more API key needed
 * Feature: better CSS, create in the plugindir the file 'myown.css' if you want to override the CSS in events_manager.css
+* Bugfix: the RSVP form was only shown when google maps integration was active, now it is correctly shown when RSVP is wanted

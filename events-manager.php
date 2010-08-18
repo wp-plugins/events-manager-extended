@@ -585,7 +585,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		 
 		}
 		if (preg_match('/#_ADDBOOKINGFORM/', $result)) {
-		 	$rsvp_is_active = get_option('dbem_gmap_is_active'); 
+		 	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
 			if ($event['event_rsvp']) {
 			   $rsvp_add_module .= dbem_add_booking_form($event['event_id']);
 			} else {
@@ -594,7 +594,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		 	$event_string = str_replace($result, $rsvp_add_module , $event_string );
 		}
 		if (preg_match('/#_REMOVEBOOKINGFORM/', $result)) {
-		 	$rsvp_is_active = get_option('dbem_gmap_is_active'); 
+		 	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
 			if ($event['event_rsvp']) {
 			   $rsvp_delete_module .= dbem_delete_booking_form();
 			} else {
@@ -603,7 +603,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		 	$event_string = str_replace($result, $rsvp_delete_module , $event_string );
 		}
 		if (preg_match('/#_AVAILABLESPACES/', $result)) {
-                        $rsvp_is_active = get_option('dbem_gmap_is_active');
+                        $rsvp_is_active = get_option('dbem_rsvp_enabled');
                         if ($event['event_rsvp']) {
                            $availble_seats .= dbem_get_available_seats($event['event_id']);
                         } else {
