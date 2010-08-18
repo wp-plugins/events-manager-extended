@@ -423,7 +423,6 @@ function dbem_add_options() {
 	'dbem_location_event_list_item_format' => DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT,
 	'dbem_location_no_events_message' => DEFAULT_LOCATION_NO_EVENTS_MESSAGE,
 	'dbem_single_location_format' => DEFAULT_SINGLE_LOCATION_FORMAT,
-	'dbem_map_text_format' => DEFAULT_MAP_TEXT_FORMAT,
 	'dbem_rss_main_title' => get_bloginfo('title')." - ".__('Events'),
 	'dbem_rss_main_description' => get_bloginfo('description')." - ".__('Events'),
 	'dbem_rss_description_format' => DEFAULT_RSS_DESCRIPTION_FORMAT,

@@ -9,7 +9,6 @@ function dbem_attributes_form($event) {
 		get_option ( 'dbem_location_baloon_format' ).
 		get_option ( 'dbem_location_event_list_item_format' ).
 		get_option ( 'dbem_location_page_title_format' ).
-		get_option ( 'dbem_map_text_format' ).
 		get_option ( 'dbem_rss_description_format' ).
 		get_option ( 'dbem_rss_title_format' ).
 		get_option ( 'dbem_single_event_format' ).

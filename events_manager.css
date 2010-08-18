@@ -106,6 +106,9 @@ table#dbem-location-data th {
 	background: green;
 	width: 400px;
 	height: 300px;
+}
+/* for google maps to work ok in IE, we need at least 690px as max-width for the images */
+.dbem-location-map img {
 	max-width: none;
 	background: none !important;
 }

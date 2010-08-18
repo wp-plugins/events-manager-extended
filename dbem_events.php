@@ -335,6 +335,7 @@ function dbem_options_subpanel() {
 	dbem_options_radio_binary ( __ ( 'Use RSVP?' ), 'dbem_rsvp_enabled', __ ( 'Select yes to enable the RSVP feature','dbem' ) );     
 	dbem_options_radio_binary ( __ ( 'Use categories?' ), 'dbem_categories_enabled', __ ( 'Select yes to enable the category features','dbem' ) );     
 	dbem_options_radio_binary ( __ ( 'Use attributes?' ), 'dbem_attributes_enabled', __ ( 'Select yes to enable the attributes feature','dbem' ) );
+	dbem_options_radio_binary ( __ ( 'Enable Google Maps integration?' ), 'dbem_gmap_is_active', __ ( 'Check this option to enable Goggle Map integration.','dbem' ) );
    ?>
 </table>
 <h3><?php
@@ -397,41 +398,6 @@ function dbem_options_subpanel() {
 	dbem_options_input_text ( __ ( 'RSS description format', 'dbem' ), 'dbem_rss_description_format', __ ( 'The format of the description of each item in the events RSS feed. Follow the previous formatting instructions.', 'dbem' ) );
 	?>
 		</table>
-
-<h3><?php
-	_e ( 'Maps and geotagging', 'dbem' );
-	?></h3>
-<table class='form-table'> 
-				    <?php
-	$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
-	?>
-				   	<tr valign="top">
-		<th scope="row"><?php
-	_e ( 'Enable Google Maps integration?', 'dbem' );
-	?></th>
-		<td><input id="dbem_gmap_is_active_yes" name="dbem_gmap_is_active"
-			type="radio" value="1"
-			<?php
-	if ($gmap_is_active)
-		echo "checked='checked'";
-	?> /><?php
-	_e ( 'Yes' );
-	?> <br />
-		<input name="dbem_gmap_is_active" type="radio" value="0"
-			<?php
-	if (! $gmap_is_active)
-		echo "checked='checked'";
-	?> /> <?php
-	_e ( 'No' );
-	?>  <br />
-							<?php
-	_e ( 'Check this option to enable Goggle Map integration.', 'dbem' )?>
-						</td>
-	</tr>
-					 <?php
-	 dbem_options_textarea ( __ ( 'Map text format', 'dbem' ), 'dbem_map_text_format', __ ( 'The format the text appearing in the event page map cloud.<br/>Follow the previous formatting instructions.', 'dbem' ) );     
-	?> 
-				</table>
 
 <h3><?php _e ( 'RSVP and bookings', 'dbem' ); ?></h3>
 <table class='form-table'>
@@ -2209,7 +2175,7 @@ function dbem_favorite_menu($actions) {
 ////////////////////////////////////
 // WP 2.7 options registration
 function dbem_options_register() {
-	$options = array ('dbem_events_page', 'dbem_display_calendar_in_events_page', 'dbem_use_event_end', 'dbem_event_list_item_format_header', 'dbem_event_list_item_format', 'dbem_event_list_item_format_footer', 'dbem_event_page_title_format', 'dbem_single_event_format', 'dbem_list_events_page', 'dbem_events_page_title', 'dbem_no_events_message', 'dbem_location_page_title_format', 'dbem_location_baloon_format', 'dbem_single_location_format', 'dbem_location_event_list_item_format', 'dbem_location_no_events_message', 'dbem_gmap_is_active', 'dbem_rss_main_title', 'dbem_rss_main_description', 'dbem_rss_title_format', 'dbem_rss_description_format', 'dbem_map_text_format', 'dbem_rsvp_mail_notify_is_active', 'dbem_contactperson_email_body', 'dbem_respondent_email_body', 'dbem_mail_sender_name', 'dbem_smtp_username', 'dbem_smtp_password', 'dbem_default_contact_person', 'dbem_mail_sender_address', 'dbem_mail_receiver_address', 'dbem_smtp_host', 'dbem_rsvp_mail_send_method', 'dbem_rsvp_mail_port', 'dbem_rsvp_mail_SMTPAuth', 'dbem_image_max_width', 'dbem_image_max_height', 'dbem_image_max_size', 'dbem_full_calendar_event_format', 'dbem_use_select_for_locations', 'dbem_attributes_enabled', 'dbem_recurrence_enabled','dbem_rsvp_enabled','dbem_categories_enabled','dbem_small_calendar_event_title_format','dbem_small_calendar_event_title_seperator');
+	$options = array ('dbem_events_page', 'dbem_display_calendar_in_events_page', 'dbem_use_event_end', 'dbem_event_list_item_format_header', 'dbem_event_list_item_format', 'dbem_event_list_item_format_footer', 'dbem_event_page_title_format', 'dbem_single_event_format', 'dbem_list_events_page', 'dbem_events_page_title', 'dbem_no_events_message', 'dbem_location_page_title_format', 'dbem_location_baloon_format', 'dbem_single_location_format', 'dbem_location_event_list_item_format', 'dbem_location_no_events_message', 'dbem_gmap_is_active', 'dbem_rss_main_title', 'dbem_rss_main_description', 'dbem_rss_title_format', 'dbem_rss_description_format', 'dbem_rsvp_mail_notify_is_active', 'dbem_contactperson_email_body', 'dbem_respondent_email_body', 'dbem_mail_sender_name', 'dbem_smtp_username', 'dbem_smtp_password', 'dbem_default_contact_person', 'dbem_mail_sender_address', 'dbem_mail_receiver_address', 'dbem_smtp_host', 'dbem_rsvp_mail_send_method', 'dbem_rsvp_mail_port', 'dbem_rsvp_mail_SMTPAuth', 'dbem_image_max_width', 'dbem_image_max_height', 'dbem_image_max_size', 'dbem_full_calendar_event_format', 'dbem_use_select_for_locations', 'dbem_attributes_enabled', 'dbem_recurrence_enabled','dbem_rsvp_enabled','dbem_categories_enabled','dbem_small_calendar_event_title_format','dbem_small_calendar_event_title_seperator');
 	foreach ( $options as $opt ) {
 		register_setting ( 'dbem-options', $opt, '' );
 	}
