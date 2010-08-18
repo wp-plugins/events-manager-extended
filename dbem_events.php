@@ -2016,7 +2016,7 @@ function dbem_admin_map_script() {
 							position: results[0].geometry.location
 						});
 						var infowindow = new google.maps.InfoWindow({
-							content: '<strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p>',
+							content: '<div class=\"dbem-location-balloon\"><strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p></div>',
 						});
 						infowindow.open(map,marker);
 						$j_dbem_admin('input#location-latitude').val(results[0].geometry.location.lat());
@@ -2210,6 +2210,10 @@ function substitute_rss($data) {
 function dbem_general_css() {
 	$base_url = get_bloginfo ( 'wpurl' );
 	echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/events_manager.css' type='text/css'/>\n";
+	$file_name= ABSPATH.PLUGINDIR."/events-manager-extended/myown.css";
+	if (file_exists($file_name)) {
+	   echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/myown.css' type='text/css'/>\n";
+	}
 	echo "<script type='text/javascript' src='$base_url/wp-content/plugins/events-manager-extended/dbem_location_map.js'></script>\n";
 }
 function dbem_admin_general_css() {

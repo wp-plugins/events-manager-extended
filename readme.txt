@@ -59,16 +59,20 @@ I call that "the green screen of death", but it's quite easy to fix your issue. 
 If your page(s) doesn't contain such line, add it just before the line containing `</head>`. Now everything should work allright.    
 For curiosity's sake, `<?php wp_head(); ?>` is an action hook, that is a function call allowing plugins to insert their stuff in Wordpress pages; if you're a theme maker, you should make sure to include `<?php wp_head(); ?> ` and all the necessary hooks in your theme.
 
-= How do I resize the map? = 
+= How do I resize the single events map? Or change the font color of the balloon? = 
 
-Insert some code similar to this in your css:
-
-    #event-map {
-	    width: 300px !important;
-	    height: 200px !important;
-    }
-
-Do not leave out the `!important` directive; it is, needless to say, important.
+Create a file called 'myown.css' in the plugin directory and put in there eg.:  
+  
+.dbem-location-map {  
+width: 600px;  
+height: 400px;  
+}  
+.dbem-location-balloon {  
+        color: #FF7146;  
+}  
+  
+Do not leave out the `!important` directive; it is, needless to say, important.  
+For the multiple locations map, see the shortcode [locations_map] with its possible parameters on the documentation site.
 
 = Can I customise the event page? =
 
@@ -151,3 +155,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.0.4 =
 * Improvement: add Dutch translation (thanks to Paul Jonker)
 * Feature: use google maps API v3, no more API key needed
+* Feature: better CSS, create in the plugindir the file 'myown.css' if you want to override the CSS in events_manager.css
