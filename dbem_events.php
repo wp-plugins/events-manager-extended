@@ -1993,6 +1993,10 @@ function dbem_admin_map_script() {
 				var myOptions = {
 					zoom: 13,
 					center: latlng,
+					disableDoubleClickZoom: true,
+					mapTypeControlOptions: {
+						mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
+					},
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				}
 				var map = new google.maps.Map(document.getElementById("event-map"), myOptions);
@@ -2205,12 +2209,12 @@ function substitute_rss($data) {
 }
 function dbem_general_css() {
 	$base_url = get_bloginfo ( 'wpurl' );
-	echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/events_manager.css' type='text/css'/>";
-	echo "<script type='text/javascript' src='$base_url/wp-content/plugins/events-manager-extended/dbem_location_map.js' />";
+	echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/events_manager.css' type='text/css'/>\n";
+	echo "<script type='text/javascript' src='$base_url/wp-content/plugins/events-manager-extended/dbem_location_map.js'></script>\n";
 }
 function dbem_admin_general_css() {
 	$base_url = get_bloginfo ( 'wpurl' );
-	echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/events_manager.css' type='text/css'/>";
+	echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/events_manager.css' type='text/css'/>\n";
 }
 add_action ( 'wp_head', 'dbem_general_css' );
 add_action ( 'admin_head', 'dbem_admin_general_css' );
