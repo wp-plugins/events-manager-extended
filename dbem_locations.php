@@ -128,6 +128,10 @@ function dbem_locations_edit_layout($location, $message = "") {
 						<input id='location-longitude' name='location_longitude' id='location_longitude' type='text' value='<?php echo $location['location_longitude'] ?>' size='15'  /></td>
 					 </tr>
 					 
+					 <?php
+						$gmap_is_active = get_option('dbem_gmap_is_active');
+						if ($gmap_is_active) {  
+					 ?>
 					<tr>
 				 		<th scope='row' valign='top'><label for='location_map'><?php echo __('Location map', 'dbem') ?></label></th>
 						<td>
@@ -135,7 +139,9 @@ function dbem_locations_edit_layout($location, $message = "") {
 		 					<div id='event-map' style='width: 450px; height: 300px; background: green; display: hide; margin-right:8px'></div>
 		 				</td>
 		 			</tr>
-
+		 			<?php
+						}
+					?>
 					<tr class='form-field'>
 						<th scope='row' valign='top'><label for='location_description'><?php _e('Location description', 'dbem') ?></label></th>
 						<td>
@@ -286,20 +292,26 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								   <input id='location-image' name='location_image' id='location_image' type='file' size='35' />
 								    <p><?php echo __('Select an image to upload', 'dbem') ?>.</p>
 								</div>
-						 		<div id='map-not-found' style='width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide'><p><?php echo __('Map not found') ?></p></div>
-							 	<div id='event-map' style='width: 450px; height: 300px; background: green; display: hide; margin-right:8px'></div>
-							 	<br style='clear:both;' />   
-								<div id="poststuff">
-									<label for='location_description'><?php _e('Location description', 'dbem') ?></label>
-									<div class="inside">
-										<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
-											<?php the_editor($new_location['location_description']); ?>
+								<?php 
+									$gmap_is_active = get_option('dbem_gmap_is_active');
+                 					if ($gmap_is_active) :
+								 ?>	
+						 		 	<div id='map-not-found' style='width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide'><p><?php echo __('Map not found') ?></p></div>
+							 		<div id='event-map' style='width: 450px; height: 300px; background: green; display: hide; margin-right:8px'></div>
+							 		<br style='clear:both;' />   
+								 <?php endif; ?>
+									<div id="poststuff">
+										<label for='location_description'><?php _e('Location description', 'dbem') ?></label>
+										<div class="inside">
+											<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
+												<?php the_editor($new_location['location_description']); ?>
+											</div>
+											<?php _e('A description of the Location. You may include any kind of info here.', 'dbem') ?>
 										</div>
-										<?php _e('A description of the Location. You may include any kind of info here.', 'dbem') ?>
-									</div>
-								</div>               
+									</div>               
 								 <p class='submit'><input type='submit' class='button' name='submit' value='<?php echo __('Add location', 'dbem') ?>' /></p>
 							 </form>   
+
 					  </div>
 					</div> 
 				</div>  <!-- end col-left -->   
@@ -490,6 +502,7 @@ function dbem_delete_image_files_for_location_id($location_id) {
 }          
 
 function dbem_global_map($atts) {  
+	if (get_option('dbem_gmap_is_active') == '1') {
 	extract(shortcode_atts(array(
 			'eventful' => "false",
 			'scope' => 'all',
@@ -509,6 +522,10 @@ function dbem_global_map($atts) {
 	</script>";
 	//$result .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_global_map.js' type='text/javascript'></script>";
 	$result .= "<ol id='dbem_locations_list'></ol>"; 
+	
+	} else {
+		$result = "";
+	}
 	return $result;
 }
 add_shortcode('locations_map', 'dbem_global_map'); 
@@ -585,10 +602,12 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 	
 }
 function dbem_single_location_map($location) {
+	$gmap_is_active = get_option('dbem_gmap_is_active'); 
 	$map_text = addslashes(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
 	$map_text = preg_replace("/\r\n|\n\r|\n/","<br />",$map_text);
+	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
-	if (!empty($location['location_name'])) {  
+	if ($gmap_is_active && !empty($location['location_name'])) {  
 		$id="dbem-location-map_".$location['location_id'];
 		$latitude_string="latitude_".$location['location_id'];
 		$longitude_string="longitude_".$location['location_id'];
@@ -601,8 +620,7 @@ function dbem_single_location_map($location) {
   			<!--// 
   		$latitude_string = parseFloat('".$location['location_latitude']."');
   		$longitude_string = parseFloat('".$location['location_longitude']."');
-  		//$map_text_string = '<div class=\"dbem-location-balloon\">$map_text</div>';
-  		$map_text_string = '$map_text';
+  		$map_text_string = '<div class=\"dbem-location-balloon\">$map_text</div>';
 		//-->
 		</script>";
 		// $map_div .= "<script src='".get_bloginfo('wpurl')."/wp-content/plugins/events-manager-extended/dbem_single_location_map.js' type='text/javascript'></script>";
@@ -640,6 +658,7 @@ function dbem_locations_autocomplete() {
 		jQuery.noConflict();
 
 		jQuery(document).ready(function($) {
+			var gmap_enabled = <?php echo get_option('dbem_gmap_is_active'); ?>; 
 		    
 		   <?php if(!get_option('dbem_use_select_for_locations')) :?>
 			$("input#location-name").autocomplete("../wp-content/plugins/events-manager-extended/locations-search.php", {
@@ -659,10 +678,12 @@ function dbem_locations_autocomplete() {
 				item = eval("(" + data + ")"); 
 				$('input#location-address').val(item.address);
 				$('input#location-town').val(item.town);
+				if(gmap_enabled) {   
 					eventLocation = $("input#location-name").val(); 
 					eventTown = $("input#location-town").val(); 
 					eventAddress = $("input#location-address").val();
 					loadMap(eventLocation, eventTown, eventAddress)
+				} 
 			});  
 			<?php else : ?>
 			$('#location-select-id').change(function() {
@@ -674,6 +695,7 @@ function dbem_locations_autocomplete() {
 					$("input[name='location-select-address']").val(eventAddress); 
 					$("input[name='location-select-town']").val(eventTown); 
 					loadMap(eventLocation, eventTown, eventAddress)
+					
 			   	})
 			});  
 			<?php endif; ?>
