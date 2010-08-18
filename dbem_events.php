@@ -398,44 +398,6 @@ function dbem_options_subpanel() {
 	?>
 		</table>
 
-<h3><?php
-	_e ( 'Maps and geotagging', 'dbem' );
-	?></h3>
-<table class='form-table'> 
-				    <?php
-	$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
-	?>
-					 
-				   	<tr valign="top">
-		<th scope="row"><?php
-	_e ( 'Enable Google Maps integration?', 'dbem' );
-	?></th>
-		<td><input id="dbem_gmap_is_active_yes" name="dbem_gmap_is_active"
-			type="radio" value="1"
-			<?php
-	if ($gmap_is_active)
-		echo "checked='checked'";
-	?> /><?php
-	_e ( 'Yes' );
-	?> <br />
-		<input name="dbem_gmap_is_active" type="radio" value="0"
-			<?php
-	if (! $gmap_is_active)
-		echo "checked='checked'";
-	?> /> <?php
-	_e ( 'No' );
-	?>  <br />
-							<?php
-	_e ( 'Check this option to enable Goggle Map integration.', 'dbem' )?>
-						</td>
-	</tr>
-					 <?php
-	dbem_options_input_text ( __ ( 'Google Maps API Key', 'dbem' ), 'dbem_gmap_key', sprintf ( __ ( "To display Google Maps you need a Google Maps API key. Don't worry, it's free, you can get one <a href='%s'>here</a>.", 'dbem' ), 'http://code.google.com/apis/maps/signup.html' ) );
-	         
-	 dbem_options_textarea ( __ ( 'Map text format', 'dbem' ), 'dbem_map_text_format', __ ( 'The format the text appearing in the event page map cloud.<br/>Follow the previous formatting instructions.', 'dbem' ) );     
-	?> 
-				</table>
-
 <h3><?php _e ( 'RSVP and bookings', 'dbem' ); ?></h3>
 <table class='form-table'>
      <?php
@@ -1597,10 +1559,6 @@ function dbem_event_form($event, $title, $element) {
 											&nbsp;</th>
 										<td><input id="location-name" type="text" name="location_name" value="<?php echo $event ['location_name']?>" /></td>
 									<?php } ?>
-									<?php
-										$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
-										if ($gmap_is_active) {
-									?>
 										<td rowspan='6'><div id='map-not-found'
 					style='width: 400px; font-size: 140%; text-align: center; margin-top: 100px; display: hide'>
 												<p>
@@ -1609,9 +1567,6 @@ function dbem_event_form($event, $title, $element) {
 											</div>
 											<div id='event-map'
 					style='width: 400px; height: 300px; background: green; display: hide; margin-right: 8px'></div></td>
-										<?php
-			}
-			; // end of IF_GMAP_ACTIVE	?>
 									</tr>     
 									 <?php  if(!$use_select_for_locations) : ?>  
 									<tr>
@@ -1967,7 +1922,6 @@ function dbem_admin_map_script() {
 			$event = dbem_get_event ( $event_ID );
 			
 			if ((isset($event ['location_town']) && $event ['location_town'] != '') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] = 'events-manager-locations')) {
-				$gmap_key = get_option ( 'dbem_gmap_key' );
 				if (isset($event ['location_address']) && $event ['location_address'] != "") {
 					$search_key = $event ['location_address'] . ", " . $event ['location_town'];
 				} else {
@@ -2076,43 +2030,7 @@ function dbem_admin_map_script() {
 		}
 	}
 }
-$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
-if ($gmap_is_active) {
-	add_action ( 'admin_head', 'dbem_admin_map_script' );
-
-}
-
-// Script to validate map options
-function dbem_admin_options_script() {
-	if (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] == 'events-manager-options') {
-		?>
-<script type="text/javascript">
-	//<![CDATA[
-		jQuery.noConflict();
-		 
-		jQuery(document).ready(function($) {   
-	  		// users cannot enable Google Maps without an api key
-			function verifyOptionsForm() {
-			   	var gmap_is_active = $("input[@name=dbem_gmap_is_active]:checked").val();
-				var gmap_key = $("input[@name=dbem_gmap_key]").val();
-			  	if(gmap_is_active == '1' && (gmap_key == '')){
-					alert("<?php _e ( 'You cannot enable Google Maps integration without setting an appropriate API key.' ); ?>");
-					$("input[@name='dbem_gmap_is_active']:nth(1)").attr("checked","checked");
-					return false;
-				} else {
-					return true;
-				}
-			}
-        		$('#dbem_options_form').bind("submit", verifyOptionsForm);
-		 });
-		
-	//]]>
-</script>
-
-<?php
-	}
-}
-add_action ( 'admin_head', 'dbem_admin_options_script' );
+add_action ( 'admin_head', 'dbem_admin_map_script' );
 
 function dbem_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 	if (strpos ( $justurl, "=" )) {
@@ -2242,7 +2160,7 @@ function dbem_favorite_menu($actions) {
 ////////////////////////////////////
 // WP 2.7 options registration
 function dbem_options_register() {
-	$options = array ('dbem_events_page', 'dbem_display_calendar_in_events_page', 'dbem_use_event_end', 'dbem_event_list_item_format_header', 'dbem_event_list_item_format', 'dbem_event_list_item_format_footer', 'dbem_event_page_title_format', 'dbem_single_event_format', 'dbem_list_events_page', 'dbem_events_page_title', 'dbem_no_events_message', 'dbem_location_page_title_format', 'dbem_location_baloon_format', 'dbem_single_location_format', 'dbem_location_event_list_item_format', 'dbem_location_no_events_message', 'dbem_gmap_is_active', 'dbem_rss_main_title', 'dbem_rss_main_description', 'dbem_rss_title_format', 'dbem_rss_description_format', 'dbem_gmap_key', 'dbem_map_text_format', 'dbem_rsvp_mail_notify_is_active', 'dbem_contactperson_email_body', 'dbem_respondent_email_body', 'dbem_mail_sender_name', 'dbem_smtp_username', 'dbem_smtp_password', 'dbem_default_contact_person', 'dbem_mail_sender_address', 'dbem_mail_receiver_address', 'dbem_smtp_host', 'dbem_rsvp_mail_send_method', 'dbem_rsvp_mail_port', 'dbem_rsvp_mail_SMTPAuth', 'dbem_image_max_width', 'dbem_image_max_height', 'dbem_image_max_size', 'dbem_full_calendar_event_format', 'dbem_use_select_for_locations', 'dbem_attributes_enabled', 'dbem_recurrence_enabled','dbem_rsvp_enabled','dbem_categories_enabled','dbem_small_calendar_event_title_format','dbem_small_calendar_event_title_seperator');
+	$options = array ('dbem_events_page', 'dbem_display_calendar_in_events_page', 'dbem_use_event_end', 'dbem_event_list_item_format_header', 'dbem_event_list_item_format', 'dbem_event_list_item_format_footer', 'dbem_event_page_title_format', 'dbem_single_event_format', 'dbem_list_events_page', 'dbem_events_page_title', 'dbem_no_events_message', 'dbem_location_page_title_format', 'dbem_location_baloon_format', 'dbem_single_location_format', 'dbem_location_event_list_item_format', 'dbem_location_no_events_message', 'dbem_rss_main_title', 'dbem_rss_main_description', 'dbem_rss_title_format', 'dbem_rss_description_format',  'dbem_map_text_format', 'dbem_rsvp_mail_notify_is_active', 'dbem_contactperson_email_body', 'dbem_respondent_email_body', 'dbem_mail_sender_name', 'dbem_smtp_username', 'dbem_smtp_password', 'dbem_default_contact_person', 'dbem_mail_sender_address', 'dbem_mail_receiver_address', 'dbem_smtp_host', 'dbem_rsvp_mail_send_method', 'dbem_rsvp_mail_port', 'dbem_rsvp_mail_SMTPAuth', 'dbem_image_max_width', 'dbem_image_max_height', 'dbem_image_max_size', 'dbem_full_calendar_event_format', 'dbem_use_select_for_locations', 'dbem_attributes_enabled', 'dbem_recurrence_enabled','dbem_rsvp_enabled','dbem_categories_enabled','dbem_small_calendar_event_title_format','dbem_small_calendar_event_title_seperator');
 	foreach ( $options as $opt ) {
 		register_setting ( 'dbem-options', $opt, '' );
 	}
