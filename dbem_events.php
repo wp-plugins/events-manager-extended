@@ -1474,11 +1474,7 @@ function dbem_event_form($event, $title, $element) {
 								<input id='location-longitude' name='location_longitude' type='text' value='<?php echo $event ['location_longitude']; ?>' size='15' />
 							</div>
 						</div>
-					<?php if ($event['event_page_title_format'] != "") { ?>
-						<div id="event_page_title_format" class="postbox">
-					<?php } else { ?>
-						<div id="event_page_title_format" class="postbox closed">
-					<?php } ?>
+						<div id="event_page_title_format" class="postbox <?php if ($event['event_page_title_format']=="") echo "closed"; ?>">
                                                         <div class="handlediv" title="Click to toggle">
 								<br />
                                                         </div>
@@ -1495,11 +1491,7 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-					<?php if ($event['event_single_event_format'] != "") { ?>
-						<div id="event_single_event_format" class="postbox">
-					<?php } else { ?>
-						<div id="event_single_event_format" class="postbox closed">
-					<?php } ?>
+						<div id="event_single_event_format" class="postbox <?php if ($event['event_single_event_format']=="") echo "closed"; ?>">
                                                         <div class="handlediv" title="Click to toggle">
 								<br />
                                                         </div>
@@ -1516,11 +1508,7 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-					<?php if ($event['event_contactperson_email_body'] != "") { ?>
-						<div id="event_contactperson_email_body" class="postbox">
-					<?php } else { ?>
-						<div id="event_contactperson_email_body" class="postbox closed">
-					<?php } ?>
+						<div id="event_contactperson_email_body" class="postbox <?php if ($event['event_contactperson_email_body']=="") echo "closed"; ?>">
                                                         <div class="handlediv" title="Click to toggle">
 								<br />
                                                         </div>
@@ -1537,11 +1525,7 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-					<?php if ($event['event_respondent_email_body'] != "") { ?>
-						<div id="event_respondent_email_body" class="postbox">
-					<?php } else { ?>
-						<div id="event_respondent_email_body" class="postbox closed">
-					<?php } ?>
+						<div id="event_respondent_email_body" class="postbox <?php if ($event['event_respondent_email_body']=="") echo "closed"; ?>">
                                                         <div class="handlediv" title="Click to toggle">
 								<br />
                                                         </div>
