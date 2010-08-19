@@ -1,7 +1,3 @@
-#content img {
-        max-width: 690px;
-}
-
 table#dbem-bookings-table tfoot td.booking-result {
 	font-weight: bold;
    	background:#6D6D6D url(../../../wp-admin/images/menu-bits.gif) repeat-x scroll left top;      
@@ -105,15 +101,16 @@ table#dbem-location-data th {
 	width: 400px;
 	height: 300px;
 }
-/* for google maps to work ok in IE, we need at least 690px as max-width for the images */
-.dbem-location-map img {
-	max-width: none !important;
-	background: none !important;
-}
 .dbem-location-balloon {
 	font-size: 95%;  
 	line-height: 100%;
 	height: 70px;
+}
+/* for google maps to work ok in IE, we need at least 690px as max-width for the images */
+#dbem_global_map img,
+.dbem-location-map img {
+	max-width: none !important;
+	background: none !important;
 }
 
 table.dbem-calendar-table td {
