@@ -1,3 +1,7 @@
+#content img {
+        max-width: 690px;
+}
+
 table#dbem-bookings-table tfoot td.booking-result {
 	font-weight: bold;
    	background:#6D6D6D url(../../../wp-admin/images/menu-bits.gif) repeat-x scroll left top;      
