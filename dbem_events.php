@@ -1474,9 +1474,13 @@ function dbem_event_form($event, $title, $element) {
 								<input id='location-longitude' name='location_longitude' type='text' value='<?php echo $event ['location_longitude']; ?>' size='15' />
 							</div>
 						</div>
-						<div id="event_page_title_format" class="stuffbox">
-							<h3>
+						<div id="event_page_title_format" class="postbox closed">
+                                                        <div class="handlediv" title="Click to toggle">
+								<br />
+                                                        </div>
+							<h3 class='hndle'><span>
 								<?php _e ( 'Single Event Title Format', 'dbem' ); ?>
+								</span>
 							</h3>
 							<div class="inside">
 								<textarea name="event_page_title_format" id="event_page_title_format" rows="6" cols="60"><?php echo htmlspecialchars($event['event_page_title_format']);?></textarea>
@@ -1487,9 +1491,13 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<div id="event_single_event_format" class="stuffbox">
-							<h3>
+						<div id="event_single_event_format" class="postbox closed">
+                                                        <div class="handlediv" title="Click to toggle">
+								<br />
+                                                        </div>
+							<h3 class='hndle'><span>
 								<?php _e ( 'Single Event Format', 'dbem' ); ?>
+								</span>
 							</h3>
 							<div class="inside">
 								<textarea name="event_single_event_format" id="event_single_event_format" rows="6" cols="60"><?php echo htmlspecialchars($event ['event_single_event_format']);?></textarea>
@@ -1500,9 +1508,13 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<div id="event_contactperson_email_body" class="stuffbox">
-							<h3>
+						<div id="event_contactperson_email_body" class="postbox closed">
+                                                        <div class="handlediv" title="Click to toggle">
+								<br />
+                                                        </div>
+							<h3 class='hndle'><span>
 								<?php _e ( 'Contact Person Email Format', 'dbem' ); ?>
+								</span>
 							</h3>
 							<div class="inside">
 								<textarea name="event_contactperson_email_body" id="event_contactperson_email_body" rows="6" cols="60"><?php echo htmlspecialchars($event['event_contactperson_email_body']);?></textarea>
@@ -1513,9 +1525,13 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<div id="event_respondent_email_body" class="stuffbox">
-							<h3>
+						<div id="event_respondent_email_body" class="postbox closed">
+                                                        <div class="handlediv" title="Click to toggle">
+								<br />
+                                                        </div>
+							<h3 class='hndle'><span>
 								<?php _e ( 'Respondent Email Format', 'dbem' ); ?>
+								</span>
 							</h3>
 							<div class="inside">
 								<textarea name="event_respondent_email_body" id="event_respondent_email_body" rows="6" cols="60"><?php echo htmlspecialchars($event['event_respondent_email_body']);?></textarea>
