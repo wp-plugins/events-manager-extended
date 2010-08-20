@@ -158,3 +158,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: better CSS, create in the plugindir the file 'myown.css' if you want to override the CSS in events_manager.css (see the FAQ section)  
   ==> read the FAQ about how to size/style the balloon in the google map
 * Bugfix: the RSVP form was only shown when google maps integration was active, now it is correctly shown when RSVP is wanted
+
+= 3.0.5 =
+* Improvement: for single events editing, the format windows are in the state closed by default
+* Feature: #_LOCATION now also possible in the calendar title formatting

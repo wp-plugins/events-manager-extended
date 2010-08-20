@@ -607,7 +607,7 @@ function dbem_single_location_map($location) {
 	$map_text = preg_replace("/\r\n|\n\r|\n/","<br />",$map_text);
 	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
-	if ($gmap_is_active && !empty($location['location_name'])) {  
+	if ($gmap_is_active && !empty($location['location_name']) && !empty($location['location_address']) && !empty($location['location_town'])) {
 		$id="dbem-location-map_".$location['location_id'];
 		$latitude_string="latitude_".$location['location_id'];
 		$longitude_string="longitude_".$location['location_id'];
