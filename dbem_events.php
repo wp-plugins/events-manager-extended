@@ -1834,11 +1834,56 @@ $j_dbem_event(document).ready( function() {
 	$j_dbem_event("#end-time").timeEntry({spinnerImage: '', show24Hours: <?php echo $show24Hours; ?>});
 
 	$j_dbem_event('input.select-all').change(function(){
-	 	if($j_dbem_event(this).is(':checked'))
-	 	$j_dbem_event('input.row-selector').attr('checked', true);
-	 	else
-	 	$j_dbem_event('input.row-selector').attr('checked', false);
+		if($j_dbem_event(this).is(':checked'))
+			$j_dbem_event('input.row-selector').attr('checked', true);
+		else
+			$j_dbem_event('input.row-selector').attr('checked', false);
+	});
+
+	// if any of event_single_event_format,event_page_title_format,event_contactperson_email_body,event_respondent_email_body
+	// is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
+
+	$j_dbem_event('textarea#event_page_title_format').focus(function(){
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_page_title_format' )); ?>';
+	 	if($j_dbem_event(this).val() == '')
+	 		$j_dbem_event('textarea#event_page_title_format').val(tmp_value);
 	}); 
+	$j_dbem_event('textarea#event_page_title_format').blur(function(){
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_page_title_format' )); ?>';
+	 	if($j_dbem_event(this).val() == tmp_value)
+	 		$j_dbem_event('textarea#event_page_title_format').val('');
+	}); 
+	$j_dbem_event('textarea#event_single_event_format').focus(function(){
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_single_event_format' )); ?>';
+	 	if($j_dbem_event(this).val() == '')
+	 		$j_dbem_event('textarea#event_single_event_format').val(tmp_value);
+	}); 
+	$j_dbem_event('textarea#event_single_event_format').blur(function(){
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_single_event_format' )); ?>';
+	 	if($j_dbem_event(this).val() == tmp_value)
+	 		$j_dbem_event('textarea#event_single_event_format').val('');
+	}); 
+	$j_dbem_event('textarea#event_contactperson_email_body').focus(function(){
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_contactperson_email_body' )); ?>';
+	 	if($j_dbem_event(this).val() == '')
+	 		$j_dbem_event('textarea#event_contactperson_email_body').val(tmp_value);
+	}); 
+	$j_dbem_event('textarea#event_contactperson_email_body').blur(function(){
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_contactperson_email_body' )); ?>';
+	 	if($j_dbem_event(this).val() == tmp_value)
+	 		$j_dbem_event('textarea#event_contactperson_email_body').val('');
+	}); 
+	$j_dbem_event('textarea#event_respondent_email_body').focus(function(){
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_respondent_email_body' )); ?>';
+	 	if($j_dbem_event(this).val() == '')
+	 		$j_dbem_event('textarea#event_respondent_email_body').val(tmp_value);
+	}); 
+	$j_dbem_event('textarea#event_respondent_email_body').blur(function(){
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_respondent_email_body' )); ?>';
+	 	if($j_dbem_event(this).val() == tmp_value)
+	 		$j_dbem_event('textarea#event_respondent_email_body').val('');
+	}); 
+
 	// TODO: NOT WORKING FOR SOME REASON, val() gives me 2 instead of 'smtp'...
 	// console.log($j('select[name:dbem_rsvp_mail_send_method]').val());
 	// 	if ($j('select[name:dbem_rsvp_mail_send_method]').val() != "smtp") {
@@ -1862,26 +1907,28 @@ $j_dbem_event(document).ready( function() {
 	// 	 		$j('tr#dbem_smtp_password_row').hide();
 	// 	 	}                                                 
     
-	 //});
-	 updateIntervalDescriptor(); 
-	 updateIntervalSelectors();
-	 updateShowHideRecurrence();  
-	 updateShowHideRsvp();
-	 $j_dbem_event('input#event-recurrence').change(updateShowHideRecurrence);  
-	 $j_dbem_event('input#rsvp-checkbox').change(updateShowHideRsvp);   
-	 // recurrency elements   
-	 $j_dbem_event('input#recurrence-interval').keyup(updateIntervalDescriptor);
-	 $j_dbem_event('select#recurrence-frequency').change(updateIntervalDescriptor);
-	 $j_dbem_event('select#recurrence-frequency').change(updateIntervalSelectors);
+	//});
+	updateIntervalDescriptor(); 
+	updateIntervalSelectors();
+	updateShowHideRecurrence();  
+	updateShowHideRsvp();
+	$j_dbem_event('input#event-recurrence').change(updateShowHideRecurrence);  
+	$j_dbem_event('input#rsvp-checkbox').change(updateShowHideRsvp);   
+	// recurrency elements   
+	$j_dbem_event('input#recurrence-interval').keyup(updateIntervalDescriptor);
+	$j_dbem_event('select#recurrence-frequency').change(updateIntervalDescriptor);
+	$j_dbem_event('select#recurrence-frequency').change(updateIntervalSelectors);
     
-	 // hiding or showing notes according to their content	
-	 jQuery('.postbox h3').prepend('<a class="togbox">+</a> ');
-	 // 	    	if(jQuery("textarea[@name=event_notes]").val()!="") {
+	// Add a "+" to the collapsable postboxes
+	jQuery('.postbox h3').prepend('<a class="togbox">+</a> ');
+
+	// hiding or showing notes according to their content	
+	// 	    	if(jQuery("textarea[@name=event_notes]").val()!="") {
 	 	//    jQuery("textarea[@name=event_notes]").parent().parent().removeClass('closed');
 	 	// }
-	jQuery('#event_notes h3').click( function() {
-		   	jQuery(jQuery(this).parent().get(0)).toggleClass('closed');
-    });
+	//jQuery('#event_notes h3').click( function() {
+	//	   	jQuery(jQuery(this).parent().get(0)).toggleClass('closed');
+        //});
 
    // users cannot submit the event form unless some fields are filled
    	function validateEventForm(){
