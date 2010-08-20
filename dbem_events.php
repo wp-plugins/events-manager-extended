@@ -409,8 +409,8 @@ function dbem_options_subpanel() {
 	dbem_options_input_text ( __ ( 'Notification sender name', 'dbem' ), 'dbem_mail_sender_name', __ ( "Insert the display name of the notification sender.", 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Notification sender address', 'dbem' ), 'dbem_mail_sender_address', __ ( "Insert the address of the notification sender. It must corresponds with your gmail account user", 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Default notification receiver address', 'dbem' ), 'dbem_mail_receiver_address', __ ( "Insert the address of the receiver of your notifications", 'dbem' ) );
-	dbem_options_input_text ( 'Mail sending port', 'dbem_rsvp_mail_port', __ ( "The port through which you e-mail notifications will be sent. Make sure the firewall doesn't block this port", 'dbem' ) );
 	dbem_options_select ( __ ( 'Mail sending method', 'dbem' ), 'dbem_rsvp_mail_send_method', array ('smtp' => 'SMTP', 'mail' => __ ( 'PHP mail function', 'dbem' ), 'sendmail' => 'Sendmail', 'qmail' => 'Qmail' ), __ ( 'Select the method to send email notification.', 'dbem' ) );
+	dbem_options_input_text ( 'Mail sending port', 'dbem_rsvp_mail_port', __ ( "The port through which you e-mail notifications will be sent. Make sure the firewall doesn't block this port", 'dbem' ) );
 	dbem_options_radio_binary ( __ ( 'Use SMTP authentication?', 'dbem' ), 'dbem_rsvp_mail_SMTPAuth', __ ( 'SMTP authentication is often needed. If you use GMail, make sure to set this parameter to Yes', 'dbem' ) );
 	dbem_options_input_text ( 'SMTP host', 'dbem_smtp_host', __ ( "The SMTP host. Usually it corresponds to 'localhost'. If you use GMail, set this value to 'ssl://smtp.gmail.com:465'.", 'dbem' ) );
 	dbem_options_input_text ( __ ( 'SMTP username', 'dbem' ), 'dbem_smtp_username', __ ( "Insert the username to be used to access your SMTP server.", 'dbem' ) );
@@ -1876,38 +1876,50 @@ $j_dbem_event(document).ready( function() {
 	$j_dbem_event('textarea#event_respondent_email_body').focus(function(){
 		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_respondent_email_body' )); ?>';
 	 	if($j_dbem_event(this).val() == '')
-	 		$j_dbem_event('textarea#event_respondent_email_body').val(tmp_value);
+	 		//$j_dbem_event('textarea#event_respondent_email_body').val(tmp_value);
+	 		$j_dbem_event(this).val(tmp_value);
 	}); 
 	$j_dbem_event('textarea#event_respondent_email_body').blur(function(){
 		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_respondent_email_body' )); ?>';
 	 	if($j_dbem_event(this).val() == tmp_value)
-	 		$j_dbem_event('textarea#event_respondent_email_body').val('');
+	 		//$j_dbem_event('textarea#event_respondent_email_body').val('');
+	 		$j_dbem_event(this).val('');
 	}); 
 
-	// TODO: NOT WORKING FOR SOME REASON, val() gives me 2 instead of 'smtp'...
-	// console.log($j('select[name:dbem_rsvp_mail_send_method]').val());
-	// 	if ($j('select[name:dbem_rsvp_mail_send_method]').val() != "smtp") {
-	// 	 	$j('tr#dbem_smtp_host_row').hide();
-	// 		$j('tr#dbem_rsvp_mail_SMTPAuth_row').hide();
-	// 	 	$j('tr#dbem_smtp_username_row').hide(); 
-	// 	 	$j('tr#dbem_smtp_password_row').hide();
-	// 	 }    
-	//     
-	// 	 $j('select[name:dbem_rsvp_mail_send_method]').change(function() {
-	// 	 	console.log($j(this).val()); 
-	// 	 	if($j(this).val() == "smtp") {
-	// 	 		$j('tr#dbem_smtp_host_row').show();   
-	// 			$j('tr#dbem_rsvp_mail_SMTPAuth_row').show();
-	// 	 		$j('tr#dbem_smtp_username_row').show(); 
-	// 	 		$j('tr#dbem_smtp_password_row').show(); 
-	// 	 	} else {
-	// 	 		$j('tr#dbem_smtp_host_row').hide();
-	// 			$j('tr#dbem_rsvp_mail_SMTPAuth_row').hide();
-	// 	 		$j('tr#dbem_smtp_username_row').hide(); 
-	// 	 		$j('tr#dbem_smtp_password_row').hide();
-	// 	 	}                                                 
-    
-	//});
+	if ($j_dbem_event('[name=dbem_rsvp_mail_send_method]').val() != "smtp") {
+	 	$j_dbem_event('tr#dbem_smtp_host_row').hide();
+		$j_dbem_event('tr#dbem_rsvp_mail_SMTPAuth_row').hide();
+	 	$j_dbem_event('tr#dbem_smtp_username_row').hide(); 
+	 	$j_dbem_event('tr#dbem_smtp_password_row').hide();
+	}
+	$j_dbem_event('[name=dbem_rsvp_mail_send_method]').change(function() {
+	 	if($j_dbem_event(this).val() == "smtp") {
+	 		$j_dbem_event('tr#dbem_smtp_host_row').show();   
+	 		$j_dbem_event('tr#dbem_rsvp_mail_SMTPAuth_row').show();
+	  		$j_dbem_event('tr#dbem_smtp_username_row').show(); 
+	  		$j_dbem_event('tr#dbem_smtp_password_row').show(); 
+	  		$j_dbem_event('tr#dbem_rsvp_mail_port_row').show(); 
+	  	} else {
+	  		$j_dbem_event('tr#dbem_smtp_host_row').hide();
+	 		$j_dbem_event('tr#dbem_rsvp_mail_SMTPAuth_row').hide();
+	  		$j_dbem_event('tr#dbem_smtp_username_row').hide(); 
+	  		$j_dbem_event('tr#dbem_smtp_password_row').hide();
+	  		$j_dbem_event('tr#dbem_rsvp_mail_port_row').hide(); 
+	  	}                                                 
+	});
+	if ($j_dbem_event('input[name=dbem_rsvp_mail_SMTPAuth]:checked').val() != 1) {
+	 	$j_dbem_event('tr#dbem_smtp_username_row').hide(); 
+	 	$j_dbem_event('tr#dbem_smtp_password_row').hide();
+	}
+	$j_dbem_event('input[name=dbem_rsvp_mail_SMTPAuth]').change(function() {
+	 	if($j_dbem_event(this).val() == 1) {
+	  		$j_dbem_event('tr#dbem_smtp_username_row').show(); 
+	  		$j_dbem_event('tr#dbem_smtp_password_row').show(); 
+	  	} else {
+	  		$j_dbem_event('tr#dbem_smtp_username_row').hide(); 
+	  		$j_dbem_event('tr#dbem_smtp_password_row').hide();
+	  	}                                                 
+	});
 	updateIntervalDescriptor(); 
 	updateIntervalSelectors();
 	updateShowHideRecurrence();  
