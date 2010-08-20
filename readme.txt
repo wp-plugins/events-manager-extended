@@ -162,3 +162,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.0.5 =
 * Improvement: for single events editing, the format windows are in the state closed by default
 * Feature: #_LOCATION now also possible in the calendar title formatting
+* Change: map only shown if location name/address/town all have a value
