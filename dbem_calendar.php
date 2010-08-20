@@ -55,12 +55,12 @@ function dbem_get_calendar($args="") {
   
   	switch($month_start_day){ 
 		case "Sun": $offset = 0; break; 
-	   case "Mon": $offset = 1; break; 
-	   case "Tue": $offset = 2; break; 
-	   case "Wed": $offset = 3; break; 
-	   case "Thu": $offset = 4; break; 
-	   case "Fri": $offset = 5; break; 
-	   case "Sat": $offset = 6; break;
+		case "Mon": $offset = 1; break; 
+		case "Tue": $offset = 2; break; 
+		case "Wed": $offset = 3; break; 
+		case "Thu": $offset = 4; break; 
+		case "Fri": $offset = 5; break; 
+		case "Sat": $offset = 6; break;
 	}       
    
 	$offset -= $start_of_week;
@@ -177,9 +177,9 @@ function dbem_get_calendar($args="") {
 	   	"<thead>\n<tr>\n".
 		"<td>$previous_link</td><td class='month_name' colspan='5'>$month_name $year</td><td>$next_link</td>\n". 
 		"</tr>\n</thead>\n".	
-	    "<tr class='days-names'>\n". 
-	    $days_initials. 
-	    "</tr>\n"; 
+		"<tr class='days-names'>\n". 
+		$days_initials. 
+		"</tr>\n"; 
 
 	// Now we break each key of the array  
 	// into a week and create a new table row for each 
@@ -188,37 +188,37 @@ function dbem_get_calendar($args="") {
 	$i = 0; 
 	foreach($weeks as $week){ 
 		$calendar .= "<tr>\n"; 
-	   foreach($week as $d){ 
-	   	if($i < $offset_count){ //if it is PREVIOUS month
-	      	$calendar .= "<td class='eventless-pre'>$d</td>\n"; 
-	      }
-		   if(($i >= $offset_count) && ($i < ($num_weeks * 7) - $outset)){ // if it is THIS month
-	      	$fullday=$d;
+		foreach($week as $d){ 
+	   		if ($i < $offset_count) { //if it is PREVIOUS month
+	      			$calendar .= "<td class='eventless-pre'>$d</td>\n"; 
+	      		}
+			if(($i >= $offset_count) && ($i < ($num_weeks * 7) - $outset)){ // if it is THIS month
+				$fullday=$d;
 				$d=date('j', $d);
 				$day_link = "$d";
 			  	// original :
-	        	//if($date == mktime(0,0,0,$month,$d,$year)){
+				//if($date == mktime(0,0,0,$month,$d,$year)){
 		 	  	// proposed patch (http://davidebenini.it/events-manager-forum/topic.php?id=73 )
 			  	// if(($date == mktime(0,0,0,$month,$d,$year)) && (date('F') == $month_name)) {
 			  	// my solution:
 			  	if($d == date('j') && $month == date('m') && $year == date('Y')) {
-	        		$calendar .= "<td class='eventless-today'>$d</td>\n"; 
-	        	} else { 
-	         		$calendar .= "<td class='eventless'>$day_link</td>\n"; 
-	        	} 
+	        			$calendar .= "<td class='eventless-today'>$d</td>\n"; 
+	        		} else { 
+	         			$calendar .= "<td class='eventless'>$day_link</td>\n"; 
+	        		} 
 	        	} elseif(($outset > 0)) { //if it is NEXT month
-	         	if(($i >= ($num_weeks * 7) - $outset)){ 
-	            	$calendar .= "<td class='eventless-post'>$d</td>\n"; 
-	           } 
+	         		if(($i >= ($num_weeks * 7) - $outset)){ 
+	            			$calendar .= "<td class='eventless-post'>$d</td>\n"; 
+				} 
 	        	} 
 	        	$i++; 
 	      } 
 	      $calendar .= "</tr>\n";    
-		} 
+	} 
 	
-	  	$calendar .= " </table>\n</div>";
+  	$calendar .= " </table>\n</div>";
 	
-		// query the database for events in this time span
+	// query the database for events in this time span
 	if ($month == 1) {
 		$month_pre=12;
 		$month_post=2;
@@ -230,25 +230,28 @@ function dbem_get_calendar($args="") {
 		$year_pre=$year;
 		$year_post=$year+1;
 	} else {
-			$month_pre=$month-1;
-			$month_post=$month+1;
-			$year_pre=$year;
-			$year_post=$year;
+		$month_pre=$month-1;
+		$month_post=$month+1;
+		$year_pre=$year;
+		$year_post=$year;
 	}
 	$limit_pre=date("Y-m-d", mktime(0,0,0,$month_pre, 1 , $year_pre));
-	$limit_post=date("Y-m-d", mktime(0,0,0,$month_post, 30 , $year_post));
+	$number_of_days_post=dbem_days_in_month($month_post, $year_post);
+	$limit_post=date("Y-m-d", mktime(0,0,0,$month_post, $number_of_days_post , $year_post));
 	$events_table = $wpdb->prefix.EVENTS_TBNAME; 
 	$sql = "SELECT event_id, 
 		event_name, 
 	 	event_start_date,
 		event_start_time, 
 		event_end_date,
+		location_id,
 		DATE_FORMAT(event_start_date, '%w') AS 'event_weekday_n',
 		DATE_FORMAT(event_start_date, '%e') AS 'event_day',
 		DATE_FORMAT(event_start_date, '%c') AS 'event_month_n',
 		DATE_FORMAT(event_start_time, '%Y') AS 'event_year',
 		DATE_FORMAT(event_start_time, '%k') AS 'event_hh',
 		DATE_FORMAT(event_start_time, '%i') AS 'event_mm'
+
 		FROM $events_table 
 		WHERE (event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post') ORDER BY event_start_date";      
 
@@ -264,14 +267,21 @@ function dbem_get_calendar($args="") {
 	if($events){	
 		//Go through the events and slot them into the right d-m index
 		foreach($events as $event) {   
+			if ($event ['location_id'] ) {
+				$this_location = dbem_get_location ( $event ['location_id'] );
+				$event ['location_name'] = $this_location ['location_name'];
+				$event ['location_address'] = $this_location ['location_address'];
+				$event ['location_town'] = $this_location ['location_town'];
+			}
+
 			if( $long_events ){
 				//If $long_events is set then show a date as eventful if there is an multi-day event which runs during that day
 				$event_start_date = strtotime($event['event_start_date']);
 				$event_end_date = strtotime($event['event_end_date']);
-				while( $event_start_date <= $event_end_date ){
+				while( $event_start_date <= $event_end_date ) {
 					$event_eventful_date = date('Y-m-d', $event_start_date);
 					//Only show events on the day that they start
-					if( is_array($eventful_days[$event_eventful_date]) ){
+					if( is_array($eventful_days[$event_eventful_date]) ) {
 						$eventful_days[$event_eventful_date][] = $event; 
 					} else {
 						$eventful_days[$event_eventful_date] = array($event);  
@@ -280,7 +290,7 @@ function dbem_get_calendar($args="") {
 				}
 			}else{
 				//Only show events on the day that they start
-				if( isset($eventful_days[$event['event_start_date']]) && is_array($eventful_days[$event['event_start_date']]) ){
+				if( isset($eventful_days[$event['event_start_date']]) && is_array($eventful_days[$event['event_start_date']]) ) {
 					$eventful_days[$event['event_start_date']][] = $event; 
 				} else {
 					$eventful_days[$event['event_start_date']] = array($event);  
@@ -307,7 +317,8 @@ function dbem_get_calendar($args="") {
 		$events_page_id = get_option('dbem_events_page');
 		$event_page_link = get_permalink($events_page_id);
 		if (stristr($event_page_link, "?"))
-			$joiner = "&amp;";
+			//$joiner = "&amp;";
+			$joiner = "&";
 		else
 			$joiner = "?";
 		
@@ -347,30 +358,7 @@ function dbem_get_calendar($args="") {
 }
 
 function dbem_days_in_month($month, $year) {
-	switch ($month) {
-		case (2):
-			if ($year % 4 == 0 && ($year % 100 != 0 || $year % 400 == 0)) {
-				return 29;
-			} else {
-				return 28;
-			}
-		break;
-		case (4):
-			return 30;
-		break;
-		case (6):
-			return 30;
-		break;
-		case (9):
-			return 30;
-		break;
-		case (11):
-			return 30;
-		break;
-		default:
-			return 31;
-		break;
-	}		
+	return (date("t",mktime(0,0,0,$month,1,$year)));
 }
 
 function dbem_calendar_style() {
