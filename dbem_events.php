@@ -1844,12 +1844,12 @@ $j_dbem_event(document).ready( function() {
 	// is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
 
 	$j_dbem_event('textarea#event_page_title_format').focus(function(){
-		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_page_title_format' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_event_page_title_format' )); ?>';
 	 	if($j_dbem_event(this).val() == '')
 	 		$j_dbem_event('textarea#event_page_title_format').val(tmp_value);
 	}); 
 	$j_dbem_event('textarea#event_page_title_format').blur(function(){
-		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_page_title_format' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_event_page_title_format' )); ?>';
 	 	if($j_dbem_event(this).val() == tmp_value)
 	 		$j_dbem_event('textarea#event_page_title_format').val('');
 	}); 
@@ -1864,22 +1864,22 @@ $j_dbem_event(document).ready( function() {
 	 		$j_dbem_event('textarea#event_single_event_format').val('');
 	}); 
 	$j_dbem_event('textarea#event_contactperson_email_body').focus(function(){
-		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_contactperson_email_body' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_contactperson_email_body' )); ?>';
 	 	if($j_dbem_event(this).val() == '')
 	 		$j_dbem_event('textarea#event_contactperson_email_body').val(tmp_value);
 	}); 
 	$j_dbem_event('textarea#event_contactperson_email_body').blur(function(){
-		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_contactperson_email_body' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_contactperson_email_body' )); ?>';
 	 	if($j_dbem_event(this).val() == tmp_value)
 	 		$j_dbem_event('textarea#event_contactperson_email_body').val('');
 	}); 
 	$j_dbem_event('textarea#event_respondent_email_body').focus(function(){
-		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_respondent_email_body' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_respondent_email_body' )); ?>';
 	 	if($j_dbem_event(this).val() == '')
 	 		$j_dbem_event('textarea#event_respondent_email_body').val(tmp_value);
 	}); 
 	$j_dbem_event('textarea#event_respondent_email_body').blur(function(){
-		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'event_respondent_email_body' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\n|\r/","",get_option ( 'dbem_respondent_email_body' )); ?>';
 	 	if($j_dbem_event(this).val() == tmp_value)
 	 		$j_dbem_event('textarea#event_respondent_email_body').val('');
 	}); 
