@@ -613,7 +613,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			$events_page_id = get_option('dbem_events_page');
 			$event_page_link = get_permalink($events_page_id);
 			if (stristr($event_page_link, "?"))
-				$joiner = "&amp;";
+				$joiner = "&";
 			else
 				$joiner = "?";
 			$event_string = str_replace($result, "<a href='".get_permalink($events_page_id).$joiner."event_id=".$event['event_id']."'   title='".$event['event_name']."'>".$event['event_name']."</a>" , $event_string );
@@ -621,7 +621,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
 			$events_page_id = get_option('dbem_events_page');
 			if (stristr($event_page_link, "?"))
-				$joiner = "&amp;";
+				$joiner = "&";
 			else
 				$joiner = "?";
 			$event_string = str_replace($result, get_permalink($events_page_id).$joiner."event_id=".$event['event_id'] , $event_string );
@@ -726,7 +726,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		 if (preg_match('/#_(LOCATIONPAGEURL)/', $result)) { 
 			$events_page_link = dbem_get_events_page(true, false);
 			if (stristr($events_page_link, "?"))
-			 	$joiner = "&amp;";
+			 	$joiner = "&";
 			else
 			 	$joiner = "?";
 			$venue_page_link = $events_page_link.$joiner."location_id=".$event['location_id'];

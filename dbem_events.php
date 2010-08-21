@@ -447,7 +447,8 @@ function dbem_events_page_content() {
 		$page_body = dbem_replace_locations_placeholders ( $single_location_format, $location );
 		return $page_body;
 	}
-	if (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') {
+	//if (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') {
+	if (dbem_is_single_event_page()) {
 		// single event page
 		$event_ID = intval($_REQUEST ['event_id']);      
 		$event = dbem_get_event ( $event_ID );
@@ -504,13 +505,10 @@ function dbem_events_count_for($date) {
 
 // filter function to call the event page when appropriate
 function dbem_filter_events_page($data) {
-	
-	// $table_name = $wpdb->prefix .EVENTS_TBNAME;
-	// 	$start = strpos($data, DBEM_PAGE);
-	
-	$is_events_post = (get_the_ID () == get_option ( 'dbem_events_page' ));
-	$events_page_id = get_option ( 'dbem_events_page' );
-	if (is_page ( $events_page_id ) && $is_events_post) {
+	//$is_events_post = (get_the_ID () == get_option ( 'dbem_events_page' ));
+	//$events_page_id = get_option ( 'dbem_events_page' );
+	//if (is_page ( $events_page_id ) && $is_events_post) {
+	if (dbem_is_events_page()) {
 		return dbem_events_page_content ();
 	} else {
 		return $data;
@@ -523,7 +521,8 @@ function dbem_events_page_title($data) {
 	$events_page = get_page ( $events_page_id );
 	$events_page_title = $events_page->post_title;
 	
-	if (($data == $events_page_title) && (is_page ( $events_page_id ))) {
+	//if (($data == $events_page_title) && (is_page ( $events_page_id ))) {
+	if (($data == $events_page_title) && dbem_is_events_page()) {
 		if (isset ( $_REQUEST['calendar_day'] ) && $_REQUEST['calendar_day'] != '') {
 			
 			$date = dbem_sanitize_request($_REQUEST['calendar_day']);
@@ -544,7 +543,7 @@ function dbem_events_page_title($data) {
 			$page_title = dbem_replace_locations_placeholders ( $stored_page_title_format, $location );
 			return $page_title;
 		}
-		if (isset ( $_REQUEST['event_id'] ) && $_REQUEST['event_id'] != '') {
+		if (dbem_is_single_event_page()) {
 			// single event page
 			$event_ID = intval($_REQUEST['event_id']);
 			$event = dbem_get_event ( $event_ID );
@@ -2167,7 +2166,7 @@ function dbem_rss() {
 		$events_page_id = get_option ( 'dbem_events_page' );
 		$events_page_link = get_permalink ( $events_page_id );
 		if (stristr ( $events_page_link, "?" ))
-			$joiner = "&amp;";
+			$joiner = "&";
 		else
 			$joiner = "?";
 		
@@ -2233,6 +2232,10 @@ function dbem_general_css() {
 function dbem_admin_general_css() {
 	$base_url = get_bloginfo ( 'wpurl' );
 	echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/events_manager.css' type='text/css'/>\n";
+	$file_name= ABSPATH.PLUGINDIR."/events-manager-extended/myown.css";
+	if (file_exists($file_name)) {
+		echo "<link rel='stylesheet' href='$base_url/wp-content/plugins/events-manager-extended/myown.css' type='text/css'/>\n";
+	}
 }
 add_action ( 'wp_head', 'dbem_general_css' );
 add_action ( 'admin_head', 'dbem_admin_general_css' );
