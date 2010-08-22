@@ -616,7 +616,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$joiner = "&";
 			else
 				$joiner = "?";
-			$event_string = str_replace($result, "<a href='".$event_page_link.$joiner."event_id=".$event['event_id']."'   title='".$event['event_name']."'>".$event['event_name']."</a>" , $event_string );
+			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."'   title='".$event['event_name']."'>".$event['event_name']."</a>" , $event_string );
 		} 
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
 			$events_page_link = dbem_get_events_page(true, false);
@@ -624,7 +624,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$joiner = "&";
 			else
 				$joiner = "?";
-			$event_string = str_replace($result, $event_page_link.$joiner."event_id=".$event['event_id'] , $event_string );
+			$event_string = str_replace($result, $events_page_link.$joiner."event_id=".$event['event_id'] , $event_string );
 		}
 	 	if (preg_match('/#_(NAME|NOTES|EXCERPT)/', $result)) {
 			$field = "event_".ltrim(strtolower($result), "#_");
