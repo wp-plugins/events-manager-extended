@@ -304,11 +304,14 @@ function dbem_events_subpanel() {
 // array of all pages, bypasses the filter I set up :)
 function dbem_get_all_pages() {
 	global $wpdb;
-	$query = "SELECT id, post_title FROM " . $wpdb->prefix . "posts WHERE post_type = 'page';";
+	$query = "SELECT id, post_title FROM " . $wpdb->prefix . "posts WHERE post_type = 'page' AND post_status='publish'";
 	$pages = $wpdb->get_results ( $query, ARRAY_A );
+	// get_pages() is better, but uses way more memory and it might be filtered by dbem_filter_get_pages()
+	//$pages = get_pages();
 	$output = array ();
 	foreach ( $pages as $page ) {
 		$output [$page ['id']] = $page ['post_title'];
+	//	$output [$page->ID] = $page->post_title;
 	}
 	return $output;
 }
@@ -2163,8 +2166,7 @@ function dbem_rss() {
 		header ( "Content-type: text/xml" );
 		echo "<?xml version='1.0'?>\n";
 		
-		$events_page_id = get_option ( 'dbem_events_page' );
-		$events_page_link = get_permalink ( $events_page_id );
+		$events_page_link = dbem_get_events_page(true, false);
 		if (stristr ( $events_page_link, "?" ))
 			$joiner = "&";
 		else
@@ -2274,7 +2276,6 @@ function dbem_alert_events_page() {
 		$notice = "<div class='error'><p>$message</p></div>";
 		echo $notice;
 	}
-
 }
 add_action ( 'admin_notices', 'dbem_alert_events_page' );
 

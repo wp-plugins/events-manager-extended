@@ -314,8 +314,7 @@ function dbem_get_calendar($args="") {
 		}   
 		$link_title = implode($event_title_separator_format,$events_titles);       
 		
-		$events_page_id = get_option('dbem_events_page');
-		$event_page_link = get_permalink($events_page_id);
+		$events_page_link = dbem_get_events_page(true, false);
 		if (stristr($event_page_link, "?"))
 			//$joiner = "&amp;";
 			$joiner = "&";

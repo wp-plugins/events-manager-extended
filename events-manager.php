@@ -3,13 +3,14 @@
 Plugin Name: Events Manager Extended
 Version: 3.0.4
 Plugin URI: http://www.e-dynamics.be/wordpress
-Description: Manage events specifying precise spatial data (Location, Town, Province, etc).
+Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
 Author URI: http://www.e-dynamics.be/wordpress
 */
 
 /*
 Copyright (c) 2009, Davide Benini.  $Revision: 1 $
+Copyright (c) 2010, Franky Van Liedekerke.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -317,7 +318,6 @@ function dbem_create_locations_table() {
 			location_name tinytext NOT NULL,
 			location_address tinytext NOT NULL,
 			location_town tinytext NOT NULL,
-			location_province tinytext,
 			location_latitude float DEFAULT NULL,
 			location_longitude float DEFAULT NULL,
 			location_description text DEFAULT NULL,
@@ -610,23 +610,22 @@ function dbem_replace_placeholders($format, $event, $target="html") {
                         $event_string = str_replace($result, $availble_seats , $event_string );
                 }
 		if (preg_match('/#_LINKEDNAME/', $result)) {
-			$events_page_id = get_option('dbem_events_page');
-			$event_page_link = get_permalink($events_page_id);
+			$events_page_link = dbem_get_events_page(true, false);
 			if (stristr($event_page_link, "?"))
 				$joiner = "&";
 			else
 				$joiner = "?";
-			$event_string = str_replace($result, "<a href='".get_permalink($events_page_id).$joiner."event_id=".$event['event_id']."'   title='".$event['event_name']."'>".$event['event_name']."</a>" , $event_string );
+			$event_string = str_replace($result, "<a href='".$event_page_link.$joiner."event_id=".$event['event_id']."'   title='".$event['event_name']."'>".$event['event_name']."</a>" , $event_string );
 		} 
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
-			$events_page_id = get_option('dbem_events_page');
+			$events_page_link = dbem_get_events_page(true, false);
 			if (stristr($event_page_link, "?"))
 				$joiner = "&";
 			else
 				$joiner = "?";
-			$event_string = str_replace($result, get_permalink($events_page_id).$joiner."event_id=".$event['event_id'] , $event_string );
+			$event_string = str_replace($result, $event_page_link.$joiner."event_id=".$event['event_id'] , $event_string );
 		}
-	 	if (preg_match('/#_(NAME|NOTES|SEATS|EXCERPT)/', $result)) {
+	 	if (preg_match('/#_(NAME|NOTES|EXCERPT)/', $result)) {
 			$field = "event_".ltrim(strtolower($result), "#_");
 		 	$field_value = $event[$field];      
 			
@@ -667,24 +666,14 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}  
 	  
-		if (preg_match('/#_(ADDRESS|TOWN|PROVINCE)/', $result)) {
+		if (preg_match('/#_(ADDRESS|TOWN)/', $result)) {
 			$field = "location_".ltrim(strtolower($result), "#_");
 		 	$field_value = $event[$field];      
 		
-			if ($field == "event_notes") {
-				if ($target == "html")
-					$field_value = apply_filters('dbem_notes', $field_value);
-				else
-				  if ($target == "map")
-					$field_value = apply_filters('dbem_notes_map', $field_value);
-				  else
-				 	$field_value = apply_filters('dbem_notes_rss', $field_value);
-		  	} else {
-				if ($target == "html")    
-					$field_value = apply_filters('dbem_general', $field_value); 
-				else 
-					$field_value = apply_filters('dbem_general_rss', $field_value); 
-			}
+			if ($target == "html")    
+				$field_value = apply_filters('dbem_general', $field_value); 
+			else 
+				$field_value = apply_filters('dbem_general_rss', $field_value); 
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
 	  

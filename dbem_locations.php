@@ -558,7 +558,7 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 		 	$location_string = str_replace($result, $list , $location_string ); 
 		}
 	  
-		if (preg_match('/#_(NAME|ADDRESS|TOWN|PROVINCE|DESCRIPTION)/', $result)) {
+		if (preg_match('/#_(NAME|ADDRESS|TOWN|DESCRIPTION)/', $result)) {
 			$field = "location_".ltrim(strtolower($result), "#_");
 		 	$field_value = $location[$field];      
 		
