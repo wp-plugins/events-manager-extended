@@ -30,7 +30,9 @@ For more information visit the [Documentation Page](http://www.e-dynamics.be/wor
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Add events list or calendars following the instructions in the Usage section.
 
-Events Manager Extended should take care of your events database migration automatically, but it's always advised to perform a database backup, as previously suggested.
+== Upgrade from the old Events Manager plugin ==
+
+Events Manager Extended is completely backwards compatible with the old data from Events Manager 2.2.2. Just deactivate the old plugin, remove the files if you want, and proceed with the Events Manager Extended installation as usual. Events Manager Extended takes care of your events database migration automatically.
 
 == Usage == 
 
