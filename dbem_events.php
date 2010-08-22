@@ -309,6 +309,7 @@ function dbem_get_all_pages() {
 	// get_pages() is better, but uses way more memory and it might be filtered by dbem_filter_get_pages()
 	//$pages = get_pages();
 	$output = array ();
+	$output [] = __( 'Please select a page','dbem' );
 	foreach ( $pages as $page ) {
 		$output [$page ['id']] = $page ['post_title'];
 	//	$output [$page->ID] = $page->post_title;
@@ -566,6 +567,7 @@ function dbem_events_page_title($data) {
 add_filter ( 'the_title', 'dbem_events_page_title' );
 add_filter ( 'single_post_title', 'dbem_events_page_title' );
 
+// filter out the events page in the get_pages call
 function dbem_filter_get_pages($data) {
 	$output = array ();
 	$events_page_id = get_option ( 'dbem_events_page' );
