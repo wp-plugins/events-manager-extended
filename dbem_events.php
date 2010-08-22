@@ -325,35 +325,28 @@ function dbem_options_subpanel() {
 <div class="wrap">
 <div id='icon-options-general' class='icon32'><br />
 </div>
-<h2><?php
-	_e ( 'Event Manager Options', 'dbem' );
-	?></h2>
+<h2><?php _e ( 'Event Manager Options', 'dbem' ); ?></h2>
 <form id="dbem_options_form" method="post" action="options.php">     
-<h3><?php
-	_e ( 'General options', 'dbem' );
-	?></h3>
+<h3><?php _e ( 'General options', 'dbem' ); ?></h3>
 <table class="form-table">                              
- 					<?php
-	dbem_options_radio_binary ( __ ( 'Use dropdown for locations?' ), 'dbem_use_select_for_locations', __ ( 'Select yes to select location from a drop-down menu; location selection will be faster, but you will lose the ability to insert locations with events','dbem' ) );  
-	dbem_options_radio_binary ( __ ( 'Use recurrence?' ), 'dbem_recurrence_enabled', __ ( 'Select yes to enable the recurrence feature','dbem' ) ); 
-	dbem_options_radio_binary ( __ ( 'Use RSVP?' ), 'dbem_rsvp_enabled', __ ( 'Select yes to enable the RSVP feature','dbem' ) );     
-	dbem_options_radio_binary ( __ ( 'Use categories?' ), 'dbem_categories_enabled', __ ( 'Select yes to enable the category features','dbem' ) );     
-	dbem_options_radio_binary ( __ ( 'Use attributes?' ), 'dbem_attributes_enabled', __ ( 'Select yes to enable the attributes feature','dbem' ) );
+ 	<?php
+	dbem_options_radio_binary ( __ ( 'Use dropdown for locations?' ), 'dbem_use_select_for_locations', __ ( 'Select yes to select location from a drop-down menu; location selection will be faster, but you will lose the ability to insert locations with events.','dbem' ) );  
+	dbem_options_radio_binary ( __ ( 'Use recurrence?' ), 'dbem_recurrence_enabled', __ ( 'Select yes to enable the possiblity to create recurrent events.','dbem' ) ); 
+	dbem_options_radio_binary ( __ ( 'Use RSVP?' ), 'dbem_rsvp_enabled', __ ( 'Select yes to enable the RSVP feature so people can register for an event and book places.','dbem' ) );     
+	dbem_options_radio_binary ( __ ( 'Use categories?' ), 'dbem_categories_enabled', __ ( 'Select yes to enable the category features.','dbem' ) );     
+	dbem_options_radio_binary ( __ ( 'Use attributes?' ), 'dbem_attributes_enabled', __ ( 'Select yes to enable the attributes feature.','dbem' ) );
 	dbem_options_radio_binary ( __ ( 'Enable Google Maps integration?' ), 'dbem_gmap_is_active', __ ( 'Check this option to enable Goggle Map integration.','dbem' ) );
-   ?>
+	?>
 </table>
-<h3><?php
-	_e ( 'Events page', 'dbem' );
-	?></h3>
+<h3><?php _e ( 'Events page', 'dbem' ); ?></h3>
 <table class="form-table">  
- 					<?php
+ 	<?php
 	dbem_options_select ( __ ( 'Events page' ), 'dbem_events_page', dbem_get_all_pages (), __ ( 'This option allows you to select which page to use as an events page.', 'dbem' )."<br/><strong>".__ ( 'The content of this pagea (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data.','dbem' )."</strong>" );
 	dbem_options_radio_binary ( __ ( 'Show events page in lists?', 'dbem' ), 'dbem_list_events_page', __ ( 'Check this option if you want the events page to appear together with other pages in pages lists.', 'dbem' )."<br/><strong>".__ ( 'This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended.', 'dbem' )."</strong>" ); 
-	dbem_options_radio_binary ( __ ( 'Display calendar in events page?', 'dbem' ), 'dbem_display_calendar_in_events_page', __ ( 'This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page.','dbem' ) )?>
-	      </table>
-<h3><?php
-	_e ( 'Events format', 'dbem' );
-	?></h3>
+	dbem_options_radio_binary ( __ ( 'Display calendar in events page?', 'dbem' ), 'dbem_display_calendar_in_events_page', __ ( 'This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page.','dbem' ) );
+	?>
+</table>
+<h3><?php _e ( 'Events format', 'dbem' ); ?></h3>
 <table class="form-table">
  	<?php
  	/* Marcus Begin Edit */
@@ -365,45 +358,40 @@ function dbem_options_subpanel() {
 	dbem_options_input_text ( __ ( 'Single event page title format', 'dbem' ), 'dbem_event_page_title_format', __ ( 'The format of a single event page title. Follow the previous formatting instructions.', 'dbem' ) );
 	dbem_options_textarea ( __ ( 'Default single event format', 'dbem' ), 'dbem_single_event_format', __ ( 'The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings.', 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Events page title', 'dbem' ), 'dbem_events_page_title', __ ( 'The title on the multiple events page.', 'dbem' ) );
-	dbem_options_input_text ( __ ( 'No events message', 'dbem' ), 'dbem_no_events_message', __ ( 'The message displayed when no events are available.', 'dbem' ) );?>         
- 
-  </table>                      
-   <h3><?php _e ( 'Calendar format', 'dbem' ); ?></h3>
-	<table class="form-table">   
-<?php
-    dbem_options_input_text ( __ ( 'Small calendar title', 'dbem' ), 'dbem_small_calendar_event_title_format', __ ( 'The format of the title, corresponding to the text that appears when hovering on an eventful calendar day.', 'dbem' ) );
-	dbem_options_input_text ( __ ( 'Small calendar title separator', 'dbem' ), 'dbem_small_calendar_event_title_separator', __ ( 'The separator appearing on the above title when more than one events are taking place on the same day.', 'dbem' ) );         
-    dbem_options_input_text ( __ ( 'Full calendar events format', 'dbem' ), 'dbem_full_calendar_event_format', __ ( 'The format of each event when displayed in the full calendar. Remember to include <code>li</code> tags before and after the event.', 'dbem' ) );        
-
+	dbem_options_input_text ( __ ( 'No events message', 'dbem' ), 'dbem_no_events_message', __ ( 'The message displayed when no events are available.', 'dbem' ) );
 	?>
-	</table>
+</table>                      
+<h3><?php _e ( 'Calendar format', 'dbem' ); ?></h3>
+<table class="form-table">   
+	<?php
+	dbem_options_input_text ( __ ( 'Small calendar title', 'dbem' ), 'dbem_small_calendar_event_title_format', __ ( 'The format of the title, corresponding to the text that appears when hovering on an eventful calendar day.', 'dbem' ) );
+	dbem_options_input_text ( __ ( 'Small calendar title separator', 'dbem' ), 'dbem_small_calendar_event_title_separator', __ ( 'The separator appearing on the above title when more than one events are taking place on the same day.', 'dbem' ) );         
+	dbem_options_input_text ( __ ( 'Full calendar events format', 'dbem' ), 'dbem_full_calendar_event_format', __ ( 'The format of each event when displayed in the full calendar. Remember to include <code>li</code> tags before and after the event.', 'dbem' ) );        
+	?>
+</table>
 
-<h3><?php
-	_e ( 'Locations format', 'dbem' );
-	?></h3>
-<table class="form-table"><?php
+<h3><?php _e ( 'Locations format', 'dbem' ); ?></h3>
+<table class="form-table">
+	<?php
 	dbem_options_input_text ( __ ( 'Single location page title format', 'dbem' ), 'dbem_location_page_title_format', __ ( 'The format of a single location page title.<br/>Follow the previous formatting instructions.', 'dbem' ) );
 	dbem_options_textarea ( __ ( 'Default single location page format', 'dbem' ), 'dbem_single_location_format', __ ( 'The format of a single location page.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>.<br/> Use <code>#_MAP</code> to display a map of the event location, and <code>#_IMAGE</code> to display an image of the location.<br/> Use <code>#_NEXTEVENTS</code> to insert a list of the upcoming events, <code>#_PASTEVENTS</code> for a list of past events, <code>#_ALLEVENTS</code> for a list of all events taking place in this location.', 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Default location baloon format', 'dbem' ), 'dbem_location_baloon_format', __ ( 'The format of of the text appearing in the baloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>.', 'dbem' ) );
 	dbem_options_textarea ( __ ( 'Default location event list format', 'dbem' ), 'dbem_location_event_list_item_format', __ ( 'The format of the events the list inserted in the location page through the <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> element. <br/> Follow the events formatting instructions', 'dbem' ) );
 	dbem_options_textarea ( __ ( 'Default no events message', 'dbem' ), 'dbem_location_no_events_message', __ ( 'The message to be displayed in the list generated by <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> when no events are available.', 'dbem' ) );
-	
 	?>
-				</table>
+</table>
 
-<h3><?php
-	_e ( 'RSS feed format', 'dbem' );
-	?></h3>
-<table class="form-table"><?php
-	
+<h3><?php _e ( 'RSS feed format', 'dbem' ); ?></h3>
+<table class="form-table">
+	<?php
 	dbem_options_input_text ( __ ( 'RSS main title', 'dbem' ), 'dbem_rss_main_title', __ ( 'The main title of your RSS events feed.', 'dbem' ) );
 	dbem_options_input_text ( __ ( 'RSS main description', 'dbem' ), 'dbem_rss_main_description', __ ( 'The main description of your RSS events feed.', 'dbem' ) );
 	dbem_options_input_text ( __ ( 'RSS title format', 'dbem' ), 'dbem_rss_title_format', __ ( 'The format of the title of each item in the events RSS feed.', 'dbem' ) );
 	dbem_options_input_text ( __ ( 'RSS description format', 'dbem' ), 'dbem_rss_description_format', __ ( 'The format of the description of each item in the events RSS feed. Follow the previous formatting instructions.', 'dbem' ) );
 	?>
-		</table>
+</table>
 
-<h3><?php _e ( 'RSVP and bookings', 'dbem' ); ?></h3>
+<h3><?php _e ( 'RSVP: registrations and bookings', 'dbem' ); ?></h3>
 <table class='form-table'>
      <?php
 	dbem_options_select ( __ ( 'Default contact person', 'dbem' ), 'dbem_default_contact_person', dbem_get_indexed_users (), __ ( 'Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event', 'dbem' ) );
@@ -423,16 +411,15 @@ function dbem_options_subpanel() {
 </table>
 
 <h3><?php _e ( 'Images size', 'dbem' ); ?></h3>
-<table class='form-table'> <?php
+<table class='form-table'>
+	<?php
 	dbem_options_input_text ( __ ( 'Maximum width (px)', 'dbem' ), 'dbem_image_max_width', __ ( 'The maximum allowed width for images uploaded', 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Maximum height (px)', 'dbem' ), 'dbem_image_max_height', __ ( "The maximum allowed width for images uploaded, in pixels", 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Maximum size (bytes)', 'dbem' ), 'dbem_image_max_size', __ ( "The maximum allowed size for images uploaded, in pixels", 'dbem' ) );
 	?>
 </table>
 
-
 <p class="submit"><input type="submit" id="dbem_options_submit" name="Submit" value="<?php _e ( 'Save Changes' )?>" /></p>
-				
 	<?php
 	settings_fields ( 'dbem-options' );
 	?> 
