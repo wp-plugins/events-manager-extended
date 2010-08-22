@@ -1,7 +1,7 @@
 === Events Manager Extended ===  
 Contributors: liedekef
 Donate link: http://www.e-dynamics.be
-Tags: events, manager, calendar, gigs, concert, maps, geotagging  
+Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
 Stable tag: 3.0.4
