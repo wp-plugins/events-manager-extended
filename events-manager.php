@@ -62,10 +62,11 @@ define('DEFAULT_FULL_CALENDAR_EVENT_FORMAT', '<li>#_LINKEDNAME</li>');
 define('DEFAULT_SMALL_CALENDAR_EVENT_TITLE_FORMAT', "#_NAME" );
 define('DEFAULT_SMALL_CALENDAR_EVENT_TITLE_SEPARATOR', ", ");  
 define('DEFAULT_USE_SELECT_FOR_LOCATIONS', false);      
-define('DEFAULT_ATTRIBUTES_ENABLED', false);
-define('DEFAULT_RECURRENCE_ENABLED', false);
-define('DEFAULT_RSVP_ENABLED', false);
-define('DEFAULT_CATEGORIES_ENABLED', false);
+define('DEFAULT_ATTRIBUTES_ENABLED', true);
+define('DEFAULT_RECURRENCE_ENABLED', true);
+define('DEFAULT_RSVP_ENABLED', true);
+define('DEFAULT_CATEGORIES_ENABLED', true);
+define('DEFAULT_GMAP_ENABLED', true);
 
 // DEBUG constant for developing
 // if you are hacking this plugin, set to TRUE, a log will show in admin pages
@@ -427,7 +428,7 @@ function dbem_add_options() {
 	'dbem_rss_main_description' => get_bloginfo('description')." - ".__('Events'),
 	'dbem_rss_description_format' => DEFAULT_RSS_DESCRIPTION_FORMAT,
 	'dbem_rss_title_format' => DEFAULT_RSS_TITLE_FORMAT,
-	'dbem_gmap_is_active'=>1,
+	'dbem_gmap_is_active'=> DEFAULT_GMAP_ENABLED,
 	'dbem_default_contact_person' => 1,
 	'dbem_rsvp_mail_notify_is_active' => 0 ,
 	'dbem_contactperson_email_body' => __(preg_replace("/<br ?\/?>/", "\n\r", $contact_person_email_body_localizable)),        

@@ -1056,16 +1056,10 @@ function dbem_events_table($events, $limit, $title) {
 		<tr>
 			<th class='manage-column column-cb check-column' scope='col'><input
 				class='select-all' type="checkbox" value='1' /></th>
-			<th><?php
-		_e ( 'Name', 'dbem' );
-		?></th>
-	  	   		<th></th>
-	  	   		<th><?php
-		_e ( 'Location', 'dbem' );
-		?></th>
-			<th colspan="2"><?php
-		_e ( 'Date and time', 'dbem' );
-		?></th>
+			<th><?php _e ( 'Name', 'dbem' ); ?></th>
+	  	   	<th></th>
+	  	   	<th><?php _e ( 'Location', 'dbem' ); ?></th>
+			<th colspan="2"><?php _e ( 'Date and time', 'dbem' ); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -1556,7 +1550,7 @@ function dbem_event_form($event, $title, $element) {
 									<?php  if($use_select_for_locations) {
 										$locations = dbem_get_locations();
 									?>   
-										<th><?php _e('Location:','dbem') ?></th>
+										<th><?php _e('Location','dbem') ?></th>
 										<td> 
 											<select name="location-select-id" id='location-select-id' size="1">  
 												<?php foreach($locations as $location) :    
@@ -1576,7 +1570,7 @@ function dbem_event_form($event, $title, $element) {
 											<input type='hidden' name='location-select-address' value='<?php echo $event['location_address']?>'/>  		
 										</td>
 									<?php } else { ?>
-										<th><?php _e ( 'Name:' )?>
+										<th><?php _e ( 'Name','dbem' )?>
 											&nbsp;</th>
 										<td><input id="location-name" type="text" name="location_name" value="<?php echo $event ['location_name']?>" /></td>
 									<?php } ?>
