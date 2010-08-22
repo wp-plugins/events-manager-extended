@@ -38,9 +38,14 @@ function dbem_add_booking_form($event_id) {
 			$module .= $option."\n";                  
 		}
 		$module .= "</select></td></tr>
-				<tr><th scope='row'>".__('Comment', 'dbem').":</th><td><textarea name='bookerComment'></textarea></td></tr>
+				<tr><th scope='row'>".__('Comment', 'dbem').":</th><td><textarea name='bookerComment'></textarea></td></tr>";
+		if (get_option('dbem_captcha_for_booking')) {
+			$module .= "
 				<tr><th scope='row'>".__('Please fill in the code displayed here', 'dbem').":</th><td><img src='$base_url/wp-content/plugins/events-manager-extended/captcha.php'><br>
 				      <input type='text' name='captcha_check'></td></tr>
+				";
+		}
+		$module .= "
 		</table>
 		<p>".__('(* marks a required field)', 'dbem')."</p>   
 		<p><input type='submit' value='".__('Send your booking', 'dbem')."'/>   
@@ -77,10 +82,7 @@ function dbem_delete_booking_form() {
 	// $module .= "dati inviati: ";
 	//  	$module .= $_POST['bookerName'];  
 
-	
-	
 	return $module;
-	
 }
 
 
@@ -88,15 +90,19 @@ function dbem_catch_rsvp() {
   	global $form_add_message;   
 	global $form_delete_message; 
 	$result = "";
+
+	if (get_option('dbem_captcha_for_booking')) {
+		// the captcha needs a session
+		if (!session_id())
+			session_start();
+	}
+
 	if (isset($_POST['eventAction']) && $_POST['eventAction'] == 'add_booking') { 
 		$result = dbem_book_seats();
 		$form_add_message = $result;
-	  
-		
   	} 
 
 	if (isset($_POST['eventAction']) && $_POST['eventAction'] == 'delete_booking') { 
-		
 		$bookerName = dbem_sanitize_request($_POST['bookerName']);
 		$bookerEmail = dbem_sanitize_request($_POST['bookerEmail']);
 		$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
@@ -124,11 +130,14 @@ function dbem_book_seats() {
 	$event_id = intval($_GET['event_id']);
 	$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
 	
-	// if any of name, email, phone or bookedseats are empty: return an error
-	$msg = response_check_captcha("captcha_check",1);
+	$msg="";
+	if (get_option('dbem_captcha_for_booking')) {
+		$msg = response_check_captcha("captcha_check",1);
+	}
   	if(!empty($msg)) {
 		$result = __('You entered an incorrect code','dbem');  
   	} elseif (!$bookerName || !$bookerEmail || !$bookerPhone || !$bookedSeats) {
+	// if any of name, email, phone or bookedseats are empty: return an error
 		$result = __('Please fill in all the required fields','dbem');  
 	} else {
 	   if (!$booker) {

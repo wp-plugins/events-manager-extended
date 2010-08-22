@@ -168,3 +168,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: if any of event_single_event_format,event_page_title_format,event_contactperson_email_body,event_respondent_email_body is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
 * Improvement: make it more clear that a page needs to be choosen to show the events on
 * Advertise that showing the event page itself is going to be deprecated
+* Feature: captcha can be disabled now if you want, plus the session is hopefully started earlier so other plugins can't interfere anymore

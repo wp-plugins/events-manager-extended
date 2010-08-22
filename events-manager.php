@@ -81,6 +81,7 @@ if (get_magic_quotes_gpc()) {
 }
 
 // INCLUDES
+include("captcha_check.php");
 include("dbem_events.php");
 include("dbem_calendar.php");      
 include("dbem_widgets.php");
@@ -91,7 +92,6 @@ include("dbem_recurrence.php");
 include("dbem_UI_helpers.php");
 include("dbem_categories.php");
 include("dbem_attributes.php");
-include("captcha_check.php");
 
 require_once("phpmailer/dbem_phpmailer.php") ;
 //require_once("phpmailer/language/phpmailer.lang-en.php") ;
@@ -430,6 +430,7 @@ function dbem_add_options() {
 	'dbem_rss_title_format' => DEFAULT_RSS_TITLE_FORMAT,
 	'dbem_gmap_is_active'=> DEFAULT_GMAP_ENABLED,
 	'dbem_default_contact_person' => 1,
+	'dbem_captcha_for_booking' => 0 ,
 	'dbem_rsvp_mail_notify_is_active' => 0 ,
 	'dbem_contactperson_email_body' => __(preg_replace("/<br ?\/?>/", "\n\r", $contact_person_email_body_localizable)),        
 	'dbem_respondent_email_body' => __(preg_replace("/<br ?\/?>/", "\n\r", $respondent_email_body_localizable)),
