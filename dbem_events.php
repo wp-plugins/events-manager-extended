@@ -347,7 +347,7 @@ function dbem_options_subpanel() {
 	?></h3>
 <table class="form-table">  
  					<?php
-	dbem_options_select ( __ ( 'Events page' ), 'dbem_events_page', dbem_get_all_pages (), __ ( 'This option allows you to select which page to use as an events page','dbem' ) );
+	dbem_options_select ( __ ( 'Events page' ), 'dbem_events_page', dbem_get_all_pages (), __ ( 'This option allows you to select which page to use as an events page.', 'dbem' )."<br/><strong>".__ ( 'The content of this pagea (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data.','dbem' )."</strong>" );
 	dbem_options_radio_binary ( __ ( 'Show events page in lists?', 'dbem' ), 'dbem_list_events_page', __ ( 'Check this option if you want the events page to appear together with other pages in pages lists.', 'dbem' )."<br/><strong>".__ ( 'This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended.', 'dbem' )."</strong>" ); 
 	dbem_options_radio_binary ( __ ( 'Display calendar in events page?', 'dbem' ), 'dbem_display_calendar_in_events_page', __ ( 'This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page.','dbem' ) )?>
 	      </table>
