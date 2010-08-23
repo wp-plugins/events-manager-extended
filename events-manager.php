@@ -613,7 +613,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
                 }
 		if (preg_match('/#_LINKEDNAME/', $result)) {
 			$events_page_link = dbem_get_events_page(true, false);
-			if (stristr($event_page_link, "?"))
+			if (stristr($events_page_link, "?"))
 				$joiner = "&";
 			else
 				$joiner = "?";
@@ -621,7 +621,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		} 
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
 			$events_page_link = dbem_get_events_page(true, false);
-			if (stristr($event_page_link, "?"))
+			if (stristr($events_page_link, "?"))
 				$joiner = "&";
 			else
 				$joiner = "?";

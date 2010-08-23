@@ -152,7 +152,7 @@ function dbem_book_seats() {
 			dbem_email_rsvp_booking();
 		} 
 	   }	else {
-		 $result = __('Booking cannot be made – not enough seats available!', 'dbem');
+		 $result = __('Booking cannot be made: not enough seats available!', 'dbem');
 	   }  
 	}  
 	return $result;
@@ -366,7 +366,7 @@ function dbem_email_rsvp_booking(){
 	$available_seats = dbem_get_available_seats($event_id);
 	$reserved_seats = dbem_get_booked_seats($event_id);
 
-	if($event['event_contactperson_id'] != "") 
+	if($event['event_contactperson_id'] && $event['event_contactperson_id']>0) 
 		$contact_id = $event['event_contactperson_id']; 
 	else
 		$contact_id = get_option('dbem_default_contact_person');
@@ -388,13 +388,12 @@ function dbem_email_rsvp_booking(){
 	}
 	dbem_send_mail(__("New booking",'dbem'), $contact_body, $contact_email);
 	dbem_send_mail(__('Reservation confirmed','dbem'),$booker_body, $bookerEmail);
-
 } 
    
 function dbem_get_user_email($user_id) {          
 	global $wpdb;    
 	$sql = "SELECT user_email FROM $wpdb->users WHERE ID = $user_id"; 
-  return $wpdb->get_var( $wpdb->prepare($sql) );
+	return $wpdb->get_var( $wpdb->prepare($sql) );
 }                                                      
 function dbem_get_user_name($user_id) {          
 	global $wpdb;    
