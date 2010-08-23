@@ -100,6 +100,7 @@ table#dbem-location-data th {
 	background: green;
 	width: 400px;
 	height: 300px;
+	line-height: 100%;
 }
 .dbem-location-balloon {
 	font-size: 95%;  
