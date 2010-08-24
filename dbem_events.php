@@ -1035,7 +1035,7 @@ function dbem_events_table($events, $limit, $title) {
 	<?php
 	if (empty ( $events )) {
 		// TODO localize
-		echo "no events";
+		_e ('No events', 'dbem');
 	} else {
 		?>
 		
