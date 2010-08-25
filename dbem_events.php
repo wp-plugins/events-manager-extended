@@ -17,6 +17,7 @@ function dbem_new_event_page() {
     "event_end_12h_time" => '',
     "event_notes" => '',
     "event_rsvp" => 0,
+    "registration_requires_approval" => 0,
     "event_seats" => 0,
     "event_freq" => '',
     "location_id" => 0,
@@ -129,6 +130,7 @@ function dbem_events_subpanel() {
 		$recurrence ['recurrence_byweekno'] = isset($_POST['recurrence_byweekno']) ? $_POST ['recurrence_byweekno'] : '';
 		
 		$event ['event_rsvp'] = (isset ($_POST ['event_rsvp']) && is_numeric($_POST ['event_rsvp'])) ? $_POST ['event_rsvp']:0;
+		$event ['registration_requires_approval'] = (isset ($_POST ['registration_requires_approval']) && is_numeric($_POST ['registration_requires_approval'])) ? $_POST ['registration_requires_approval']:0;
 		$event ['event_seats'] = (isset ($_POST ['event_seats']) && is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
 		
 		if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '' && $_POST ['event_contactperson_id'] != '-1') {
@@ -172,7 +174,7 @@ function dbem_events_subpanel() {
 		$event_attributes = array();
 		for($i=1 ; isset($_POST["mtm_{$i}_ref"]) && trim($_POST["mtm_{$i}_ref"])!='' ; $i++ ){
 	 		if(trim($_POST["mtm_{$i}_name"]) != ''){
-		 		$event_attributes[$_POST["mtm_{$i}_ref"]] = $_POST["mtm_{$i}_name"];
+		 		$event_attributes[$_POST["mtm_{$i}_ref"]] = stripslashes($_POST["mtm_{$i}_name"]);
 	 		}
 	 	}
 	 	$event['event_attributes'] = serialize($event_attributes);
@@ -399,6 +401,8 @@ function dbem_options_subpanel() {
 	dbem_options_radio_binary ( __ ( 'Enable the RSVP e-mail notifications?', 'dbem' ), 'dbem_rsvp_mail_notify_is_active', __ ( 'Check this option if you want to receive an email when someone books places for your events.', 'dbem' ) );
 	dbem_options_textarea ( __ ( 'Contact person email format', 'dbem' ), 'dbem_contactperson_email_body', __ ( 'The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats.', 'dbem' ) );
 	dbem_options_textarea ( __ ( 'Respondent email format', 'dbem' ), 'dbem_respondent_email_body', __ ( 'The format of the email which will be sent to the respondent. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code> to display the name of the respondent.<br/>Use <code>#_CONTACTNAME</code> and <code>#_PLAIN_CONTACTEMAIL</code> to display respectively the name and e-mail of the contact person.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment.', 'dbem' ) );
+	dbem_options_textarea ( __ ( 'Registration pending email format', 'dbem' ), 'dbem_registration_pending_email_body', __ ( 'The format of the email which will be sent to the respondent when the event requires registration approval.', 'dbem' ) );
+	dbem_options_textarea ( __ ( 'Registration denied email format', 'dbem' ), 'dbem_registration_denied_email_body', __ ( 'The format of the email which will be sent to the respondent when the admin denies the registration request if the event requires registration approval.', 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Notification sender name', 'dbem' ), 'dbem_mail_sender_name', __ ( "Insert the display name of the notification sender.", 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Notification sender address', 'dbem' ), 'dbem_mail_sender_address', __ ( "Insert the address of the notification sender. It must corresponds with your gmail account user", 'dbem' ) );
 	dbem_options_input_text ( __ ( 'Default notification receiver address', 'dbem' ), 'dbem_mail_receiver_address', __ ( "Insert the address of the receiver of your notifications", 'dbem' ) );
@@ -788,7 +792,7 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 		if ($scope == "past")
 			$conditions [] = " event_start_date < '$today'";  
 		if ($scope == "today")
-			$conditions [] = " (event_start_date  like '$today') OR (event_start_date <= '$today' AND event_end_date >= '$today')";
+			$conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
 	}    
 	
 	if ($location_id != "")
@@ -827,6 +831,7 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 				event_end_time,
 	 			event_notes, 
 				event_rsvp,
+				registration_requires_approval,
 				recurrence_id, 
 				location_id, 
 				event_contactperson_id, 
@@ -890,6 +895,7 @@ function dbem_get_event($event_id) {
 				event_end_time,
 				event_notes,
 				event_rsvp,
+				registration_requires_approval,
 				event_seats,
 				recurrence_id, 
 				location_id,
@@ -1005,10 +1011,10 @@ function dbem_events_table($events, $limit, $title) {
 	
 	?> 
 		
-  	<form id="posts-filter" action="" method="get"><input type='hidden'
-	name='page' value='events-manager' />
+  	<form id="posts-filter" action="" method="get">
+	<input type='hidden' name='page' value='events-manager' />
 	<ul class="subsubsub">
-		<li><a href='edit.php' class="current"><?php _e ( 'Total', 'dbem' ); ?> <span class="count">(<?php echo (count ( $events )); ?>)</span></a></li>
+		<li><?php _e ( 'Total', 'dbem' ); ?> <span class="count">(<?php echo (count($events)). " ". __('Events','dbem'); ?>)</span></li>
 	</ul>
 
 	<div class="tablenav">
@@ -1034,7 +1040,6 @@ function dbem_events_table($events, $limit, $title) {
 	<div class="clear"></div>
 	<?php
 	if (empty ( $events )) {
-		// TODO localize
 		_e ('No events', 'dbem');
 	} else {
 		?>
@@ -1184,8 +1189,8 @@ function dbem_event_form($event, $title, $element) {
 	} else {
 		$localised_end_date = "";
 	}
-	// if($event[$pref.'rsvp'])
-	// 	echo (dbem_bookings_table($event[$pref.'id']));      
+	//if($event[$pref.'rsvp'])
+	 //	echo (dbem_bookings_table($event[$pref.'id']));      
 	
 
 	$freq_options = array ("daily" => __ ( 'Daily', 'dbem' ), "weekly" => __ ( 'Weekly', 'dbem' ), "monthly" => __ ( 'Monthly', 'dbem' ) );
@@ -1193,6 +1198,7 @@ function dbem_event_form($event, $title, $element) {
 	$weekno_options = array ("1" => __ ( 'first', 'dbem' ), '2' => __ ( 'second', 'dbem' ), '3' => __ ( 'third', 'dbem' ), '4' => __ ( 'fourth', 'dbem' ), '-1' => __ ( 'last', 'dbem' ), "none" => __('Start day') );
 	
 	$event [$pref . 'rsvp'] ? $event_RSVP_checked = "checked='checked'" : $event_RSVP_checked = '';
+	$event ['registration_requires_approval'] ? $registration_requires_approval = "checked='checked'" : $registration_requires_approval = '';
 	
 	?>
 	<form id="eventForm" method="post" 	action="<?php echo $form_destination; ?>">
@@ -1226,7 +1232,7 @@ function dbem_event_form($event, $title, $element) {
 			<div id="poststuff" class="metabox-holder has-right-sidebar">
 				<!-- SIDEBAR -->
 				<div id="side-info-column" class='inner-sidebar'>
-					<div id='side-sortables'>       
+					<div id='side-sortables' class="meta-box-sortables">       
 						<?php if(get_option('dbem_recurrence_enabled')) : ?>
 						<!-- recurrence postbox -->
 						<div class="postbox ">
@@ -1339,23 +1345,17 @@ function dbem_event_form($event, $title, $element) {
 									<?php _e ( 'Enable registration for this event', 'dbem' )?>
 								</p>
 								<div id='rsvp-data'>
-									<?php
-		if ($event ['event_contactperson_id'] != NULL)
-			$selected = $event ['event_contactperson_id'];
-		else
-			$selected = '0';
-		?>
 									<p>
+										<input id="approval_required-checkbox" name='registration_requires_approval' value='1' type='checkbox' <?php echo $registration_requires_approval?> />
+										<?php _e ( 'Require approval for registration','dbem' ); ?>
+									<br />
 										<?php _e ( 'Spaces','dbem' ); ?> :
 										<input id="seats-input" type="text" name="event_seats" size='5' value="<?php echo $event [$pref . 'seats']?>" />
 									</p>
-									<?php
-		if ($event ['event_rsvp']) {
-			?>
-									<?php dbem_bookings_compact_table ( $event [$pref . 'id'] ); ?>
-									<?php
-		}
-		?>
+									<?php	if ($event ['event_rsvp']) {
+											dbem_bookings_compact_table ( $event [$pref . 'id'] );
+										}
+									?>
 								</div>
 							</div>
 						</div>
@@ -1399,7 +1399,7 @@ function dbem_event_form($event, $title, $element) {
 				</div>
 				<!-- END OF SIDEBAR -->
 				<div id="post-body">
-					<div id="post-body-content">
+					<div id="post-body-content" class="meta-box-sortables">
 			<?php/* Marcus End Edit */ ?>
 						<div id="event_name" class="stuffbox">
 							<h3>
@@ -1421,9 +1421,9 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'Recurrence dates', 'dbem' ); ?>
 							</h3>
 							<div class="inside">
-								<input id="localised-date" type="text" name="localised_event_date" value="<?php echo $localised_date?>" style="display: none;" />
+								<input id="localised-date" type="text" name="localised_event_date" value="<?php echo $localised_date?>" style="display: none;" readonly />
 								<input id="date-to-submit" type="text" name="event_date" value="<?php echo $event [$pref . 'start_date']?>" style="background: #FCFFAA" />
-								<input id="localised-end-date" type="text" name="localised_event_end_date" value="<?php echo $localised_end_date?>" style="display: none;" />
+								<input id="localised-end-date" type="text" name="localised_event_end_date" value="<?php echo $localised_end_date?>" style="display: none;" readonly />
 								<input id="end-date-to-submit" type="text" name="event_end_date" value="<?php echo $event [$pref . 'end_date']?>" style="background: #FCFFAA" />
 								<br />
 								<span id='event-date-explanation'>
@@ -1924,7 +1924,7 @@ $j_dbem_event(document).ready( function() {
 	$j_dbem_event('select#recurrence-frequency').change(updateIntervalSelectors);
     
 	// Add a "+" to the collapsable postboxes
-	jQuery('.postbox h3').prepend('<a class="togbox">+</a> ');
+	//jQuery('.postbox h3').prepend('<a class="togbox">+</a> ');
 
 	// hiding or showing notes according to their content	
 	// 	    	if(jQuery("textarea[@name=event_notes]").val()!="") {
@@ -2243,9 +2243,10 @@ function dbem_favorite_menu($actions) {
 }
 
 ////////////////////////////////////
-// WP 2.7 options registration
+// WP options registration
+////////////////////////////////////
 function dbem_options_register() {
-	$options = array ('dbem_events_page', 'dbem_display_calendar_in_events_page', 'dbem_use_event_end', 'dbem_event_list_item_format_header', 'dbem_event_list_item_format', 'dbem_event_list_item_format_footer', 'dbem_event_page_title_format', 'dbem_single_event_format', 'dbem_list_events_page', 'dbem_events_page_title', 'dbem_no_events_message', 'dbem_location_page_title_format', 'dbem_location_baloon_format', 'dbem_single_location_format', 'dbem_location_event_list_item_format', 'dbem_location_no_events_message', 'dbem_gmap_is_active', 'dbem_rss_main_title', 'dbem_rss_main_description', 'dbem_rss_title_format', 'dbem_rss_description_format', 'dbem_rsvp_mail_notify_is_active', 'dbem_contactperson_email_body', 'dbem_respondent_email_body', 'dbem_mail_sender_name', 'dbem_smtp_username', 'dbem_smtp_password', 'dbem_default_contact_person','dbem_captcha_for_booking', 'dbem_mail_sender_address', 'dbem_mail_receiver_address', 'dbem_smtp_host', 'dbem_rsvp_mail_send_method', 'dbem_rsvp_mail_port', 'dbem_rsvp_mail_SMTPAuth', 'dbem_image_max_width', 'dbem_image_max_height', 'dbem_image_max_size', 'dbem_full_calendar_event_format', 'dbem_use_select_for_locations', 'dbem_attributes_enabled', 'dbem_recurrence_enabled','dbem_rsvp_enabled','dbem_categories_enabled','dbem_small_calendar_event_title_format','dbem_small_calendar_event_title_seperator');
+	$options = array ('dbem_events_page', 'dbem_display_calendar_in_events_page', 'dbem_use_event_end', 'dbem_event_list_item_format_header', 'dbem_event_list_item_format', 'dbem_event_list_item_format_footer', 'dbem_event_page_title_format', 'dbem_single_event_format', 'dbem_list_events_page', 'dbem_events_page_title', 'dbem_no_events_message', 'dbem_location_page_title_format', 'dbem_location_baloon_format', 'dbem_single_location_format', 'dbem_location_event_list_item_format', 'dbem_location_no_events_message', 'dbem_gmap_is_active', 'dbem_rss_main_title', 'dbem_rss_main_description', 'dbem_rss_title_format', 'dbem_rss_description_format', 'dbem_rsvp_mail_notify_is_active', 'dbem_contactperson_email_body', 'dbem_respondent_email_body', 'dbem_mail_sender_name', 'dbem_smtp_username', 'dbem_smtp_password', 'dbem_default_contact_person','dbem_captcha_for_booking', 'dbem_mail_sender_address', 'dbem_mail_receiver_address', 'dbem_smtp_host', 'dbem_rsvp_mail_send_method', 'dbem_rsvp_mail_port', 'dbem_rsvp_mail_SMTPAuth', 'dbem_image_max_width', 'dbem_image_max_height', 'dbem_image_max_size', 'dbem_full_calendar_event_format', 'dbem_use_select_for_locations', 'dbem_attributes_enabled', 'dbem_recurrence_enabled','dbem_rsvp_enabled','dbem_categories_enabled','dbem_small_calendar_event_title_format','dbem_small_calendar_event_title_seperator','dbem_registration_pending_email_body','dbem_registration_denied_email_body');
 	foreach ( $options as $opt ) {
 		register_setting ( 'dbem-options', $opt, '' );
 	}

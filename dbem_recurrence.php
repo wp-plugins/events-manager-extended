@@ -190,6 +190,7 @@ function dbem_insert_events_for_recurrence($recurrence) {
 		$new_event['event_single_event_format'] = $recurrence['event_single_event_format'];
 		$new_event['event_contactperson_email_body'] = $recurrence['event_contactperson_email_body'];
 		$new_event['event_respondent_email_body'] = $recurrence['event_respondent_email_body'];
+		$new_event['registration_requires_approval'] = $recurrence['registration_requires_approval'];
 
 		//print_r($new_event);
 		$wpdb->insert($events_table, $new_event);

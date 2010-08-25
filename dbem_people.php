@@ -86,13 +86,17 @@ function dbem_printable_booking_report($event_id) {
 					<th scope='col'><?php _e('Seats', 'dbem')?></th>
 					<th scope='col'><?php _e('Comment', 'dbem')?></th> 
 				<?php
-				foreach($bookings as $booking) {       ?>
+				foreach($bookings as $booking) {
+					$pending_string="";
+					if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
+						$pending_string=__('(pending)','dbem');
+					}
+			       ?>
 				<tr>
-					
 					<td><?php echo $booking['person_name']?></td> 
 					<td><?php echo $booking['person_email']?></td>
 					<td><?php echo $booking['person_phone']?></td>
-					<td class='seats-number'><?php echo $booking['booking_seats']?></td>
+					<td class='seats-number'><?php echo $booking['booking_seats']." ".$pending_string?></td>
 					<td><?=$booking['booking_comment'] ?></td> 
 				</tr>
 			   	<?php } ?>

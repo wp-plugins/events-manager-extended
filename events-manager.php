@@ -43,14 +43,14 @@ define('SETTING_CAPABILITY', 'activate_plugins');	// Minimum user level to acces
 define('DEFAULT_EVENT_LIST_ITEM_FORMAT', '<li>#j #M #Y - #H:#i<br/> #_LINKEDNAME<br/>#_TOWN </li>');
 define('DEFAULT_SINGLE_EVENT_FORMAT', '<p>#j #M #Y - #H:#i</p><p>#_TOWN</p>'); 
 define('DEFAULT_EVENTS_PAGE_TITLE',__('Events','dbem') ) ;
-define('DEFAULT_EVENT_PAGE_TITLE_FORMAT', '	#_NAME'); 
+define('DEFAULT_EVENT_PAGE_TITLE_FORMAT', '#_NAME'); 
 define('DEFAULT_RSS_DESCRIPTION_FORMAT',"#j #M #y - #H:#i <br/>#_LOCATION <br/>#_ADDRESS <br/>#_TOWN");
 define('DEFAULT_RSS_TITLE_FORMAT',"#_NAME");
 define('DEFAULT_MAP_TEXT_FORMAT', '<strong>#_LOCATION</strong><p>#_ADDRESS</p><p>#_TOWN</p>');     
 define('DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT','<li>#_LINKEDNAME<ul><li>#j #M #y</li><li>#_TOWN</li></ul></li>');
 define('DEFAULT_NO_EVENTS_MESSAGE', __('No events', 'dbem'));  
 define('DEFAULT_SINGLE_LOCATION_FORMAT', '<p>#_ADDRESS</p><p>#_TOWN</p>'); 
-define('DEFAULT_LOCATION_PAGE_TITLE_FORMAT', '	#_NAME'); 
+define('DEFAULT_LOCATION_PAGE_TITLE_FORMAT', '#_NAME'); 
 define('DEFAULT_LOCATION_BALOON_FORMAT', "<strong>#_NAME</strong><br/>#_ADDRESS - #_TOWN<br/><a href='#_LOCATIONPAGEURL'>Details</a>");
 define('DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT', "<li>#_NAME - #j #M #Y - #H:#i</li>");
 define('DEFAULT_LOCATION_NO_EVENTS_MESSAGE', __('<li>No events in this location</li>', 'dbem'));
@@ -208,6 +208,7 @@ function dbem_create_events_table() {
   			event_single_event_format text NULL, 
   			event_contactperson_email_body text NULL, 
   			event_respondent_email_body text NULL, 
+			registration_requires_approval bool DEFAULT 0,
 			UNIQUE KEY (event_id)
 			);";
 		/* Marcus End Edit */
@@ -243,7 +244,7 @@ function dbem_create_events_table() {
 		maybe_add_column($table_name, 'event_end_date', "alter table $table_name add event_end_date date NULL;");
 		maybe_add_column($table_name, 'event_start_time', "alter table $table_name add event_start_time time NOT NULL;"); 
 		maybe_add_column($table_name, 'event_end_time', "alter table $table_name add event_end_time time NOT NULL;"); 
-		maybe_add_column($table_name, 'event_rsvp', "alter table $table_name add event_rsvp BOOL NOT NULL;");
+		maybe_add_column($table_name, 'event_rsvp', "alter table $table_name add event_rsvp bool NOT NULL DEFAULT 0;");
 		maybe_add_column($table_name, 'event_seats', "alter table $table_name add event_seats mediumint(9) NULL;"); 
 		maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) NOT NULL;");    
 		maybe_add_column($table_name, 'recurrence_id', "alter table $table_name add recurrence_id mediumint(9) NULL;"); 
@@ -253,6 +254,7 @@ function dbem_create_events_table() {
 		maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
 		maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
 		maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
+		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
 		
 		// Fix buggy columns
 		$wpdb->query("ALTER TABLE $table_name MODIFY event_notes text ;");
@@ -287,6 +289,7 @@ function dbem_create_recurrence_table() {
   			event_single_event_format text NULL, 
   			event_contactperson_email_body text NULL, 
   			event_respondent_email_body text NULL, 
+			registration_requires_approval bool DEFAULT 0,
 			UNIQUE KEY (recurrence_id)
 			);";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -297,6 +300,7 @@ function dbem_create_recurrence_table() {
 		maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
 		maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
 		maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
+		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
 		// Fix buggy columns
 		$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
 	}
@@ -347,6 +351,7 @@ function dbem_create_bookings_table() {
 			event_id mediumint(9) NOT NULL,
 			person_id mediumint(9) NOT NULL, 
 			booking_seats mediumint(9) NOT NULL,
+			booking_approved bool DEFAULT 0,
 			booking_comment text DEFAULT NULL,
 			UNIQUE KEY  (booking_id)
 			);";
@@ -354,6 +359,7 @@ function dbem_create_bookings_table() {
 		dbDelta($sql);
 	} else {
 		maybe_add_column($table_name, 'booking_comment', "ALTER TABLE $table_name add booking_comment text DEFAULT NULL;"); 
+		maybe_add_column($table_name, 'booking_approved', "ALTER TABLE $table_name add booking_approved bool DEFAULT 0;"); 
 		$wpdb->query("ALTER TABLE $table_name MODIFY event_id mediumint(9) NOT NULL;");
 		$wpdb->query("ALTER TABLE $table_name MODIFY person_id mediumint(9) NOT NULL;");
 		$wpdb->query("ALTER TABLE $table_name MODIFY booking_seats mediumint(9) NOT NULL;");
@@ -409,8 +415,10 @@ function dbem_migrate_old_events() {
 }
 
 function dbem_add_options() {
-	$contact_person_email_body_localizable = __("#_RESPNAME (#_RESPEMAIL) will attend #_NAME on #m #d, #Y. He wants to reserve #_SPACES spaces.<br/> Now there are #_RESERVEDSPACES spaces reserved, #_AVAILABLESPACES are still available.<br/>Yours faithfully,<br/>Events Manager",'dbem') ;
-	$respondent_email_body_localizable = __("Dear #_RESPNAME, <br/>you have successfully reserved #_SPACES space/spaces for #_NAME.<br/>Yours faithfully,<br/> #_CONTACTPERSON",'dbem');
+	$contact_person_email_body_localizable = __("#_RESPNAME (#_RESPEMAIL) will attend #_NAME on #m #d, #Y. He wants to reserve #_SPACES space(s).<br/>Now there are #_RESERVEDSPACES space(s) reserved, #_AVAILABLESPACES are still available.<br/><br/>Yours faithfully,<br/>Events Manager",'dbem') ;
+	$respondent_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>you have successfully reserved #_SPACES space(s) for #_NAME.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'dbem');
+	$registration_pending_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'dbem');
+	$registration_denied_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME has been denied.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'dbem');
 	
 	$dbem_options = array('dbem_event_list_item_format' => DEFAULT_EVENT_LIST_ITEM_FORMAT,
 	'dbem_display_calendar_in_events_page' => 0,
@@ -432,8 +440,10 @@ function dbem_add_options() {
 	'dbem_default_contact_person' => 1,
 	'dbem_captcha_for_booking' => 0 ,
 	'dbem_rsvp_mail_notify_is_active' => 0 ,
-	'dbem_contactperson_email_body' => __(preg_replace("/<br ?\/?>/", "\n\r", $contact_person_email_body_localizable)),        
-	'dbem_respondent_email_body' => __(preg_replace("/<br ?\/?>/", "\n\r", $respondent_email_body_localizable)),
+	'dbem_contactperson_email_body' => preg_replace("/<br ?\/?>/", "\n\r", $contact_person_email_body_localizable),        
+	'dbem_respondent_email_body' => preg_replace("/<br ?\/?>/", "\n\r", $respondent_email_body_localizable),
+	'dbem_registration_pending_email_body' => preg_replace("/<br ?\/?>/", "\n\r", $registration_pending_email_body),
+	'dbem_registration_denied_email_body' => preg_replace("/<br ?\/?>/", "\n\r", $registration_denied_email_body),
 	'dbem_rsvp_mail_port' => 25,
 	'dbem_smtp_host' => 'localhost',
 	'dbem_mail_sender_name' => '',
@@ -493,6 +503,10 @@ function dbem_create_events_submenu () {
 		$plugin_page = add_submenu_page('events-manager', __('Event Categories','dbem'),__('Categories','dbem'), SETTING_CAPABILITY, "events-manager-categories", 'dbem_categories_subpanel');
                 add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
 		$plugin_page = add_submenu_page('events-manager', __('People', 'dbem'), __('People', 'dbem'), MIN_CAPABILITY, 'events-manager-people', "dbem_people_page");
+		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
+		$plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'dbem'), __('Pending Approvals', 'dbem'), MIN_CAPABILITY, 'events-manager-registration-approval', "dbem_registration_approval_page");
+		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
+		$plugin_page = add_submenu_page('events-manager', __('Change Registration', 'dbem'), __('Change Registration', 'dbem'), MIN_CAPABILITY, 'events-manager-registration-seats', "dbem_registration_seats_page");
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
 		//add_submenu_page('events-manager', 'Test ', 'Test ', 8, 'test', 'dbem_recurrence_test');
 		$plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','dbem'),__('Settings','dbem'), SETTING_CAPABILITY, "events-manager-options", 'dbem_options_subpanel');
@@ -587,7 +601,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_ADDBOOKINGFORM/', $result)) {
 		 	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
 			if ($event['event_rsvp']) {
-			   $rsvp_add_module .= dbem_add_booking_form($event['event_id']);
+				$rsvp_add_module .= dbem_add_booking_form($event['event_id']);
 			} else {
 				$rsvp_add_module .= "";
 			}
@@ -596,16 +610,34 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_REMOVEBOOKINGFORM/', $result)) {
 		 	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
 			if ($event['event_rsvp']) {
-			   $rsvp_delete_module .= dbem_delete_booking_form();
+				$rsvp_delete_module .= dbem_delete_booking_form();
 			} else {
 				$rsvp_delete_module .= "";
 			}
 		 	$event_string = str_replace($result, $rsvp_delete_module , $event_string );
 		}
-		if (preg_match('/#_AVAILABLESPACES/', $result)) {
+		if (preg_match('/#_AVAILABLESPACES|#_AVAILABLESEATS/', $result)) {
                         $rsvp_is_active = get_option('dbem_rsvp_enabled');
                         if ($event['event_rsvp']) {
-                           $availble_seats .= dbem_get_available_seats($event['event_id']);
+				$available_seats .= dbem_get_available_seats($event['event_id']);
+                        } else {
+                                $available_seats .= "";
+                        }
+                        $event_string = str_replace($result, $available_seats , $event_string );
+                }
+		if (preg_match('/#_(RESERVEDSPACES|BOOKEDSEATS)/', $result)) {
+                        $rsvp_is_active = get_option('dbem_rsvp_enabled');
+                        if ($event['event_rsvp']) {
+				$booked_seats .= dbem_get_booked_seats($event['event_id']);
+                        } else {
+                                $booked_seats .= "";
+                        }
+                        $event_string = str_replace($result, $booked_seats , $event_string );
+                }
+		if (preg_match('/#_(AVAILABLESPACES|AVAILABLESEATS)/', $result)) {
+                        $rsvp_is_active = get_option('dbem_rsvp_enabled');
+                        if ($event['event_rsvp']) {
+				$availble_seats .= dbem_get_available_seats($event['event_id']);
                         } else {
                                 $availble_seats .= "";
                         }

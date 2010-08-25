@@ -164,8 +164,16 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.0.5 =
 * Improvement: for single events editing, the format windows are in the state closed by default
 * Feature: #_LOCATION now also possible in the calendar title formatting
-* Change: map only shown if location name/address/town all have a value
+* Improvement: map only shown if location name/address/town all have a value
 * Improvement: if any of event_single_event_format, event_page_title_format, event_contactperson_email_body, event_respondent_email_body is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
 * Improvement: make it more clear that a page needs to be chosen to show the events on
 * Advertise that showing the event page itself is going to be deprecated
 * Feature: captcha can be disabled now if you want, plus the session is hopefully started earlier so other plugins can't interfere anymore
+
+= 3.0.6 =
+* Bugfix: stripslashes needed for custom attributes
+* Bugfix: when using scope=today, the sql query was wrong and thus ignored other conditions
+* Improvement: changed the document to include better info concerning custom attributes
+* Feature: you can now choose whether or not registrations need approvements, and then manage pending registrations
+* Feature: you can now edit the number of seats somebody registered for, in case they change their minds
+* Improvement: force the use of the datepicker for start/end dates by makeing the field readonly, no more empty dates thus
