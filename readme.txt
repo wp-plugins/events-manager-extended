@@ -173,6 +173,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.0.6 =
 * Bugfix: stripslashes needed for custom attributes
 * Bugfix: when using scope=today, the sql query was wrong and thus ignored other conditions
+* Bugfix: characters now get escaped ok in locations as well
 * Improvement: changed the document to include better info concerning custom attributes
 * Feature: you can now choose whether or not registrations need approvements, and then manage pending registrations
 * Feature: you can now edit the number of seats somebody registered for, in case they change their minds

@@ -143,9 +143,9 @@ function dbem_events_subpanel() {
 		//if (! _dbem_is_time_valid ( $event_end_time ))
 		//	$event_end_time = $event_time;
 		
-		$location ['location_name'] = isset($_POST ['location_name']) ? $_POST ['location_name'] : '';
-		$location ['location_address'] = isset($_POST ['location_address']) ? $_POST ['location_address'] : '';
-		$location ['location_town'] = isset($_POST ['location_town']) ? $_POST ['location_town'] : '';
+		$location ['location_name'] = isset($_POST ['location_name']) ? stripslashes($_POST ['location_name']) : '';
+		$location ['location_address'] = isset($_POST ['location_address']) ? stripslashes($_POST ['location_address']) : '';
+		$location ['location_town'] = isset($_POST ['location_town']) ? stripslashes($_POST ['location_town']) : '';
 		$location ['location_latitude'] = isset($_POST ['location_latitude']) ? $_POST ['location_latitude'] : '';
 		$location ['location_longitude'] = isset($_POST ['location_longitude']) ? $_POST ['location_longitude'] : '';
 		$location ['location_description'] = "";
