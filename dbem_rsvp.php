@@ -102,8 +102,8 @@ function dbem_catch_rsvp() {
   	} 
 
 	if (isset($_POST['eventAction']) && $_POST['eventAction'] == 'delete_booking') { 
-		$bookerName = dbem_sanitize_request($_POST['bookerName']);
-		$bookerEmail = dbem_sanitize_request($_POST['bookerEmail']);
+		$bookerName = $_POST['bookerName'];
+		$bookerEmail = $_POST['bookerEmail'];
 		$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
 	  	if ($booker) {
 			$person_id = $booker['person_id'];
@@ -119,11 +119,11 @@ function dbem_catch_rsvp() {
 add_action('init','dbem_catch_rsvp');  
  
 function dbem_book_seats() {
-	$bookerName = dbem_sanitize_request($_POST['bookerName']);
-	$bookerEmail = dbem_sanitize_request($_POST['bookerEmail']);
-	$bookerPhone = dbem_sanitize_request($_POST['bookerPhone']); 
-	$bookedSeats = intval($_POST['bookedSeats']);
-	$bookerComment = dbem_sanitize_request($_POST['bookerComment']);   
+	$bookerName = $_POST['bookerName'];
+	$bookerEmail = $_POST['bookerEmail'];
+	$bookerPhone = $_POST['bookerPhone']; 
+	$bookedSeats = intval($_POST['bookedSeats'];
+	$bookerComment = $_POST['bookerComment'];   
 	$event_id = intval($_GET['event_id']);
 	$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
 	
@@ -174,6 +174,10 @@ function dbem_get_bookings_by_person_id($person_id) {
 function dbem_record_booking($event_id, $person_id, $seats, $comment = "") {
 	global $wpdb;        
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
+	$event_id = intval($event_id);
+	$person_id = intval($person_id);
+	$seats = intval($seats);
+	$comment = dbem_sanitize_request($comment);
 	// checking whether the booker has already booked places
 //	$sql = "SELECT * FROM $bookings_table WHERE event_id = '$event_id' and person_id = '$person_id'; ";       
 //	//echo $sql;
@@ -259,9 +263,9 @@ function dbem_bookings_table($event_id) {
 						</thead>\n" ;
 	foreach ($bookings as $booking) {
 		$table .= "<tr> <td><input type='checkbox' value='".$booking['booking_id']."' name='bookings[]'/></td>
-										<td>".$booking['person_name']."</td>
-										<td>".$booking['person_email']."</td>
-										<td>".$booking['person_phone']."</td>
+										<td>".htmlspecialchars($booking['person_name'])."</td>
+										<td>".htmlspecialchars($booking['person_email'])."</td>
+										<td>".htmlspecialchars($booking['person_phone'])."</td>
 										<td>".$booking['booking_seats']."</td></tr>";
 	}
 	$available_seats = dbem_get_available_seats($event_id);
@@ -317,7 +321,7 @@ function dbem_bookings_compact_table($event_id) {
 				$table .= 
 				"<tr id='booking-".$booking['booking_id']."'> 
 					<td><a id='booking-check-".$booking['booking_id']."' class='bookingdelbutton'>X</a></td>
-					<td><a title='".$booking['person_email']." - ".$booking['person_phone']."'>".$booking['person_name']."</a>$baloon</td>
+					<td><a title=\"".htmlspecialchars($booking['person_email'])." - ".htmlspecialchars($booking['person_phone']).\"">".htmlspecialchars($booking['person_name'])."</a>$baloon</td>
 					<td>".$booking['booking_seats']." $pending_string </td>
 				 </tr>";
 			}
@@ -365,7 +369,6 @@ function dbem_get_bookings_for($event_ids,$pending=0) {
 	$bookings = $wpdb->get_results($sql, ARRAY_A);  
 	if ($bookings) {
 		foreach ($bookings as $booking) {  
-			$booking;
 			$person = dbem_get_person($booking['person_id']);
 			$booking['person_name'] = $person['person_name']; 
 			$booking['person_email'] = $person['person_email'];   

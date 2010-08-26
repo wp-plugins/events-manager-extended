@@ -158,6 +158,8 @@ function dbem_people_table() {
 function dbem_get_person_by_name_and_email($name, $email) {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
+	$name = dbem_sanitize_request($name);
+	$email = dbem_sanitize_request($email);
 	$sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE person_name = '$name' AND person_email = '$email' ;" ;
 	$result = $wpdb->get_row($sql, ARRAY_A);
 	return $result;
@@ -182,6 +184,9 @@ function dbem_get_people() {
 function dbem_add_person($name, $email, $phone = "") {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
+	$name = dbem_sanitize_request($name);
+	$email = dbem_sanitize_request($email);
+	$$phone = dbem_sanitize_request($phone);
 	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone) VALUES ('$name', '$email', '$phone');";
 	$wpdb->query($sql);
 	$new_person = dbem_get_person_by_name_and_email($name, $email);  
