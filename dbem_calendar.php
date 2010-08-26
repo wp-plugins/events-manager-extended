@@ -155,12 +155,12 @@ function dbem_get_calendar($args="") {
 		 $next_year = $year;	
 	} 
 	$next_link = "<a class='next-month $link_extra_class' href=\"".$base_link."calmonth={$next_month}&amp;calyear={$next_year}\">&gt;&gt;</a>";  
-   $random = (rand(100,200));
+	$random = (rand(100,200));
 	$full ? $class = 'dbem-calendar-full' : $class='dbem-calendar';
 	$calendar="<div class='$class' id='dbem-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div>";
 	
  	$weekdays = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
-   $n = 0 ;
+	$n = 0 ;
 	while( $n < $start_of_week ) {   
 		$last_day = array_shift($weekdays);     
 		$weekdays[]= $last_day; 
@@ -360,41 +360,12 @@ function dbem_days_in_month($month, $year) {
 	return (date("t",mktime(0,0,0,$month,1,$year)));
 }
 
-function dbem_calendar_style() {
-	?>
-	<style type="text/css"> 
-	table.dbem-calendar-table td {
-		padding: 2px 4px; 
-		text-align: center;
-	}
-	table.dbem-calendar.table tr.days-names {
-		font-weight: bold;
-	} 
-	table.dbem-calendar-table td.eventless-pre, .dbem-calendar td.eventless-post {
-		color: #ccc;
-	}
-	table.dbem-calendar-table td.eventful a {
-	  font-weight: bold;
-	  color: #FD7E29;
-	}
-	 table.dbem-calendar-table td.eventless-today {
-	   background-color: #CFCFCF;  
-	}
-	table.dbem-calendar-table thead {
-		font-size: 120%;  
-		font-weight: bold;  
-	}
-	</style>
-	<?php
-}
-//add_action('wp_head', 'dbem_calendar_style');
- 
 function dbem_translate_and_trim($string, $length = 1) {
 	return substr(__($string), 0, $length);
 }       
 
-function dbem_ajaxize_calendar()
-{ ?>
+function dbem_ajaxize_calendar() {
+?>
 	<script type='text/javascript'>
 		$j_dbem_calendar=jQuery.noConflict();   
         
