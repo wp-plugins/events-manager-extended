@@ -170,7 +170,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Advertise that showing the event page itself is going to be deprecated
 * Feature: captcha can be disabled now if you want, plus the session is hopefully started earlier so other plugins can't interfere anymore
 
-= 3.0.6 =
+= 3.1.0 =
 * Bugfix: stripslashes needed for custom attributes
 * Bugfix: when using scope=today, the sql query was wrong and thus ignored other conditions
 * Bugfix: characters now get escaped ok in locations as well
@@ -179,5 +179,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: you can now edit the number of seats somebody registered for, in case they change their minds
 * Improvement: force the use of the datepicker for start/end dates by making the field readonly, so no more empty dates
 
-= 3.0.7 =
+= 3.1.1 =
 * Improvement: use constants DBEM_PLUGIN_URL and DBEM_PLUGIN_DIR
+* Feature: categories possible for events_calendar widget and events_calendar shortcode
