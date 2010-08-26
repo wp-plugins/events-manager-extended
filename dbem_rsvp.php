@@ -122,7 +122,7 @@ function dbem_book_seats() {
 	$bookerName = $_POST['bookerName'];
 	$bookerEmail = $_POST['bookerEmail'];
 	$bookerPhone = $_POST['bookerPhone']; 
-	$bookedSeats = intval($_POST['bookedSeats'];
+	$bookedSeats = intval($_POST['bookedSeats']);
 	$bookerComment = $_POST['bookerComment'];   
 	$event_id = intval($_GET['event_id']);
 	$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
@@ -321,7 +321,7 @@ function dbem_bookings_compact_table($event_id) {
 				$table .= 
 				"<tr id='booking-".$booking['booking_id']."'> 
 					<td><a id='booking-check-".$booking['booking_id']."' class='bookingdelbutton'>X</a></td>
-					<td><a title=\"".htmlspecialchars($booking['person_email'])." - ".htmlspecialchars($booking['person_phone']).\"">".htmlspecialchars($booking['person_name'])."</a>$baloon</td>
+					<td><a title=\"".htmlspecialchars($booking['person_email'])." - ".htmlspecialchars($booking['person_phone'])."\">".htmlspecialchars($booking['person_name'])."</a>$baloon</td>
 					<td>".$booking['booking_seats']." $pending_string </td>
 				 </tr>";
 			}
