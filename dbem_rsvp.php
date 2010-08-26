@@ -3,7 +3,6 @@ $form_add_message = "";
 $form_delete_message = "";
 function dbem_add_booking_form($event_id) {                
 	global $form_add_message;
-	$base_url = get_bloginfo ( 'wpurl' );
 	//$message = dbem_catch_rsvp();
  
 	$destination = "?".$_SERVER['QUERY_STRING']."#dbem-rsvp-message";
@@ -41,7 +40,7 @@ function dbem_add_booking_form($event_id) {
 				<tr><th scope='row'>".__('Comment', 'dbem').":</th><td><textarea name='bookerComment'></textarea></td></tr>";
 		if (get_option('dbem_captcha_for_booking')) {
 			$module .= "
-				<tr><th scope='row'>".__('Please fill in the code displayed here', 'dbem').":</th><td><img src='$base_url/wp-content/plugins/events-manager-extended/captcha.php'><br>
+				<tr><th scope='row'>".__('Please fill in the code displayed here', 'dbem').":</th><td><img src='".DBEM_PLUGIN_URL."captcha.php'><br>
 				      <input type='text' name='captcha_check'></td></tr>
 				";
 		}
@@ -313,7 +312,7 @@ function dbem_bookings_compact_table($event_id) {
 						</tfoot>
 						<tbody>" ;
 			foreach ($bookings as $booking) {  
-				($booking['booking_comment']) ? $baloon = " <img src='../wp-content/plugins/events-manager-extended/images/baloon.png' title='".__('Comment:','dbem')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";  
+				($booking['booking_comment']) ? $baloon = " <img src='".DBEM_PLUGIN_URL."images/baloon.png' title='".__('Comment:','dbem')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";  
 				$pending_string="";
 				if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
 					$pending_string=__('(pending)','dbem');
