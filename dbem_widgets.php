@@ -76,7 +76,7 @@ class WP_Widget_dbem_list extends WP_Widget {
  </select>
   </p>
 <?php
-  if(get_option('dbem_categories_enabled')) {
+		if(get_option('dbem_categories_enabled')) {
 ?>
   <p>
     <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','dbem'); ?>:</label><br/>
@@ -89,10 +89,10 @@ class WP_Widget_dbem_list extends WP_Widget {
 		<?php
 		    }
 		?>
- </select>
+	</select>
   </p>
 <?php
-  }
+		}
 ?>
   <p>
     <label for="<?php echo $this->get_field_id('format'); ?>"><?php _e('List item format','dbem'); ?>:</label>
@@ -112,6 +112,7 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 		extract($args);
 		$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Calendar','dbem' ) : $instance['title'], $instance, $this->id_base);
 		$long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;
+		$category = empty( $instance['category'] ) ? '' : $instance['category'];
 		echo $before_widget;
 		if ( $title)
 			echo $before_title . $title . $after_title;
@@ -119,6 +120,7 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 		$options=array();
 		$options['title'] = $title;
 		$options['long_events'] = $long_events;
+		$options['category'] = $category;
 		$options['month'] = date("m");
 		dbem_get_calendar($options);
 		echo $after_widget;
@@ -127,6 +129,7 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
+		$instance['category'] = $new_instance['category'];
 		$instance['long_events'] = $new_instance['long_events'];
 		return $instance;
 	}
@@ -135,7 +138,9 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 		//Defaults
 		$instance = wp_parse_args( (array) $instance, array( 'long_events' => 0 ) );
 		$title = isset($instance['title']) ? esc_attr($instance['title']) : '';
+		$category = empty( $instance['category'] ) ? '' : $instance['category'];
 		$long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;
+   		$categories = dbem_get_categories();
 ?>
   <p>
 	<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
@@ -144,8 +149,25 @@ class WP_Widget_dbem_calendar extends WP_Widget {
   <p>
     <label for="<?php echo $this->get_field_id('long_events'); ?>"><?php _e('Show Long Events?', 'dbem'); ?>:</label>
     <input type="checkbox" id="<?php echo $this->get_field_id('long_events'); ?>" name="<?php echo $this->get_field_name('scope'); ?>" value="1" <?php echo ($long_events) ? 'checked="checked"':'' ;?> />
-  </p>	
+  </p>
 <?php
+		  if(get_option('dbem_categories_enabled')) {
+?>
+  <p>
+    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','dbem'); ?>:</label><br/>
+  	<select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
+		<option value=""><?php _e ( 'Select...', 'dbem' ); ?>   </option>
+                <?php
+                    foreach ( $categories as $my_category ){
+		?>
+   		<option value="<?php echo $my_category['category_id']; ?>" <?php selected( $category,$my_category['category_id']); ?>><?php echo $my_category['category_name']; ?></option>
+		<?php
+		    }
+		?>
+	</select>
+  </p>
+<?php
+		}
 	}
 }
 

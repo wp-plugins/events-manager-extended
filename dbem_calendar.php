@@ -1,28 +1,29 @@
 <?php
 function dbem_get_calendar_shortcode($atts) { 
 	extract(shortcode_atts(array(
+			'category' => 0,
 			'full' => 0,
 			'month' => '',
 			'year' => '',
+			'echo' => 0,
 			'long_events' => 0
-				), $atts)); 
-	$result = dbem_get_calendar("full={$full}&month={$month}&year={$year}&echo=0&long_events={$long_events}");
+		), $atts)); 
+	$result = dbem_get_calendar("full={$full}&month={$month}&year={$year}&echo={$echo}&long_events={$long_events}&category={$category}");
 	return $result;
 }    
 add_shortcode('events_calendar', 'dbem_get_calendar_shortcode');
 
 function dbem_get_calendar($args="") {
 	$defaults = array(
+		'category' => 0,
 		'full' => 0,
 		'month' => '',
+		'year' => '',
 		'echo' => 1,
 		'long_events' => 0
 	);           
 	$r = wp_parse_args( $args, $defaults );
 	extract( $r, EXTR_SKIP );  
-	$full = $r['full'];
-	$month = $r['month']; 
-	$echo = $r['echo'];
 	
 	$week_starts_on_sunday = get_option('dbem_week_starts_sunday');
 	$start_of_week = get_option('start_of_week');
@@ -239,11 +240,18 @@ function dbem_get_calendar($args="") {
 	$number_of_days_post=dbem_days_in_month($month_post, $year_post);
 	$limit_post=date("Y-m-d", mktime(0,0,0,$month_post, $number_of_days_post , $year_post));
 	$events_table = $wpdb->prefix.EVENTS_TBNAME; 
+	if ($category && get_option('dbem_categories_enabled')) {
+		//show a specific category
+		$cat_condition = "AND event_category_id=".intval($category);
+	} else {
+		$cat_condition = "";
+	}
 	$sql = "SELECT event_id, 
 		event_name, 
 	 	event_start_date,
 		event_start_time, 
 		event_end_date,
+		event_category_id,
 		location_id,
 		DATE_FORMAT(event_start_date, '%w') AS 'event_weekday_n',
 		DATE_FORMAT(event_start_date, '%e') AS 'event_day',
@@ -253,7 +261,7 @@ function dbem_get_calendar($args="") {
 		DATE_FORMAT(event_start_time, '%i') AS 'event_mm'
 
 		FROM $events_table 
-		WHERE (event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post') ORDER BY event_start_date";      
+		WHERE ((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post')) $cat_condition ORDER BY event_start_date";      
 
 	$events=$wpdb->get_results($sql, ARRAY_A);   
 
