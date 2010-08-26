@@ -177,4 +177,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: changed the document to include better info concerning custom attributes
 * Feature: you can now choose whether or not registrations need approvements, and then manage pending registrations
 * Feature: you can now edit the number of seats somebody registered for, in case they change their minds
-* Improvement: force the use of the datepicker for start/end dates by makeing the field readonly, no more empty dates thus
+* Improvement: force the use of the datepicker for start/end dates by making the field readonly, so no more empty dates
