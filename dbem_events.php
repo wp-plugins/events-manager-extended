@@ -788,7 +788,7 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 		if ($scope == "past")
 			$conditions [] = " event_start_date < '$today'";  
 		if ($scope == "today")
-			$conditions [] = " (event_start_date  like '$today') OR (event_start_date <= '$today' AND event_end_date >= '$today')";
+			$conditions [] = " (event_start_date = '$today') OR (event_start_date <= '$today' AND event_end_date >= '$today')";
 	}    
 	
 	if ($location_id != "")
