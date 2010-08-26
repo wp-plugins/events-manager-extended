@@ -96,10 +96,14 @@ table#dbem-location-data th {
 	text-align: right;
 	width: 50px;
 }
+#dbem_global_map {
+	line-height: 100%;
+}
 .dbem-location-map {
 	background: green;
 	width: 400px;
 	height: 300px;
+	line-height: 100%;
 }
 .dbem-location-balloon {
 	font-size: 95%;  

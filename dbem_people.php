@@ -86,13 +86,17 @@ function dbem_printable_booking_report($event_id) {
 					<th scope='col'><?php _e('Seats', 'dbem')?></th>
 					<th scope='col'><?php _e('Comment', 'dbem')?></th> 
 				<?php
-				foreach($bookings as $booking) {       ?>
+				foreach($bookings as $booking) {
+					$pending_string="";
+					if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
+						$pending_string=__('(pending)','dbem');
+					}
+			       ?>
 				<tr>
-					
 					<td><?php echo $booking['person_name']?></td> 
 					<td><?php echo $booking['person_email']?></td>
 					<td><?php echo $booking['person_phone']?></td>
-					<td class='seats-number'><?php echo $booking['booking_seats']?></td>
+					<td class='seats-number'><?php echo $booking['booking_seats']." ".$pending_string?></td>
 					<td><?=$booking['booking_comment'] ?></td> 
 				</tr>
 			   	<?php } ?>
@@ -154,6 +158,8 @@ function dbem_people_table() {
 function dbem_get_person_by_name_and_email($name, $email) {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
+	$name = dbem_sanitize_request($name);
+	$email = dbem_sanitize_request($email);
 	$sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE person_name = '$name' AND person_email = '$email' ;" ;
 	$result = $wpdb->get_row($sql, ARRAY_A);
 	return $result;
@@ -178,6 +184,9 @@ function dbem_get_people() {
 function dbem_add_person($name, $email, $phone = "") {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
+	$name = dbem_sanitize_request($name);
+	$email = dbem_sanitize_request($email);
+	$$phone = dbem_sanitize_request($phone);
 	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone) VALUES ('$name', '$email', '$phone');";
 	$wpdb->query($sql);
 	$new_person = dbem_get_person_by_name_and_email($name, $email);  

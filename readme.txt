@@ -4,15 +4,15 @@ Donate link: http://www.e-dynamics.be
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.0.4
+Stable tag: 3.1.0
 
 Manage events and display them in your blog. Includes recurring events, location management, calendar, Google map integration, RSVP. 
              
 == Description ==
 
-Events Manager Extended is based on Events Manager (http://davidebenini.it)
+Events Manager Extended is based on the older Events Manager plugin, improving and extending it.
 
-Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports recurring events, venues data, RSVP and maps. With Events Manager Extended you can plan and publish your tour, or let people reserve spaces for your weekly meetings. You can then add events list, calendars and description to your blog using a sidebar widget or shortcodes; if you’re a web designer you can simply employ the template tags provided by Events Manager Extended. 
+Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports recurring events, venues data, RSVP and maps. With Events Manager Extended you can plan and publish your tour, or let people reserve spaces for your weekly meetings. You can then add events list, calendars and description to your blog using a sidebar widget or shortcodes; if you are a web designer you can simply employ the template tags provided by Events Manager Extended. 
 
 Events Manager Extended integrates with Google Maps; thanks the geocoding, Events Manager Extended can find the location of your events, and accordingly display a map. To enable Google Maps integration, you used to need a Google maps API key, but since the update to Google Maps API v3, this is no longer needed.
 
@@ -164,8 +164,17 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.0.5 =
 * Improvement: for single events editing, the format windows are in the state closed by default
 * Feature: #_LOCATION now also possible in the calendar title formatting
-* Change: map only shown if location name/address/town all have a value
-* Improvement: if any of event_single_event_format,event_page_title_format,event_contactperson_email_body,event_respondent_email_body is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
-* Improvement: make it more clear that a page needs to be choosen to show the events on
+* Improvement: map only shown if location name/address/town all have a value
+* Improvement: if any of event_single_event_format, event_page_title_format, event_contactperson_email_body, event_respondent_email_body is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
+* Improvement: make it more clear that a page needs to be chosen to show the events on
 * Advertise that showing the event page itself is going to be deprecated
 * Feature: captcha can be disabled now if you want, plus the session is hopefully started earlier so other plugins can't interfere anymore
+
+= 3.0.6 =
+* Bugfix: stripslashes needed for custom attributes
+* Bugfix: when using scope=today, the sql query was wrong and thus ignored other conditions
+* Bugfix: characters now get escaped ok in locations as well
+* Improvement: changed the document to include better info concerning custom attributes
+* Feature: you can now choose whether or not registrations need approvements, and then manage pending registrations
+* Feature: you can now edit the number of seats somebody registered for, in case they change their minds
+* Improvement: force the use of the datepicker for start/end dates by making the field readonly, so no more empty dates
