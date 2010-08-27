@@ -1810,49 +1810,49 @@ $j_dbem_event(document).ready( function() {
 	// is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
 
 	$j_dbem_event('textarea#event_page_title_format').focus(function(){
-		var tmp_value='<?php echo preg_replace("/\n/","___",get_option ( 'dbem_event_page_title_format' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\r\n/","___",get_option ( 'dbem_event_page_title_format' )); ?>';
 		tmp_value=tmp_value.replace(/___/g,"\n");
 	 	if($j_dbem_event(this).val() == '')
 	 		$j_dbem_event(this).val(tmp_value);
 	}); 
 	$j_dbem_event('textarea#event_page_title_format').blur(function(){
-		var tmp_value='<?php echo preg_replace("/\n/","___",get_option ( 'dbem_event_page_title_format' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\r\n/","___",get_option ( 'dbem_event_page_title_format' )); ?>';
 		tmp_value=tmp_value.replace(/___/g,"\n");
 	 	if($j_dbem_event(this).val() == tmp_value)
 	 		$j_dbem_event(this).val('');
 	}); 
 	$j_dbem_event('textarea#event_single_event_format').focus(function(){
-		var tmp_value='<?php echo preg_replace("/\n/","___",get_option ( 'dbem_single_event_format' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\r\n/","___",get_option ( 'dbem_single_event_format' )); ?>';
 		tmp_value=tmp_value.replace(/___/g,"\n");
 	 	if($j_dbem_event(this).val() == '')
 	 		$j_dbem_event(this).val(tmp_value);
 	}); 
 	$j_dbem_event('textarea#event_single_event_format').blur(function(){
-		var tmp_value='<?php echo preg_replace("/\n/","___",get_option ( 'dbem_single_event_format' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\r\n/","___",get_option ( 'dbem_single_event_format' )); ?>';
 		tmp_value=tmp_value.replace(/___/g,"\n");
 	 	if($j_dbem_event(this).val() == tmp_value)
 	 		$j_dbem_event(this).val('');
 	}); 
 	$j_dbem_event('textarea#event_contactperson_email_body').focus(function(){
-		var tmp_value='<?php echo preg_replace("/\n/","___",get_option ( 'dbem_contactperson_email_body' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\r\n/","___",get_option ( 'dbem_contactperson_email_body' )); ?>';
 		tmp_value=tmp_value.replace(/___/g,"\n");
 	 	if($j_dbem_event(this).val() == '')
 	 		$j_dbem_event(this).val(tmp_value);
 	})
 	$j_dbem_event('textarea#event_contactperson_email_body').blur(function(){
-		var tmp_value='<?php echo preg_replace("/\n/","___",get_option ( 'dbem_contactperson_email_body' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\r\n/","___",get_option ( 'dbem_contactperson_email_body' )); ?>';
 		tmp_value=tmp_value.replace(/___/g,"\n");
 	 	if($j_dbem_event(this).val() == tmp_value)
 	 		$j_dbem_event(this).val('');
 	}); 
 	$j_dbem_event('textarea#event_respondent_email_body').focus(function(){
-		var tmp_value='<?php echo preg_replace("/\n/","___",get_option ( 'dbem_respondent_email_body' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\r\n/","___",get_option ( 'dbem_respondent_email_body' )); ?>';
 		tmp_value=tmp_value.replace(/___/g,"\n");
 	 	if($j_dbem_event(this).val() == '')
 	 		$j_dbem_event(this).val(tmp_value);
 	}); 
 	$j_dbem_event('textarea#event_respondent_email_body').blur(function(){
-		var tmp_value='<?php echo preg_replace("/\n/","___",get_option ( 'dbem_respondent_email_body' )); ?>';
+		var tmp_value='<?php echo preg_replace("/\r\n/","___",get_option ( 'dbem_respondent_email_body' )); ?>';
 		tmp_value=tmp_value.replace(/___/g,"\n");
 	 	if($j_dbem_event(this).val() == tmp_value)
 	 		$j_dbem_event(this).val('');
