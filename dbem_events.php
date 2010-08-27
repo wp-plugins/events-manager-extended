@@ -1917,42 +1917,38 @@ $j_dbem_event(document).ready( function() {
    // users cannot submit the event form unless some fields are filled
    	function validateEventForm(){
    		errors = "";
-		var recurring = $j_dbem_event("input[@name=repeated_event]:checked").val();
-		requiredFields= new Array('event_name', 'localised_event_date', 'location_name','location_address','location_town');
-		var localisedRequiredFields = {'event_name':"<?php
-	_e ( 'Name', 'dbem' )?>", 'localised_event_date':"<?php
-	_e ( 'Date', 'dbem' )?>", 'location_name':"<?php
-	_e ( 'Location', 'dbem' )?>",'location_address':"<?php
-	_e ( 'Address', 'dbem' )?>",'location_town':"<?php
-	_e ( 'Town', 'dbem' )?>"};
+		var recurring = $j_dbem_event("input[name=repeated_event]:checked").val();
+		//requiredFields= new Array('event_name', 'localised_event_date', 'location_name','location_address','location_town');
+		requiredFields= new Array('event_name', 'localised_event_date');
+		var localisedRequiredFields = {'event_name':"<?php _e ( 'Name', 'dbem' )?>",
+					       'localised_event_date':"<?php _e ( 'Date', 'dbem' )?>"
+					      };
 		
 		missingFields = new Array;
 		for (var i in requiredFields) {
-			if ($j_dbem_event("input[@name=" + requiredFields[i]+ "]").val() == 0) {
+			if ($j_dbem_event("input[name=" + requiredFields[i]+ "]").val() == 0) {
 				missingFields.push(localisedRequiredFields[requiredFields[i]]);
-				$j_dbem_event("input[@name=" + requiredFields[i]+ "]").css('border','2px solid red');
+				$j_dbem_event("input[name=" + requiredFields[i]+ "]").css('border','2px solid red');
 			} else {
-				$j_dbem_event("input[@name=" + requiredFields[i]+ "]").css('border','1px solid #DFDFDF');
-				
+				$j_dbem_event("input[name=" + requiredFields[i]+ "]").css('border','1px solid #DFDFDF');
 			}
-				
 	   	}
 	
 		// 	alert('ciao ' + recurring+ " end: " + $j_dbem_event("input[@name=localised_event_end_date]").val());     
 	   	if (missingFields.length > 0) {
 		    errors = "<?php echo _e ( 'Some required fields are missing:', 'dbem' )?> " + missingFields.join(", ") + ".\n";
 		}
-		if(recurring && $j_dbem_event("input[@name=localised_event_end_date]").val() == "") {
+		if(recurring && $j_dbem_event("input[name=localised_event_end_date]").val() == "") {
 			errors = errors +  "<?php _e ( 'Since the event is repeated, you must specify an end date', 'dbem' )?>."; 
-			$j_dbem_event("input[@name=localised_event_end_date]").css('border','2px solid red');
+			$j_dbem_event("input[name=localised_event_end_date]").css('border','2px solid red');
 		} else {
-			$j_dbem_event("input[@name=localised_event_end_date]").css('border','1px solid #DFDFDF');
+			$j_dbem_event("input[name=localised_event_end_date]").css('border','1px solid #DFDFDF');
 		}
 		if(errors != "") {
 			alert(errors);
 			return false;
 		}
-		return true; 
+		return true;
    }
    
    $j_dbem_event('#eventForm').bind("submit", validateEventForm);
