@@ -2184,8 +2184,8 @@ function substitute_rss($data) {
 		return $data;
 }
 function dbem_general_css() {
-	echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."events-manager-extended/events_manager.css' type='text/css'/>\n";
-	$file_name= DBEM_PLUGIN_DIR."/events-manager-extended/myown.css";
+	echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
+	$file_name= DBEM_PLUGIN_DIR."myown.css";
 	if (file_exists($file_name)) {
 		echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."myown.css' type='text/css'/>\n";
 	}
