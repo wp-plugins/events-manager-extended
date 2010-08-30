@@ -403,13 +403,13 @@ function dbem_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone
 	$contact_email = dbem_get_user_email($contact_id);
  	
 	$contact_body = ( $event['event_contactperson_email_body'] != '' ) ? $event['event_contactperson_email_body'] : get_option ( 'dbem_contactperson_email_body' );
-	$contact_body = dbem_replace_placeholders($contact_body, $event);
+	$contact_body = dbem_replace_placeholders($contact_body, $event, "text");
 	$booker_body = ( $event['event_respondent_email_body'] != '' ) ? $event['event_respondent_email_body'] : get_option ( 'dbem_respondent_email_body' );
-	$booker_body = dbem_replace_placeholders($booker_body, $event);
+	$booker_body = dbem_replace_placeholders($booker_body, $event, "text");
 	$pending_body = get_option ( 'dbem_registration_pending_email_body' );
-	$pending_body = dbem_replace_placeholders($pending_body, $event);
+	$pending_body = dbem_replace_placeholders($pending_body, $event, "text");
 	$denied_body = get_option ( 'dbem_registration_denied_email_body' );
-	$denied_body = dbem_replace_placeholders($denied_body, $event);
+	$denied_body = dbem_replace_placeholders($denied_body, $event, "text");
 	
 	// rsvp specific placeholders
 	$placeholders = array('#_CONTACTPERSON'=> $contact_name, '#_PLAIN_CONTACTEMAIL'=> $contact_email, '#_RESPNAME' => $bookerName, '#_RESPEMAIL' => $bookerEmail, '#_RESPPHONE' => $bookerPhone, '#_SPACES' => $bookedSeats,'#_COMMENT' => $bookerComment );

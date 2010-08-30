@@ -1073,7 +1073,7 @@ function dbem_events_table($events, $limit, $title) {
 	  <tr <?php echo "$class $style"; ?>>
 			<td><input type='checkbox' class='row-selector' value='<?php echo $event ['event_id']; ?>' name='events[]' /></td>
 			<td><strong>
-			<a class="row-title" href="<?php bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_event&event_id=<?php echo $event ['event_id']; ?>"><?php echo ($event ['event_name']); ?></a>
+			<a class="row-title" href="<?php bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_event&event_id=<?php echo $event ['event_id']; ?>"><?php echo dbem_sanitize_html($event ['event_name']); ?></a>
 			</strong>
 			<?php
 			$category = dbem_get_category($event ['event_category_id']);
@@ -1549,17 +1549,17 @@ function dbem_event_form($event, $title, $element) {
 												}
 											   
 												?>          
-											    <option value="<?php echo $location['location_id'] ?>" <?php echo $selected ?>><?php echo $location['location_name'] ?></option>
+											    <option value="<?php echo $location['location_id'] ?>" <?php echo $selected ?>><?php echo dbem_sanitize_html($location['location_name']) ?></option>
 												<?php endforeach; ?>
 											</select>        
-											<input type='hidden' name='location-select-name' value='<?php echo $event['location_name']?>'/>
-											<input type='hidden' name='location-select-town' value='<?php	echo $event['location_town']?>'/>
-											<input type='hidden' name='location-select-address' value='<?php echo $event['location_address']?>'/>  		
+											<input type='hidden' name='location-select-name' value='<?php echo dbem_sanitize_html($event['location_name'])?>'/>
+											<input type='hidden' name='location-select-town' value='<?php echo dbem_sanitize_html($event['location_town'])?>'/>
+											<input type='hidden' name='location-select-address' value='<?php echo dbem_sanitize_html($event['location_address'])?>'/>  		
 										</td>
 									<?php } else { ?>
 										<th><?php _e ( 'Name','dbem' )?>
 											&nbsp;</th>
-										<td><input id="location-name" type="text" name="location_name" value="<?php echo $event ['location_name']?>" /></td>
+										<td><input id="location_name" type="text" name="location_name" value="<?php echo dbem_sanitize_html($event ['location_name'])?>" /></td>
 									<?php } ?>
 									<?php
 										$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
@@ -1594,7 +1594,7 @@ function dbem_event_form($event, $title, $element) {
 								    <?php  if(!$use_select_for_locations) : ?> 
 									<tr>
 	<th><?php _e ( 'Address:' )?> &nbsp;</th>
-	<td><input id="location-address" type="text" name="location_address"
+	<td><input id="location_address" type="text" name="location_address"
 					value="<?php
 			echo $event ['location_address'];
 			?>" /></td>
@@ -1606,7 +1606,7 @@ function dbem_event_form($event, $title, $element) {
 									</tr>
 									<tr>
 										<th><?php _e ( 'Town:' )?> &nbsp;</th>
-										<td><input id="location-town" type="text" name="location_town" value="<?php echo $event ['location_town']?>" /></td>
+										<td><input id="location_town" type="text" name="location_town" value="<?php echo $event ['location_town']?>" /></td>
 									</tr>
 									<tr>
 										<td colspan='2'><p>
@@ -2041,29 +2041,29 @@ function dbem_admin_map_script() {
 				eventAddress = $j_dbem_admin("input[name='location-select-address']").val(); 
 	
    				<?php else: ?>
-				eventLocation = $j_dbem_admin("input#location-name").val(); 
-			  	eventTown = $j_dbem_admin("input#location-town").val(); 
-				eventAddress = $j_dbem_admin("input#location-address").val();
+				eventLocation = $j_dbem_admin("input[name='location_name']").val(); 
+			  	eventTown = $j_dbem_admin("input#location_town").val(); 
+				eventAddress = $j_dbem_admin("input#location_address").val();
 		        	<?php endif; ?>
 				
 				loadMap(eventLocation, eventTown, eventAddress);
 			
-				$j_dbem_admin("input#location-name").blur(function(){
-						newEventLocation = $j_dbem_admin("input#location-name").val();  
+				$j_dbem_admin("input[name='location_name']").blur(function(){
+						newEventLocation = $j_dbem_admin("input[name='location_name']").val();  
 						if (newEventLocation !=eventLocation) {                
 							loadMap(newEventLocation, eventTown, eventAddress); 
 							eventLocation = newEventLocation;
 						}
 				});
-				$j_dbem_admin("input#location-town").blur(function(){
-						newEventTown = $j_dbem_admin("input#location-town").val(); 
+				$j_dbem_admin("input#location_town").blur(function(){
+						newEventTown = $j_dbem_admin("input#location_town").val(); 
 						if (newEventTown !=eventTown) {  
 							loadMap(eventLocation, newEventTown, eventAddress); 
 							eventTown = newEventTown;
 						} 
 				});
-				$j_dbem_admin("input#location-address").blur(function(){
-						newEventAddress = $j_dbem_admin("input#location-address").val(); 
+				$j_dbem_admin("input#location_address").blur(function(){
+						newEventAddress = $j_dbem_admin("input#location_address").val(); 
 						if (newEventAddress != eventAddress) {
 							loadMap(eventLocation, eventTown, newEventAddress);
 						 	eventAddress = newEventAddress; 

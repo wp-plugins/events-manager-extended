@@ -651,9 +651,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$joiner = "&";
 			else
 				$joiner = "?";
-			$tmp_name=$event['event_name'];
-			if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $tmp_name = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($tmp_name);
-			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".$tmp_name."'>".$tmp_name."</a>" , $event_string );
+			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".dbem_sanitize_html($event['event_name'])."'>".dbem_sanitize_html($event['event_name'])."</a>" , $event_string );
 		} 
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
 			$events_page_link = dbem_get_events_page(true, false);
@@ -663,26 +661,27 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$joiner = "?";
 			$event_string = str_replace($result, $events_page_link.$joiner."event_id=".$event['event_id'] , $event_string );
 		}
-	 	if (preg_match('/#_(NAME|NOTES|EXCERPT)/', $result)) {
+	 	if (preg_match('/#_(NOTES|EXCERPT)/', $result)) {
 			$field = "event_".ltrim(strtolower($result), "#_");
 		 	$field_value = $event[$field];      
 			
-			if ($field == "event_notes" || $field == "event_excerpt") {
-				/* Marcus Begin Edit */
-				if ($target == "html"){
-					//If excerpt, we use more link text
-					if($field == "event_excerpt"){
-						$matches = explode('<!--more-->', $event['event_notes']);
-						$field_value = $matches[0];
-						$field_value = apply_filters('dbem_notes_excerpt', $field_value);
-					}else{
-						$field_value = apply_filters('dbem_notes', $field_value);
-					}
-					//$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
-				}else{
-				  if ($target == "map"){
+			if ($target == "html") {
+				//If excerpt, we use more link text
+				if($field == "event_excerpt") {
+					$matches = explode('<!--more-->', $event['event_notes']);
+					$field_value = $matches[0];
+					$field_value = apply_filters('dbem_notes_excerpt', $field_value);
+				} else {
+					$field_value = apply_filters('dbem_notes', $field_value);
+				}
+				//$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
+				// we call the sanitize_html function so the qtranslate
+				// does it's thing anyway
+				$field_value = dbem_sanitize_html($field_value,0);
+			} else {
+				if ($target == "map") {
 					$field_value = apply_filters('dbem_notes_map', $field_value);
-				  } else {
+				} else {
 		  			if($field == "event_excerpt"){
 						$matches = explode('<!--more-->', $event['event_notes']);
 						$field_value = htmlentities($matches[0]);
@@ -691,38 +690,43 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 						$field_value = apply_filters('dbem_notes_rss', $field_value);
 					}
 					$field_value = apply_filters('the_content_rss', $field_value);
-				  }
 				}
-				/* Marcus End Edit */
-		  	} else {
-				if ($target == "html"){    
-					$field_value = apply_filters('dbem_general', $field_value); 
-		  		}else{
-					$field_value = apply_filters('dbem_general_rss', $field_value);
-		  		}
 			}
-			if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $field_value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($field_value);
+			$event_string = str_replace($result, $field_value , $event_string ); 
+	 	}
+	 	if (preg_match('/#_NAME/', $result)) {
+			$field = "event_".ltrim(strtolower($result), "#_");
+		 	$field_value = $event[$field];      
+			$field_value = dbem_sanitize_html($field_value);
+			if ($target == "html") {    
+				$field_value = apply_filters('dbem_general', $field_value); 
+		  	} else {
+				$field_value = apply_filters('dbem_general_rss', $field_value);
+			}
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}  
 	  
 		if (preg_match('/#_(ADDRESS|TOWN)/', $result)) {
 			$field = "location_".ltrim(strtolower($result), "#_");
 		 	$field_value = $event[$field];      
-		
-			if ($target == "html")    
+			$field_value = dbem_sanitize_html($field_value);
+			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
-			else 
+			} else { 
 				$field_value = apply_filters('dbem_general_rss', $field_value); 
+			}
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
 	  
 		if (preg_match('/#_(LOCATION)$/', $result)) {
 			$field = "location_name";
 		 	$field_value = $event[$field];     
-			if ($target == "html")    
-					$field_value = apply_filters('dbem_general', $field_value); 
-			else 
+			$field_value = dbem_sanitize_html($field_value);
+			if ($target == "html") {
+				$field_value = apply_filters('dbem_general', $field_value); 
+			} else {
 				$field_value = apply_filters('dbem_general_rss', $field_value); 
+			}
 			
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
@@ -786,18 +790,15 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			$event_string = str_replace($result, mysql2date(ltrim($result, "#@"), "2010-10-10 ".$event['event_end_time']),$event_string );  
 		}
 		
-		/* Marcus Begin Edit*/
-			//Add a placeholder for categories
-		 	if (preg_match('/^#_CATEGORY$/', $result)) {
+		//Add a placeholder for categories
+		if (preg_match('/^#_CATEGORY$/', $result)) {
 	      		$category = (dbem_get_event_category($event['event_id']));
-				$event_string = str_replace($result, $category['category_name'], $event_string );
-			}
-		/* Marcus End Edit */
-		     
+			$field_value = dbem_sanitize_html($category['category_name']);
+			$event_string = str_replace($result, $field_value, $event_string );
+		}
 	}
 		     
 	// for extra date formatting, eg. #_{d/m/Y}
-	/* Marcus Begin Edit */
 	preg_match_all("/#@?_\{[A-Za-z0-9 -\/,\.\\\]+\}/", $format, $results);
 	foreach($results[0] as $result) {
 		if(substr($result, 0, 3 ) == "#@_"){
@@ -813,10 +814,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			$event_string = str_replace($result, mysql2date(substr($result, $offset, (strlen($result)-($offset+1)) ), $event[$date]),$event_string );
 		}
 	}
-	/* Marcus End Edit */
-	
 	return $event_string;	
-	
 }
 
 function dbem_date_to_unix_time($date) {
@@ -843,5 +841,14 @@ function dbem_sanitize_request( $value ) {
 }
 function escapeMe(&$val) {
 	$val = mysql_real_escape_string($val);
+}
+
+function dbem_sanitize_html( $value, $do_convert=1 ) {
+	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
+	if ($do_convert) {
+		return htmlspecialchars($value);
+	} else {
+		return $value;
+	}
 }
 ?>
