@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 
 Manage events and display them in your blog. Includes recurring events, location management, calendar, Google map integration, RSVP. 
              
@@ -182,3 +182,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.1.1 =
 * Improvement: use constants DBEM_PLUGIN_URL and DBEM_PLUGIN_DIR
 * Feature: categories possible for events_calendar widget and events_calendar shortcode
+* Bugfix: javascript error fix when editing/creating an event
