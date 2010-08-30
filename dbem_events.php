@@ -991,7 +991,6 @@ function dbem_events_table($events, $limit, $title) {
 	$say_hello = get_option ( 'dbem_hello_to_user' );
 	if ($say_hello == 1)
 		dbem_hello_to_new_user ();
-	
 	?>   
   	<!--<div id='new-event' class='switch-tab'><a href="<?php
 	bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_event"><?php
@@ -1401,14 +1400,14 @@ function dbem_event_form($event, $title, $element) {
 				<div id="post-body">
 					<div id="post-body-content" class="meta-box-sortables">
 			<?php/* Marcus End Edit */ ?>
-						<div id="event_name" class="stuffbox">
+						<div id="titlediv" class="stuffbox">
 							<h3>
 								<?php
 			_e ( 'Name', 'dbem' );
 			?>
 							</h3>
 							<div class="inside">
-								<input type="text" name="event_name" value="<?php echo $event [$pref . 'name']?>" />
+								<input type="text" id="title" name="event_name" value="<?php echo $event [$pref . 'name']?>" />
 								<br />
 								<?php _e ( 'The event name. Example: Birthday party', 'dbem' )?>
 							</div>

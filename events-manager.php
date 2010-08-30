@@ -651,7 +651,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$joiner = "&";
 			else
 				$joiner = "?";
-			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."'   title='".$event['event_name']."'>".$event['event_name']."</a>" , $event_string );
+			$tmp_name=$event['event_name'];
+			if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $tmp_name = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($tmp_name);
+			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".$tmp_name."'>".$tmp_name."</a>" , $event_string );
 		} 
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
 			$events_page_link = dbem_get_events_page(true, false);
@@ -699,6 +701,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 					$field_value = apply_filters('dbem_general_rss', $field_value);
 		  		}
 			}
+			if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $field_value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($field_value);
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}  
 	  
