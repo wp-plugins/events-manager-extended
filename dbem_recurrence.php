@@ -1,7 +1,5 @@
 <?php
 
- 
-
 function dbem_recurrence_test() {
 	echo "<h2>Recurrence iCalendar</h2>";   
 	
@@ -136,10 +134,7 @@ function dbem_get_recurrence_events($recurrence){
 		}
 	}   
 	
- // print_r($matching_days);
-	
 	return $matching_days ;
-	
 }
 
 
@@ -159,8 +154,11 @@ function dbem_insert_recurrent_event($event, $recurrence ){
 			//print_r($recurrence);
 
 		 	$recurrence['recurrence_id'] = mysql_insert_id();
+			// the following 3 have no column in the recurrence table, but we need it anyway
+			// maybe something to change later on
 		 	$recurrence['recurrence_rsvp'] = $event['event_rsvp'];
 		 	$recurrence['recurrence_seats'] = $event['event_seats'];
+		 	$recurrence['event_attributes'] = $event['event_attributes'];
 
 			$output = "<h2>Recurring</h2>";
 			//echo "recurrence_id = $recurrence_id<br/>";  
@@ -191,6 +189,7 @@ function dbem_insert_events_for_recurrence($recurrence) {
 		$new_event['event_contactperson_email_body'] = $recurrence['event_contactperson_email_body'];
 		$new_event['event_respondent_email_body'] = $recurrence['event_respondent_email_body'];
 		$new_event['registration_requires_approval'] = $recurrence['registration_requires_approval'];
+		$new_event['event_attributes'] = $recurrence['event_attributes'];
 
 		//print_r($new_event);
 		$wpdb->insert($events_table, $new_event);
@@ -217,6 +216,7 @@ function dbem_update_recurrence($event, $recurrence) {
 		dbem_remove_events_for_recurrence_id($recurrence['recurrence_id']);
 		$recurrence['recurrence_rsvp'] = $event['event_rsvp'];
 		$recurrence['recurrence_seats'] = $event['event_seats'];
+		$recurrence['event_attributes'] = $event['event_attributes'];
 		dbem_insert_events_for_recurrence($recurrence); 
 		return true;
 	}
@@ -232,6 +232,7 @@ function dbem_remove_events_for_recurrence_id($recurrence_id) {
 }
 function dbem_get_recurrence($recurrence_id) {
 	global $wpdb;
+	$events_table = $wpdb->prefix.EVENTS_TBNAME;
 	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 	$sql = "SELECT *,
 		DATE_FORMAT(recurrence_start_time, '%k') AS 'recurrence_hh',
@@ -244,7 +245,16 @@ function dbem_get_recurrence($recurrence_id) {
 		DATE_FORMAT(recurrence_end_time, '%h:%i%p') AS 'recurrence_end_12h_time', 
 		DATE_FORMAT(recurrence_end_time, '%H:%i') AS 'recurrence_end_24h_time'
 	       FROM $recurrence_table WHERE recurrence_id = $recurrence_id;";
-	$recurrence = $wpdb->get_row($sql, ARRAY_A);                       
+	$recurrence = $wpdb->get_row($sql, ARRAY_A);
+
+	// now add the info that has no column in the recurrence table
+	$sql = "SELECT event_rsvp,event_seats,event_attributes FROM $events_table WHERE recurrence_id = '$recurrence_id' LIMIT 1;";
+	$rsvp = $wpdb->get_row($sql);
+	$recurrence['recurrence_rsvp'] = $rsvp->event_rsvp;
+	$recurrence['recurrence_seats'] = $rsvp->event_seats;
+	$recurrence['event_attributes'] = @unserialize($rsvp->event_attributes);
+
+	// now add the location info
 	$location = dbem_get_location($recurrence['location_id']);
 	$recurrence['location_name'] = $location['location_name'];
 	$recurrence['location_address'] = $location['location_address'];

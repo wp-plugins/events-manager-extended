@@ -260,19 +260,13 @@ function dbem_events_subpanel() {
 		
 		dbem_event_form ( $event, $title, $event_ID );
 	}
-	/* Marcus Begin Edit */
 	//Add duplicate event if requested
 	if ($action == 'duplicate_event') {
 		dbem_duplicate_event ( $event_ID );
 	}
-	/* Marcus End Edit */
 	if ($action == 'edit_recurrence') {
 		$event_ID = intval($_GET ['recurrence_id']);
 		$recurrence = dbem_get_recurrence ( $event_ID );
-		$sql = "SELECT event_rsvp,event_seats FROM $event_table_name WHERE recurrence_id = '$event_ID' LIMIT 1;";
-		$rsvp = $wpdb->get_row($sql);
-		$recurrence['recurrence_rsvp'] = $rsvp->event_rsvp;
-		$recurrence['recurrence_seats'] = $rsvp->event_seats;
 		$title = __ ( "Reschedule", 'dbem' ) . " '" . $recurrence ['recurrence_name'] . "'";
 		dbem_event_form ( $recurrence, $title, $event_ID );
 	}
@@ -1593,11 +1587,8 @@ function dbem_event_form($event, $title, $element) {
 									<?php endif; ?>   
 								    <?php  if(!$use_select_for_locations) : ?> 
 									<tr>
-	<th><?php _e ( 'Address:' )?> &nbsp;</th>
-	<td><input id="location_address" type="text" name="location_address"
-					value="<?php
-			echo $event ['location_address'];
-			?>" /></td>
+										<th><?php _e ( 'Address:' )?> &nbsp;</th>
+										<td><input id="location_address" type="text" name="location_address" value="<?php echo $event ['location_address']; ?>" /></td>
 									</tr>
 									<tr>
 										<td colspan='2'><p>
@@ -1632,7 +1623,6 @@ function dbem_event_form($event, $title, $element) {
 							</div>
 						</div>
 						<?php if(get_option('dbem_attributes_enabled')) : ?>
-						<?php/* Marcus Begin Edit */ ?>
 						<div id="event_attributes" class="postbox">
 							<h3>
 								<?php _e ( 'Attributes', 'dbem' ); ?>
@@ -1641,7 +1631,6 @@ function dbem_event_form($event, $title, $element) {
 								<?php dbem_attributes_form($event) ?>
 							</div>
 						</div>
-						<?php/* Marcus End Edit */ ?>
 						<?php endif; ?>
 					</div>
 					<p class="submit">
