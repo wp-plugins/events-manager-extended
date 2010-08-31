@@ -183,3 +183,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: use constants DBEM_PLUGIN_URL and DBEM_PLUGIN_DIR
 * Feature: categories possible for events_calendar widget and events_calendar shortcode
 * Bugfix: javascript error fix when editing/creating an event
+
+= 3.1.2 = 
+* Feature: qtranslate can now be used together with Events Manager Extended
+* Bugfix: better checking for special characters used in events name/location/...
+* Bugfix/feature: event attributes are now also taken into account for recurring events
