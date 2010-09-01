@@ -193,12 +193,12 @@ function dbem_create_events_table() {
 		$sql = "CREATE TABLE ".$table_name." (
 			event_id mediumint(9) NOT NULL AUTO_INCREMENT,
 			event_author mediumint(9) DEFAULT NULL,
-			event_name tinytext NOT NULL,
+			event_name text NOT NULL,
 			event_start_time time NOT NULL,
 			event_end_time time NOT NULL,
 			event_start_date date NOT NULL,
 			event_end_date date NULL, 
-			event_notes text DEFAULT NULL,
+			event_notes longtext DEFAULT NULL,
 			event_rsvp bool NOT NULL DEFAULT 0,
 			event_seats mediumint(9),
 			event_contactperson_id mediumint(9) NULL,  
@@ -259,7 +259,8 @@ function dbem_create_events_table() {
 		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
 		
 		// Fix buggy columns
-		$wpdb->query("ALTER TABLE $table_name MODIFY event_notes text ;");
+		$wpdb->query("ALTER TABLE $table_name MODIFY event_name text;");
+		$wpdb->query("ALTER TABLE $table_name MODIFY event_notes longtext;");
 		$wpdb->query("ALTER TABLE $table_name MODIFY event_author mediumint(9);");
 		$wpdb->query("ALTER TABLE $table_name MODIFY event_seats mediumint(9) NULL;");
 	}
@@ -274,12 +275,12 @@ function dbem_create_recurrence_table() {
 		
 		$sql = "CREATE TABLE ".$table_name." (
 			recurrence_id mediumint(9) NOT NULL AUTO_INCREMENT,
-			recurrence_name tinytext NOT NULL,
+			recurrence_name text NOT NULL,
 			recurrence_start_date date NOT NULL,
 			recurrence_end_date date NOT NULL,
 			recurrence_start_time time NOT NULL,
 			recurrence_end_time time NOT NULL,
-			recurrence_notes text NOT NULL,
+			recurrence_notes longtext NOT NULL,
 			location_id mediumint(9) NOT NULL,
 			recurrence_interval tinyint NOT NULL, 
 			recurrence_freq tinytext NOT NULL,
@@ -305,6 +306,8 @@ function dbem_create_recurrence_table() {
 		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
 		// Fix buggy columns
 		$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
+		$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_name text;");
+		$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_notes longtext;");
 	}
 }
 
@@ -322,7 +325,7 @@ function dbem_create_locations_table() {
 		// Creating the events table
 		$sql = "CREATE TABLE ".$table_name." (
 			location_id mediumint(9) NOT NULL AUTO_INCREMENT,
-			location_name tinytext NOT NULL,
+			location_name text NOT NULL,
 			location_address tinytext NOT NULL,
 			location_town tinytext NOT NULL,
 			location_latitude float DEFAULT NULL,
@@ -339,6 +342,8 @@ function dbem_create_locations_table() {
 					VALUES ('The Crane Bar', '2, Sea Road','Galway', 53.2692, -9.06151)");
 		$wpdb->query("INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude)
 					VALUES ('Taaffes Bar', '19 Shop Street','Galway', 53.2725, -9.05321)");
+	} else {
+		$wpdb->query("ALTER TABLE $table_name MODIFY location_name text NOT NULL ;");
 	}
 }
 

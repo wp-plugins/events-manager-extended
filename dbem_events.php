@@ -1140,6 +1140,10 @@ function dbem_event_form($event, $title, $element) {
 	
 	global $localised_date_formats;               
 	$use_select_for_locations = get_option('dbem_use_select_for_locations');
+	// qtranslate there? Then we need the select, otherwise locations will be created again...
+	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
+		$use_select_for_locations=1;
+	}
 	$saved_bydays = array();
 	// change prefix according to event/recurrence
 	if (isset($_GET ['action']) && $_GET ['action'] == "edit_recurrence") {
@@ -1216,10 +1220,6 @@ function dbem_event_form($event, $title, $element) {
 			<?php
 			}
 			?>
-			<?php
-			/* Marcus Begin Edit */
-			//This is an edit for WP 2.8 for styling fix
-			?>                
 			<div id="poststuff" class="metabox-holder has-right-sidebar">
 				<!-- SIDEBAR -->
 				<div id="side-info-column" class='inner-sidebar'>
@@ -1391,7 +1391,7 @@ function dbem_event_form($event, $title, $element) {
 				<!-- END OF SIDEBAR -->
 				<div id="post-body">
 					<div id="post-body-content" class="meta-box-sortables">
-			<?php/* Marcus End Edit */ ?>
+						<!-- we need titlediv for qtranslate as ID -->
 						<div id="titlediv" class="stuffbox">
 							<h3>
 								<?php
@@ -1399,6 +1399,7 @@ function dbem_event_form($event, $title, $element) {
 			?>
 							</h3>
 							<div class="inside">
+								<!-- we need title for qtranslate as ID -->
 								<input type="text" id="title" name="event_name" value="<?php echo $event [$pref . 'name']?>" />
 								<br />
 								<?php _e ( 'The event name. Example: Birthday party', 'dbem' )?>

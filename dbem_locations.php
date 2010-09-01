@@ -101,6 +101,7 @@ function dbem_locations_edit_layout($location, $message = "") {
 			<input type="hidden" name="action" value="editedlocation" />
 			<input type="hidden" name="location_ID" value="<?php echo $location['location_id'] ?>"/>
 			
+			<!-- we need titlediv and title for qtranslate as ID -->
 			<div id="titlediv" class="form-field form-required">
 			  <label for="location_name"><?php _e('Location name', 'dbem') ?></label>
 			  <input name="location_name" id="title" type="text" value="<?php echo htmlspecialchars($location['location_name']); ?>" size="40" />
@@ -587,7 +588,8 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 }
 function dbem_single_location_map($location) {
 	$gmap_is_active = get_option('dbem_gmap_is_active'); 
-	$map_text = addslashes(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
+	//$map_text = addslashes(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
+	$map_text = dbem_sanitize_html(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
 	$map_text = preg_replace("/\r\n|\n\r|\n/","<br />",$map_text);
 	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
@@ -628,7 +630,13 @@ function dbem_events_in_location_list($location, $scope = "") {
 
 add_action ('admin_head', 'dbem_locations_autocomplete');  
 
-function dbem_locations_autocomplete() {     
+function dbem_locations_autocomplete() {
+        $use_select_for_locations = get_option('dbem_use_select_for_locations');
+	// qtranslate there? Then we need the select
+	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
+		$use_select_for_locations=1;
+	}
+
 	if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
 		?>
 		<link rel="stylesheet" href="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-autocomplete/jquery.autocomplete.css" type="text/css"/>
@@ -644,7 +652,7 @@ function dbem_locations_autocomplete() {
 		jQuery(document).ready(function($) {
 			var gmap_enabled = <?php echo get_option('dbem_gmap_is_active'); ?>; 
 		    
-		   <?php if(!get_option('dbem_use_select_for_locations')) :?>
+		   <?php if(!$use_select_for_locations=1) :?>
 			$("input#location-name").autocomplete("<?php echo DBEM_PLUGIN_URL; ?>locations-search.php", {
 				width: 260,
 				selectFirst: false,
@@ -679,7 +687,6 @@ function dbem_locations_autocomplete() {
 					$("input[name='location-select-address']").val(eventAddress); 
 					$("input[name='location-select-town']").val(eventTown); 
 					loadMap(eventLocation, eventTown, eventAddress)
-					
 			   	})
 			});  
 			<?php endif; ?>
