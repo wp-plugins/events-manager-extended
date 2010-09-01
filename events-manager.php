@@ -149,7 +149,7 @@ function dbem_install() {
 	if (get_option('dbem_events_page') && !get_option('dbem_version')) 
 		dbem_migrate_old_events();
   
-  	update_option('dbem_version', 2); 
+  	update_option('dbem_version', 3); 
 	// Create events page if necessary
  	$events_page_id = get_option('dbem_events_page')  ;
 	if ($events_page_id != "" ) {
@@ -170,6 +170,7 @@ function dbem_install() {
 
 function dbem_create_events_table() {
 	global  $wpdb, $user_level;
+	$version = get_option('dbem_version');
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php'); 
 	
 	$old_table_name = $wpdb->prefix."events";
@@ -259,16 +260,19 @@ function dbem_create_events_table() {
 		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
 		
 		// Fix buggy columns
-		$wpdb->query("ALTER TABLE $table_name MODIFY event_name text;");
-		$wpdb->query("ALTER TABLE $table_name MODIFY event_notes longtext;");
-		$wpdb->query("ALTER TABLE $table_name MODIFY event_author mediumint(9);");
-		$wpdb->query("ALTER TABLE $table_name MODIFY event_seats mediumint(9) NULL;");
+		if ($version<3) {
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_name text;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_notes longtext;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_author mediumint(9);");
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_seats mediumint(9) NULL;");
+		}
 	}
 }
 
 function dbem_create_recurrence_table() {
 	
 	global  $wpdb, $user_level;
+	$version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.RECURRENCE_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -305,15 +309,18 @@ function dbem_create_recurrence_table() {
 		maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
 		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
 		// Fix buggy columns
-		$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
-		$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_name text;");
-		$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_notes longtext;");
+		if ($version<3) {
+			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_name text;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_notes longtext;");
+		}
 	}
 }
 
 function dbem_create_locations_table() {
 	
 	global  $wpdb, $user_level;
+	$version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.LOCATIONS_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -343,13 +350,16 @@ function dbem_create_locations_table() {
 		$wpdb->query("INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude)
 					VALUES ('Taaffes Bar', '19 Shop Street','Galway', 53.2725, -9.05321)");
 	} else {
-		$wpdb->query("ALTER TABLE $table_name MODIFY location_name text NOT NULL ;");
+		if ($version<3) {
+			$wpdb->query("ALTER TABLE $table_name MODIFY location_name text NOT NULL ;");
+		}
 	}
 }
 
 function dbem_create_bookings_table() {
 	
 	global  $wpdb, $user_level;
+	$version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.BOOKINGS_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -367,9 +377,11 @@ function dbem_create_bookings_table() {
 	} else {
 		maybe_add_column($table_name, 'booking_comment', "ALTER TABLE $table_name add booking_comment text DEFAULT NULL;"); 
 		maybe_add_column($table_name, 'booking_approved', "ALTER TABLE $table_name add booking_approved bool DEFAULT 0;"); 
-		$wpdb->query("ALTER TABLE $table_name MODIFY event_id mediumint(9) NOT NULL;");
-		$wpdb->query("ALTER TABLE $table_name MODIFY person_id mediumint(9) NOT NULL;");
-		$wpdb->query("ALTER TABLE $table_name MODIFY booking_seats mediumint(9) NOT NULL;");
+		if ($version<3) {
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_id mediumint(9) NOT NULL;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY person_id mediumint(9) NOT NULL;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY booking_seats mediumint(9) NOT NULL;");
+		}
 	}
 }
 
@@ -421,7 +433,7 @@ function dbem_migrate_old_events() {
 		}
 }
 
-function dbem_add_options() {
+function dbem_add_options($reset=0) {
 	$contact_person_email_body_localizable = __("#_RESPNAME (#_RESPEMAIL) will attend #_NAME on #m #d, #Y. He wants to reserve #_SPACES space(s).<br/>Now there are #_RESERVEDSPACES space(s) reserved, #_AVAILABLESPACES are still available.<br/><br/>Yours faithfully,<br/>Events Manager",'dbem') ;
 	$respondent_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>you have successfully reserved #_SPACES space(s) for #_NAME.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'dbem');
 	$registration_pending_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'dbem');
@@ -471,24 +483,24 @@ function dbem_add_options() {
 	
 	foreach($dbem_options as $key => $value){
 		#if(preg_match('/$dbem/', $key)){
-			dbem_add_option($key, $value);
+			dbem_add_option($key, $value, $reset);
 		#}
 	}
 		
 }
-function dbem_add_option($key, $value) {
+function dbem_add_option($key, $value, $reset) {
 	$option = get_option($key);
-	if (empty($option))
+	if (empty($option) || $reset)
 		update_option($key, $value);
 }      
 
 function dbem_create_events_page(){
 	global $wpdb;
 	$postarr = array(
-		'post_status'=>'publish',
-		'post_title'=>DEFAULT_EVENT_PAGE_NAME,
-		'post_name'=>$wpdb->escape(__('events','dbem')),
-		'post_type' => 'page',
+		'post_status'=> 'publish',
+		'post_title' => DEFAULT_EVENT_PAGE_NAME,
+		'post_name'  => $wpdb->escape(__('events','dbem')),
+		'post_type'  => 'page',
 	);
 	if($int_post_id = wp_insert_post($postarr)){
 		update_option('dbem_events_page', $int_post_id);
