@@ -233,9 +233,7 @@ function dbem_events_subpanel() {
 			}
 			
 			//$wpdb->query($sql); 
-			echo "<div id='message' class='updated fade'>
-						<p>$feedback_message</p>
-			  </div>";
+			echo "<div id='message' class='updated fade'><p>".dbem_sanitize_html($feedback_message)."</p></div>";
 			$events = dbem_get_events ( "", "future" );
 			dbem_events_table ( $events, 10, "Future events" );
 		} else {
@@ -1059,7 +1057,7 @@ function dbem_events_table($events, $limit, $title) {
 			$style = "";
 			$today = date ( "Y-m-d" );
 			
-			$location_summary = "<b>" . $event ['location_name'] . "</b><br/>" . $event ['location_address'] . " - " . $event ['location_town'];
+			$location_summary = "<b>" . dbem_sanitize_html($event ['location_name']) . "</b><br/>" . dbem_sanitize_html($event ['location_address']) . " - " . dbem_sanitize_html($event ['location_town']);
 			
 			if ($event ['event_start_date'] < $today)
 				$style = "style ='background-color: #FADDB7;'";
@@ -1072,7 +1070,7 @@ function dbem_events_table($events, $limit, $title) {
 			<?php
 			$category = dbem_get_category($event ['event_category_id']);
 			if($category)
-				echo "<br/><span title='".__ ( 'Category', 'dbem' ).": ".$category['category_name']."'>".$category['category_name']."</span>";
+				echo "<br/><span title='".__ ( 'Category', 'dbem' ).": ".dbem_sanitize_html($category['category_name'])."'>".dbem_sanitize_html($category['category_name'])."</span>";
 			?> 
 			</td>
 			<td>
@@ -1197,7 +1195,7 @@ function dbem_event_form($event, $title, $element) {
 	<form id="eventForm" method="post" 	action="<?php echo $form_destination; ?>">
 		<div class="wrap">
 			<div id="icon-events" class="icon32"><br /></div>
-			<h2><?php echo $title; ?></h2>
+			<h2><?php echo dbem_sanitize_html($title); ?></h2>
 			<?php
 			if ($event ['recurrence_id']) {
 				?>
