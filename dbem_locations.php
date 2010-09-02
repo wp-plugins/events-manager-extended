@@ -588,8 +588,7 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 }
 function dbem_single_location_map($location) {
 	$gmap_is_active = get_option('dbem_gmap_is_active'); 
-	//$map_text = addslashes(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
-	$map_text = dbem_sanitize_html(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
+	$map_text = addslashes(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
 	$map_text = preg_replace("/\r\n|\n\r|\n/","<br />",$map_text);
 	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
