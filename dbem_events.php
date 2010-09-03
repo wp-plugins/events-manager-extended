@@ -1552,7 +1552,7 @@ function dbem_event_form($event, $title, $element) {
 									<?php } else { ?>
 										<th><?php _e ( 'Name','dbem' )?>
 											&nbsp;</th>
-										<td><input id="location_name" type="text" name="location_name" value="<?php echo dbem_sanitize_html($event ['location_name'])?>" /></td>
+										<td><input name="translated_location_name" type="hidden" value="<?php echo dbem_sanitize_html($event ['location_name'])?>" /><input id="location_name" type="text" name="location_name" value="<?php echo dbem_sanitize_html($event ['location_name'])?>" /></td>
 									<?php } ?>
 									<?php
 										$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
@@ -2029,7 +2029,7 @@ function dbem_admin_map_script() {
 				eventAddress = $j_dbem_admin("input[name='location-select-address']").val(); 
 	
    				<?php else: ?>
-				eventLocation = $j_dbem_admin("input[name='location_name']").val(); 
+				eventLocation = $j_dbem_admin("input[name='translated_location_name']").val(); 
 			  	eventTown = $j_dbem_admin("input#location_town").val(); 
 				eventAddress = $j_dbem_admin("input#location_address").val();
 		        	<?php endif; ?>
