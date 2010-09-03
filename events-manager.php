@@ -863,7 +863,7 @@ function escapeMe(&$val) {
 function dbem_sanitize_html( $value, $do_convert=1 ) {
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
 	if ($do_convert) {
-		return htmlspecialchars($value);
+		return htmlspecialchars($value,ENT_QUOTES);
 	} else {
 		return $value;
 	}
