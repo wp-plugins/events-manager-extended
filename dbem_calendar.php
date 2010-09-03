@@ -261,7 +261,7 @@ function dbem_get_calendar($args="") {
 		DATE_FORMAT(event_start_time, '%i') AS 'event_mm'
 
 		FROM $events_table 
-		WHERE ((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post')) $cat_condition ORDER BY event_start_date";      
+		WHERE ((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post')) $cat_condition ORDER BY event_start_date ASC, event_start_time ASC";      
 
 	$events=$wpdb->get_results($sql, ARRAY_A);   
 
