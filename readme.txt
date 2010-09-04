@@ -188,3 +188,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: qtranslate can now be used together with Events Manager Extended
 * Bugfix: better checking for special characters used in events name/location/...
 * Bugfix/feature: event attributes are now also taken into account for recurring events
+* Bugfix: language setting now happens on init action, better for qtranslate and all
+* Bugfix: automplete is working again for locations when creating an event
+* Bugfix: sort by day and time for the full calendar
