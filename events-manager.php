@@ -53,7 +53,7 @@ define('DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT','<li>#_LINKEDNAME<ul><li>#j #M #y
 define('DEFAULT_NO_EVENTS_MESSAGE', __('No events', 'dbem'));  
 define('DEFAULT_SINGLE_LOCATION_FORMAT', '<p>#_ADDRESS</p><p>#_TOWN</p>'); 
 define('DEFAULT_LOCATION_PAGE_TITLE_FORMAT', '#_NAME'); 
-define('DEFAULT_LOCATION_BALOON_FORMAT', "<strong>#_NAME</strong><br/>#_ADDRESS - #_TOWN<br/><a href='#_LOCATIONPAGEURL'>Details</a>");
+define('DEFAULT_LOCATION_BALLOON_FORMAT', "<strong>#_NAME</strong><br/>#_ADDRESS - #_TOWN<br/><a href='#_LOCATIONPAGEURL'>Details</a>");
 define('DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT', "<li>#_NAME - #j #M #Y - #H:#i</li>");
 define('DEFAULT_LOCATION_NO_EVENTS_MESSAGE', __('<li>No events in this location</li>', 'dbem'));
 define("IMAGE_UPLOAD_DIR", "wp-content/uploads/locations-pics");
@@ -450,7 +450,7 @@ function dbem_add_options($reset=0) {
 	'dbem_events_page_title' => DEFAULT_EVENTS_PAGE_TITLE,
 	'dbem_no_events_message' => __('No events','dbem'),
 	'dbem_location_page_title_format' => DEFAULT_LOCATION_PAGE_TITLE_FORMAT,
-	'dbem_location_baloon_format' => DEFAULT_LOCATION_BALOON_FORMAT,
+	'dbem_location_baloon_format' => DEFAULT_LOCATION_BALLOON_FORMAT,
 	'dbem_location_event_list_item_format' => DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT,
 	'dbem_location_no_events_message' => DEFAULT_LOCATION_NO_EVENTS_MESSAGE,
 	'dbem_single_location_format' => DEFAULT_SINGLE_LOCATION_FORMAT,

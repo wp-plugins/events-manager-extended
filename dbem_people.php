@@ -48,7 +48,7 @@ function dbem_global_map_json($eventful = false, $scope = "all") {
 		$tmp_loc=dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location);
 		# no newlines allowed, otherwise no map is shown
 		$tmp_loc=preg_replace("/\r\n|\n\r|\n/","<br />",$tmp_loc);
-		$json_location[] = '"location_baloon":"'.dbem_sanitize_html($tmp_loc).'"';
+		$json_location[] = '"location_balloon":"'.dbem_sanitize_html($tmp_loc).'"';
 		$json_locations[] = "{".implode(",",$json_location)."}";
 	}        
 	$json .= implode(",", $json_locations); 
