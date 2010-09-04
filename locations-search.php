@@ -12,9 +12,9 @@ if(isset($_GET['id']) && $_GET['id'] != "") {
 	foreach($locations as $item) {
 	  	$record = array();
 	  	$record['id']      = $item['location_id'];
-	  	$record['name']    = $item['location_name']; 
-		$record['address'] = $item['location_address'];   
-		$record['town']    = $item['location_town']; 
+	  	$record['name']    = dbem_sanitize_html($item['location_name']); 
+		$record['address'] = dbem_sanitize_html($item['location_address']);   
+		$record['town']    = dbem_sanitize_html($item['location_town']); 
 	  	$return[]  = $record;
 	}
 
