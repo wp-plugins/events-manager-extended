@@ -1405,7 +1405,7 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'The event name. Example: Birthday party', 'dbem' )?>
 							</div>
 						</div>
-						<div id="event_start_date" class="stuffbox">
+						<div id="div_event_start_date" class="stuffbox">
 							<h3 id='event-date-title'>
 								<?php _e ( 'Event date', 'dbem' ); ?>
 							</h3>
@@ -1430,7 +1430,7 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'The recurrence beginning and end date.', 'dbem' ); ?>
 								</span> </div>
 						</div>
-						<div id="event_end_day" class="stuffbox">
+						<div id="div_event_end_day" class="stuffbox">
 							<h3>
 								<?php _e ( 'Event time', 'dbem' ); ?>
 							</h3>
@@ -1442,7 +1442,7 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'The time of the event beginning and end', 'dbem' )?>
 								. </div>
 						</div>
-						<div id="location_coordinates" class="stuffbox" style='display: none;'>
+						<div id="div_location_coordinates" class="stuffbox" style='display: none;'>
 							<h3>
 								<?php _e ( 'Coordinates', 'dbem' ); ?>
 							</h3>
@@ -1452,7 +1452,7 @@ function dbem_event_form($event, $title, $element) {
 								<input id='location-longitude' name='location_longitude' type='text' value='<?php echo $event ['location_longitude']; ?>' size='15' />
 							</div>
 						</div>
-						<div id="event_page_title_format" class="postbox <?php if ($event['event_page_title_format']=="") echo "closed"; ?>">
+						<div id="div_event_page_title_format" class="postbox <?php if ($event['event_page_title_format']=="") echo "closed"; ?>">
                                                         <div class="handlediv" title="Click to toggle">
 								<br />
                                                         </div>
@@ -1469,7 +1469,7 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<div id="event_single_event_format" class="postbox <?php if ($event['event_single_event_format']=="") echo "closed"; ?>">
+						<div id="div_event_single_event_format" class="postbox <?php if ($event['event_single_event_format']=="") echo "closed"; ?>">
                                                         <div class="handlediv" title="Click to toggle">
 								<br />
                                                         </div>
@@ -1486,7 +1486,7 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<div id="event_contactperson_email_body" class="postbox <?php if ($event['event_contactperson_email_body']=="") echo "closed"; ?>">
+						<div id="div_event_contactperson_email_body" class="postbox <?php if ($event['event_contactperson_email_body']=="") echo "closed"; ?>">
                                                         <div class="handlediv" title="Click to toggle">
 								<br />
                                                         </div>
@@ -1503,7 +1503,7 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<div id="event_respondent_email_body" class="postbox <?php if ($event['event_respondent_email_body']=="") echo "closed"; ?>">
+						<div id="div_event_respondent_email_body" class="postbox <?php if ($event['event_respondent_email_body']=="") echo "closed"; ?>">
                                                         <div class="handlediv" title="Click to toggle">
 								<br />
                                                         </div>
@@ -1520,7 +1520,7 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<div id="location_name" class="stuffbox">
+						<div id="div_location_name" class="stuffbox">
 							<h3>
 								<?php _e ( 'Location', 'dbem' ); ?>
 							</h3>
@@ -1612,7 +1612,7 @@ function dbem_event_form($event, $title, $element) {
 								</table>
 							</div>
 						</div>
-						<div id="event_notes" class="postbox">
+						<div id="div_event_notes" class="postbox">
 							<h3>
 								<?php _e ( 'Details', 'dbem' ); ?>
 							</h3>
@@ -1627,7 +1627,7 @@ function dbem_event_form($event, $title, $element) {
 							</div>
 						</div>
 						<?php if(get_option('dbem_attributes_enabled')) : ?>
-						<div id="event_attributes" class="postbox">
+						<div id="div_event_attributes" class="postbox">
 							<h3>
 								<?php _e ( 'Attributes', 'dbem' ); ?>
 							</h3>
