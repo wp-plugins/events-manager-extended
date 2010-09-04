@@ -653,8 +653,8 @@ function dbem_locations_autocomplete() {
 		jQuery(document).ready(function($) {
 			var gmap_enabled = <?php echo get_option('dbem_gmap_is_active'); ?>; 
 		    
-		   <?php if(!$use_select_for_locations=1) :?>
-			$("input#location-name").autocomplete("<?php echo DBEM_PLUGIN_URL; ?>locations-search.php", {
+		   <?php if(!$use_select_for_locations) :?>
+			$("input#location_name").autocomplete("<?php echo DBEM_PLUGIN_URL; ?>locations-search.php", {
 				width: 260,
 				selectFirst: false,
 				formatItem: function(row) {
@@ -667,14 +667,14 @@ function dbem_locations_autocomplete() {
 				} 
 
 			});
-			$('input#location-name').result(function(event,data,formatted) {       
+			$('input#location_name').result(function(event,data,formatted) {       
 				item = eval("(" + data + ")"); 
-				$('input#location-address').val(item.address);
-				$('input#location-town').val(item.town);
+				$('input#location_address').val(item.address);
+				$('input#location_town').val(item.town);
 				if(gmap_enabled) {   
-					eventLocation = $("input#location-name").val(); 
-					eventTown = $("input#location-town").val(); 
-					eventAddress = $("input#location-address").val();
+					eventLocation = $("input#location_name").val(); 
+					eventTown = $("input#location_town").val(); 
+					eventAddress = $("input#location_address").val();
 					loadMap(eventLocation, eventTown, eventAddress)
 				} 
 			});  
