@@ -2,7 +2,7 @@
 require_once('../../../wp-load.php');
 if(isset($_GET['id']) && $_GET['id'] != "") {
 	$location = dbem_get_location($_GET['id']);
-	echo '{"id":"'.$location['location_id'].'" , "name"  : "'.$location['location_name'].'","town" : "'.$location['location_town'].'","address" : "'.$location['location_address'].'" }';
+	echo '{"id":"'.$location['location_id'].'" , "name"  : "'.dbem_sanitize_html($location['location_name']).'","town" : "'.dbem_sanitize_html($location['location_town']).'","address" : "'.dbem_sanitize_html($location['location_address']).'" }';
 	
 } else {
 
