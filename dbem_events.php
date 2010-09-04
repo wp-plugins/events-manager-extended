@@ -2028,16 +2028,24 @@ function dbem_admin_map_script() {
 	    		}
    
 			$j_dbem_admin(document).ready(function() {
-	  			<?php if(get_option('dbem_use_select_for_locations') || function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) : ?>
+	  			<?php 
+				// if we're creating a new event, or editing an event *AND*
+				// the use_select_for_locations options is on or qtranslare is installed
+				// then we do the select thing
+				// We check on the new/edit event because this javascript is also executed for editing locations, and then we don't care
+				// about the use_select_for_locations parameter
+				if (
+					((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) && 
+		      			(get_option('dbem_use_select_for_locations') || function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage'))) { ?>
 				eventLocation = $j_dbem_admin("input[name='location-select-name']").val(); 
 			  	eventTown = $j_dbem_admin("input[name='location-select-town']").val();  
 				eventAddress = $j_dbem_admin("input[name='location-select-address']").val(); 
 	
-   				<?php else: ?>
+   				<?php } else { ?>
 				eventLocation = $j_dbem_admin("input[name='translated_location_name']").val(); 
 			  	eventTown = $j_dbem_admin("input#location_town").val(); 
 				eventAddress = $j_dbem_admin("input#location_address").val();
-		        	<?php endif; ?>
+		        	<?php } ?>
 				
 				loadMap(eventLocation, eventTown, eventAddress);
 			

@@ -137,6 +137,12 @@ function dbem_locations_edit_layout($location, $message = "") {
 				$gmap_is_active = get_option('dbem_gmap_is_active');
                			if ($gmap_is_active) :
 			 ?>	
+			<div><?php 
+				if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
+					_e("Because qtranslate is active, the title of the location will not update automatically in the balloon, so don't panic there.");
+				}
+				?>
+			</div>
 		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found') ?></p></div>
 	 		<div id="event-map" style="width: 450px; height: 300px; background: green; display: hide; margin-right:8px"></div>
 	 		<br style="clear:both;" />   
