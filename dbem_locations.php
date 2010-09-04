@@ -246,6 +246,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								<div id="titlediv" class="form-field form-required">
 								  <label for="location_name"><?php _e('Location name', 'dbem') ?></label>
 						 		  <input name="location_name" id="title" type="text" value="<?php echo htmlspecialchars($new_location['location_name']); ?>" size="40" />
+			  					  <input type="hidden" name="translated_location_name" value="<?php echo dbem_sanitize_html($location['location_name']); ?>" />
 								  <p><?php _e('The name of the location', 'dbem') ?>.</p>
 								</div>
                
