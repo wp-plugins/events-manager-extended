@@ -501,15 +501,21 @@ function dbem_global_map($atts) {
 			'width' => 450,
 			'height' => 300
 		), $atts));                                  
-	$events_page = dbem_get_events_page(true, false);
+	$events_page_link = dbem_get_events_page(true, false);
+	if (stristr($events_page_link, "?"))
+		$joiner = "&";
+	else
+		$joiner = "?";
+
 	$result = "";
 	$result .= "<div id='dbem_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
 	$result .= "<script type='text/javascript'>
 	<!--// 
 	  eventful = $eventful;
 	  scope = '$scope';
-	  events_page = '$events_page';
-	  location_infos = '$location_infos'
+	  events_page_link = '$events_page_link';
+	  location_infos = '$location_infos';
+	  joiner = '$joiner'
 	//-->
 	</script>";
 	//$result .= "<script src='".DBEM_PLUGIN_URL."dbem_global_map.js' type='text/javascript'></script>";
