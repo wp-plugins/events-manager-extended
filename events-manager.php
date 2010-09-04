@@ -105,8 +105,11 @@ $localised_date_formats = array("am" => "dd.mm.yy","ar" => "dd/mm/yy", "bg" => "
 $required_fields = array('event_name'); 
 $location_required_fields = array("location_name" => __('The location name', 'dbem'), "location_address" => __('The location address', 'dbem'), "location_town" => __('The location town', 'dbem'));
 
-$thisDir = dirname( plugin_basename( __FILE__ ) );
-load_plugin_textdomain('dbem', false, $thisDir.'/langs'); 
+add_action('init', 'dbem_load_textdomain');
+function dbem_load_textdomain() {
+	$thisDir = dirname( plugin_basename( __FILE__ ) );
+	load_plugin_textdomain('dbem', false, $thisDir.'/langs'); 
+}
 
 // To enable activation through the activate function
 register_activation_hook(__FILE__,'dbem_install');
