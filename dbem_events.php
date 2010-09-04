@@ -1533,21 +1533,26 @@ function dbem_event_form($event, $title, $element) {
 										<th><?php _e('Location','dbem') ?></th>
 										<td> 
 											<select name="location-select-id" id='location-select-id' size="1">  
-												<?php foreach($locations as $location) :    
-												$selected = "";  
+												<?php 
+												$selected_location=$locations[0];
+												foreach($locations as $location) :    
+												$count++;
+												$selected = "";
 												if(isset($event['location_id']))  { 
 													$location_id =  $event['location_id'];  
-													if ($location_id == $location['location_id']) 
+													if ($location_id == $location['location_id']) {
+														$selected_location=$location;
 														$selected = "selected='selected' ";
+													}
 												}
 											   
 												?>          
 											    <option value="<?php echo $location['location_id'] ?>" <?php echo $selected ?>><?php echo dbem_sanitize_html($location['location_name']) ?></option>
 												<?php endforeach; ?>
 											</select>        
-											<input type='hidden' name='location-select-name' value='<?php echo dbem_sanitize_html($event['location_name'])?>'/>
-											<input type='hidden' name='location-select-town' value='<?php echo dbem_sanitize_html($event['location_town'])?>'/>
-											<input type='hidden' name='location-select-address' value='<?php echo dbem_sanitize_html($event['location_address'])?>'/>  		
+											<input type='hidden' name='location-select-name' value='<?php echo dbem_sanitize_html($selected_location['location_name'])?>'/>
+											<input type='hidden' name='location-select-town' value='<?php echo dbem_sanitize_html($selected_location['location_town'])?>'/>
+											<input type='hidden' name='location-select-address' value='<?php echo dbem_sanitize_html($selected_location['location_address'])?>'/>  		
 										</td>
 									<?php } else { ?>
 										<th><?php _e ( 'Name','dbem' )?>
@@ -2023,7 +2028,7 @@ function dbem_admin_map_script() {
 	    		}
    
 			$j_dbem_admin(document).ready(function() {
-	  			<?php if(get_option('dbem_use_select_for_locations')) : ?>
+	  			<?php if(get_option('dbem_use_select_for_locations') || function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) : ?>
 				eventLocation = $j_dbem_admin("input[name='location-select-name']").val(); 
 			  	eventTown = $j_dbem_admin("input[name='location-select-town']").val();  
 				eventAddress = $j_dbem_admin("input[name='location-select-address']").val(); 
