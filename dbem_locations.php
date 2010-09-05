@@ -1,7 +1,6 @@
 <?php  
 $feedback_message = "";
  
-
 add_action('init', 'dbem_intercept_locations_actions');
 function dbem_intercept_locations_actions() {
 	if(isset($_GET['page']) && $_GET['page'] == "events-manager-locations" &&

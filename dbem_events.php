@@ -1447,9 +1447,9 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'Coordinates', 'dbem' ); ?>
 							</h3>
 							<div class="inside">
-								<input id='location-latitude' name='location_latitude' type='text' value='<?php echo $event ['location_latitude']; ?>' size='15' />
+								<input id='location_latitude' name='location_latitude' type='text' value='<?php echo $event ['location_latitude']; ?>' size='15' />
 								-
-								<input id='location-longitude' name='location_longitude' type='text' value='<?php echo $event ['location_longitude']; ?>' size='15' />
+								<input id='location_longitude' name='location_longitude' type='text' value='<?php echo $event ['location_longitude']; ?>' size='15' />
 							</div>
 						</div>
 						<div id="div_event_page_title_format" class="postbox <?php if ($event['event_page_title_format']=="") echo "closed"; ?>">
@@ -2016,8 +2016,8 @@ function dbem_admin_map_script() {
 							content: '<div class=\"dbem-location-balloon\"><strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p></div>',
 						});
 						infowindow.open(map,marker);
-						$j_dbem_admin('input#location-latitude').val(results[0].geometry.location.lat());
-						$j_dbem_admin('input#location-longitude').val(results[0].geometry.location.lng());   
+						$j_dbem_admin('input#location_latitude').val(results[0].geometry.location.lat());
+						$j_dbem_admin('input#location_longitude').val(results[0].geometry.location.lng());   
 						$j_dbem_admin("#event-map").show();
 						$j_dbem_admin('#map-not-found').hide();
 					} else {
