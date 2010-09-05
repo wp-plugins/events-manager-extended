@@ -558,7 +558,6 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 		if (preg_match('/#_(NAME|ADDRESS|TOWN|DESCRIPTION)/', $result)) {
 			$field = "location_".ltrim(strtolower($result), "#_");
 		 	$field_value = $location[$field];      
-			$field_value = dbem_sanitize_html($field_value);
 		
 			if ($field == "location_description") {
 				if ($target == "html")
@@ -569,12 +568,13 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 				  else
 				 	$field_value = apply_filters('dbem_notes_rss', $field_value);
 		  	} else {
+				// description is a tinymce field, so no sanitizing needed, but the other fields do
+				$field_value = dbem_sanitize_html($field_value);
 				if ($target == "html")    
 					$field_value = apply_filters('dbem_general', $field_value); 
 				else 
 					$field_value = apply_filters('dbem_general_rss', $field_value); 
 			}
-			//$location_string = str_replace($result, $field_value , $location_string ); 
 			$location_string = str_replace($result, $field_value , $location_string ); 
 	 	}
 	  
