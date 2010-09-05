@@ -156,7 +156,7 @@ msgstr "Gebruik keuzelijst voor Locaties?"
 
 #: dbem_events.php:333
 msgid "Select yes to select location from a drop-down menu; location selection will be faster, but you will lose the ability to insert locations with events"
-msgstr ""
+msgstr "Selecteer ja om de locatie via een drop-down menu te kiezen; de locatie selectie zal sneller zijn, maar u zal de mogelijkheid verliezen om locaties toe te voegen bij evenementen"
 
 #: dbem_events.php:334
 msgid "Use recurrence?"
@@ -164,8 +164,8 @@ msgstr "Terugkeerpatroon gebruiken?"
 
 #: dbem_events.php:334
 #: dbem_events.php:335
-msgid "Select yes to enable the recurrence features feature"
-msgstr ""
+msgid "Select yes to enable the possiblity to create recurrent events."
+msgstr "Selecteer ja voor de mogelijkheid te hebben om terugkerende evenementen te maken."
 
 #: dbem_events.php:335
 msgid "Use RSVP?"
@@ -176,21 +176,21 @@ msgid "Use categories?"
 msgstr "Evenementen Categorieën"
 
 #: dbem_events.php:336
-msgid "Select yes to enable the category features"
-msgstr ""
+msgid "Select yes to enable the category feature."
+msgstr "Selecteer ja voor de mogelijkheid om categorieën te gebruiken."
 
 #: dbem_events.php:337
 msgid "Use attributes?"
-msgstr "Gebruik Attributes?"
+msgstr "Attributen gebruiken?"
 
 #: dbem_events.php:337
-msgid "Select yes to enable the attributes feature"
-msgstr ""
+msgid "Select yes to enable the attributes feature."
+msgstr "Selecteer ja voor de mogelijkheid om attributen te gebruiken."
 
 #: dbem_events.php:341
 #: dbem_events.php:345
 msgid "Events page"
-msgstr "Evenementen Pagina"
+msgstr "Evenementen pagina"
 
 #: dbem_events.php:345
 msgid "This option allows you to select which page to use as an events page"
@@ -230,11 +230,11 @@ msgstr "Standaard opmaak evenementenlijst"
 
 #: dbem_events.php:356
 msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM starttime/endtime notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event."
-msgstr ""
+msgstr "Het formaat van een event in een lijst.<br/>Gebruik één of meer van de volgende placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Gebruik <code>#_EXCERPT</code> om <code>#_NOTES</code> te tonen tot u de markeercode &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; plaatst.<br/> Gebruik <code>#_LINKEDNAME</code> voor de naam van het evenement met een link naar de pagina van het destreffende evenement.<br/> Gebruik <code>#_EVENTPAGEURL</code> om de URL van het evenement te printen en zo eigen links te maken.<br/> Gebruik <code>#_LOCATIONPAGEURL</code> om de URL van de locatie te printen en zo eigen links te maken.<br/>Gebruik <code>#_EDITEVENTLINK</code> om een link toe te voegen naar de edit-pagina voor dit event, dit is enkel zichtbaar als de gebruiker is aangemeld.<br/>Om datum en tijd waarden in te voegen, gebruik <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a> met een <code>#</code> symbool ervoor, bv. <code>#m</code>, <code>#M</code>, <code>#j</code>, enz.<br/> Voor de eindtijd, zet <code>#@</code> voor het character, bv. <code>#@h</code>, <code>#@i</code>, etc.<br/> U kan ook een datum formaat maken zonder <code>#</code> ervoor te zetten, door het te omsingelen met #_{} of #@_{} (bv. <code>#_{d/m/Y}</code>). Als er geen einddatum is, zal de waarde niet getoond worden.<br/>Gebruik <code>#_12HSTARTTIME</code> en <code>#_12HENDTIME</code> voor AM/PM starttijd/eindtijd notatie, idem <code>#_24HSTARTTIME</code> en <code>#_24HENDTIME</code>.<br/>U mag ook HTML tags gebruiken, zoals <code>li</code>, <code>br</code> enz.<br/>Voor eigen attributen, gebruik <code>#_ATT{key}{alternative text}</code>, de tweede accolades zijn optioneel en worden enkel gebruikt als het attribuut niet is gedefinieerd of leeg is. De key zal zichtbaar zijn als een optie bij het toevoegen van attributen aan het event."
 
 #: dbem_events.php:357
 msgid "Default event list format footer"
-msgstr "Standaard opmaak van de evenementen lijst voettekst."
+msgstr "Standaard opmaak van de voettekst van de evenementen lijst"
 
 #: dbem_events.php:357
 msgid "This content will appear just below your code for the default event list format. Default is blank"
@@ -321,11 +321,11 @@ msgid "The format of a single location page.<br/>Insert one or more of the follo
 msgstr "Opmaak pagina met een enkele locatie..<br/>Voeg een van de volgende \"placeholders in: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>.<br/> \"Gebruik <code>#_MAP</code>om een kaart van de locatie en <code>#_IMAGE</code>om een afbeelding van de locatie te tonen.<br/> Gebruik <code>#_NEXTEVENTS</code> om een lijst met komende evenementen in te voegen, <code>#_PASTEVENTS</code>voor een lijst met voorbije evenementen, <code>#_ALLEVENTS</code> voor een lijst met alle evenementen die op deze locatie plaastvinden."
 
 #: dbem_events.php:382
-msgid "Default location baloon format"
+msgid "Default location balloon format"
 msgstr "Standaard locatie \"ballon\"-opmaak."
 
 #: dbem_events.php:382
-msgid "The format of of the text appearing in the baloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
+msgid "The format of of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
 msgstr "De opmaak van de tekst die verschijnt in ballon met een beschrijving van de locatie in de kaart.<br/>Voeg een van de volgende placeholders in: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> of <code>#_IMAGE</code>."
 
 #: dbem_events.php:383
@@ -548,11 +548,11 @@ msgstr "Sla wijzigingen op"
 #: dbem_events.php:1002
 #, php-format
 msgid ""
-"<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager</strong>! We hope you like it around here.</p> \r\n"
+"<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> \r\n"
 "\t<p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>\r\n"
 "\t<p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>\r\n"
 "\t<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>"
-msgstr "<p>Hallo, <strong>%s</strong>, welkom bij <strong>Events Manager</strong>!We hopen dat je het hier naar je zin hebt.</p>\t<p>Je kunt nu evenementen invoegen met behulp van  <a href='%s' title='Widgets page'>widgets</a>, <a href='%s' title='Template tags documentation'>template tags</a> or <a href='%s' title='Shortcodes documentation'>shortcodes</a>.</p>\t<p>Heb je al bij de <a href='%s' title='Change settings'>Instellingen</a> gekeken? Daar kun je de manier waarop evenementen en locaties worden weergegeven aanpassen.</p>\t<p>Wat? Genoeg van deze aankondiging?Ik snap het, <a href='%s' title='Don't show this advice again'>klik hier</a> en je ziet dit nooit meer!</p>"
+msgstr "<p>Hallo, <strong>%s</strong>, welkom bij <strong>Events Manager Extended</strong>!We hopen dat je het hier naar je zin hebt.</p>\t<p>Je kunt nu evenementen invoegen met behulp van  <a href='%s' title='Widgets page'>widgets</a>, <a href='%s' title='Template tags documentation'>template tags</a> or <a href='%s' title='Shortcodes documentation'>shortcodes</a>.</p>\t<p>Heb je al bij de <a href='%s' title='Change settings'>Instellingen</a> gekeken? Daar kun je de manier waarop evenementen en locaties worden weergegeven aanpassen.</p>\t<p>Wat? Genoeg van deze aankondiging?Ik snap het, <a href='%s' title='Don't show this advice again'>klik hier</a> en je ziet dit nooit meer!</p>"
 
 #: dbem_events.php:1037
 msgid "New Event ..."
@@ -740,7 +740,7 @@ msgstr "maanden"
 
 #: dbem_events.php:1327
 msgid "If you leave this empty, the event start date will be used as a reference."
-msgstr ""
+msgstr "Als dut leeg laat zal de startdatum van het evenement gebruikt worden als referentie."
 
 #: dbem_events.php:1337
 msgid "Day of month"
@@ -748,7 +748,7 @@ msgstr "Dag van de maand"
 
 #: dbem_events.php:1339
 msgid "If you use \"Start day\" as day of the month, the month day of the event start date will be used as a reference."
-msgstr ""
+msgstr "Als u \"Start dag\" gebruikt als dag van de maana,d zal de maand-dag van het evenement gebruikt worden als referentie. "
 
 #: dbem_events.php:1343
 msgid "Check if your event happens more than once according to a regular pattern"
@@ -880,15 +880,15 @@ msgstr "Kaart niet gevonden"
 
 #: dbem_events.php:1618
 msgid "The name of the location where the event takes place. You can use the name of a venue, a square, etc"
-msgstr "De naam van de locatie waar het evenement plaatsvindt. U kunt gebruik maken van de naam van een locatie, een vierkant, enz"
+msgstr "De naam van de locatie waar het evenement plaatsvindt. U kunt gebruik maken van de naam van een locatie, een plein, enz"
 
 #: dbem_events.php:1620
 msgid "If you leave this empty, the map will NOT be shown for this event"
-msgstr "Als u dit blanco laat, wordt de kaart voor dit evenement niet getoond"
+msgstr "Als u dit blanco laat, wordt de kaart voor dit evenement NIET getoond"
 
 #: dbem_events.php:1626
 msgid "Select a location for your event"
-msgstr "Seletceer een locatie voor het evenement"
+msgstr "Selecteer een locatie voor het evenement"
 
 #: dbem_events.php:1632
 msgid "Address:"
@@ -900,7 +900,7 @@ msgstr "Het adres van de locatie waar het evenement plaatsvindt. Voorbeeld: Piet
 
 #: dbem_events.php:1644
 msgid "Town:"
-msgstr "Plaats:"
+msgstr "Stad:"
 
 #: dbem_events.php:1649
 msgid "The town where the location is located. If you're using the Google Map integration and want to avoid geotagging ambiguities include the country in the town field. Example: Verona, Italy."
@@ -998,7 +998,7 @@ msgstr "Het adres van de locatie"
 #: dbem_locations.php:119
 #: dbem_locations.php:276
 msgid "Location town"
-msgstr "Plaats van de locatie"
+msgstr "Stad van de locatie"
 
 #: dbem_locations.php:121
 msgid "The town where the location is located"
@@ -1059,7 +1059,7 @@ msgstr "Selecteer een afbeelding om te uploaden"
 
 #: dbem_locations.php:412
 msgid " is missing!"
-msgstr "ontbreekt!"
+msgstr " ontbreekt!"
 
 #: dbem_locations.php:420
 msgid "The image file is too big! Maximum size:"
@@ -1182,7 +1182,7 @@ msgstr "de laatste %s van de maand"
 #: dbem_recurrence.php:259
 #, php-format
 msgid "From %1$s to %2$s"
-msgstr "Van %1$s totl %2$s"
+msgstr "Van %1$s tot %2$s"
 
 #: dbem_recurrence.php:262
 msgid "everyday"
