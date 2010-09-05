@@ -339,13 +339,14 @@ function dbem_get_locations($eventful = false, $scope="all") {
 	if ($scope == "past")
 		$condition = "AND $events_table.event_start_date < '$today'";
 
+	// for the query: we don't do "SELECT *" because the data returned from this function is also used in the function dbem_global_map_json()
+	// and some fields from the events table contain carriage returns, which can't be passed along
+	// The function dbem_global_map_json tries to remove these, but the data is not needed and better be safe than sorry
 	if ($eventful == 'true') {
-		$sql = "SELECT * from $locations_table JOIN $events_table ON $locations_table.location_id = $events_table.location_id WHERE $locations_table.location_name != '' $condition";
+		$sql = "SELECT $locations_table.* from $locations_table JOIN $events_table ON $locations_table.location_id = $events_table.location_id WHERE $locations_table.location_name != '' $condition";
 	} else {
-		$sql = "SELECT location_id, location_address, location_name, location_town,location_latitude, location_longitude 
-			FROM $locations_table WHERE location_name != '' ORDER BY location_name";   
+		$sql = "SELECT * FROM $locations_table WHERE location_name != '' ORDER BY location_name";   
 	}
-
 	$locations = $wpdb->get_results($sql, ARRAY_A); 
 	return $locations;  
 }
