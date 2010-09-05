@@ -1566,7 +1566,7 @@ function dbem_event_form($event, $title, $element) {
 										<td rowspan='6'><div id='map-not-found'
 					style='width: 400px; font-size: 140%; text-align: center; margin-top: 100px; display: hide'>
 												<p>
-													<?php _e ( 'Map not found' ); ?>
+													<?php _e ( 'Map not found','dbem' ); ?>
 												</p>
 											</div>
 											<div id='event-map'

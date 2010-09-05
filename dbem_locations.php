@@ -142,7 +142,7 @@ function dbem_locations_edit_layout($location, $message = "") {
 				}
 				?>
 			</div>
-		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found') ?></p></div>
+		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found','dbem') ?></p></div>
 	 		<div id="event-map" style="width: 450px; height: 300px; background: green; display: hide; margin-right:8px"></div>
 	 		<br style="clear:both;" />   
 			<?php endif; ?>
@@ -285,7 +285,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 									$gmap_is_active = get_option('dbem_gmap_is_active');
                  					if ($gmap_is_active) :
 								 ?>	
-						 		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found') ?></p></div>
+						 		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found','dbem') ?></p></div>
 							 		<div id="event-map" style="width: 450px; height: 300px; background: green; display: hide; margin-right:8px"></div>
 							 		<br style="clear:both;" />   
 								 <?php endif; ?>

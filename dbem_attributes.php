@@ -27,18 +27,18 @@ function dbem_attributes_form($event) {
 	}
 	?>
 	<div class="wrap">
-		<h2>Attributes</h2>
-		<p>Add attributes here</p>
+		<h2><?php _e('Attributes','dbem'); ?></h2>
+		<p><?php _e('Add attributes here','dbem'); ?></p>
 		<table class="form-table">
 			<thead>
 				<tr valign="top">
-					<td><strong>Attribute Name</strong></td>
-					<td><strong>Value</strong></td>
+					<td><strong><?php _e('Attribute Name','dbem'); ?></strong></td>
+					<td><strong><?php _e('Value','dbem'); ?></strong></td>
 				</tr>
 			</thead>    
 			<tfoot>
 				<tr valign="top">
-					<td colspan="3"><a href="#" id="mtm_add_tag">Add new tag</a></td>
+					<td colspan="3"><a href="#" id="mtm_add_tag"><?php _e('Add new tag','dbem'); ?></a></td>
 				</tr>
 			</tfoot>
 			<tbody id="mtm_body">
@@ -63,7 +63,7 @@ function dbem_attributes_form($event) {
 									}
 									?>
 								</select>
-								<a href="#" rel="<?php echo $count ?>">Remove</a>
+								<a href="#" rel="<?php echo $count ?>"><?php _e('Remove','dbem'); ?></a>
 							</td>
 							<td>
 								<input type="text" size="40" name="mtm_<?php echo $count ?>_name" value="<?php echo $value ?>" />
@@ -84,7 +84,7 @@ function dbem_attributes_form($event) {
 									}
 									?>
 								</select>
-								<a href="#" rel="<?php echo $count ?>">Remove</a>
+								<a href="#" rel="<?php echo $count ?>"><?php _e('Remove','dbem'); ?></a>
 							</td>
 							<td>
 								<input type="text" size="40" name="mtm_<?php echo $count ?>_name" value="" />
