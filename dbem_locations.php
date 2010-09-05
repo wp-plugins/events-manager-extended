@@ -537,7 +537,6 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 		if (preg_match('/#_MAP/', $result)) {
 		 	$map_div = dbem_single_location_map($location);
 		 	$location_string = str_replace($result, $map_div , $location_string ); 
-		 
 		}
 		if (preg_match('/#_GOOGLEDIRECTIONS/', $result)) {
 			$google_directions = "Get Directions";
@@ -586,20 +585,19 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 				$location_image = "";
 			$location_string = str_replace($result, $location_image , $location_string ); 
 		}
-	 if (preg_match('/#_(LOCATIONPAGEURL)/', $result)) {
-	      $events_page_link = dbem_get_events_page(true, false);
-		  if (stristr($events_page_link, "?"))
-		  	$joiner = "&";
-		  else
-		  	$joiner = "?";
-		  $venue_page_link = dbem_get_events_page(true, false).$joiner."location_id=".$location['location_id'];
-		  $location_string = str_replace($result, $venue_page_link , $location_string ); 
-	 }
-			
+		if (preg_match('/#_(LOCATIONPAGEURL)/', $result)) {
+			$events_page_link = dbem_get_events_page(true, false);
+			if (stristr($events_page_link, "?"))
+				$joiner = "&";
+			else
+				$joiner = "?";
+			$venue_page_link = $events_page_link.$joiner."location_id=".$location['location_id'];
+			$location_string = str_replace($result, $venue_page_link , $location_string ); 
+		}
 	}
 	return $location_string;	
-	
 }
+
 function dbem_single_location_map($location) {
 	$gmap_is_active = get_option('dbem_gmap_is_active'); 
 	$map_text = addslashes(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
@@ -619,7 +617,7 @@ function dbem_single_location_map($location) {
   			<!--// 
   		$latitude_string = parseFloat('".$location['location_latitude']."');
   		$longitude_string = parseFloat('".$location['location_longitude']."');
-  		$map_text_string = '<div class=\"dbem-location-balloon\">$map_text</div>';
+  		$map_text_string = '$map_text';
 		//-->
 		</script>";
 		// $map_div .= "<script src='".DBEM_PLUGIN_URL."dbem_single_location_map.js' type='text/javascript'></script>";
