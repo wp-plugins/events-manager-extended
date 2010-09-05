@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/events-manager-extended\n"
-"POT-Creation-Date: 2010-09-04 17:20+0000\n"
+"POT-Creation-Date: 2010-09-05 21:22+0000\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,8 +28,32 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+#: dbem_attributes.php:30 dbem_events.php:1632
+msgid "Attributes"
+msgstr ""
+
+#: dbem_attributes.php:31
+msgid "Add attributes here"
+msgstr ""
+
+#: dbem_attributes.php:35
+msgid "Attribute Name"
+msgstr ""
+
+#: dbem_attributes.php:36
+msgid "Value"
+msgstr ""
+
+#: dbem_attributes.php:41
+msgid "Add new tag"
+msgstr ""
+
 #: dbem_attributes.php:55
 msgid "Not defined in templates"
+msgstr ""
+
+#: dbem_attributes.php:66 dbem_attributes.php:87
+msgid "Remove"
 msgstr ""
 
 #: dbem_attributes.php:98
@@ -49,7 +73,7 @@ msgstr ""
 
 #: dbem_categories.php:106 dbem_categories.php:113 dbem_events.php:1043
 #: dbem_events.php:1398 dbem_events.php:1558 dbem_events.php:1915
-#: dbem_locations.php:204 dbem_locations.php:212 dbem_people.php:83
+#: dbem_locations.php:203 dbem_locations.php:211 dbem_people.php:84
 #: dbem_rsvp.php:32 dbem_rsvp.php:74 dbem_rsvp.php:510 dbem_rsvp.php:641
 msgid "Name"
 msgstr ""
@@ -670,8 +694,8 @@ msgstr ""
 #: dbem_events.php:955
 #, php-format
 msgid ""
-"<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager</strong>! We "
-"hope you like it around here.</p> \r\n"
+"<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</"
+"strong>! We hope you like it around here.</p> \r\n"
 "\t<p>Now it's time to insert events lists through  <a href=\"%s\" title="
 "\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags "
 "documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes "
@@ -1003,7 +1027,7 @@ msgstr ""
 msgid "The format of the email which will be sent to the respondent."
 msgstr ""
 
-#: dbem_events.php:1569 dbem_locations.php:146 dbem_locations.php:289
+#: dbem_events.php:1569 dbem_locations.php:145 dbem_locations.php:288
 msgid "Map not found"
 msgstr ""
 
@@ -1050,10 +1074,6 @@ msgstr ""
 msgid "Details about the event"
 msgstr ""
 
-#: dbem_events.php:1632
-msgid "Attributes"
-msgstr ""
-
 #: dbem_events.php:1641
 msgid "Submit Event"
 msgstr ""
@@ -1092,81 +1112,81 @@ msgid ""
 "s'>Settings</a>. "
 msgstr ""
 
-#: dbem_locations.php:45
+#: dbem_locations.php:44
 msgid "The location has been updated."
 msgstr ""
 
-#: dbem_locations.php:91
+#: dbem_locations.php:90
 msgid "Edit location"
 msgstr ""
 
-#: dbem_locations.php:106 dbem_locations.php:253
+#: dbem_locations.php:105 dbem_locations.php:252
 msgid "Location name"
 msgstr ""
 
-#: dbem_locations.php:109 dbem_locations.php:256
+#: dbem_locations.php:108 dbem_locations.php:255
 msgid "The name of the location"
 msgstr ""
 
-#: dbem_locations.php:112 dbem_locations.php:260
+#: dbem_locations.php:111 dbem_locations.php:259
 msgid "Location address"
 msgstr ""
 
-#: dbem_locations.php:114 dbem_locations.php:262
+#: dbem_locations.php:113 dbem_locations.php:261
 msgid "The address of the location"
 msgstr ""
 
-#: dbem_locations.php:118 dbem_locations.php:266
+#: dbem_locations.php:117 dbem_locations.php:265
 msgid "Location town"
 msgstr ""
 
-#: dbem_locations.php:120 dbem_locations.php:268
+#: dbem_locations.php:119 dbem_locations.php:267
 msgid "The town of the location"
 msgstr ""
 
-#: dbem_locations.php:132 dbem_locations.php:281
+#: dbem_locations.php:131 dbem_locations.php:280
 msgid "Location image"
 msgstr ""
 
-#: dbem_locations.php:134 dbem_locations.php:283
+#: dbem_locations.php:133 dbem_locations.php:282
 msgid "Select an image to upload"
 msgstr ""
 
-#: dbem_locations.php:142
+#: dbem_locations.php:141
 msgid ""
 "Because qtranslate is active, the title of the location will not update "
 "automatically in the balloon, so don't panic there."
 msgstr ""
 
-#: dbem_locations.php:151 dbem_locations.php:294
+#: dbem_locations.php:150 dbem_locations.php:293
 msgid "Location description"
 msgstr ""
 
-#: dbem_locations.php:156 dbem_locations.php:299
+#: dbem_locations.php:155 dbem_locations.php:298
 msgid "A description of the Location. You may include any kind of info here."
 msgstr ""
 
-#: dbem_locations.php:159
+#: dbem_locations.php:158
 msgid "Update location"
 msgstr ""
 
-#: dbem_locations.php:185 events-manager.php:523
+#: dbem_locations.php:184 events-manager.php:523
 msgid "Locations"
 msgstr ""
 
-#: dbem_locations.php:205 dbem_locations.php:213
+#: dbem_locations.php:204 dbem_locations.php:212
 msgid "Address"
 msgstr ""
 
-#: dbem_locations.php:206 dbem_locations.php:214
+#: dbem_locations.php:205 dbem_locations.php:213
 msgid "Town"
 msgstr ""
 
-#: dbem_locations.php:239
+#: dbem_locations.php:238
 msgid "No venues have been inserted yet!"
 msgstr ""
 
-#: dbem_locations.php:249 dbem_locations.php:302
+#: dbem_locations.php:248 dbem_locations.php:301
 msgid "Add location"
 msgstr ""
 
@@ -1194,48 +1214,48 @@ msgstr ""
 msgid "The image could not be loaded"
 msgstr ""
 
-#: dbem_people.php:80
+#: dbem_people.php:81
 msgid "Bookings data"
 msgstr ""
 
-#: dbem_people.php:84
+#: dbem_people.php:85
 msgid "E-mail"
 msgstr ""
 
-#: dbem_people.php:85 dbem_people.php:199 dbem_people.php:202 dbem_rsvp.php:34
+#: dbem_people.php:86 dbem_people.php:200 dbem_people.php:203 dbem_rsvp.php:34
 msgid "Phone number"
 msgstr ""
 
-#: dbem_people.php:86 dbem_rsvp.php:35 dbem_rsvp.php:513 dbem_rsvp.php:644
+#: dbem_people.php:87 dbem_rsvp.php:35 dbem_rsvp.php:513 dbem_rsvp.php:644
 msgid "Seats"
 msgstr ""
 
-#: dbem_people.php:87 dbem_rsvp.php:40
+#: dbem_people.php:88 dbem_rsvp.php:40
 msgid "Comment"
 msgstr ""
 
-#: dbem_people.php:92 dbem_rsvp.php:318
+#: dbem_people.php:93 dbem_rsvp.php:318
 msgid "(pending)"
 msgstr ""
 
-#: dbem_people.php:105
+#: dbem_people.php:106
 msgid "Booked"
 msgstr ""
 
-#: dbem_people.php:110
+#: dbem_people.php:111
 msgid "Available"
 msgstr ""
 
-#: dbem_people.php:125
+#: dbem_people.php:126
 msgid "No people have responded to your events yet!"
 msgstr ""
 
-#: dbem_people.php:127
+#: dbem_people.php:128
 msgid ""
 "This table collects the data about the people who responded to your events"
 msgstr ""
 
-#: dbem_people.php:204
+#: dbem_people.php:205
 msgid ""
 "The phone number used by Events Manager when the user is indicated as the "
 "contact person for an event."
