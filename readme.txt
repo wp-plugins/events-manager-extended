@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.1.1
+Stable tag: 3.1.2
 
 Manage events and display them in your blog. Includes recurring events, location management, calendar, Google map integration, RSVP. 
              
@@ -191,3 +191,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: language setting now happens on init action, better for qtranslate and all
 * Bugfix: automplete is working again for locations when creating an event
 * Bugfix: sort by day and time for the full calendar
+* Improvement: English, French languages updates (thanks to Sebastian), Dutch updated by me
