@@ -78,12 +78,15 @@ function loadGMap() {
 						    + joiner + "location_id=" + item.location_id + "'>Details<a></div>";
 				customIcon = "http://www.google.com/mapfiles/marker" + letter + ".png";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
+				var balloon_id = "dbem-location-balloon-id";
+				var balloon_content = "<div id=\""+balloon_id+"\" class=\"dbem-location-balloon\">"+location_info+"</div>";
+				infowindow.balloon_id = balloon_id;
 				var marker = new google.maps.Marker({
 					position: point,
 					map: map,
 					icon: customIcon,
 					infowindow: infowindow,
-					infowindowcontent: location_info
+					infowindowcontent: balloon_content
 				});
 				//var pixoff = new google.maps.Size(0,-32);
 				//infowindow = new google.maps.InfoWindow();
@@ -93,7 +96,7 @@ function loadGMap() {
 				//});
 				$j_dbem_locations('ol#dbem_locations_list').append(li_element);
 				$j_dbem_locations('li#location-'+item.location_id+' a').click(function() {
-					infowindow.setContent(location_info);
+					infowindow.setContent(balloon_content);
 					infowindow.open(map,marker);
 				});
 				google.maps.event.addListener(marker, "click", function() {
@@ -104,6 +107,12 @@ function loadGMap() {
 					this.infowindow.setContent(this.infowindowcontent);
 					this.infowindow.open(this.map,this);
 				});
+			});
+			// to remove the scrollbars: we unset the overflow
+			// of the parent div of the infowindow
+			google.maps.event.addListener(infowindow, 'domready', function() {
+					document.getElementById(this.balloon_id).parentNode.style.overflow='';
+					document.getElementById(this.balloon_id).parentNode.parentNode.style.overflow='';
 			});
 		});
 	}
@@ -129,8 +138,10 @@ function loadGMap() {
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			}
 			var s_map = new google.maps.Map(divs[i], myOptions);
+			var s_balloon_id= "dbem-location-balloon-"+map_id;
 			var s_infowindow = new google.maps.InfoWindow({
-				content: "<div class=\"dbem-location-balloon\">"+map_text_id+"</div>"
+				content: "<div id=\"" + s_balloon_id +"\" class=\"dbem-location-balloon\">"+map_text_id+"</div>",
+				balloon_id: s_balloon_id
 			});
 			// we add the infowinfow object to the marker object, then we can call it in the 
 			// google.maps.event.addListener and it always has the correct content
@@ -144,6 +155,12 @@ function loadGMap() {
 			google.maps.event.addListener(s_marker, "click", function() {
 				// the content of s_marker is available via "this"
 				this.infowindow.open(this.map,this);
+			});
+			// to remove the scrollbars: we unset the overflow
+			// of the parent div of the infowindow
+			google.maps.event.addListener(s_infowindow, 'domready', function() {
+				document.getElementById(this.balloon_id).parentNode.style.overflow='';
+				document.getElementById(this.balloon_id).parentNode.parentNode.style.overflow='';
 			});
       		}
 	}

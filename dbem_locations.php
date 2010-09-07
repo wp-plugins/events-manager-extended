@@ -607,10 +607,14 @@ function dbem_single_location_map($location) {
 	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
 	if ($gmap_is_active && !empty($location['location_name']) && !empty($location['location_address']) && !empty($location['location_town'])) {
-		$id="dbem-location-map_".$location['location_id'];
-		$latitude_string="latitude_".$location['location_id'];
-		$longitude_string="longitude_".$location['location_id'];
-		$map_text_string="map_text_".$location['location_id'];
+		//$id_base = $location['location_id'];
+		// we can't create a unique <div>-id based on location id, because you can have multiple maps on the sampe page for
+		// different events but they can go to the same location...
+		$id_base = preg_replace("/\./","_",microtime(1));
+		$id="dbem-location-map_".$id_base;
+		$latitude_string="latitude_".$id_base;
+		$longitude_string="longitude_".$id_base;
+		$map_text_string="map_text_".$id_base;
 		#$latitude_string="latitude";
 		#$longitude_string="longitude";
    		//$map_div = "<div id='$id' style=' background: green; width: 400px; height: 300px'></div>" ;

@@ -108,7 +108,6 @@ table#dbem-location-data th {
 .dbem-location-balloon {
 	font-size: 95%;  
 	line-height: 100%;
-	height: 70px;
 }
 /* for google maps to work ok in IE, we need at least 690px as max-width for the images */
 #dbem_global_map img,
