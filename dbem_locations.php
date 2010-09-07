@@ -560,6 +560,9 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 		 	$field_value = $location[$field];      
 		
 			if ($field == "location_description") {
+				// no real sanitizing needed, but possible translation
+				// this is the same as for an event in fact
+				$field_value = dbem_sanitize_html($field_value,0);
 				if ($target == "html")
 					$field_value = apply_filters('dbem_notes', $field_value);
 				else
@@ -568,7 +571,6 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 				  else
 				 	$field_value = apply_filters('dbem_notes_rss', $field_value);
 		  	} else {
-				// description is a tinymce field, so no sanitizing needed, but the other fields do
 				$field_value = dbem_sanitize_html($field_value);
 				if ($target == "html")    
 					$field_value = apply_filters('dbem_general', $field_value); 
