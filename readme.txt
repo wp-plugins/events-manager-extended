@@ -192,3 +192,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: automplete is working again for locations when creating an event
 * Bugfix: sort by day and time for the full calendar
 * Improvement: English, French languages updates (thanks to Sebastian), Dutch updated by me
+
+= 3.1.3 = 
+* Improvement: French, German language updates (thanks to Sebastian), Spanish language updates (thanks to Ricardo)
+* Workaround: hopefully no more google balloon scrollbars
