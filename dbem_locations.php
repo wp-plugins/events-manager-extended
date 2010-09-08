@@ -538,10 +538,10 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 		 	$map_div = dbem_single_location_map($location);
 		 	$location_string = str_replace($result, $map_div , $location_string ); 
 		}
-		if (preg_match('/#_GOOGLEDIRECTIONS/', $result)) {
-			$google_directions = "Get Directions";
-			$location_string = str_replace($result, $google_directions , $location_string );
-		}
+//		if (preg_match('/#_GOOGLEDIRECTIONS/', $result)) {
+//			$google_directions = "Get Directions";
+//			$location_string = str_replace($result, $google_directions , $location_string );
+//		}
 		if (preg_match('/#_PASTEVENTS/', $result)) {
 		 	$list = dbem_events_in_location_list($location, "past");
 		 	$location_string = str_replace($result, $list , $location_string ); 
@@ -598,6 +598,18 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 		}
 	}
 	return $location_string;	
+}
+
+function dbem_add_directions_form($location) {
+	$res = '
+<form action="http://maps.google.com/maps" method="get" target="_blank" style="text-align:left;">
+<label for="saddr">'.__('Your Street Address','dbem').'</label>
+<input type="text" name="saddr" id="saddr" value="" />
+<input type="submit" value="'.__('Get Directions','dbem').'" />
+<input type="hidden" name="daddr" value="'.$location['location_address'].', '.$location['location_town'].'" />
+<input type="hidden" name="hl" value="'.$locale_code.'" />
+</form>';
+	return $res;
 }
 
 function dbem_single_location_map($location) {

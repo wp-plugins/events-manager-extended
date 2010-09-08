@@ -618,7 +618,11 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			$location = dbem_get_location($event['location_id']);
 			$map_div = dbem_single_location_map($location);
 		  	$event_string = str_replace($result, $map_div , $event_string ); 
-		 
+		}
+		if (preg_match('/#_DIRECTIONS/', $result)) {
+			$location = dbem_get_location($event['location_id']);
+			$directions_form = dbem_add_directions_form($location);
+		  	$event_string = str_replace($result, $directions_form , $event_string ); 
 		}
 		if (preg_match('/#_ADDBOOKINGFORM/', $result)) {
 		 	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
