@@ -628,12 +628,11 @@ add_action ( 'admin_print_scripts', 'dbem_admin_css' );
 
 
 // exposed function, for theme  makers
-/* Marcus Begin Edit */
 	//Added a category option to the get events list method and shortcode
-function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '') {
+function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showmonths = 0) {
 	if (strpos ( $limit, "=" )) {
 		// allows the use of arguments without breaking the legacy code
-		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '');
+		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showmonths' => 0);
 		
 		$r = wp_parse_args ( $limit, $defaults );
 		extract ( $r, EXTR_SKIP );
@@ -643,6 +642,7 @@ function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", 
 		$format = $r ['format'];
 		$echo = $r ['echo'];
 		$category = ( preg_match('/^([0-9],?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
+		$showmonths = $r ['showmonths'];
 	}
 	if ($scope == "")
 		$scope = "future";
@@ -655,9 +655,15 @@ function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", 
 	$events = dbem_get_events ( $limit, $scope, $order, '', '', $category );
 	$output = "";
 	if (! empty ( $events )) {
+		$curmonth="";
 		foreach ( $events as $event ) {
+			$themonth = date("F", strtotime($event['event_start_date']));
+			if ($showmonths == 1 && $themonth != $curmonth) {
+				$output .= "<li class='dbem_month'>$themonth</li>";
+			}
 			//  $localised_date = mysql2date("j M Y", $event->event_time);
 			$output .= dbem_replace_placeholders ( $format, $event );
+			$curmonth=$themonth;
 		}
 		//Add headers and footers to output
 		if( $orig_format ){
@@ -677,12 +683,11 @@ function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", 
 }
 
 function dbem_get_events_list_shortcode($atts) {
-	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '' ), $atts ) );
-	$result = dbem_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category" );
+	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showmonths' => 0 ), $atts ) );
+	$result = dbem_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showmonths=$showmonths" );
 	return $result;
 }
 add_shortcode ( 'events_list', 'dbem_get_events_list_shortcode' );
-/* Marcus End Edit*/
 
 function dbem_get_events_page($justurl = 0, $echo = 1, $text = '') {
 	if (strpos ( $justurl, "=" )) {
