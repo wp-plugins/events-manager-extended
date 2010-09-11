@@ -197,4 +197,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: French, German language updates (thanks to Sebastian), Spanish language updates (thanks to Ricardo)
 * Workaround: hopefully no more google balloon scrollbars
 * Feature: #_DIRECTIONS shortcode available, so you can ask for driving directions to an event/location
+* Feature: events can be grouped by month now in the list
 * Feature: new shortcode available: display_single_event
+* Feature: show month or day in events_list if wanted (new parameter for shortcode events_list: showperiod=daily|monthly)
