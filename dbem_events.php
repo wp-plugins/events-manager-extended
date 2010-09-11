@@ -689,6 +689,15 @@ function dbem_get_events_list_shortcode($atts) {
 }
 add_shortcode ( 'events_list', 'dbem_get_events_list_shortcode' );
 
+function dbem_display_single_event_shortcode($atts){
+	extract ( shortcode_atts ( array ('id'=>''), $atts ) );
+	$event = dbem_get_event ( $id );
+	$single_event_format = get_option ( 'dbem_single_event_format' );
+	$page_body = dbem_replace_placeholders ($single_event_format, $event);
+	return $page_body;
+}
+add_shortcode('display_single_event', 'dbem_display_single_event_shortcode');
+
 function dbem_get_events_page($justurl = 0, $echo = 1, $text = '') {
 	if (strpos ( $justurl, "=" )) {
 		// allows the use of arguments without breaking the legacy code
@@ -867,6 +876,7 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 
 function dbem_get_event($event_id) {
 	global $wpdb;
+	$event_id = intval($event_id);
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
 	$sql = "SELECT event_id, 
 			   	event_name, 
