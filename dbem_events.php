@@ -662,7 +662,7 @@ function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", 
 			$theday = date(get_option('date_format'), strtotime($event['event_start_date']));
 			if ($showperiod == "monthly" && $themonth != $curmonth) {
 				$output .= "<li class='dbem_period'>$themonth</li>";
-			} elseif ($showperiod == "daily" && $themonth != $curmonth) {
+			} elseif ($showperiod == "daily" && $theday != $curday) {
 				$output .= "<li class='dbem_period'>$theday</li>";
 			}
 			//  $localised_date = mysql2date("j M Y", $event->event_time);
@@ -689,7 +689,7 @@ function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", 
 
 function dbem_get_events_list_shortcode($atts) {
 	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '' ), $atts ) );
-	$result = dbem_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showmonths" );
+	$result = dbem_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod" );
 	return $result;
 }
 add_shortcode ( 'events_list', 'dbem_get_events_list_shortcode' );
