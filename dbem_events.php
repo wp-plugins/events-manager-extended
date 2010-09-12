@@ -2117,7 +2117,7 @@ function dbem_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 	if ($text == '')
 		$text = "RSS";
 	$rss_title = get_option ( 'dbem_events_page_title' );
-	$url = get_bloginfo ( 'wpurl' ) . "/?dbem_rss=main";
+	$url = site_url ("/?dbem_rss=main");
 	$link = "<a href='$url'>$text</a>";
 	
 	if ($justurl)
@@ -2191,7 +2191,7 @@ Weblog Editor 2.0
 add_action ( 'init', 'dbem_rss' );
 function substitute_rss($data) {
 	if (isset ( $_REQUEST ['event_id'] ))
-		return get_bloginfo ( 'wpurl' ) . "/?dbem_rss=main";
+		return site_url ("/?dbem_rss=main");
 	else
 		return $data;
 }

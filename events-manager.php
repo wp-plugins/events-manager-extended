@@ -173,7 +173,6 @@ function dbem_install() {
 function dbem_create_events_table() {
 	global  $wpdb, $user_level;
 	$version = get_option('dbem_version');
-	require_once(ABSPATH . 'wp-admin/includes/upgrade.php'); 
 	
 	$old_table_name = $wpdb->prefix."events";
 	$table_name = $wpdb->prefix.EVENTS_TBNAME;
@@ -191,8 +190,6 @@ function dbem_create_events_table() {
 		// if ($user_level < 8) { return; }
 	
 		// Creating the events table
-		/* Marcus Begin Edit*/
-		//Added Category FK Field
 		$sql = "CREATE TABLE ".$table_name." (
 			event_id mediumint(9) NOT NULL AUTO_INCREMENT,
 			event_author mediumint(9) DEFAULT NULL,
@@ -216,9 +213,8 @@ function dbem_create_events_table() {
 			registration_requires_approval bool DEFAULT 0,
 			UNIQUE KEY (event_id)
 			);";
-		/* Marcus End Edit */
 		
-		dbDelta($sql);
+		$wpdb->query($sql); 
 		//--------------  DEBUG CODE to insert a few events n the new table
 		// get the current timestamp into an array
 		$timestamp = time();
@@ -301,8 +297,7 @@ function dbem_create_recurrence_table() {
 			registration_requires_approval bool DEFAULT 0,
 			UNIQUE KEY (recurrence_id)
 			);";
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
+		$wpdb->query($sql); 
 	} else {
 		maybe_add_column($table_name, 'event_category_id', "alter table $table_name add event_category_id int(11) default NULL;");    
 		maybe_add_column($table_name, 'event_page_title_format', "alter table $table_name add event_page_title_format text NULL;"); 
@@ -342,8 +337,7 @@ function dbem_create_locations_table() {
 			location_description text DEFAULT NULL,
 			UNIQUE KEY (location_id)
 			);";
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
+		$wpdb->query($sql); 
 		
 		$wpdb->query("INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude)
 					VALUES ('Arts Millenium Building', 'Newcastle Road','Galway', 53.275, -9.06532)");
@@ -373,8 +367,7 @@ function dbem_create_bookings_table() {
 			booking_comment text DEFAULT NULL,
 			UNIQUE KEY  (booking_id)
 			);";
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
+		$wpdb->query($sql); 
 	} else {
 		maybe_add_column($table_name, 'booking_comment', "ALTER TABLE $table_name add booking_comment text DEFAULT NULL;"); 
 		maybe_add_column($table_name, 'booking_approved', "ALTER TABLE $table_name add booking_approved bool DEFAULT 0;"); 
@@ -398,8 +391,7 @@ function dbem_create_people_table() {
 			person_phone tinytext NOT NULL,
 			UNIQUE KEY (person_id)
 			);";
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
+		$wpdb->query($sql); 
 	}
 } 
 
@@ -413,8 +405,7 @@ function dbem_create_categories_table() {
 			category_name tinytext NOT NULL,
 			PRIMARY KEY  (category_id)
 			);";
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
+		$wpdb->query($sql); 
 	}
 }
 

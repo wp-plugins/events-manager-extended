@@ -377,7 +377,7 @@ function dbem_image_url_for_location_id($location_id) {
 	$mime_types = array('gif','jpg','png');foreach($mime_types as $type) { 
 		$file_path = "$file_name.$type";
 		if (file_exists($file_path)) {
-			$result = get_bloginfo('wpurl')."/".IMAGE_UPLOAD_DIR."/location-$location_id.$type";
+			$result = site_url("/".IMAGE_UPLOAD_DIR."/location-$location_id.$type");
   			return $result;
 		}
 	}

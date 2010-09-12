@@ -404,7 +404,7 @@ function dbem_ajaxize_calendar() {
 			parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
 		   	if (parseInt(month_n,10) == 1)
 					year_n = parseInt(year_n,10) -1;
-			$j_dbem_calendar.get("<?php bloginfo('wpurl'); ?>", {ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar}, function(data){
+			$j_dbem_calendar.get("<?php site_url(); ?>", {ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar}, function(data){
 				tableDiv.html(data);
 				initCalendar();
 			});
@@ -418,7 +418,7 @@ function dbem_ajaxize_calendar() {
 			parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
 		   	if (parseInt(month_n,10) == 12)
 					year_n = parseInt(year_n,10) + 1;
-			$j_dbem_calendar.get("<?php bloginfo('wpurl'); ?>", {ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar}, function(data){
+			$j_dbem_calendar.get("<?php site_url(); ?>", {ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar}, function(data){
 				tableDiv.html(data);
 				initCalendar();
 			});
@@ -427,12 +427,12 @@ function dbem_ajaxize_calendar() {
 		// function reloadCalendar(e) {
 		// 	// e.preventDefault();
 		//  	console.log($j_dbem_calendar(this).parents('table'));
-		//     $j_dbem_calendar.get("<?php bloginfo('wpurl'); ?>", {ajax: 'true'}, function(data){
+		//     $j_dbem_calendar.get("<?php site_url(); ?>", {ajax: 'true'}, function(data){
 		// 		tableDiv = table.parent();
 		// 		tableDiv.html(data);
 		//             });
 		// }
-		//                      
+		//
 		
 	</script>
 	
