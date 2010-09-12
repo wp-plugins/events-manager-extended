@@ -22,7 +22,7 @@ function dbem_new_event_page() {
     "event_freq" => '',
     "location_id" => 0,
     "event_contactperson_id" => 0,
-    "event_category_id" => 0,
+    "event_category_ids" => '',
     "event_attributes" => '',
     "event_page_title_format" => '',
     "event_single_event_format" => '',
@@ -163,9 +163,18 @@ function dbem_events_subpanel() {
 		$recurrence ['event_contactperson_email_body'] = $event ['event_contactperson_email_body'];
 		$recurrence ['event_respondent_email_body'] = $event ['event_respondent_email_body'];
 		$recurrence ['recurrence_notes'] = $event ['event_notes'];
-                if(isset ($_POST['event_category_id']) && is_numeric($_POST['event_category_id']) ){
-                        $event ['event_category_id'] = $_POST ['event_category_id'];
-                        $recurrence ['event_category_id'] = $_POST ['event_category_id'];
+                if (isset ($_POST['event_category_ids'])) {
+			// the category id's need to begin and end with a comma
+			// this is needed so we can later search for a specific
+			// cat using LIKE '%,$cat,%'
+			$event ['event_category_ids']=",";
+			$recurrence ['event_category_ids']=",";
+			foreach ($_POST['event_category_ids'] as $cat) {
+				if (is_numeric($cat)) {
+                        		$event ['event_category_ids'] .= "$cat,";
+                        		$recurrence ['event_category_ids'] .="$cat,";
+				}
+			}
                 }
 
 		$validation_result = dbem_validate_event ( $event );
@@ -762,10 +771,7 @@ function dbem_is_multiple_events_page() {
 }
 
 // main function querying the database event table
-/* Marcus Begin Edit */
-	//Added extra method option for category
 function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset = "", $location_id = "", $category = '') {
-/* Marcus End Edit */
 	global $wpdb;
   
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
@@ -811,12 +817,12 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 		
 	if(get_option('dbem_categories_enabled')) {
 	   if ($category != '' && is_numeric($category)){
-		$conditions [] = " event_category_id = $category";
+		$conditions [] = " event_category_ids like '%,$category,%'";
 	   }elseif( preg_match('/^([0-9],?)+$/', $category) ){
 		$category = explode(',', $category);
 		$category_conditions = array();
 		foreach($category as $cat){
-			$category_conditions[] = " event_category_id = $cat";
+			$category_conditions[] = " event_category_ids like '%,$cat,%'";
 		}
 		$conditions [] = "(".implode(' OR', $category_conditions).")";
 	   }
@@ -846,7 +852,7 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 				recurrence_id, 
 				location_id, 
 				event_contactperson_id, 
-				event_category_id,
+				event_category_ids,
 				event_attributes
 				FROM $events_table   
 				$where
@@ -912,7 +918,7 @@ function dbem_get_event($event_id) {
 				recurrence_id, 
 				location_id,
 				event_contactperson_id,
-				event_category_id,
+				event_category_ids,
 				event_attributes,
 				event_page_title_format,
 				event_single_event_format,
@@ -1088,9 +1094,12 @@ function dbem_events_table($events, $limit, $title) {
 			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event ['event_id']); ?>"><?php echo dbem_sanitize_html($event ['event_name']); ?></a>
 			</strong>
 			<?php
-			$category = dbem_get_category($event ['event_category_id']);
-			if($category)
-				echo "<br/><span title='".__ ( 'Category', 'dbem' ).": ".dbem_sanitize_html($category['category_name'])."'>".dbem_sanitize_html($category['category_name'])."</span>";
+			$categories = explode(',', $event ['event_category_ids']);
+			foreach($categories as $cat){
+				$category = dbem_get_category($cat);
+				if($category)
+					echo "<br/><span title='".__ ( 'Category', 'dbem' ).": ".dbem_sanitize_html($category['category_name'])."'>".dbem_sanitize_html($category['category_name'])."</span>";
+			}
 			?> 
 			</td>
 			<td>
@@ -1382,13 +1391,15 @@ function dbem_event_form($event, $title, $element) {
 										<?php
 							$categories = dbem_get_categories();
 							?>
-									<select name="event_category_id">
+									<select name="event_category_ids[]" MULTIPLE SIZE=5>
 										<option value=""><?php _e ( 'Select...', 'dbem' ); ?>   </option>
 										<?php
-							foreach ( $categories as $category ){
-                                                                if ($event['event_category_id']) {
-                                                                        $selected = ($category['category_id'] == $event['event_category_id']) ? "selected='selected'": '';
-                                                                }
+							foreach ( $categories as $category) {
+                                                                if ($event['event_category_ids'] && preg_match("/,".$category['category_id'].",/",$event['event_category_ids'])) {
+                                                                        $selected = "selected='selected'";
+                                                                } else {
+									$selected = "";
+								}
 								?>
 										<option value="<?php echo $category['category_id'] ?>" <?php echo $selected ?>>
 										<?php echo $category['category_name'] ?>
@@ -1402,7 +1413,6 @@ function dbem_event_form($event, $title, $element) {
 						</div> 
 						<?php endif; ?>
 					</div>
-					<?php/* Marcus End Edit */ ?>
 				</div>
 				<!-- END OF SIDEBAR -->
 				<div id="post-body">

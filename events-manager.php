@@ -151,7 +151,7 @@ function dbem_install() {
 	if (get_option('dbem_events_page') && !get_option('dbem_version')) 
 		dbem_migrate_old_events();
   
-  	update_option('dbem_version', 3); 
+  	update_option('dbem_version', 4); 
 	// Create events page if necessary
  	$events_page_id = get_option('dbem_events_page')  ;
 	if ($events_page_id != "" ) {
@@ -204,7 +204,7 @@ function dbem_create_events_table() {
 			event_contactperson_id mediumint(9) NULL,  
 			location_id mediumint(9) NOT NULL,
 			recurrence_id mediumint(9) NULL,
-  			event_category_id int(11) default NULL,
+  			event_category_ids text default NULL,
   			event_attributes text NULL, 
   			event_page_title_format text NULL, 
   			event_single_event_format text NULL, 
@@ -257,12 +257,15 @@ function dbem_create_events_table() {
 		maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
 		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
 		
-		// Fix buggy columns
 		if ($version<3) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_name text;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_notes longtext;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_author mediumint(9);");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_seats mediumint(9) NULL;");
+		}
+		if ($version<4) {
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_category_ids text default NULL;");
+			$wpdb->query("ALTER TABLE $table_name change event_category_id event_category_ids text default NULL;");
 		}
 	}
 }
@@ -289,7 +292,7 @@ function dbem_create_recurrence_table() {
 			recurrence_byday tinytext NOT NULL,
 			recurrence_byweekno tinyint NOT NULL,
 			event_contactperson_id mediumint(9) NULL,
-  			event_category_id int(11) default NULL,
+  			event_category_ids text default NULL,
   			event_page_title_format text NULL, 
   			event_single_event_format text NULL, 
   			event_contactperson_email_body text NULL, 
@@ -299,7 +302,7 @@ function dbem_create_recurrence_table() {
 			);";
 		$wpdb->query($sql); 
 	} else {
-		maybe_add_column($table_name, 'event_category_id', "alter table $table_name add event_category_id int(11) default NULL;");    
+		maybe_add_column($table_name, 'event_category_ids', "alter table $table_name add event_category_id text default NULL;");    
 		maybe_add_column($table_name, 'event_page_title_format', "alter table $table_name add event_page_title_format text NULL;"); 
 		maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
 		maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
@@ -310,6 +313,10 @@ function dbem_create_recurrence_table() {
 			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_name text;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_notes longtext;");
+		}
+		if ($version<4) {
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_category_ids text default NULL;");
+			$wpdb->query("ALTER TABLE $table_name change event_category_id event_category_ids text default NULL;");
 		}
 	}
 }
