@@ -200,3 +200,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: events can be grouped by month now in the list
 * Feature: new shortcode available: display_single_event
 * Feature: show month or day in events_list if wanted (new parameter for shortcode events_list: showperiod=daily|monthly)
+* Feature: events can belong to multiple categories now

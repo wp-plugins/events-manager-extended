@@ -243,12 +243,12 @@ function dbem_get_calendar($args="") {
 	if ($category && get_option('dbem_categories_enabled')) {
 		//show a specific category
 		if ($category != '' && is_numeric($category)){
-			$cat_condition = "AND event_category_ids like '%,$category,%'";
+			$cat_condition = "AND (event_category_ids like '$category' OR event_category_ids like '%,$category,%'";
 		}elseif( preg_match('/^([0-9],?)+$/', $category) ){
 			$category = explode(',', $category);
 			$category_conditions = array();
 			foreach($category as $cat){
-				$category_conditions[] = " event_category_ids like '%,$cat,%'";
+				$category_conditions[] = " event_category_ids like '$cat' OR event_category_ids like '%,$cat,%'";
 			}
 			$cat_condition = "AND (".implode(' OR', $category_conditions).")";
 		}

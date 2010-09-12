@@ -817,12 +817,12 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 		
 	if(get_option('dbem_categories_enabled')) {
 	   if ($category != '' && is_numeric($category)){
-		$conditions [] = " event_category_ids like '%,$category,%'";
+		$conditions [] = " event_category_ids like '$category' OR event_category_ids like '%,$category,%'";
 	   }elseif( preg_match('/^([0-9],?)+$/', $category) ){
 		$category = explode(',', $category);
 		$category_conditions = array();
 		foreach($category as $cat){
-			$category_conditions[] = " event_category_ids like '%,$cat,%'";
+			$category_conditions[] = " event_category_ids like '$category' OR event_category_ids like '%,$cat,%'";
 		}
 		$conditions [] = "(".implode(' OR', $category_conditions).")";
 	   }
