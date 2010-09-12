@@ -38,6 +38,7 @@ define('LOCATIONS_TBNAME','dbem_locations'); //TABLE NAME
 define('BOOKINGS_TBNAME','dbem_bookings'); //TABLE NAME
 define('PEOPLE_TBNAME','dbem_people'); //TABLE NAME  
 define('BOOKING_PEOPLE_TBNAME','dbem_bookings_people'); //TABLE NAME  
+define('CATEGORIES_TBNAME', 'dbem_categories');
 define('DEFAULT_EVENT_PAGE_NAME', 'Events');   
 define('DBEM_PAGE','<!--DBEM_EVENTS_PAGE-->'); //EVENTS PAGE
 define('MIN_CAPABILITY', 'edit_posts');	// Minimum user level to access calendars
@@ -143,10 +144,8 @@ function dbem_install() {
 	dbem_create_locations_table();
   	dbem_create_bookings_table();
   	dbem_create_people_table();
-	dbem_add_options();
-	/* Marcus Begin Edit */
 	dbem_create_categories_table();
-	/* Marcus End Edit */
+	dbem_add_options();
   	// if ANY 1.0 option is there  AND the version options hasn't been set yet THEN launch the update script 
 	
 	if (get_option('dbem_events_page') && !get_option('dbem_version')) 
@@ -360,7 +359,6 @@ function dbem_create_locations_table() {
 }
 
 function dbem_create_bookings_table() {
-	
 	global  $wpdb, $user_level;
 	$version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.BOOKINGS_TBNAME;
@@ -389,7 +387,6 @@ function dbem_create_bookings_table() {
 }
 
 function dbem_create_people_table() {
-	
 	global  $wpdb, $user_level;
 	$table_name = $wpdb->prefix.PEOPLE_TBNAME;
 
@@ -405,6 +402,21 @@ function dbem_create_people_table() {
 		dbDelta($sql);
 	}
 } 
+
+function dbem_create_categories_table() {
+	global  $wpdb, $user_level;
+	$table_name = $wpdb->prefix.CATEGORIES_TBNAME;
+
+	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+		$sql = "CREATE TABLE ".$table_name." (
+			category_id int(11) NOT NULL auto_increment,
+			category_name tinytext NOT NULL,
+			PRIMARY KEY  (category_id)
+			);";
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+	}
+}
 
 function dbem_migrate_old_events() {         
 		global $wpdb;  
@@ -570,21 +582,21 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_EDITEVENTLINK/', $result)) { 
 			$link = "";
 			if(is_user_logged_in())
-				$link = "<a href=' ".get_bloginfo('wpurl')."/wp-admin/admin.php?page=events-manager&action=edit_event&event_id=".$event['event_id']."'>".__('Edit')."</a>";
-			$event_string = str_replace($result, $link , $event_string );		
+				$link = "<a href=' ".admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event['event_id'])."'>".__('Edit')."</a>";
+			$event_string = str_replace($result, $link , $event_string );
 		}
 		if (preg_match('/#_24HSTARTTIME/', $result)) { 
 			$time = substr($event['event_start_time'], 0,5);
-			$event_string = str_replace($result, $time , $event_string );		
+			$event_string = str_replace($result, $time , $event_string );
 		}
 		if (preg_match('/#_24HENDTIME/', $result)) { 
 			$time = substr($event['event_end_time'], 0,5);
-			$event_string = str_replace($result, $time , $event_string );		
+			$event_string = str_replace($result, $time , $event_string );
 		}
 		
 		if (preg_match('/#_12HSTARTTIME/', $result)) {
 			$AMorPM = "AM"; 
-			$hour = substr($event['event_start_time'], 0,2);   
+			$hour = substr($event['event_start_time'], 0,2);
 			$minute = substr($event['event_start_time'], 3,2);
 			// 12:00 in 24H time = 12:00PM
 			// 13:01 in 24H time = 01:01PM

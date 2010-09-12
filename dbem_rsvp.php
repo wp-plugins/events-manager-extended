@@ -248,7 +248,7 @@ function dbem_are_seats_available_for($event_id, $seats) {
       
 function dbem_bookings_table($event_id) {
 	$bookings =  dbem_get_bookings_for($event_id);
-	$destination = get_bloginfo('wpurl')."/wp-admin/edit.php"; 
+	$destination = admin_url("edit.php"); 
 	$table = "<form id='bookings-filter' method='get' action='$destination'>
 						<input type='hidden' name='page' value='events-manager'/>
 						<input type='hidden' name='action' value='edit_event'/>
@@ -286,10 +286,10 @@ function dbem_bookings_table($event_id) {
 
 function dbem_bookings_compact_table($event_id) {
 	$bookings =  dbem_get_bookings_for($event_id);
-	$destination = get_bloginfo('wpurl')."/wp-admin/edit.php"; 
+	$destination = admin_url("edit.php"); 
 	$available_seats = dbem_get_available_seats($event_id);
 	$booked_seats = dbem_get_booked_seats($event_id);   
-	$printable_address = get_bloginfo('wpurl')."/wp-admin/admin.php?page=events-manager-people&action=printable&event_id=$event_id";
+	$printable_address = admin_url("/admin.php?page=events-manager-people&action=printable&event_id=$event_id");
 	$count_respondents=count($bookings);
 	if ($count_respondents>0) { 
 		$table = 
@@ -536,7 +536,7 @@ function dbem_registration_seats_form_table($event_id=0) {
 	  	<tr <?php echo "$class $style"; ?>>
 			<td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='bookings[]' /></td>
 			<td><strong>
-			<a class="row-title" href="<?php bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_event&event_id=<?php echo $event_booking ['event_id']; ?>"><?php echo ($event ['event_name']); ?></a>
+			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
 			</strong>
 			</td>
 			<td>
@@ -667,7 +667,7 @@ function dbem_registration_approval_form_table($event_id=0) {
 	  	<tr <?php echo "$class $style"; ?>>
 			<td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='pending_bookings[]' /></td>
 			<td><strong>
-			<a class="row-title" href="<?php bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_event&event_id=<?php echo $event_booking ['event_id']; ?>"><?php echo ($event ['event_name']); ?></a>
+			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
 			</strong>
 			</td>
 			<td>

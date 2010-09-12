@@ -1,24 +1,4 @@
 <?php
-define('DBEM_CATEGORIES_TBNAME', 'dbem_categories');
-
-//Add the categories table
-function dbem_create_categories_table() {
-	
-	global  $wpdb, $user_level;
-	$table_name = $wpdb->prefix.DBEM_CATEGORIES_TBNAME;
-
-	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-		// Creating the events table
-		$sql = "CREATE TABLE ".$table_name." (
-			  category_id int(11) NOT NULL auto_increment,
-			  category_name tinytext NOT NULL,
-			  PRIMARY KEY  (category_id)
-			);";
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
-	}
-}
-
 function dbem_categories_subpanel() {      
 	global $wpdb;
 	
@@ -74,7 +54,7 @@ function dbem_categories_subpanel() {
 
 function dbem_categories_table_layout($message = "") {
 	$categories = dbem_get_categories();
-	$destination = get_bloginfo('wpurl')."/wp-admin/admin.php"; 
+	$destination = admin_url("admin.php"); 
 	$table = "
 		<div class='wrap nosubsub'>\n
 			<div id='icon-edit' class='icon32'>
@@ -95,7 +75,7 @@ function dbem_categories_table_layout($message = "") {
 				<?-- begin col-right -->
 				<div id='col-right'>
 			 	 <div class='col-wrap'>
-				 	 <form id='bookings-filter' method='post' action='".get_bloginfo('wpurl')."/wp-admin/admin.php?page=events-manager-categories'>
+				 	 <form id='bookings-filter' method='post' action='".admin_url("admin.php?page=events-manager-categories")."'>
 						<input type='hidden' name='action' value='delete'/>";
 						if (count($categories)>0) {
 							$table .= "<table class='widefat'>
@@ -118,8 +98,8 @@ function dbem_categories_table_layout($message = "") {
 								$table .= "		
 									<tr>
 									<td><input type='checkbox' class ='row-selector' value='".$this_category['category_id']."' name='categories[]'/></td>
-									<td><a href='".get_bloginfo('wpurl')."/wp-admin/admin.php?page=events-manager-categories&action=edit&category_ID=".$this_category['category_id']."'>".$this_category['category_id']."</a></td>
-									<td><a href='".get_bloginfo('wpurl')."/wp-admin/admin.php?page=events-manager-categories&action=edit&category_ID=".$this_category['category_id']."'>".$this_category['category_name']."</a></td>
+									<td><a href='".admin_url("admin.php?page=events-manager-categories&action=edit&category_ID=".$this_category['category_id'])."'>".$this_category['category_id']."</a></td>
+									<td><a href='".admin_url("admin.php?page=events-manager-categories&action=edit&category_ID=".$this_category['category_id'])."'>".$this_category['category_name']."</a></td>
 									</tr>
 								";
 							}

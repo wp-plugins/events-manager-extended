@@ -164,7 +164,7 @@ function dbem_locations_edit_layout($location, $message = "") {
 }
 
 function dbem_locations_table_layout($locations, $new_location, $message = "") {
-	$destination = get_bloginfo('wpurl')."/wp-admin/admin.php";
+	$destination = admin_url("admin.php");
 	if (!is_array($new_location)) {
 		$location = array();
 		$location['location_name'] = '';
@@ -217,7 +217,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								<?php foreach ($locations as $this_location) : ?>	
 								<tr>
 									<td><input type="checkbox" class ="row-selector" value="<?php echo $this_location['location_id'] ?>" name="locations[]"/></td>
-									<td><a href="<?php echo get_bloginfo('wpurl') ?>/wp-admin/admin.php?page=events-manager-locations&action=edit&location_ID=<?php echo $this_location['location_id'] ?>"><?php echo dbem_sanitize_html($this_location['location_name']); ?></a></td>
+									<td><a href="<?php echo admin_url("admin.php?page=events-manager-locations&action=edit&location_ID=".$this_location['location_id']); ?>"><?php echo dbem_sanitize_html($this_location['location_name']); ?></a></td>
 									<td><?php echo dbem_sanitize_html($this_location['location_address']); ?></td>
 									<td><?php echo dbem_sanitize_html($this_location['location_town']); ?></td>                         
 								</tr>

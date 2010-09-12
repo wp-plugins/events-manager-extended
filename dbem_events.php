@@ -975,7 +975,7 @@ function dbem_hello_to_new_user() {
 	$advice = sprintf ( __ ( "<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> 
 	<p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>
 	<p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>
-	<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'dbem' ), $current_user->display_name, get_bloginfo ( 'wpurl' ) . '/wp-admin/widgets.php', 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', get_bloginfo ( 'wpurl' ) . '/wp-admin/admin.php?page=events-manager-options', get_bloginfo ( 'wpurl' ) . '/wp-admin/admin.php?page=events-manager&disable_hello_to_user=true' );
+	<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'dbem' ), $current_user->display_name, admin_url("widgets.php"), 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', admin_url("admin.php?page=events-manager-options"), admin_url("admin.php?page=events-manager&disable_hello_to_user=true") );
 	?>
 <div id="message" class="updated">
 		<?php
@@ -1005,15 +1005,15 @@ function dbem_events_table($events, $limit, $title) {
 		dbem_hello_to_new_user ();
 	?>   
   	<!--<div id='new-event' class='switch-tab'><a href="<?php
-	bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_event"><?php
+	echo admin_url("admin.php?page=events-manager&action=edit_event")?>><?php
 	_e ( 'New Event ...', 'dbem' );
 	?></a></div>-->  
 		<?php
 	
 	$link = array ();
-	$link ['past'] = "<a href='" . get_bloginfo ( 'wpurl' ) . "/wp-admin/admin.php?page=events-manager&scope=past&order=desc'>" . __ ( 'Past events', 'dbem' ) . "</a>";
-	$link ['all'] = " <a href='" . get_bloginfo ( 'wpurl' ) . "/wp-admin/admin.php?page=events-manager&scope=all&order=desc'>" . __ ( 'All events', 'dbem' ) . "</a>";
-	$link ['future'] = "  <a href='" . get_bloginfo ( 'wpurl' ) . "/wp-admin/admin.php?page=events-manager&scope=future'>" . __ ( 'Future events', 'dbem' ) . "</a>";
+	$link ['past'] = "<a href='" . admin_url("admin.php?page=events-manager&scope=past&order=desc").">" . __ ( 'Past events', 'dbem' ) . "</a>";
+	$link ['all'] = "<a href='" . admin_url("admin.php?page=events-manager&scope=all&order=desc").">" . __ ( 'All events', 'dbem' ) . "</a>";
+	$link ['future'] = "<a href='" . admin_url("admin.php?page=events-manager&scope=future").">" . __ ( 'Future events', 'dbem' ) . "</a>";
 	
 	$scope_names = array ();
 	$scope_names ['past'] = __ ( 'Past events', 'dbem' );
@@ -1085,7 +1085,7 @@ function dbem_events_table($events, $limit, $title) {
 	  <tr <?php echo "$class $style"; ?>>
 			<td><input type='checkbox' class='row-selector' value='<?php echo $event ['event_id']; ?>' name='events[]' /></td>
 			<td><strong>
-			<a class="row-title" href="<?php bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_event&event_id=<?php echo $event ['event_id']; ?>"><?php echo dbem_sanitize_html($event ['event_name']); ?></a>
+			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event ['event_id']); ?>"><?php echo dbem_sanitize_html($event ['event_name']); ?></a>
 			</strong>
 			<?php
 			$category = dbem_get_category($event ['event_category_id']);
@@ -1094,9 +1094,7 @@ function dbem_events_table($events, $limit, $title) {
 			?> 
 			</td>
 			<td>
-  	    		<?php /* Marcus Begin Edit */			?>
-			<a href="<?php bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=duplicate_event&event_id=<?php echo $event ['event_id']; ?>" title="<?php _e ( 'Duplicate this event', 'dbem' ); ?>"><strong>+</strong></a>
-  	    		<?php /* Marcus End Edit */			?>
+			<a href="<?php echo admin_url("admin.php?page=events-manager&action=duplicate_event&event_id=".$event ['event_id']); ?>" title="<?php _e ( 'Duplicate this event', 'dbem' ); ?>"><strong>+</strong></a>
 			</td>
 			<td>
 				 <?php echo $location_summary; ?>
@@ -1112,7 +1110,7 @@ function dbem_events_table($events, $limit, $title) {
 				?>
 					<b><?php echo $recurrence ['recurrence_description']; ?>
 				<br />
-				<a href="<?php bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_recurrence&recurrence_id=<?php echo $recurrence ['recurrence_id']; ?>"><?php _e ( 'Reschedule', 'dbem' ); ?></a></b>
+				<a href="<?php echo admin_url("admin.php?page=events-manager&action=edit_recurrence&recurrence_id=".$recurrence ['recurrence_id']); ?>"><?php _e ( 'Reschedule', 'dbem' ); ?></a></b>
 				<?php
 				}
 				?>
@@ -1146,9 +1144,9 @@ function dbem_events_table($events, $limit, $title) {
 			echo "COUNT = $count BACKWARD = $backward  FORWARD = $forward<br> -- OFFSET = $offset";
 		echo "<div id='events-pagination'> ";
 		if ($backward < $events_count)
-			echo "<a style='float: left' href='" . get_bloginfo ( 'wpurl' ) . "/wp-admin/admin.php?page=events-manager&scope=$scope&offset=$backward'>&lt;&lt;</a>";
+			echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&offset=$backward")."'>&lt;&lt;</a>";
 		if ($forward >= 0)
-			echo "<a style='float: right' href='" . get_bloginfo ( 'wpurl' ) . "/wp-admin/admin.php?page=events-manager&scope=$scope&offset=$forward'>&gt;&gt;</a>";
+			echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&scope=$scope&offset=$forward")."'>&gt;&gt;</a>";
 		echo "</div>";
 	}
 	?>
@@ -1319,13 +1317,11 @@ function dbem_event_form($event, $title, $element) {
 									<?php echo $recurrence ['recurrence_description']; ?>
 									<br />
 									<a href="<?php
-				bloginfo ( 'wpurl' )?>/wp-admin/admin.php?page=events-manager&action=edit_recurrence&recurrence_id=<?php echo $recurrence ['recurrence_id']; ?>">
+				admin_url("admin.php?page=events-manager&action=edit_recurrence&recurrence_id=".$recurrence ['recurrence_id']); ?>">
 									<?php _e ( 'Reschedule', 'dbem' ); ?>
 									</a></p>
 								<?php
 			}
-			?>
-								<?php
 		}
 		?>
 							</div>
