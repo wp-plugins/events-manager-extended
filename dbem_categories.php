@@ -7,7 +7,7 @@ function dbem_categories_subpanel() {
 		dbem_categories_edit_layout();
 	} else {
 		// Insert/Update/Delete Record
-		$categories_table = $wpdb->prefix.DBEM_CATEGORIES_TBNAME;
+		$categories_table = $wpdb->prefix.CATEGORIES_TBNAME;
 		$validation_result = '';
 		if( isset($_POST['action']) && $_POST['action'] == "edit" ) {
 			// category update required  
@@ -191,13 +191,13 @@ function dbem_categories_edit_layout($message = "") {
 
 function dbem_get_categories(){
 	global $wpdb;
-	$categories_table = $wpdb->prefix.DBEM_CATEGORIES_TBNAME; 
+	$categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
 	return $wpdb->get_results("SELECT * FROM $categories_table", ARRAY_A);
 }
 
 function dbem_get_category($category_id) { 
 	global $wpdb;
-	$categories_table = $wpdb->prefix.DBEM_CATEGORIES_TBNAME; 
+	$categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
 	$sql = "SELECT * FROM $categories_table WHERE category_id ='$category_id'";   
  	$category = $wpdb->get_row($sql, ARRAY_A);
 	return $category;
@@ -206,7 +206,7 @@ function dbem_get_category($category_id) {
 function dbem_get_event_category($event_id) { 
 	global $wpdb;
 	$event_table = $wpdb->prefix.EVENTS_TBNAME; 
-	$sql = "SELECT category_id, category_name FROM $event_table LEFT JOIN ".$wpdb->prefix.DBEM_CATEGORIES_TBNAME." ON category_id=event_category_id WHERE event_id ='$event_id'";
+	$sql = "SELECT category_id, category_name FROM $event_table LEFT JOIN ".$wpdb->prefix.CATEGORIES_TBNAME." ON category_id=event_category_id WHERE event_id ='$event_id'";
  	$category = $wpdb->get_row($sql, ARRAY_A);
 	return $category;
 }

@@ -1391,23 +1391,18 @@ function dbem_event_form($event, $title, $element) {
 										<?php
 							$categories = dbem_get_categories();
 							?>
-									<select name="event_category_ids[]" MULTIPLE SIZE=5>
-										<option value=""><?php _e ( 'Select...', 'dbem' ); ?>   </option>
-										<?php
+<?php
 							foreach ( $categories as $category) {
-                                                                if ($event['event_category_ids'] && preg_match("/,".$category['category_id'].",/",$event['event_category_ids'])) {
-                                                                        $selected = "selected='selected'";
+                                                                if ($event['event_category_ids'] && in_array($category['category_id'],explode(",",$event['event_category_ids']))) {
+                                                                        $selected = "checked='checked'";
                                                                 } else {
 									$selected = "";
 								}
 								?>
-										<option value="<?php echo $category['category_id'] ?>" <?php echo $selected ?>>
-										<?php echo $category['category_name'] ?>
-										</option>
-										<?php
+<input type="checkbox" name="event_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?>><?php echo $category['category_name']; ?></br>
+<?php
 							}
 						?>
-									</select>
 								</p>
 							</div>
 						</div> 
