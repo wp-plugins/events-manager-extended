@@ -242,7 +242,7 @@ function dbem_get_calendar($args="") {
 	$events_table = $wpdb->prefix.EVENTS_TBNAME; 
 	if ($category && get_option('dbem_categories_enabled')) {
 		//show a specific category
-		$cat_condition = "AND event_category_id=".intval($category);
+		$cat_condition = "AND event_category_ids like '%,$category,%'";
 	} else {
 		$cat_condition = "";
 	}
@@ -251,7 +251,7 @@ function dbem_get_calendar($args="") {
 	 	event_start_date,
 		event_start_time, 
 		event_end_date,
-		event_category_id,
+		event_category_ids,
 		location_id,
 		DATE_FORMAT(event_start_date, '%w') AS 'event_weekday_n',
 		DATE_FORMAT(event_start_date, '%e') AS 'event_day',

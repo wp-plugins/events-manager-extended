@@ -139,6 +139,7 @@ add_filter('dbem_notes_map', 'js_escape');
 /* Creating the wp_events table to store event data*/
 function dbem_install() {
  	// Creates the events table if necessary
+	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	dbem_create_events_table();
 	dbem_create_recurrence_table();  
 	dbem_create_locations_table();
