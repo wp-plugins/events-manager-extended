@@ -645,13 +645,8 @@ function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", 
 		
 		$r = wp_parse_args ( $limit, $defaults );
 		extract ( $r, EXTR_SKIP );
-		$limit = $r ['limit'];
-		$scope = $r ['scope'];
-		$order = $r ['order'];
-		$format = $r ['format'];
-		$echo = $r ['echo'];
+		$echo = (bool) $r ['echo'];
 		$category = ( preg_match('/^([0-9],?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
-		$showperiod = $r ['showperiod'];
 	}
 	if ($scope == "")
 		$scope = "future";
@@ -719,9 +714,7 @@ function dbem_get_events_page($justurl = 0, $echo = 1, $text = '') {
 		
 		$r = wp_parse_args ( $justurl, $defaults );
 		extract ( $r, EXTR_SKIP );
-		$justurl = $r ['justurl'];
-		$text = $r ['text'];
-		$echo = $r ['echo'];
+		$echo = (bool) $r ['echo'];
 	}
 	
 	$page_link = get_permalink ( get_option ( "dbem_events_page" ) );
@@ -736,8 +729,8 @@ function dbem_get_events_page($justurl = 0, $echo = 1, $text = '') {
 		echo $result;
 	else
 		return $result;
-
 }
+
 function dbem_get_events_page_shortcode($atts) {
 	extract ( shortcode_atts ( array ('justurl' => 0, 'text' => '' ), $atts ) );
 	$result = dbem_get_events_page ( "justurl=$justurl&text=$text&echo=0" );
@@ -2115,9 +2108,7 @@ function dbem_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 		
 		$r = wp_parse_args ( $justurl, $defaults );
 		extract ( $r, EXTR_SKIP );
-		$justurl = $r ['justurl'];
-		$echo = $r ['echo'];
-		$text = $r ['text'];
+		$echo = (bool) $r ['echo'];
 	}
 	if ($text == '')
 		$text = "RSS";

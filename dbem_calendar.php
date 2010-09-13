@@ -24,6 +24,7 @@ function dbem_get_calendar($args="") {
 	);           
 	$r = wp_parse_args( $args, $defaults );
 	extract( $r, EXTR_SKIP );  
+	$echo = (bool) $r ['echo'];
 	
 	// this comes from global wordpress preferences
 	$start_of_week = get_option('start_of_week');
@@ -112,7 +113,6 @@ function dbem_get_calendar($args="") {
 	// how many days to appened to the end 
 	// of the final array to make it 35 days. 
 
-
 	if($current_num > 35){ 
 	   $num_weeks = 6; 
 	   $outset = (42 - $current_num); 
@@ -132,8 +132,6 @@ function dbem_get_calendar($args="") {
 	// into weeks. Each week has 7 days 
 	// so we will array_chunk it into 7 days. 
 	$weeks = array_chunk($new_count, 7); 
-	
-	
 
 	// Build Previous and Next Links 
 	$base_link = "?".$_SERVER['QUERY_STRING']."&amp;";       
