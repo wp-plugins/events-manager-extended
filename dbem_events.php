@@ -644,7 +644,7 @@ function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", 
 		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '');
 		
 		$r = wp_parse_args ( $limit, $defaults );
-		extract ( $r, EXTR_SKIP );
+		extract ( $r );
 		$echo = (bool) $r ['echo'];
 		$category = ( preg_match('/^([0-9],?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
 	}
@@ -713,7 +713,7 @@ function dbem_get_events_page($justurl = 0, $echo = 1, $text = '') {
 		$defaults = array ('justurl' => 0, 'text' => '', 'echo' => 1 );
 		
 		$r = wp_parse_args ( $justurl, $defaults );
-		extract ( $r, EXTR_SKIP );
+		extract ( $r );
 		$echo = (bool) $r ['echo'];
 	}
 	
@@ -793,7 +793,9 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 	if (preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope )) {
 		//$conditions [] = " event_start_date like '$scope'";
 		$conditions [] = " (event_start_date  like '$scope') OR (event_start_date <= '$scope' AND event_end_date >= '$scope')";
-	} else {   
+	} elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
+		$conditions [] = " (event_start_date BETWEEN '$matches[1]' AND '$matches[2]')";
+	} else {
 		if (($scope != "past") && ($scope != "all") && ($scope != "today"))
 			$scope = "future";
 		if ($scope == "future")
@@ -2107,7 +2109,7 @@ function dbem_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 		$defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'RSS' );
 		
 		$r = wp_parse_args ( $justurl, $defaults );
-		extract ( $r, EXTR_SKIP );
+		extract ( $r );
 		$echo = (bool) $r ['echo'];
 	}
 	if ($text == '')
