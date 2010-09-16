@@ -824,7 +824,7 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 			DATE_FORMAT(event_end_date, '%e') AS 'event_end_day',
 		  	DATE_FORMAT(event_end_date, '%Y') AS 'event_end_year',
 		  	DATE_FORMAT(event_end_time, '%k') AS 'event_end_hh',
-		  	DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm',
+		  	DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm'
 			FROM $events_table   
 			$where
 			ORDER BY event_start_date $order , event_start_time $order
@@ -873,8 +873,8 @@ function dbem_get_event($event_id) {
 		  	DATE_FORMAT(event_end_date, '%Y') AS 'event_end_year',
 		  	DATE_FORMAT(event_end_time, '%k') AS 'event_end_hh',
 		  	DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm',
-			DATE_FORMAT(event_end_time, '%h:%i%p') AS 'event_end_12h_time', 
-			DATE_FORMAT(event_end_time, '%H:%i') AS 'event_end_24h_time',   
+			DATE_FORMAT(event_end_time, '%h:%i%p') AS 'event_end_12h_time',
+			DATE_FORMAT(event_end_time, '%H:%i') AS 'event_end_24h_time'
 		FROM $events_table   
 		WHERE event_id = $event_id";
 	
@@ -1143,7 +1143,7 @@ function dbem_event_form($event, $title, $element) {
 	$localised_end_example = str_replace ( "yy", "2008", str_replace ( "mm", "11", str_replace ( "dd", "28", $localised_date_format ) ) );
 	
 	if ($event [$pref . 'start_date'] != "") {
-		preg_match ( "/(\d{4})-(\d{2})-(\d{2})/", $event [$pref . 'start_date'], $matches );
+		preg_match ( "/(\d{4})-(\d{2})-(\d{2})/", $event ['event_start_date'], $matches );
 		$year = $matches [1];
 		$month = $matches [2];
 		$day = $matches [3];
@@ -1168,7 +1168,7 @@ function dbem_event_form($event, $title, $element) {
 	$days_names = array (1 => __ ( 'Mon' ), 2 => __ ( 'Tue' ), 3 => __ ( 'Wed' ), 4 => __ ( 'Thu' ), 5 => __ ( 'Fri' ), 6 => __ ( 'Sat' ), 7 => __ ( 'Sun' ) );
 	$weekno_options = array ("1" => __ ( 'first', 'dbem' ), '2' => __ ( 'second', 'dbem' ), '3' => __ ( 'third', 'dbem' ), '4' => __ ( 'fourth', 'dbem' ), '-1' => __ ( 'last', 'dbem' ), "none" => __('Start day') );
 	
-	$event [$pref . 'rsvp'] ? $event_RSVP_checked = "checked='checked'" : $event_RSVP_checked = '';
+	$event ['event_rsvp'] ? $event_RSVP_checked = "checked='checked'" : $event_RSVP_checked = '';
 	$event ['registration_requires_approval'] ? $registration_requires_approval = "checked='checked'" : $registration_requires_approval = '';
 	
 	?>
@@ -1315,10 +1315,10 @@ function dbem_event_form($event, $title, $element) {
 										<?php _e ( 'Require approval for registration','dbem' ); ?>
 									<br />
 										<?php _e ( 'Spaces','dbem' ); ?> :
-										<input id="seats-input" type="text" name="event_seats" size='5' value="<?php echo $event [$pref . 'seats']?>" />
+										<input id="seats-input" type="text" name="event_seats" size='5' value="<?php echo $event ['event_seats']?>" />
 									</p>
 									<?php	if ($event ['event_rsvp']) {
-											dbem_bookings_compact_table ( $event [$pref . 'id'] );
+											dbem_bookings_compact_table ( $event ['event_id'] );
 										}
 									?>
 								</div>
@@ -1370,7 +1370,7 @@ function dbem_event_form($event, $title, $element) {
 							</h3>
 							<div class="inside">
 								<!-- we need title for qtranslate as ID -->
-								<input type="text" id="title" name="event_name" value="<?php echo $event [$pref . 'name']?>" />
+								<input type="text" id="title" name="event_name" value="<?php echo $event ['event_name']?>" />
 								<br />
 								<?php _e ( 'The event name. Example: Birthday party', 'dbem' )?>
 							</div>
@@ -1391,10 +1391,8 @@ function dbem_event_form($event, $title, $element) {
 								<span id='event-date-explanation'>
 								<?php
 									_e ( 'The event date.', 'dbem' );
-									/* Marcus Begin Edit */
 									echo " ";
 									_e ( 'When not recurring, this event spans between the beginning and end date.', 'dbem' );
-									/* Marcus End Edit */
 								?>
 								</span><span id='recurrence-dates-explanation'>
 								<?php _e ( 'The recurrence beginning and end date.', 'dbem' ); ?>
@@ -1405,9 +1403,9 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'Event time', 'dbem' ); ?>
 							</h3>
 							<div class="inside">
-								<input id="start-time" type="text" size="8" maxlength="8" name="event_start_time" value="<?php echo $event [$pref . 'start_' . $hours_locale . "h_time"]; ?>" />
+								<input id="start-time" type="text" size="8" maxlength="8" name="event_start_time" value="<?php echo $event ['event_start_' . $hours_locale . "h_time"]; ?>" />
 								-
-								<input id="end-time" type="text" size="8" maxlength="8" name="event_end_time" value="<?php echo $event [$pref . 'end_' . $hours_locale . "h_time"]; ?>" />
+								<input id="end-time" type="text" size="8" maxlength="8" name="event_end_time" value="<?php echo $event ['event_end_' . $hours_locale . "h_time"]; ?>" />
 								<br />
 								<?php _e ( 'The time of the event beginning and end', 'dbem' )?>
 								. </div>
@@ -1589,7 +1587,7 @@ function dbem_event_form($event, $title, $element) {
 							<div class="inside">
 								<?php/* Marcus Begin Edit */ ?>
 								<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
-									<?php the_editor($event [$pref . 'notes']); ?>
+									<?php the_editor($event ['event_notes']); ?>
 								</div>
 								<?php/* Marcus End Edit */ ?>
 								<br />

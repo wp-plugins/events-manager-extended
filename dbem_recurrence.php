@@ -204,8 +204,33 @@ function dbem_remove_events_for_recurrence_id($recurrence_id) {
 	$sql = "DELETE FROM $events_table WHERE recurrence_id = '$recurrence_id';";
 	$wpdb->query($sql);
 }
-	
-function dbem_get_recurrence_desc($recurrence_id) {   
+
+function dbem_get_recurrence($recurrence_id) {
+	global $wpdb;
+	$events_table = $wpdb->prefix.EVENTS_TBNAME;
+	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
+	$sql = "SELECT * FROM $recurrence_table WHERE recurrence_id = $recurrence_id;";
+        $recurrence = $wpdb->get_row($sql, ARRAY_A);
+
+        // now add the info that has no column in the recurrence table
+        $sql = "SELECT * FROM $events_table WHERE recurrence_id = '$recurrence_id' LIMIT 1;";
+	$event = $wpdb->get_row($sql, ARRAY_A);
+	$event ['event_attributes'] = @unserialize($event ['event_attributes']);
+	$event ['event_attributes'] = (!is_array($event ['event_attributes'])) ?  array() : $event ['event_attributes'] ;
+	foreach ($event as $key=>$val) {
+		$recurrence[$key]=$val;
+	}
+
+        // now add the location info
+        $location = dbem_get_location($recurrence['location_id']);
+        $recurrence['location_name'] = $location['location_name'];
+        $recurrence['location_address'] = $location['location_address'];
+        $recurrence['location_town'] = $location['location_town'];
+        $recurrence['recurrence_description'] = dbem_get_recurrence_desc($recurrence_id);
+        return $recurrence;
+}
+
+function dbem_get_recurrence_desc($recurrence_id) {
 	global $wpdb;
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;
 	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
