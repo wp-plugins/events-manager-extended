@@ -109,7 +109,6 @@ function dbem_events_subpanel() {
 		$recurrence ['recurrence_end_date'] = $event ['event_end_date'];
 		$recurrence ['recurrence_start_time'] = $event ['event_start_time'];
 		$recurrence ['recurrence_end_time'] = $event ['event_end_time'];
-		$recurrence ['recurrence_id'] = isset($_POST ['recurrence_id']) ? $_POST['recurrence_id'] : '';
 		$recurrence ['recurrence_freq'] = isset($_POST['recurrence_freq']) ? $_POST['recurrence_freq'] : '';
 		if ($recurrence ['recurrence_freq'] == 'weekly') {
 			if (isset($_POST['recurrence_bydays'])) {
@@ -131,6 +130,7 @@ function dbem_events_subpanel() {
 		
 		$event ['event_rsvp'] = (isset ($_POST ['event_rsvp']) && is_numeric($_POST ['event_rsvp'])) ? $_POST ['event_rsvp']:0;
 		$event ['registration_requires_approval'] = (isset ($_POST ['registration_requires_approval']) && is_numeric($_POST ['registration_requires_approval'])) ? $_POST ['registration_requires_approval']:0;
+		$recurrence ['registration_requires_approval'] = $event ['registration_requires_approval'];
 		$event ['event_seats'] = (isset ($_POST ['event_seats']) && is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
 		
 		if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '' && $_POST ['event_contactperson_id'] != '-1') {
@@ -168,14 +168,16 @@ function dbem_events_subpanel() {
 			// this is needed so we can later search for a specific
 			// cat using LIKE '%,$cat,%'
 			$event ['event_category_ids']=",";
-			$recurrence ['event_category_ids']=",";
 			foreach ($_POST['event_category_ids'] as $cat) {
 				if (is_numeric($cat)) {
                         		$event ['event_category_ids'] .= "$cat,";
-                        		$recurrence ['event_category_ids'] .="$cat,";
 				}
 			}
-                }
+                } else {
+			$event ['event_category_ids']="";
+			
+		}
+		$recurrence ['event_category_ids']=$event ['event_category_ids'];
 
 		$validation_result = dbem_validate_event ( $event );
 		

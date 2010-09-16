@@ -141,30 +141,31 @@ function dbem_get_recurrence_events($recurrence){
 
 ///////////////////////////////////////////////
 
-
 function dbem_insert_recurrent_event($event, $recurrence ){
  	 	
-		global $wpdb;
-		$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
+	global $wpdb;
+	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 		
-		if (true) {//TODO add recurrence validation
-		 //$wpdb->show_errors(true);
-			
-			$wpdb->insert($recurrence_table, $recurrence);
-			//print_r($recurrence);
+	// never try to update a autoincrement value ...
+	if (isset($recurrence['recurrence_id']))
+		unset ($recurrence['recurrence_id']);
 
-		 	$recurrence['recurrence_id'] = mysql_insert_id();
-			// the following 3 have no column in the recurrence table, but we need it anyway
-			// maybe something to change later on
-		 	$recurrence['recurrence_rsvp'] = $event['event_rsvp'];
-		 	$recurrence['recurrence_seats'] = $event['event_seats'];
-		 	$recurrence['event_attributes'] = $event['event_attributes'];
+	//$wpdb->show_errors(true);
+	$wpdb->insert($recurrence_table, $recurrence);
+	//print_r($recurrence);
 
-			$output = "<h2>Recurring</h2>";
-			//echo "recurrence_id = $recurrence_id<br/>";  
-			dbem_insert_events_for_recurrence($recurrence);
-	}
+ 	$recurrence['recurrence_id'] = mysql_insert_id();
+	// the following 3 have no column in the recurrence table, but we need it anyway
+	// maybe something to change later on
+ 	$recurrence['recurrence_rsvp'] = $event['event_rsvp'];
+ 	$recurrence['recurrence_seats'] = $event['event_seats'];
+ 	$recurrence['event_attributes'] = $event['event_attributes'];
+
+	//$output = "<h2>Recurring</h2>";
+	//echo "recurrence_id = $recurrence_id<br/>";  
+	dbem_insert_events_for_recurrence($recurrence);
 }
+
 function dbem_insert_events_for_recurrence($recurrence) {
 	global $wpdb;
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;   
@@ -181,7 +182,7 @@ function dbem_insert_events_for_recurrence($recurrence) {
 		$new_event['event_seats'] = $recurrence['recurrence_seats'];
 		$new_event['location_id'] = $recurrence['location_id'];
 		$new_event['recurrence_id'] = $recurrence['recurrence_id'];
-		$new_event['event_category_id'] = $recurrence['event_category_id'];
+		$new_event['event_category_ids'] = $recurrence['event_category_ids'];
 		$new_event['event_start_date'] = date("Y-m-d", $day); 
 		$new_event['event_contactperson_id'] = $recurrence['event_contactperson_id'];
 		$new_event['event_page_title_format'] = $recurrence['event_page_title_format'];
