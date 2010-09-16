@@ -104,11 +104,6 @@ function dbem_events_subpanel() {
 		$event ['event_start_time'] = date ( "G:i:00", strtotime ( $event ['event_start_time'] ) );
 		$event ['event_end_time'] = isset($_POST ['event_end_time']) ? $_POST ['event_end_time'] : '';
 		$event ['event_end_time'] = date ( "G:i:00", strtotime ( $event ['event_end_time'] ) );
-		$recurrence ['recurrence_name'] = $event ['event_name'];
-		$recurrence ['recurrence_start_date'] = $event ['event_start_date'];
-		$recurrence ['recurrence_end_date'] = $event ['event_end_date'];
-		$recurrence ['recurrence_start_time'] = $event ['event_start_time'];
-		$recurrence ['recurrence_end_time'] = $event ['event_end_time'];
 		$recurrence ['recurrence_freq'] = isset($_POST['recurrence_freq']) ? $_POST['recurrence_freq'] : '';
 		if ($recurrence ['recurrence_freq'] == 'weekly') {
 			if (isset($_POST['recurrence_bydays'])) {
@@ -130,7 +125,6 @@ function dbem_events_subpanel() {
 		
 		$event ['event_rsvp'] = (isset ($_POST ['event_rsvp']) && is_numeric($_POST ['event_rsvp'])) ? $_POST ['event_rsvp']:0;
 		$event ['registration_requires_approval'] = (isset ($_POST ['registration_requires_approval']) && is_numeric($_POST ['registration_requires_approval'])) ? $_POST ['registration_requires_approval']:0;
-		$recurrence ['registration_requires_approval'] = $event ['registration_requires_approval'];
 		$event ['event_seats'] = (isset ($_POST ['event_seats']) && is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
 		
 		if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '' && $_POST ['event_contactperson_id'] != '-1') {
@@ -138,7 +132,6 @@ function dbem_events_subpanel() {
 		} else {
 			$event ['event_contactperson_id'] = 0;
 		}
-		$recurrence ['event_contactperson_id'] = $_POST ['event_contactperson_id'];
 		
 		//if (! _dbem_is_time_valid ( $event_end_time ))
 		//	$event_end_time = $event_time;
@@ -158,11 +151,6 @@ function dbem_events_subpanel() {
 		$event ['event_single_event_format'] = stripslashes ( $_POST ['event_single_event_format'] );
 		$event ['event_contactperson_email_body'] = stripslashes ( $_POST ['event_contactperson_email_body'] );
 		$event ['event_respondent_email_body'] = stripslashes ( $_POST ['event_respondent_email_body'] );
-		$recurrence ['event_page_title_format'] = $event ['event_page_title_format'];
-		$recurrence ['event_single_event_format'] = $event ['event_single_event_format'];
-		$recurrence ['event_contactperson_email_body'] = $event ['event_contactperson_email_body'];
-		$recurrence ['event_respondent_email_body'] = $event ['event_respondent_email_body'];
-		$recurrence ['recurrence_notes'] = $event ['event_notes'];
                 if (isset ($_POST['event_category_ids'])) {
 			// the category id's need to begin and end with a comma
 			// this is needed so we can later search for a specific
@@ -177,7 +165,6 @@ function dbem_events_subpanel() {
 			$event ['event_category_ids']="";
 			
 		}
-		$recurrence ['event_category_ids']=$event ['event_category_ids'];
 
 		$validation_result = dbem_validate_event ( $event );
 		
@@ -829,33 +816,20 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 	if ($where != "")
 		$where = " WHERE " . $where;
 	
-	$sql = "SELECT event_id, 
-			   event_name, 
-			  	DATE_FORMAT(event_start_date, '%e') AS 'event_day',
-			  	DATE_FORMAT(event_start_date, '%Y') AS 'event_year',
-			  	DATE_FORMAT(event_start_time, '%k') AS 'event_hh',
-			  	DATE_FORMAT(event_start_time, '%i') AS 'event_mm',
-				DATE_FORMAT(event_end_date, '%e') AS 'event_end_day',
-			  	DATE_FORMAT(event_end_date, '%Y') AS 'event_end_year',
-			  	DATE_FORMAT(event_end_time, '%k') AS 'event_end_hh',
-			  	DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm',
-			  	event_start_date,
-				event_end_date,
-				event_start_time,
-				event_end_time,
-	 			event_notes, 
-				event_rsvp,
-				registration_requires_approval,
-				recurrence_id, 
-				location_id, 
-				event_contactperson_id, 
-				event_category_ids,
-				event_attributes
-				FROM $events_table   
-				$where
-				ORDER BY event_start_date $order , event_start_time $order
-				$limit 
-				$offset";
+	$sql = "SELECT *, 
+		  	DATE_FORMAT(event_start_date, '%e') AS 'event_day',
+		  	DATE_FORMAT(event_start_date, '%Y') AS 'event_year',
+		  	DATE_FORMAT(event_start_time, '%k') AS 'event_hh',
+		  	DATE_FORMAT(event_start_time, '%i') AS 'event_mm',
+			DATE_FORMAT(event_end_date, '%e') AS 'event_end_day',
+		  	DATE_FORMAT(event_end_date, '%Y') AS 'event_end_year',
+		  	DATE_FORMAT(event_end_time, '%k') AS 'event_end_hh',
+		  	DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm',
+			FROM $events_table   
+			$where
+			ORDER BY event_start_date $order , event_start_time $order
+			$limit 
+			$offset";
 	$wpdb->show_errors = true;
 	$events = $wpdb->get_results ( $sql, ARRAY_A );
 	if (! empty ( $events )) {
@@ -869,11 +843,9 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 				$this_event ['location_address'] = $this_location ['location_address'];
 				$this_event ['location_town'] = $this_location ['location_town'];
 			}
-			/* Marcus Begin Edit */
-			//I also edited the SQL
+
 			$this_event ['event_attributes'] = @unserialize($this_event ['event_attributes']);
 			$this_event ['event_attributes'] = (!is_array($this_event ['event_attributes'])) ?  array() : $this_event ['event_attributes'] ;
-			/* Marcus End Edit */
 			array_push ( $inflated_events, $this_event );
 		}
 		return $inflated_events;
@@ -886,41 +858,23 @@ function dbem_get_event($event_id) {
 	global $wpdb;
 	$event_id = intval($event_id);
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
-	$sql = "SELECT event_id, 
-			   	event_name, 
-		 	  	DATE_FORMAT(event_start_date, '%Y-%m-%e') AS 'event_date', 
-				DATE_FORMAT(event_start_date, '%e') AS 'event_day',   
-				DATE_FORMAT(event_start_date, '%m') AS 'event_month',
-				DATE_FORMAT(event_start_date, '%Y') AS 'event_year',
-			  	DATE_FORMAT(event_start_time, '%k') AS 'event_hh',
-			  	DATE_FORMAT(event_start_time, '%i') AS 'event_mm',
-				DATE_FORMAT(event_start_time, '%h:%i%p') AS 'event_start_12h_time', 
-				DATE_FORMAT(event_start_time, '%H:%i') AS 'event_start_24h_time', 
-				DATE_FORMAT(event_end_date, '%Y-%m-%e') AS 'event_end_date', 
-				DATE_FORMAT(event_end_date, '%e') AS 'event_end_day',        
-				DATE_FORMAT(event_end_date, '%m') AS 'event_end_month',  
-		  		DATE_FORMAT(event_end_date, '%Y') AS 'event_end_year',
-		  		DATE_FORMAT(event_end_time, '%k') AS 'event_end_hh',
-		  		DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm',
-				DATE_FORMAT(event_end_time, '%h:%i%p') AS 'event_end_12h_time', 
-				DATE_FORMAT(event_end_time, '%H:%i') AS 'event_end_24h_time',   
-				event_start_date,
-				event_end_date,
-				event_start_time,
-				event_end_time,
-				event_notes,
-				event_rsvp,
-				registration_requires_approval,
-				event_seats,
-				recurrence_id, 
-				location_id,
-				event_contactperson_id,
-				event_category_ids,
-				event_attributes,
-				event_page_title_format,
-				event_single_event_format,
-				event_contactperson_email_body,
-				event_respondent_email_body
+	$sql = "SELECT *, 
+		   	DATE_FORMAT(event_start_date, '%Y-%m-%e') AS 'event_date', 
+			DATE_FORMAT(event_start_date, '%e') AS 'event_day',   
+			DATE_FORMAT(event_start_date, '%m') AS 'event_month',
+			DATE_FORMAT(event_start_date, '%Y') AS 'event_year',
+		  	DATE_FORMAT(event_start_time, '%k') AS 'event_hh',
+		  	DATE_FORMAT(event_start_time, '%i') AS 'event_mm',
+			DATE_FORMAT(event_start_time, '%h:%i%p') AS 'event_start_12h_time', 
+			DATE_FORMAT(event_start_time, '%H:%i') AS 'event_start_24h_time', 
+			DATE_FORMAT(event_end_date, '%Y-%m-%e') AS 'event_end_date', 
+			DATE_FORMAT(event_end_date, '%e') AS 'event_end_day',        
+			DATE_FORMAT(event_end_date, '%m') AS 'event_end_month',  
+		  	DATE_FORMAT(event_end_date, '%Y') AS 'event_end_year',
+		  	DATE_FORMAT(event_end_time, '%k') AS 'event_end_hh',
+		  	DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm',
+			DATE_FORMAT(event_end_time, '%h:%i%p') AS 'event_end_12h_time', 
+			DATE_FORMAT(event_end_time, '%H:%i') AS 'event_end_24h_time',   
 		FROM $events_table   
 		WHERE event_id = $event_id";
 	
@@ -934,11 +888,9 @@ function dbem_get_event($event_id) {
 	$event ['location_latitude'] = $location ['location_latitude'];
 	$event ['location_longitude'] = $location ['location_longitude'];
 	$event ['location_image_url'] = $location ['location_image_url'];
-	/* Marcus Begin Edit */
-	//I also edited the SQL
+
 	$event ['event_attributes'] = @unserialize($event ['event_attributes']);
 	$event ['event_attributes'] = (!is_array($event ['event_attributes'])) ?  array() : $event ['event_attributes'] ;
-	/* Marcus End Edit */
 	return $event;
 }
 
