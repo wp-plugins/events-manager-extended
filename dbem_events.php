@@ -1112,11 +1112,11 @@ function dbem_events_table($events, $limit, $title) {
 			<td>
 				 <?php
 				if ($event ['recurrence_id']) {
-					$recurrence = dbem_get_recurrence ( $event ['recurrence_id'] );
+					$recurrence_desc = dbem_get_recurrence_desc ( $event ['recurrence_id'] );
 				?>
-					<b><?php echo $recurrence ['recurrence_description']; ?>
+					<b><?php echo $recurrence_desc; ?>
 				<br />
-				<a href="<?php echo admin_url("admin.php?page=events-manager&action=edit_recurrence&recurrence_id=".$recurrence ['recurrence_id']); ?>"><?php _e ( 'Reschedule', 'dbem' ); ?></a></b>
+				<a href="<?php echo admin_url("admin.php?page=events-manager&action=edit_recurrence&recurrence_id=".$event ['recurrence_id']); ?>"><?php _e ( 'Reschedule', 'dbem' ); ?></a></b>
 				<?php
 				}
 				?>
@@ -1317,13 +1317,13 @@ function dbem_event_form($event, $title, $element) {
 			if (! $event ['recurrence_id']) {
 				echo "<p>" . __ ( 'This isn\'t a recurrent event', 'dbem' ) . ".</p>";
 			} else {
-				$recurrence = dbem_get_recurrence ( $event ['recurrence_id'] );
+				$recurrence_desc = dbem_get_recurrence_desc ( $event ['recurrence_id'] );
 				?>
 								<p>
-									<?php echo $recurrence ['recurrence_description']; ?>
+									<?php echo $recurrence_desc ; ?>
 									<br />
 									<a href="<?php
-				admin_url("admin.php?page=events-manager&action=edit_recurrence&recurrence_id=".$recurrence ['recurrence_id']); ?>">
+				admin_url("admin.php?page=events-manager&action=edit_recurrence&recurrence_id=".$event ['recurrence_id']); ?>">
 									<?php _e ( 'Reschedule', 'dbem' ); ?>
 									</a></p>
 								<?php

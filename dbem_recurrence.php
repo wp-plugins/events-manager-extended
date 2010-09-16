@@ -142,7 +142,6 @@ function dbem_get_recurrence_events($recurrence){
 ///////////////////////////////////////////////
 
 function dbem_insert_recurrent_event($event, $recurrence ){
- 	 	
 	global $wpdb;
 	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 		
@@ -155,18 +154,11 @@ function dbem_insert_recurrent_event($event, $recurrence ){
 	//print_r($recurrence);
 
  	$recurrence['recurrence_id'] = mysql_insert_id();
-	// the following 3 have no column in the recurrence table, but we need it anyway
-	// maybe something to change later on
- 	$recurrence['recurrence_rsvp'] = $event['event_rsvp'];
- 	$recurrence['recurrence_seats'] = $event['event_seats'];
- 	$recurrence['event_attributes'] = $event['event_attributes'];
-
-	//$output = "<h2>Recurring</h2>";
-	//echo "recurrence_id = $recurrence_id<br/>";  
-	dbem_insert_events_for_recurrence($recurrence);
+ 	$event['recurrence_id'] = $recurrence['recurrence_id'];
+	dbem_insert_events_for_recurrence($event,$recurrence);
 }
 
-function dbem_insert_events_for_recurrence($recurrence) {
+function dbem_insert_events_for_recurrence($event,$recurrence) {
 	global $wpdb;
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;   
 	$matching_days = dbem_get_recurrence_events($recurrence);
@@ -174,30 +166,14 @@ function dbem_insert_events_for_recurrence($recurrence) {
 	sort($matching_days);
 		
 	foreach($matching_days as $day) {
-		$new_event['event_name'] = $recurrence['recurrence_name'];
-		$new_event['event_notes'] = $recurrence['recurrence_notes'];
-		$new_event['event_start_time'] = $recurrence['recurrence_start_time'];
-		$new_event['event_end_time'] = $recurrence['recurrence_end_time'];   
-		$new_event['event_rsvp'] = $recurrence['recurrence_rsvp'];
-		$new_event['event_seats'] = $recurrence['recurrence_seats'];
-		$new_event['location_id'] = $recurrence['location_id'];
-		$new_event['recurrence_id'] = $recurrence['recurrence_id'];
-		$new_event['event_category_ids'] = $recurrence['event_category_ids'];
-		$new_event['event_start_date'] = date("Y-m-d", $day); 
-		$new_event['event_contactperson_id'] = $recurrence['event_contactperson_id'];
-		$new_event['event_page_title_format'] = $recurrence['event_page_title_format'];
-		$new_event['event_single_event_format'] = $recurrence['event_single_event_format'];
-		$new_event['event_contactperson_email_body'] = $recurrence['event_contactperson_email_body'];
-		$new_event['event_respondent_email_body'] = $recurrence['event_respondent_email_body'];
-		$new_event['registration_requires_approval'] = $recurrence['registration_requires_approval'];
-		$new_event['event_attributes'] = $recurrence['event_attributes'];
-
+		$event['event_start_date'] = date("Y-m-d", $day); 
 		//print_r($new_event);
-		$wpdb->insert($events_table, $new_event);
+		$wpdb->insert($events_table, $event);
 		if(DEBUG) 
 			echo date("D d M Y", $day)."<br/>";
  	}
 }
+
 function dbem_remove_recurrence($recurrence_id) {
         global $wpdb;
         $events_table = $wpdb->prefix.EVENTS_TBNAME;
@@ -207,6 +183,7 @@ function dbem_remove_recurrence($recurrence_id) {
         $sql = "DELETE FROM $recurrence_table WHERE recurrence_id = '$recurrence_id';";
         $wpdb->query($sql);
 }
+
 function dbem_update_recurrence($event, $recurrence) {
 	global $wpdb;
 	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
@@ -215,56 +192,25 @@ function dbem_update_recurrence($event, $recurrence) {
 		$wpdb->print_error(true);
 		$wpdb->update($recurrence_table, $recurrence, $where); 
 		dbem_remove_events_for_recurrence_id($recurrence['recurrence_id']);
-		$recurrence['recurrence_rsvp'] = $event['event_rsvp'];
-		$recurrence['recurrence_seats'] = $event['event_seats'];
-		$recurrence['event_attributes'] = $event['event_attributes'];
-		dbem_insert_events_for_recurrence($recurrence); 
+		dbem_insert_events_for_recurrence($event,$recurrence); 
 		return true;
 	}
 	return false;
-		
 }
+
 function dbem_remove_events_for_recurrence_id($recurrence_id) {
 	global $wpdb;
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;
 	$sql = "DELETE FROM $events_table WHERE recurrence_id = '$recurrence_id';";
 	$wpdb->query($sql);
-	
 }
-function dbem_get_recurrence($recurrence_id) {
+	
+function dbem_get_recurrence_desc($recurrence_id) {   
 	global $wpdb;
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;
 	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
-	$sql = "SELECT *,
-		DATE_FORMAT(recurrence_start_time, '%k') AS 'recurrence_hh',
-		DATE_FORMAT(recurrence_start_time, '%i') AS 'recurrence_mm',
-		DATE_FORMAT(recurrence_start_time, '%h:%i%p') AS 'recurrence_start_12h_time', 
-		DATE_FORMAT(recurrence_start_time, '%H:%i') AS 'recurrence_start_24h_time', 
-		DATE_FORMAT(recurrence_end_time, '%Y-%m-%e') AS 'event_end_date', 
-		DATE_FORMAT(recurrence_end_time, '%k') AS 'recurrence_end_hh',
-		DATE_FORMAT(recurrence_end_time, '%i') AS 'recurrence_end_mm',
-		DATE_FORMAT(recurrence_end_time, '%h:%i%p') AS 'recurrence_end_12h_time', 
-		DATE_FORMAT(recurrence_end_time, '%H:%i') AS 'recurrence_end_24h_time'
-	       FROM $recurrence_table WHERE recurrence_id = $recurrence_id;";
+	$sql = "SELECT * FROM $recurrence_table WHERE recurrence_id = $recurrence_id;";
 	$recurrence = $wpdb->get_row($sql, ARRAY_A);
-
-	// now add the info that has no column in the recurrence table
-	$sql = "SELECT event_rsvp,event_seats,event_attributes FROM $events_table WHERE recurrence_id = '$recurrence_id' LIMIT 1;";
-	$rsvp = $wpdb->get_row($sql);
-	$recurrence['recurrence_rsvp'] = $rsvp->event_rsvp;
-	$recurrence['recurrence_seats'] = $rsvp->event_seats;
-	$recurrence['event_attributes'] = @unserialize($rsvp->event_attributes);
-
-	// now add the location info
-	$location = dbem_get_location($recurrence['location_id']);
-	$recurrence['location_name'] = $location['location_name'];
-	$recurrence['location_address'] = $location['location_address'];
-	$recurrence['location_town'] = $location['location_town'];
-	$recurrence['recurrence_description'] = dbem_build_recurrence_description($recurrence);
-	return $recurrence;
-}
-
-function dbem_build_recurrence_description($recurrence) {   
 
 	$weekdays_name = array(__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'),__('Sunday'));
 	$monthweek_name = array('1' => __('the first %s of the month', 'dbem'),'2' => __('the second %s of the month', 'dbem'), '3' => __('the third %s of the month', 'dbem'), '4' => __('the fourth %s of the month', 'dbem'), '-1' => __('the last %s of the month', 'dbem'));
@@ -301,6 +247,7 @@ function dbem_build_recurrence_description($recurrence) {
 	$output .= $freq_desc;
 	return  $output;
 }
+
 function dbem_iso_N_date_value($date) {
 	// date("N", $cycle_date)
 	$n = date("w", $date);
