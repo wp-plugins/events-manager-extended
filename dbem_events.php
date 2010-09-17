@@ -104,6 +104,8 @@ function dbem_events_subpanel() {
 		$event ['event_start_time'] = date ( "G:i:00", strtotime ( $event ['event_start_time'] ) );
 		$event ['event_end_time'] = isset($_POST ['event_end_time']) ? $_POST ['event_end_time'] : '';
 		$event ['event_end_time'] = date ( "G:i:00", strtotime ( $event ['event_end_time'] ) );
+		$recurrence ['recurrence_start_date'] = $event ['event_start_date'];
+		$recurrence ['recurrence_end_date'] = $event ['event_end_date'];
 		$recurrence ['recurrence_freq'] = isset($_POST['recurrence_freq']) ? $_POST['recurrence_freq'] : '';
 		if ($recurrence ['recurrence_freq'] == 'weekly') {
 			if (isset($_POST['recurrence_bydays'])) {
@@ -182,18 +184,15 @@ function dbem_events_subpanel() {
 			// validation successful  
 			if(isset($_POST['location-select-id']) && $_POST['location-select-id'] != "") {  
 				$event ['location_id'] = $_POST['location-select-id'];
-				$recurrence ['location_id'] = $_POST['location-select-id'];  
 			} else {
 				$related_location = dbem_get_identical_location ( $location );   
 				// print_r($related_location); 
 				if ($related_location) {
 					$event ['location_id'] = $related_location ['location_id'];
-					$recurrence ['location_id'] = $related_location ['location_id'];
 				} else {
 				
 					$new_location = dbem_insert_location ( $location );
 					$event ['location_id'] = $new_location ['location_id'];
-					$recurrence ['location_id'] = $new_location ['location_id'];
 					//print_r($new_location);
 				}                   
 			}
@@ -263,7 +262,7 @@ function dbem_events_subpanel() {
 	if ($action == 'edit_recurrence') {
 		$event_ID = intval($_GET ['recurrence_id']);
 		$recurrence = dbem_get_recurrence ( $event_ID );
-		$title = __ ( "Reschedule", 'dbem' ) . " '" . $recurrence ['recurrence_name'] . "'";
+		$title = __ ( "Reschedule", 'dbem' ) . " '" . $recurrence ['event_name'] . "'";
 		dbem_event_form ( $recurrence, $title, $event_ID );
 	}
 	
@@ -1143,7 +1142,7 @@ function dbem_event_form($event, $title, $element) {
 	$localised_end_example = str_replace ( "yy", "2008", str_replace ( "mm", "11", str_replace ( "dd", "28", $localised_date_format ) ) );
 	
 	if ($event [$pref . 'start_date'] != "") {
-		preg_match ( "/(\d{4})-(\d{2})-(\d{2})/", $event ['event_start_date'], $matches );
+		preg_match ( "/(\d{4})-(\d{2})-(\d{2})/", $event [$pref. 'start_date'], $matches );
 		$year = $matches [1];
 		$month = $matches [2];
 		$day = $matches [3];
@@ -1209,16 +1208,14 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( "Recurrence", 'dbem' ); ?>
 								</span></h3>
 							<div class="inside">
-								<?php if (!isset($event ['event_id']) || ! $event ['event_id']) { ?>
-								<?php
+								<?php if (!isset($event ['event_id']) || ! $event ['event_id'] || $event ['recurrence_id']) {
 									$recurrence_YES = "";
 									if ($event ['recurrence_id'] != "")
-										$recurrence_YES = "checked='checked'";
+										$recurrence_YES = "checked='checked' disabled";
 								?>
 								<p>
 									<input id="event-recurrence" type="checkbox" name="repeated_event"
 									   value="1" <?php echo $recurrence_YES; ?> />
-									<?php _e ( 'Repeated event', 'dbem' ); ?>
 								</p>
 								<div id="event_recurrence_pattern">
 									<p>Frequency:
@@ -1283,7 +1280,7 @@ function dbem_event_form($event, $title, $element) {
 		}
 		?>
 							</div>
-						</div>        
+						</div>
 						<?php endif; ?>          
 						<?php if(get_option('dbem_rsvp_enabled')) : ?>
 						<div class="postbox ">

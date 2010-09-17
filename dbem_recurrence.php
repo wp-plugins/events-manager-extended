@@ -167,7 +167,9 @@ function dbem_insert_events_for_recurrence($event,$recurrence) {
 		
 	foreach($matching_days as $day) {
 		$event['event_start_date'] = date("Y-m-d", $day); 
+		$event['event_end_date'] = $event['event_start_date']; 
 		//print_r($new_event);
+	//$wpdb->show_errors(true);
 		$wpdb->insert($events_table, $event);
 		if(DEBUG) 
 			echo date("D d M Y", $day)."<br/>";
@@ -188,14 +190,11 @@ function dbem_update_recurrence($event, $recurrence) {
 	global $wpdb;
 	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 	$where = array('recurrence_id' => $recurrence['recurrence_id']);
-	if (true) { 		
-		$wpdb->print_error(true);
-		$wpdb->update($recurrence_table, $recurrence, $where); 
-		dbem_remove_events_for_recurrence_id($recurrence['recurrence_id']);
-		dbem_insert_events_for_recurrence($event,$recurrence); 
-		return true;
-	}
-	return false;
+	$wpdb->print_error(true);
+	$wpdb->update($recurrence_table, $recurrence, $where); 
+	dbem_remove_events_for_recurrence_id($recurrence['recurrence_id']);
+ 	$event['recurrence_id'] = $recurrence['recurrence_id'];
+	dbem_insert_events_for_recurrence($event,$recurrence); 
 }
 
 function dbem_remove_events_for_recurrence_id($recurrence_id) {
@@ -213,10 +212,9 @@ function dbem_get_recurrence($recurrence_id) {
         $recurrence = $wpdb->get_row($sql, ARRAY_A);
 
         // now add the info that has no column in the recurrence table
-        $sql = "SELECT * FROM $events_table WHERE recurrence_id = '$recurrence_id' LIMIT 1;";
-	$event = $wpdb->get_row($sql, ARRAY_A);
-	$event ['event_attributes'] = @unserialize($event ['event_attributes']);
-	$event ['event_attributes'] = (!is_array($event ['event_attributes'])) ?  array() : $event ['event_attributes'] ;
+        $sql = "SELECT event_id FROM $events_table WHERE recurrence_id = '$recurrence_id' LIMIT 1;";
+	$event_id = $wpdb->get_var($sql);
+	$event = dbem_get_event($event_id);
 	foreach ($event as $key=>$val) {
 		$recurrence[$key]=$val;
 	}

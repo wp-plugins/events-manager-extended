@@ -281,43 +281,22 @@ function dbem_create_recurrence_table() {
 		
 		$sql = "CREATE TABLE ".$table_name." (
 			recurrence_id mediumint(9) NOT NULL AUTO_INCREMENT,
-			recurrence_name text NOT NULL,
 			recurrence_start_date date NOT NULL,
 			recurrence_end_date date NOT NULL,
-			recurrence_start_time time NOT NULL,
-			recurrence_end_time time NOT NULL,
-			recurrence_notes longtext NOT NULL,
-			location_id mediumint(9) NOT NULL,
 			recurrence_interval tinyint NOT NULL, 
 			recurrence_freq tinytext NOT NULL,
 			recurrence_byday tinytext NOT NULL,
 			recurrence_byweekno tinyint NOT NULL,
-			event_contactperson_id mediumint(9) NULL,
-  			event_category_ids text default NULL,
-  			event_page_title_format text NULL, 
-  			event_single_event_format text NULL, 
-  			event_contactperson_email_body text NULL, 
-  			event_respondent_email_body text NULL, 
-			registration_requires_approval bool DEFAULT 0,
 			UNIQUE KEY (recurrence_id)
 			);";
 		$wpdb->query($sql); 
 	} else {
-		maybe_add_column($table_name, 'event_category_ids', "alter table $table_name add event_category_id text default NULL;");    
-		maybe_add_column($table_name, 'event_page_title_format', "alter table $table_name add event_page_title_format text NULL;"); 
-		maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
-		maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
-		maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
-		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
 		// Fix buggy columns
 		if ($version<3) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
-			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_name text;");
-			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_notes longtext;");
 		}
 		if ($version<4) {
-			$wpdb->query("ALTER TABLE $table_name MODIFY event_category_ids text default NULL;");
-			$wpdb->query("ALTER TABLE $table_name change event_category_id event_category_ids text default NULL;");
+			$wpdb->query("ALTER TABLE $table_name DROP COLUMN recurrence_name, DROP COLUMN recurrence_start_time, DROP COLUMN recurrence_end_time, DROP COLUMN recurrence_notes, DROP COLUMN location_id, DROP COLUMN event_contactperson_id, DROP COLUMN event_category_id, DROP COLUMN event_page_title_format, DROP COLUMN event_single_event_format, DROP COLUMN event_contactperson_email_body, DROP COLUMN event_respondent_email_body, DROP COLUMN registration_requires_approval ");
 		}
 	}
 }
