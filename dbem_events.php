@@ -1336,7 +1336,6 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'Category', 'dbem' ); ?>
 								</span></h3>
 							<div class="inside">
-								<p><?php _e ( 'Category:', 'dbem' ); ?> 
 										<?php
 							$categories = dbem_get_categories();
 							?>
@@ -1348,7 +1347,7 @@ function dbem_event_form($event, $title, $element) {
 									$selected = "";
 								}
 								?>
-<input type="checkbox" name="event_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?>><?php echo $category['category_name']; ?></br>
+<input type="checkbox" name="event_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?>><?php echo $category['category_name']; ?><br />
 <?php
 							}
 						?>
