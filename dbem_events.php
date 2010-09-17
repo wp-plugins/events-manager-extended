@@ -157,17 +157,20 @@ function dbem_events_subpanel() {
 			// the category id's need to begin and end with a comma
 			// this is needed so we can later search for a specific
 			// cat using LIKE '%,$cat,%'
-			$event ['event_category_ids']=",";
+			$event ['event_category_ids']="";
 			foreach ($_POST['event_category_ids'] as $cat) {
 				if (is_numeric($cat)) {
-                        		$event ['event_category_ids'] .= "$cat,";
+					if (empty($event ['event_category_ids'])) {
+						$event ['event_category_ids'] = "$cat";
+                        		} else {
+						$event ['event_category_ids'] .= ",$cat";
+                        		}
 				}
 			}
                 } else {
 			$event ['event_category_ids']="";
 			
 		}
-
 		$validation_result = dbem_validate_event ( $event );
 		
 		/* Marcus Begin Edit */
@@ -800,12 +803,12 @@ function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset
 		
 	if(get_option('dbem_categories_enabled')) {
 	   if ($category != '' && is_numeric($category)){
-		$conditions [] = " event_category_ids like '$category' OR event_category_ids like '%,$category,%'";
+		$conditions [] = " FIND_IN_SET($category,event_category_ids)";
 	   }elseif( preg_match('/^([0-9],?)+$/', $category) ){
 		$category = explode(',', $category);
 		$category_conditions = array();
 		foreach($category as $cat){
-			$category_conditions[] = " event_category_ids like '$category' OR event_category_ids like '%,$cat,%'";
+			$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
 		}
 		$conditions [] = "(".implode(' OR', $category_conditions).")";
 	   }

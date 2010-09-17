@@ -527,10 +527,7 @@ function dbem_create_events_submenu () {
 }
 
 function dbem_replace_placeholders($format, $event, $target="html") {
-
 	// first we do the custom attributes, since these can contain other placeholders
-	/* Marcus Begin Edit */
-	//This is for the custom attributes
 	preg_match_all("/#_ATT\{.+?\}(\{.+?\})?/", $format, $results);
 	foreach($results[0] as $resultKey => $result) {
 		//Strip string of placeholder and just leave the reference
@@ -542,7 +539,6 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		}
 		$format = str_replace($result, $attString ,$format );
 	}
-	/* Marcus End Edit */
 
 	// and now all the other placeholders
  	$event_string = $format;
@@ -806,8 +802,8 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		
 		//Add a placeholder for categories
 		if (preg_match('/^#_CATEGORY$/', $result)) {
-	      		$category = (dbem_get_event_category($event['event_id']));
-			$field_value = dbem_sanitize_html($category['category_name']);
+	      		$categories = dbem_get_event_categories($event['event_id']);
+			$field_value = dbem_sanitize_html(join(",",$categories));
 			$event_string = str_replace($result, $field_value, $event_string );
 		}
 	}
