@@ -187,7 +187,7 @@ function dbem_add_person($name, $email, $phone = "") {
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
 	$name = dbem_sanitize_request($name);
 	$email = dbem_sanitize_request($email);
-	$$phone = dbem_sanitize_request($phone);
+	$phone = dbem_sanitize_request($phone);
 	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone) VALUES ('$name', '$email', '$phone');";
 	$wpdb->query($sql);
 	$new_person = dbem_get_person_by_name_and_email($name, $email);  

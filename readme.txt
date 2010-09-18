@@ -26,6 +26,7 @@ For more information visit the [Documentation Page](http://www.e-dynamics.be/wor
 
 == Installation ==
 
+Always take a backup of your db before doing the upgrade, just in case ...  
 1. Upload the `events-manager-extended` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Add events list or calendars following the instructions in the Usage section.
