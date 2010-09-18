@@ -193,18 +193,18 @@ function dbem_create_events_table() {
 		// Creating the events table
 		$sql = "CREATE TABLE ".$table_name." (
 			event_id mediumint(9) NOT NULL AUTO_INCREMENT,
-			event_author mediumint(9) DEFAULT NULL,
+			event_author mediumint(9) DEFAULT 0,
 			event_name text NOT NULL,
 			event_start_time time NOT NULL,
 			event_end_time time NOT NULL,
 			event_start_date date NOT NULL,
 			event_end_date date NULL, 
 			event_notes longtext DEFAULT NULL,
-			event_rsvp bool NOT NULL DEFAULT 0,
-			event_seats mediumint(9),
-			event_contactperson_id mediumint(9) NULL,  
-			location_id mediumint(9) NOT NULL,
-			recurrence_id mediumint(9) NULL,
+			event_rsvp bool DEFAULT 0,
+			event_seats mediumint(9) DEFAULT 0,
+			event_contactperson_id mediumint(9) DEFAULT 0,
+			location_id mediumint(9) DEFAULT 0,
+			recurrence_id mediumint(9) DEFAULT 0,
   			event_category_ids text default NULL,
   			event_attributes text NULL, 
   			event_page_title_format text NULL, 
@@ -246,27 +246,29 @@ function dbem_create_events_table() {
 		maybe_add_column($table_name, 'event_end_date', "alter table $table_name add event_end_date date NULL;");
 		maybe_add_column($table_name, 'event_start_time', "alter table $table_name add event_start_time time NOT NULL;"); 
 		maybe_add_column($table_name, 'event_end_time', "alter table $table_name add event_end_time time NOT NULL;"); 
-		maybe_add_column($table_name, 'event_rsvp', "alter table $table_name add event_rsvp bool NOT NULL DEFAULT 0;");
-		maybe_add_column($table_name, 'event_seats', "alter table $table_name add event_seats mediumint(9) NULL;"); 
-		maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) NOT NULL;");    
-		maybe_add_column($table_name, 'recurrence_id', "alter table $table_name add recurrence_id mediumint(9) NULL;"); 
-		maybe_add_column($table_name, 'event_contactperson_id', "alter table $table_name add event_contactperson_id mediumint(9) NULL;");
+		maybe_add_column($table_name, 'event_rsvp', "alter table $table_name add event_rsvp bool DEFAULT 0;");
+		maybe_add_column($table_name, 'event_seats', "alter table $table_name add event_seats mediumint(9) DEFAULT 0;");
+		maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) DEFAULT 0;");    
+		maybe_add_column($table_name, 'recurrence_id', "alter table $table_name add recurrence_id mediumint(9) DEFAULT 0;"); 
+		maybe_add_column($table_name, 'event_contactperson_id', "alter table $table_name add event_contactperson_id mediumint(9) DEFAULT 0;");
 		maybe_add_column($table_name, 'event_attributes', "alter table $table_name add event_attributes text NULL;"); 
 		maybe_add_column($table_name, 'event_page_title_format', "alter table $table_name add event_page_title_format text NULL;"); 
 		maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
 		maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
 		maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
 		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
-		
 		if ($version<3) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_name text;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_notes longtext;");
-			$wpdb->query("ALTER TABLE $table_name MODIFY event_author mediumint(9);");
-			$wpdb->query("ALTER TABLE $table_name MODIFY event_seats mediumint(9) NULL;");
 		}
 		if ($version<4) {
-			$wpdb->query("ALTER TABLE $table_name MODIFY event_category_ids text default NULL;");
-			$wpdb->query("ALTER TABLE $table_name change event_category_id event_category_ids text default NULL;");
+			$wpdb->query("ALTER TABLE $table_name CHANGE event_category_id event_category_ids text default NULL;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_author mediumint(9) DEFAULT 0;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_contactperson_id mediumint(9) DEFAULT 0;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_seats mediumint(9) DEFAULT 0;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY location_id mediumint(9) DEFAULT 0;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_id mediumint(9) DEFAULT 0;");
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_rsvp bool DEFAULT 0;");
 		}
 	}
 }
