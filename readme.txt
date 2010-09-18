@@ -201,3 +201,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: show month or day in events_list if wanted (new parameter for shortcode events_list: showperiod=daily|monthly)
 * Feature: events can belong to multiple categories now
 * Feature: the attribute 'scope' for the shortcode 'events_list' can now contain a date range, eg. [events_list scope=2010-00-00--2010-12-31 limit=200] 
+* Feature: "limit 0" now shows all events (pending other restrictions) for the shortcode events_list

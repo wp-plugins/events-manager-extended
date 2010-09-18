@@ -753,13 +753,15 @@ function dbem_is_multiple_events_page() {
 }
 
 // main function querying the database event table
-function dbem_get_events($limit = "", $scope = "future", $order = "ASC", $offset = "", $location_id = "", $category = '') {
+function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '') {
 	global $wpdb;
   
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
-	if ($limit != "")
+	$limit="";
+	if ($o_limit > 0)
 		$limit = "LIMIT ".intval($limit);
-	if ($offset != "")
+	$offset="";
+	if ($o_offset >0)
 		$offset = "OFFSET ".intval($offset);
 	if ($order != "DESC")
 		$order = "ASC";
