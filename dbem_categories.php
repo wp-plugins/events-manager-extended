@@ -208,7 +208,7 @@ function dbem_get_event_categories($event_id) {
 	$event_table = $wpdb->prefix.EVENTS_TBNAME; 
 	$categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
 	$sql = "SELECT category_name FROM $categories_table, $event_table where event_id ='$event_id' AND FIND_IN_SET(category_id,event_category_ids)";
- 	$category = $wpdb->get_results($sql, ARRAY_A);
+ 	$category = $wpdb->get_col($sql);
 	return $category;
 }
 ?>
