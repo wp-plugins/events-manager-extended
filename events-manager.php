@@ -803,7 +803,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		}
 		
 		//Add a placeholder for categories
-		if (preg_match('/^#_CATEGORY$/', $result)) {
+		if (preg_match('/^#_CATEGORIES$/', $result)) {
 	      		$categories = dbem_get_event_categories($event['event_id']);
 			$field_value = dbem_sanitize_html(join(",",$categories));
 			$event_string = str_replace($result, $field_value, $event_string );
