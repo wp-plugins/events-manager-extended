@@ -80,12 +80,11 @@ function dbem_events_subpanel() {
                         }
 		}
 		
-		$events = dbem_get_events ( "", "future" );
-		dbem_events_table ( $events, 10, "Future events" );
+		$events = dbem_get_events ( 0, "future" );
+		dbem_events_table ( $events, 10, "Future events", "future", $offset );
 	}
 	// UPDATE or CREATE action
 	if ($action == 'update_event' || $action == 'update_recurrence') {
-		
 		$event = array ();
 		$location = array ();
 		$event ['event_name'] = isset($_POST ['event_name']) ? stripslashes ( $_POST ['event_name'] ) : '';
@@ -232,8 +231,8 @@ function dbem_events_subpanel() {
 			
 			//$wpdb->query($sql); 
 			echo "<div id='message' class='updated fade'><p>".dbem_sanitize_html($feedback_message)."</p></div>";
-			$events = dbem_get_events ( "", "future" );
-			dbem_events_table ( $events, 10, "Future events" );
+			$events = dbem_get_events ( 0, "future" );
+			dbem_events_table ( $events, 10, "Future events", "future", $offset );
 		} else {
 			// validation unsuccessful			
 			echo "<div id='message' class='error '>
@@ -288,8 +287,7 @@ function dbem_events_subpanel() {
 		}
 		$limit = 20;
 		$events = dbem_get_events ( $limit, $scope, $order, $offset );
-		
-		dbem_events_table ( $events, $limit, $title );
+		dbem_events_table ( $events, $limit, $title, $scope, $offset );
 	}
 }
 
@@ -458,7 +456,7 @@ function dbem_events_page_content() {
 			$single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
 			return $single_event_format_header .  dbem_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
 		} else {
-			$events = dbem_get_events ( "", dbem_sanitize_request($_REQUEST['calendar_day']) );
+			$events = dbem_get_events ( 0, dbem_sanitize_request($_REQUEST['calendar_day']) );
 			$event = $events [0];
 			$single_event_format = ( $event['event_single_event_format'] != '' ) ? $event['event_single_event_format'] : get_option ( 'dbem_single_event_format' );
 			$page_body = dbem_replace_placeholders ( $single_event_format, $event );
@@ -515,7 +513,7 @@ function dbem_events_page_title($data) {
 			$events_N = dbem_events_count_for ( $date );
 			
 			if ($events_N == 1) {
-				$events = dbem_get_events ( "", dbem_sanitize_request($_REQUEST['calendar_day']));
+				$events = dbem_get_events ( 0, dbem_sanitize_request($_REQUEST['calendar_day']));
 				$event = $events [0];
 				$stored_page_title_format = ( $event['event_page_title_format'] != '' ) ? $event['event_page_title_format'] : get_option ( 'dbem_event_page_title_format' );
 				$page_title = dbem_replace_placeholders ( $stored_page_title_format, $event );
@@ -627,7 +625,7 @@ add_action ( 'admin_print_scripts', 'dbem_admin_css' );
 
 // exposed function, for theme  makers
 	//Added a category option to the get events list method and shortcode
-function dbem_get_events_list($limit = "10", $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '') {
+function dbem_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '') {
 	if (strpos ( $limit, "=" )) {
 		// allows the use of arguments without breaking the legacy code
 		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '');
@@ -759,10 +757,10 @@ function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_of
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
 	$limit="";
 	if ($o_limit > 0)
-		$limit = "LIMIT ".intval($limit);
+		$limit = "LIMIT ".intval($o_limit);
 	$offset="";
 	if ($o_offset >0)
-		$offset = "OFFSET ".intval($offset);
+		$offset = "OFFSET ".intval($o_offset);
 	if ($order != "DESC")
 		$order = "ASC";
 	
@@ -923,7 +921,7 @@ function dbem_duplicate_event($event_id) {
 		$order = $_GET ['order'];
 		$limit = 20;
 		$events = dbem_get_events ( $limit, $scope, $order, $offset );
-		dbem_events_table ( $events, $limit, $title );
+		dbem_events_table ( $events, $limit, $title, $scope, $offset );
 	}
 }
 
@@ -942,14 +940,9 @@ function dbem_hello_to_new_user() {
 <?php
 }
 
-function dbem_events_table($events, $limit, $title) {
-	$scope = isset($_GET ['scope']) ? $_GET ['scope'] : "future";
-	$events_count = count ( dbem_get_events ( "", $scope ) );
-	
-	$offset = isset($_GET ['offset']) ? intval($_GET ['offset']) : 0;
-	
+function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) {
+	$events_count = count ( dbem_get_events ( 0, $scope ) );
 	$use_events_end = get_option ( 'dbem_use_event_end' );
-	
 	?>
 
 <div class="wrap">

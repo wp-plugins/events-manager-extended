@@ -486,7 +486,7 @@ function dbem_registration_seats_form_table($event_id=0) {
 	<select name="event_id">
 	<option value='0'><?php _e ( 'All events' ); ?></option>
 	<?php
-	$all_events=dbem_get_events("","future");
+	$all_events=dbem_get_events(0,"future");
 	$events_with_pending_bookings=array();
 	foreach ( $all_events as $event ) {
 		if (dbem_get_bookings_for($event['event_id'])) {
@@ -617,7 +617,7 @@ function dbem_registration_approval_form_table($event_id=0) {
 	<select name="event_id">
 	<option value='0'><?php _e ( 'All events' ); ?></option>
 	<?php
-	$all_events=dbem_get_events("","future");
+	$all_events=dbem_get_events(0,"future");
 	$events_with_pending_bookings=array();
 	foreach ( $all_events as $event ) {
 		if ($event['registration_requires_approval'] && dbem_get_bookings_for($event['event_id'],1)) {

@@ -646,7 +646,7 @@ function dbem_single_location_map($location) {
 }
 
 function dbem_events_in_location_list($location, $scope = "") {
-	$events = dbem_get_events("",$scope,"","",$location['location_id']);
+	$events = dbem_get_events(0,$scope,"","",$location['location_id']);
 	$list = "";
 	if (count($events) > 0) {
 		foreach($events as $event)
