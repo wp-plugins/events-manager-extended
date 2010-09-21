@@ -134,7 +134,7 @@ function dbem_get_calendar($args="") {
 	$weeks = array_chunk($new_count, 7); 
 
 	// Build Previous and Next Links 
-	$base_link = "?".$_SERVER['QUERY_STRING']."&amp;";       
+	$base_link = "?".$_SERVER['QUERY_STRING'];       
 	
 	if($month == 1){ 
 		 $back_month = 12;
@@ -144,7 +144,7 @@ function dbem_get_calendar($args="") {
 		 $back_year = $year;
 	}  
 	$full ? $link_extra_class = "full-link" : $link_extra_class = '';
-	$previous_link = "<a class='prev-month $link_extra_class' href=\"".$base_link."calmonth={$back_month}&amp;calyear={$back_year}\">&lt;&lt;</a>"; 
+	$previous_link = "<a class='prev-month $link_extra_class' href=\"".$base_link."&calmonth={$back_month}&calyear={$back_year}\">&lt;&lt;</a>"; 
 
 	if($month == 12){ 
 	   $next_month = 1;
@@ -153,7 +153,7 @@ function dbem_get_calendar($args="") {
 	   $next_month = $month + 1;
 		 $next_year = $year;	
 	} 
-	$next_link = "<a class='next-month $link_extra_class' href=\"".$base_link."calmonth={$next_month}&amp;calyear={$next_year}\">&gt;&gt;</a>";  
+	$next_link = "<a class='next-month $link_extra_class' href=\"".$base_link."&calmonth={$next_month}&calyear={$next_year}\">&gt;&gt;</a>";  
 	$random = (rand(100,200));
 	$full ? $class = 'dbem-calendar-full' : $class='dbem-calendar';
 	$calendar="<div class='$class' id='dbem-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div>";
@@ -411,7 +411,7 @@ function dbem_ajaxize_calendar() {
 			parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
 		   	if (parseInt(month_n,10) == 1)
 					year_n = parseInt(year_n,10) -1;
-			$j_dbem_calendar.get("<?php site_url(); ?>", {ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar}, function(data){
+			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar}, function(data){
 				tableDiv.html(data);
 				initCalendar();
 			});
@@ -425,7 +425,7 @@ function dbem_ajaxize_calendar() {
 			parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
 		   	if (parseInt(month_n,10) == 12)
 					year_n = parseInt(year_n,10) + 1;
-			$j_dbem_calendar.get("<?php site_url(); ?>", {ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar}, function(data){
+			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar}, function(data){
 				tableDiv.html(data);
 				initCalendar();
 			});
