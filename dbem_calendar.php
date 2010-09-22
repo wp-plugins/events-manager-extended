@@ -133,27 +133,33 @@ function dbem_get_calendar($args="") {
 	// so we will array_chunk it into 7 days. 
 	$weeks = array_chunk($new_count, 7); 
 
-	// Build Previous and Next Links 
-	$base_link = "?".$_SERVER['QUERY_STRING'];       
-	
 	if($month == 1){ 
-		 $back_month = 12;
-		 $back_year = $year-1;
+		$back_month = 12;
+		$back_year = $year-1;
 	} else { 
-	   $back_month = $month -1;
-		 $back_year = $year;
+		$back_month = $month -1;
+		$back_year = $year;
 	}  
-	$full ? $link_extra_class = "full-link" : $link_extra_class = '';
-	$previous_link = "<a class='prev-month $link_extra_class' href=\"".$base_link."&calmonth={$back_month}&calyear={$back_year}\">&lt;&lt;</a>"; 
-
 	if($month == 12){ 
-	   $next_month = 1;
-		 $next_year = $year+1;
+		$next_month = 1;
+		$next_year = $year+1;
 	} else { 
-	   $next_month = $month + 1;
-		 $next_year = $year;	
+		$next_month = $month + 1;
+		$next_year = $year;	
 	} 
-	$next_link = "<a class='next-month $link_extra_class' href=\"".$base_link."&calmonth={$next_month}&calyear={$next_year}\">&gt;&gt;</a>";  
+	$full ? $link_extra_class = "full-link" : $link_extra_class = '';
+	// Build Previous and Next Links 
+	$query_string=explode("&",$_SERVER['QUERY_STRING']);
+	$query_string['calmonth']=$back_month;
+	$query_string['calyear']=$back_year;
+	$base_link = "?".implode("&",$query_string);       
+	$previous_link = "<a class='prev-month $link_extra_class' href=\"$base_link\">&lt;&lt;</a>"; 
+	
+	$query_string['calmonth']=$next_month;
+	$query_string['calyear']=$next_year;
+	$base_link = "?".implode("&",$query_string);       
+	$next_link = "<a class='next-month $link_extra_class' href=\"$base_link\">&gt;&gt;</a>";  
+
 	$random = (rand(100,200));
 	$full ? $class = 'dbem-calendar-full' : $class='dbem-calendar';
 	$calendar="<div class='$class' id='dbem-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div>";
