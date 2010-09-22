@@ -187,7 +187,7 @@ function dbem_update_events_for_recurrence($event,$recurrence) {
 	// and just deleting all current events for a recurrence and inserting new ones would break the link
 	// between booking id and event id
 	// Second step: check all days of the recurrence and if no event exists yet, insert it
-        $sql = "SELECT * FROM $events_table WHERE recurrence_id = '$recurrence_id';";
+        $sql = "SELECT * FROM $events_table WHERE recurrence_id = '".$recurrence['recurrence_id']."';";
 	$events = $wpdb->get_results($sql, ARRAY_A);
 	// Doing step 1
 	foreach($events as $existing_event) {
@@ -198,8 +198,9 @@ function dbem_update_events_for_recurrence($event,$recurrence) {
 			}
 		}
 		if ($update_needed==1) {
-			//$wpdb->show_errors(true);
 			$where=array('event_id' => $existing_event['event_id']);
+			$event['event_start_date'] = $existing_event['event_start_date'];
+			$event['event_end_date'] = $event['event_start_date'];
 			$wpdb->update($events_table, $event, $where); 
 		} else {
         		$sql = "DELETE FROM $events_table WHERE event_id = '".$existing_event['event_id']."';";
@@ -209,10 +210,10 @@ function dbem_update_events_for_recurrence($event,$recurrence) {
 	// Doing step 2
 	foreach($matching_days as $day) {
 		$insert_needed=1;
-		$event['event_start_date'] == date("Y-m-d", $day);
-		$event['event_end_date'] == $event['event_start_date'];
+		$event['event_start_date'] = date("Y-m-d", $day);
+		$event['event_end_date'] = $event['event_start_date'];
 		foreach($events as $existing_event) {
-			if (!$insert_needed && $existing_event['event_start_date'] == $event['event_start_date']) {
+			if ($insert_needed && $existing_event['event_start_date'] == $event['event_start_date']) {
 				$insert_needed=0;
 			}
 		}
@@ -220,6 +221,7 @@ function dbem_update_events_for_recurrence($event,$recurrence) {
 			$wpdb->insert($events_table, $event);			
 		}
 	}
+	return 1;
 }
 
 function dbem_remove_recurrence($recurrence_id) {
@@ -236,10 +238,11 @@ function dbem_update_recurrence($event, $recurrence) {
 	global $wpdb;
 	$recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 	$where = array('recurrence_id' => $recurrence['recurrence_id']);
-	$wpdb->print_error(true);
+	$wpdb->show_errors(true);
 	$wpdb->update($recurrence_table, $recurrence, $where); 
  	$event['recurrence_id'] = $recurrence['recurrence_id'];
 	dbem_update_events_for_recurrence($event,$recurrence); 
+	return 1;
 }
 
 function dbem_remove_events_for_recurrence_id($recurrence_id) {
