@@ -133,32 +133,10 @@ function dbem_get_calendar($args="") {
 	// so we will array_chunk it into 7 days. 
 	$weeks = array_chunk($new_count, 7); 
 
-	if($month == 1){ 
-		$back_month = 12;
-		$back_year = $year-1;
-	} else { 
-		$back_month = $month -1;
-		$back_year = $year;
-	}  
-	if($month == 12){ 
-		$next_month = 1;
-		$next_year = $year+1;
-	} else { 
-		$next_month = $month + 1;
-		$next_year = $year;	
-	} 
 	$full ? $link_extra_class = "full-link" : $link_extra_class = '';
-	// Build Previous and Next Links 
-	$query_string=explode("&",$_SERVER['QUERY_STRING']);
-	$query_string['calmonth']=$back_month;
-	$query_string['calyear']=$back_year;
-	$base_link = "?".implode("&",$query_string);       
-	$previous_link = "<a class='prev-month $link_extra_class' href=\"$base_link\">&lt;&lt;</a>"; 
-	
-	$query_string['calmonth']=$next_month;
-	$query_string['calyear']=$next_year;
-	$base_link = "?".implode("&",$query_string);       
-	$next_link = "<a class='next-month $link_extra_class' href=\"$base_link\">&gt;&gt;</a>";  
+	// the real links are created via jquery when clicking on the prev-month or next-month class-links
+	$previous_link = "<a class='prev-month $link_extra_class' href=\"#\">&lt;&lt;</a>"; 
+	$next_link = "<a class='next-month $link_extra_class' href=\"#\">&gt;&gt;</a>";  
 
 	$random = (rand(100,200));
 	$full ? $class = 'dbem-calendar-full' : $class='dbem-calendar';
