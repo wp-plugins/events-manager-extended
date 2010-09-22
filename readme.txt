@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.1.2
+Stable tag: 3.1.3
 
 Manage events and display them in your blog. Includes recurring events, location management, calendar, Google map integration, RSVP. 
              
@@ -200,8 +200,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: events can belong to multiple categories now
 * Feature: #_CATEGORIES shortcode available, will return a comma-seperated list of categories an event is in
 * Feature: #_DIRECTIONS shortcode available, so you can ask for driving directions to an event/location
-* Feature: new shortcode available: display_single_event
-* Feature: show month or day in events_list if wanted (new parameter for shortcode events_list: showperiod=daily|monthly)
-* Feature: the attribute 'scope' for the shortcode 'events_list' can now contain a date range, eg. [events_list scope=2010-00-00--2010-12-31 limit=200] 
-* Feature: "limit=0" now shows all events (pending other restrictions) for the shortcode events_list
+* Feature: new shortcode available: [display_single_event], eg: [display_single_event id=23]
+* Feature: show month or day in events_list if wanted (new parameter for shortcode [events_list]: showperiod=daily|monthly)
+* Feature: the attribute 'scope' for the shortcode [events_list] can now contain a date range, eg. [events_list scope=2010-00-00--2010-12-31 limit=200] 
+* Feature: "limit=0" now shows all events (pending other restrictions) for the shortcode [events_list]
 * Bugfix: updating a recurrent event with booking enabled, deleted all existing bookings for each event of the recurrence

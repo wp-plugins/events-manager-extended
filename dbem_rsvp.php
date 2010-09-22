@@ -49,6 +49,7 @@ function dbem_add_booking_form($event_id) {
 		<p>".__('(* marks a required field)', 'dbem')."</p>   
 		<p><input type='submit' value='".__('Send your booking', 'dbem')."'/>   
 		 <input type='hidden' name='eventAction' value='add_booking'/></p>  
+		 <input type='hidden' name='event_id' value='$event_id'/></p>  
 	</form>";   
 	// $module .= "dati inviati: ";
 	//  	$module .= dbem_sanitize_request($_POST['bookerName']);  
@@ -123,7 +124,7 @@ function dbem_book_seats() {
 	$bookerPhone = stripslashes($_POST['bookerPhone']); 
 	$bookedSeats = intval($_POST['bookedSeats']);
 	$bookerComment = stripslashes($_POST['bookerComment']);   
-	$event_id = intval($_GET['event_id']);
+	$event_id = intval($_POST['event_id']);
 	$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
 	
 	$msg="";
@@ -136,10 +137,10 @@ function dbem_book_seats() {
 	// if any of name, email, phone or bookedseats are empty: return an error
 		$result = __('Please fill in all the required fields','dbem');  
 	} else {
-	   if (!$booker) {
-   		$booker = dbem_add_person($bookerName, $bookerEmail, $bookerPhone);
-	   }
 	   if ($bookedSeats && dbem_are_seats_available_for($event_id, $bookedSeats)) {  
+	   	if (!$booker) {
+   			$booker = dbem_add_person($bookerName, $bookerEmail, $bookerPhone);
+	   	}
 		dbem_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
 		
 		$result = __('Your booking has been recorded','dbem');  
