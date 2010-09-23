@@ -140,19 +140,40 @@ add_filter('dbem_notes_map', 'js_escape');
 function dbem_install() {
  	// Creates the events table if necessary
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	dbem_create_events_table();
-	dbem_create_recurrence_table();  
-	dbem_create_locations_table();
-  	dbem_create_bookings_table();
-  	dbem_create_people_table();
-	dbem_create_categories_table();
+	$charset="";
+	$collate="";
+	if ( $wpdb->has_cap('collation') ) {
+		if ( ! empty($wpdb->charset) )
+			$charset = "DEFAULT CHARACTER SET $wpdb->charset";
+		if ( ! empty($wpdb->collate) )
+			$collate = "COLLATE $wpdb->collate";
+	}
+	dbem_create_events_table($charset,$collate);
+	dbem_create_recurrence_table($charset,$collate);
+	dbem_create_locations_table($charset,$collate);
+  	dbem_create_bookings_table($charset,$collate);
+  	dbem_create_people_table($charset,$collate);
+	dbem_create_categories_table($charset,$collate);
+	$version = get_option('dbem_version');
+	if ($version <5 && $wpdb->has_cap('collation')) {
+		if ( ! empty($wpdb->charset)) {
+			$charset = "CHARACTER SET $wpdb->charset";
+			dbem_convert_charset(EVENTS_TBNAME,$charset,$collate);
+			dbem_convert_charset(RECURRENCE_TBNAME,$charset,$collate);
+			dbem_convert_charset(LOCATIONS_TBNAME,$charset,$collate);
+			dbem_convert_charset(BOOKINGS_TBNAME,$charset,$collate);
+			dbem_convert_charset(PEOPLE_TBNAME,$charset,$collate);
+			dbem_convert_charset(BOOKING_PEOPLE_TBNAME,$charset,$collate);
+			dbem_convert_charset(CATEGORIES_TBNAME,$charset,$collate);
+		}
+	}
 	dbem_add_options();
   	// if ANY 1.0 option is there  AND the version options hasn't been set yet THEN launch the update script 
 	
 	if (get_option('dbem_events_page') && !get_option('dbem_version')) 
 		dbem_migrate_old_events();
   
-  	update_option('dbem_version', 4); 
+  	update_option('dbem_version', 5); 
 	// Create events page if necessary
  	$events_page_id = get_option('dbem_events_page')  ;
 	if ($events_page_id != "" ) {
@@ -171,8 +192,14 @@ function dbem_install() {
 				mkdir("../".IMAGE_UPLOAD_DIR, 0777);
 }
 
-function dbem_create_events_table() {
-	global  $wpdb, $user_level;
+function dbem_convert_charset($table,$charset,$collate) {
+	global $wpdb;
+	$sql = "ALTER TABLE $table CONVERT TO $charset $collate;";
+	$wpdb->query($sql);
+}
+
+function dbem_create_events_table($charset,$collate) {
+	global $wpdb, $user_level;
 	$version = get_option('dbem_version');
 	
 	$old_table_name = $wpdb->prefix."events";
@@ -213,9 +240,9 @@ function dbem_create_events_table() {
   			event_respondent_email_body text NULL, 
 			registration_requires_approval bool DEFAULT 0,
 			UNIQUE KEY (event_id)
-			);";
+			) $charset $collate;";
 		
-		$wpdb->query($sql); 
+		dbDelta($sql);
 		//--------------  DEBUG CODE to insert a few events n the new table
 		// get the current timestamp into an array
 		$timestamp = time();
@@ -270,12 +297,14 @@ function dbem_create_events_table() {
 			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_id mediumint(9) DEFAULT 0;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_rsvp bool DEFAULT 0;");
 		}
+		if ($version<4) {
+			$wpdb->query("ALTER TABLE $table_name MODIFY event_rsvp bool DEFAULT 0;");
+		}
 	}
 }
 
-function dbem_create_recurrence_table() {
-	
-	global  $wpdb, $user_level;
+function dbem_create_recurrence_table($charset,$collate) {
+	global $wpdb, $user_level;
 	$version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.RECURRENCE_TBNAME;
 
@@ -290,8 +319,8 @@ function dbem_create_recurrence_table() {
 			recurrence_byday tinytext NOT NULL,
 			recurrence_byweekno tinyint NOT NULL,
 			UNIQUE KEY (recurrence_id)
-			);";
-		$wpdb->query($sql); 
+			) $charset $collate;";
+		dbDelta($sql);
 	} else {
 		// Fix buggy columns
 		if ($version<3) {
@@ -303,9 +332,8 @@ function dbem_create_recurrence_table() {
 	}
 }
 
-function dbem_create_locations_table() {
-	
-	global  $wpdb, $user_level;
+function dbem_create_locations_table($charset,$collate) {
+	global $wpdb, $user_level;
 	$version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.LOCATIONS_TBNAME;
 
@@ -315,7 +343,6 @@ function dbem_create_locations_table() {
 		// get_currentuserinfo();
 		// if ($user_level < 8) { return; }
 
-		// Creating the events table
 		$sql = "CREATE TABLE ".$table_name." (
 			location_id mediumint(9) NOT NULL AUTO_INCREMENT,
 			location_name text NOT NULL,
@@ -325,8 +352,8 @@ function dbem_create_locations_table() {
 			location_longitude float DEFAULT NULL,
 			location_description text DEFAULT NULL,
 			UNIQUE KEY (location_id)
-			);";
-		$wpdb->query($sql); 
+			) $charset $collate;";
+		dbDelta($sql);
 		
 		$wpdb->query("INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude)
 					VALUES ('Arts Millenium Building', 'Newcastle Road','Galway', 53.275, -9.06532)");
@@ -341,8 +368,8 @@ function dbem_create_locations_table() {
 	}
 }
 
-function dbem_create_bookings_table() {
-	global  $wpdb, $user_level;
+function dbem_create_bookings_table($charset,$collate) {
+	global $wpdb, $user_level;
 	$version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.BOOKINGS_TBNAME;
 
@@ -355,8 +382,8 @@ function dbem_create_bookings_table() {
 			booking_approved bool DEFAULT 0,
 			booking_comment text DEFAULT NULL,
 			UNIQUE KEY  (booking_id)
-			);";
-		$wpdb->query($sql); 
+			) $charset $collate;";
+		dbDelta($sql);
 	} else {
 		maybe_add_column($table_name, 'booking_comment', "ALTER TABLE $table_name add booking_comment text DEFAULT NULL;"); 
 		maybe_add_column($table_name, 'booking_approved', "ALTER TABLE $table_name add booking_approved bool DEFAULT 0;"); 
@@ -368,8 +395,8 @@ function dbem_create_bookings_table() {
 	}
 }
 
-function dbem_create_people_table() {
-	global  $wpdb, $user_level;
+function dbem_create_people_table($charset,$collate) {
+	global $wpdb, $user_level;
 	$table_name = $wpdb->prefix.PEOPLE_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -379,13 +406,13 @@ function dbem_create_people_table() {
 			person_email tinytext NOT NULL,
 			person_phone tinytext NOT NULL,
 			UNIQUE KEY (person_id)
-			);";
-		$wpdb->query($sql); 
+			) $charset $collate;";
+		dbDelta($sql);
 	}
 } 
 
-function dbem_create_categories_table() {
-	global  $wpdb, $user_level;
+function dbem_create_categories_table($charset,$collate) {
+	global $wpdb, $user_level;
 	$table_name = $wpdb->prefix.CATEGORIES_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -393,39 +420,36 @@ function dbem_create_categories_table() {
 			category_id int(11) NOT NULL auto_increment,
 			category_name tinytext NOT NULL,
 			PRIMARY KEY  (category_id)
-			);";
-		$wpdb->query($sql); 
+			) $charset $collate;";
+		dbDelta($sql);
 	}
 }
 
 function dbem_migrate_old_events() {         
-		global $wpdb;  
+	global $wpdb;  
 		
-		$events_table = $wpdb->prefix.EVENTS_TBNAME;
-		$sql = "SELECT event_id, event_time, event_venue, event_address, event_town FROM $events_table";
-		//echo $sql;
-		$events = $wpdb->get_results($sql, ARRAY_A);
-		foreach($events as $event) {
-
-			// Migrating location data to the location table
-			$location = array('location_name' => $event['event_venue'], 'location_address' => $event['event_address'], 'location_town' => $event['event_town']);
-			$related_location = dbem_get_identical_location($location); 
-				 
-				if ($related_location)  {
-					$event['location_id'] = $related_location['location_id'];     
-				}
-				else {
-			   	$new_location = dbem_insert_location($location);
-				  $event['location_id']= $new_location['location_id'];
-				}                                 
-		 		// migrating event_time to event_start_date and event_start_time
-				$event['event_start_date'] = substr($event['event_time'],0,10); 
-		    	$event['event_start_time'] = substr($event['event_time'],11,8);
-				$event['event_end_time'] = substr($event['event_time'],11,8);
-				
-				$where = array('event_id' => $event['event_id']); 
-	   			$wpdb->update($events_table, $event, $where); 	
-		}
+	$events_table = $wpdb->prefix.EVENTS_TBNAME;
+	$sql = "SELECT event_id, event_time, event_venue, event_address, event_town FROM $events_table";
+	//echo $sql;
+	$events = $wpdb->get_results($sql, ARRAY_A);
+	foreach($events as $event) {
+		// Migrating location data to the location table
+		$location = array('location_name' => $event['event_venue'], 'location_address' => $event['event_address'], 'location_town' => $event['event_town']);
+		$related_location = dbem_get_identical_location($location); 
+		if ($related_location)  {
+			$event['location_id'] = $related_location['location_id'];     
+		} else {
+		   	$new_location = dbem_insert_location($location);
+			$event['location_id']= $new_location['location_id'];
+		}                                 
+		// migrating event_time to event_start_date and event_start_time
+		$event['event_start_date'] = substr($event['event_time'],0,10); 
+	   	$event['event_start_time'] = substr($event['event_time'],11,8);
+		$event['event_end_time'] = substr($event['event_time'],11,8);
+		
+		$where = array('event_id' => $event['event_id']); 
+   		$wpdb->update($events_table, $event, $where); 	
+	}
 }
 
 function dbem_add_options($reset=0) {
