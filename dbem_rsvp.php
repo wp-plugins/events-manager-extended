@@ -446,8 +446,10 @@ function dbem_registration_seats_page() {
 	// do the actions if required
         $action = isset($_POST ['action']) ? $_POST ['action'] : '';
 	$bookings = isset($_POST ['bookings']) ? $_POST ['bookings'] : array();
-	$bookings_seats = isset($_POST ['bookings_seats']) ? intval($_POST ['bookings_seats']) : array();
+	$bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
 	foreach ( $bookings as $key=>$booking_id ) {
+		// make sure the seats are integers
+		$bookings_seats[$key]=intval($bookings_seats[$key]);
 		$booking = dbem_get_booking ($booking_id);
 		$person  = dbem_get_person ($booking['person_id']);
 		// 0 seats is not possible, then you should remove the booking
