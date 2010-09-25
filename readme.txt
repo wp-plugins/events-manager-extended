@@ -209,3 +209,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.1.4 = 
 * Improvement: use the wordpress defined charset and collation for the DB tables, this will benifit those with weird character sets
 * Bugfix: Changing the registration (number of reserved places) of a user for an event works again
+* Feature: #_ATTENDEES shortcode available, will return a html-list of names attending the event

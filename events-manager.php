@@ -568,6 +568,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 
 	// and now all the other placeholders
  	$event_string = $format;
+	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
 	preg_match_all("/#@?_?[A-Za-z0-9]+/", $format, $placeholders);
 	foreach($placeholders[0] as $result) {
 		// echo "RESULT: $result <br>";
@@ -637,50 +638,38 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		  	$event_string = str_replace($result, $directions_form , $event_string ); 
 		}
 		if (preg_match('/#_ADDBOOKINGFORM/', $result)) {
-		 	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
-			if ($event['event_rsvp']) {
-				$rsvp_add_module .= dbem_add_booking_form($event['event_id']);
+			if ($rsvp_is_active && $event['event_rsvp']) {
+				$rsvp_add_module = dbem_add_booking_form($event['event_id']);
 			} else {
-				$rsvp_add_module .= "";
+				$rsvp_add_module = "";
 			}
 		 	$event_string = str_replace($result, $rsvp_add_module , $event_string );
 		}
 		if (preg_match('/#_REMOVEBOOKINGFORM/', $result)) {
-		 	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
-			if ($event['event_rsvp']) {
-				$rsvp_delete_module .= dbem_delete_booking_form();
+			if ($rsvp_is_active && $event['event_rsvp']) {
+				$rsvp_delete_module = dbem_delete_booking_form();
 			} else {
-				$rsvp_delete_module .= "";
+				$rsvp_delete_module = "";
 			}
 		 	$event_string = str_replace($result, $rsvp_delete_module , $event_string );
 		}
 		if (preg_match('/#_AVAILABLESPACES|#_AVAILABLESEATS/', $result)) {
-                        $rsvp_is_active = get_option('dbem_rsvp_enabled');
-                        if ($event['event_rsvp']) {
-				$available_seats .= dbem_get_available_seats($event['event_id']);
+                        if ($rsvp_is_active && $event['event_rsvp']) {
+				$available_seats = dbem_get_available_seats($event['event_id']);
                         } else {
-                                $available_seats .= "";
+                                $available_seats = "";
                         }
                         $event_string = str_replace($result, $available_seats , $event_string );
                 }
 		if (preg_match('/#_(RESERVEDSPACES|BOOKEDSEATS)/', $result)) {
-                        $rsvp_is_active = get_option('dbem_rsvp_enabled');
-                        if ($event['event_rsvp']) {
-				$booked_seats .= dbem_get_booked_seats($event['event_id']);
+                        if ($rsvp_is_active && $event['event_rsvp']) {
+				$booked_seats = dbem_get_booked_seats($event['event_id']);
                         } else {
-                                $booked_seats .= "";
+                                $booked_seats = "";
                         }
                         $event_string = str_replace($result, $booked_seats , $event_string );
                 }
-		if (preg_match('/#_(AVAILABLESPACES|AVAILABLESEATS)/', $result)) {
-                        $rsvp_is_active = get_option('dbem_rsvp_enabled');
-                        if ($event['event_rsvp']) {
-				$availble_seats .= dbem_get_available_seats($event['event_id']);
-                        } else {
-                                $availble_seats .= "";
-                        }
-                        $event_string = str_replace($result, $availble_seats , $event_string );
-                }
+
 		if (preg_match('/#_LINKEDNAME/', $result)) {
 			$events_page_link = dbem_get_events_page(true, false);
 			if (stristr($events_page_link, "?"))
@@ -689,6 +678,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$joiner = "?";
 			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".dbem_sanitize_html($event['event_name'])."'>".dbem_sanitize_html($event['event_name'])."</a>" , $event_string );
 		} 
+
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
 			$events_page_link = dbem_get_events_page(true, false);
 			if (stristr($events_page_link, "?"))
@@ -697,6 +687,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$joiner = "?";
 			$event_string = str_replace($result, $events_page_link.$joiner."event_id=".$event['event_id'] , $event_string );
 		}
+
 	 	if (preg_match('/#_(NOTES|EXCERPT)/', $result)) {
 			$field = "event_".ltrim(strtolower($result), "#_");
 		 	$field_value = $event[$field];      
@@ -730,8 +721,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			}
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
+
 	 	if (preg_match('/#_NAME/', $result)) {
-			$field = "event_".ltrim(strtolower($result), "#_");
+			$field = "event_name";
 		 	$field_value = $event[$field];      
 			$field_value = dbem_sanitize_html($field_value);
 			if ($target == "html") {    
@@ -754,7 +746,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
 	  
-		if (preg_match('/#_(LOCATION)$/', $result)) {
+		if (preg_match('/#_LOCATION$/', $result)) {
 			$field = "location_name";
 		 	$field_value = $event[$field];     
 			$field_value = dbem_sanitize_html($field_value);
@@ -766,6 +758,20 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
+
+		if (preg_match('/#_ATTENDEES$/', $result)) {
+                        if ($rsvp_is_active && $event['event_rsvp']) {
+				$field_value=dbem_get_bookings_list_for($event['event_id']);
+				if ($target == "html") {
+					$field_value = apply_filters('dbem_general', $field_value); 
+				} else {
+					$field_value = apply_filters('dbem_general_rss', $field_value); 
+				}
+			}
+			
+			$event_string = str_replace($result, $field_value , $event_string ); 
+		}
+
 	 	if (preg_match('/#_CONTACTNAME$/', $result)) {
       		$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
 			$name = dbem_get_user_name($user_id);
@@ -830,6 +836,11 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/^#_CATEGORIES$/', $result)) {
 	      		$categories = dbem_get_event_categories($event['event_id']);
 			$field_value = dbem_sanitize_html(join(",",$categories));
+			if ($target == "html") {    
+				$field_value = apply_filters('dbem_general', $field_value); 
+		  	} else {
+				$field_value = apply_filters('dbem_general_rss', $field_value);
+			}
 			$event_string = str_replace($result, $field_value, $event_string );
 		}
 	}

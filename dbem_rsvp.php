@@ -379,6 +379,20 @@ function dbem_get_bookings_for($event_ids,$pending=0) {
  	return $booking_data;
 }
 
+function dbem_get_bookings_list_for($event_id) {
+	$attendees=dbem_get_bookings_for($event_id);
+	if ($attendees) {
+		$res="<ul class='dbem_bookings_list_ul'>";
+		foreach ($attendees as $attendee) {
+			$res.="<li class='dbem_bookings_list_li'>".$attendee['person_name']."</li>";
+		}
+		$res.="</ul>";
+	} else {
+		$res="<p class='dbem_no_bookings'>".__('No responses yet!')."</p>";
+	}
+	return $res;
+}
+
 function dbem_intercept_bookings_delete() {
 	//dbem_email_rsvp_booking();
 	if(isset($_GET['bookings']))
