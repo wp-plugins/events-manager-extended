@@ -14,6 +14,8 @@ function dbem_get_calendar_shortcode($atts) {
 add_shortcode('events_calendar', 'dbem_get_calendar_shortcode');
 
 function dbem_get_calendar($args="") {
+	global $wp_locale;
+
 	$defaults = array(
 		'category' => 0,
 		'full' => 0,
@@ -142,8 +144,7 @@ function dbem_get_calendar($args="") {
 	$full ? $class = 'dbem-calendar-full' : $class='dbem-calendar';
 	$calendar="<div class='$class' id='dbem-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div>";
 	
- 	$weekdays = array(__('S_Sunday_initial'),__('M_Monday_initial'),__('T_Tuesday_initial'),__('W_Wednesday_initial'),__('T_Thursday_initial'),__('F_Friday_initial'),__('S_Saturday_initial'));
-
+ 	$weekdays = array(__('Sunday'),__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'));
 	$n = 0 ;
 	while( $n < $start_of_week ) {   
 		$last_day = array_shift($weekdays);     
@@ -153,7 +154,10 @@ function dbem_get_calendar($args="") {
    
 	$days_initials = "";
 	foreach($weekdays as $weekday) {
-		$days_initials .= "<td>".$weekday."</td>";
+		if ($full)
+			$days_initials .= "<td>".$wp_locale->get_weekday_abbrev($weekday)."</td>";
+		else
+			$days_initials .= "<td>".$wp_locale->get_weekday_initial($weekday)."</td>";
 	} 
 
 	$full ? $fullclass = 'fullcalendar' : $fullclass='';
