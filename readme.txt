@@ -1,6 +1,6 @@
 === Events Manager Extended ===  
 Contributors: liedekef
-Donate link: http://www.e-dynamics.be
+Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
