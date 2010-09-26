@@ -649,8 +649,8 @@ function dbem_get_events_list($limit = 10, $scope = "future", $order = "ASC", $f
 		$curmonth="";
 		$curday="";
 		foreach ( $events as $event ) {
-			$themonth = date("F Y", strtotime($event['event_start_date']));
-			$theday = date(get_option('date_format'), strtotime($event['event_start_date']));
+			$themonth = mysql2date ("F,Y", $event['event_start_date']);
+			$theday = mysql2date (get_option('date_format'), $event['event_start_date']);
 			if ($showperiod == "monthly" && $themonth != $curmonth) {
 				$output .= "<li class='dbem_period'>$themonth</li>";
 			} elseif ($showperiod == "daily" && $theday != $curday) {
