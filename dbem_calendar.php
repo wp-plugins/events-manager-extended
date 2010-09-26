@@ -142,7 +142,8 @@ function dbem_get_calendar($args="") {
 	$full ? $class = 'dbem-calendar-full' : $class='dbem-calendar';
 	$calendar="<div class='$class' id='dbem-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div>";
 	
- 	$weekdays = array('Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday');
+ 	$weekdays = array(__('S_Sunday_initial'),__('M_Monday_initial'),__('T_Tuesday_initial'),__('W_Wednesday_initial'),__('T_Thursday_initial'),__('F_Friday_initial'),__('S_Saturday_initial'));
+
 	$n = 0 ;
 	while( $n < $start_of_week ) {   
 		$last_day = array_shift($weekdays);     
@@ -152,8 +153,9 @@ function dbem_get_calendar($args="") {
    
 	$days_initials = "";
 	foreach($weekdays as $weekday) {
-		$days_initials .= "<td>".dbem_translate_and_trim($weekday)."</td>";
+		$days_initials .= "<td>".$weekday."</td>";
 	} 
+
 	$full ? $fullclass = 'fullcalendar' : $fullclass='';
 	// Build the heading portion of the calendar table 
 	$calendar .=  "<table class='dbem-calendar-table $fullclass'>\n". 
@@ -358,10 +360,6 @@ function dbem_get_calendar($args="") {
 function dbem_days_in_month($month, $year) {
 	return (date("t",mktime(0,0,0,$month,1,$year)));
 }
-
-function dbem_translate_and_trim($string, $length = 1) {
-	return substr(__($string), 0, $length);
-}       
 
 function dbem_ajaxize_calendar() {
 ?>
