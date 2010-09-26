@@ -211,3 +211,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: Changing the registration (number of reserved places) of a user for an event works again
 * Bugfix: the showperiod option to the [events_list] resulted in non-translated names for month/day. Has been fixed.
 * Feature: #_ATTENDEES shortcode available, will return a html-list of names attending the event
+* Feature: when editing an event, you can now make it recurrent
