@@ -1,6 +1,6 @@
 === Events Manager Extended ===  
 Contributors: liedekef
-Donate link: http://www.e-dynamics.be
+Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
@@ -205,3 +205,9 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: the attribute 'scope' for the shortcode [events_list] can now contain a date range, eg. [events_list scope=2010-00-00--2010-12-31 limit=200] 
 * Feature: "limit=0" now shows all events (pending other restrictions) for the shortcode [events_list]
 * Bugfix: updating a recurrent event with booking enabled, deleted all existing bookings for each event of the recurrence
+
+= 3.1.4 = 
+* Improvement: use the wordpress defined charset and collation for the DB tables, this will benifit those with weird character sets
+* Bugfix: Changing the registration (number of reserved places) of a user for an event works again
+* Bugfix: the showperiod option to the [events_list] resulted in non-translated names for month/day. Has been fixed.
+* Feature: #_ATTENDEES shortcode available, will return a html-list of names attending the event
