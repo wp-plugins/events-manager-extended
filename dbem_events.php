@@ -56,6 +56,25 @@ function dbem_events_subpanel() {
 	// Disable Hello to new user if requested
 	if (isset ( $_GET ['disable_hello_to_user'] ) && $_GET ['disable_hello_to_user'] == 'true')
 		update_option ( 'dbem_hello_to_user', 0 );
+
+	// do the UTF-8 conversion if wanted
+	if (isset ( $_GET ['do_character_conversion'] ) && $_GET ['do_character_conversion'] == 'true' && $wpdb->has_cap('collation')) {
+                if ( ! empty($wpdb->charset)) {
+                        $charset = "CHARACTER SET $wpdb->charset";
+			$collate="";
+			if ( ! empty($wpdb->collate) )
+				$collate = "COLLATE $wpdb->collate";
+                        dbem_convert_charset(EVENTS_TBNAME,$charset,$collate);
+                        dbem_convert_charset(RECURRENCE_TBNAME,$charset,$collate);
+                        dbem_convert_charset(LOCATIONS_TBNAME,$charset,$collate);
+                        dbem_convert_charset(BOOKINGS_TBNAME,$charset,$collate);
+                        dbem_convert_charset(PEOPLE_TBNAME,$charset,$collate);
+                        dbem_convert_charset(BOOKING_PEOPLE_TBNAME,$charset,$collate);
+                        dbem_convert_charset(CATEGORIES_TBNAME,$charset,$collate);
+                }
+		update_option ( 'dbem_conversion_needed', 0 );
+		print "<div id=\"message\" class=\"updated\">".__('Conversion done, please check your events and restore from backup if you see any sign of troubles.')."</div>";
+	}
 	
 	if ($order != "DESC")
 		$order = "ASC";
@@ -932,6 +951,13 @@ function dbem_duplicate_event($event_id) {
 	}
 }
 
+function dbem_explain_conversion_needed() {
+	$advice = sprintf(__("<p>It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>."),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
+	?>
+<div id="message" class="updated"> <?php echo $advice; ?> </div>
+<?php
+}
+
 function dbem_hello_to_new_user() {
 	$current_user = wp_get_current_user ();
 	$advice = sprintf ( __ ( "<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> 
@@ -960,6 +986,10 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 	$say_hello = get_option ( 'dbem_hello_to_user' );
 	if ($say_hello == 1)
 		dbem_hello_to_new_user ();
+
+	$conversion_needed = get_option ( 'dbem_conversion_needed' );
+	if ($conversion_needed == 1)
+		dbem_explain_conversion_needed ();
 	?>   
   	<!--<div id='new-event' class='switch-tab'><a href="<?php
 	echo admin_url("admin.php?page=events-manager&action=edit_event")?>><?php

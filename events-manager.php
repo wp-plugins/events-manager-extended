@@ -154,25 +154,15 @@ function dbem_install() {
   	dbem_create_bookings_table($charset,$collate);
   	dbem_create_people_table($charset,$collate);
 	dbem_create_categories_table($charset,$collate);
-	$version = get_option('dbem_version');
-	if ($version <5 && $wpdb->has_cap('collation')) {
-		if ( ! empty($wpdb->charset)) {
-			$charset = "CHARACTER SET $wpdb->charset";
-			dbem_convert_charset(EVENTS_TBNAME,$charset,$collate);
-			dbem_convert_charset(RECURRENCE_TBNAME,$charset,$collate);
-			dbem_convert_charset(LOCATIONS_TBNAME,$charset,$collate);
-			dbem_convert_charset(BOOKINGS_TBNAME,$charset,$collate);
-			dbem_convert_charset(PEOPLE_TBNAME,$charset,$collate);
-			dbem_convert_charset(BOOKING_PEOPLE_TBNAME,$charset,$collate);
-			dbem_convert_charset(CATEGORIES_TBNAME,$charset,$collate);
-		}
-	}
 	dbem_add_options();
   	// if ANY 1.0 option is there  AND the version options hasn't been set yet THEN launch the update script 
 	
 	if (get_option('dbem_events_page') && !get_option('dbem_version')) 
 		dbem_migrate_old_events();
   
+	if ($version<5) {
+  		update_option('dbem_conversion_needed', 1); 
+	}
   	update_option('dbem_version', 5); 
 	// Create events page if necessary
  	$events_page_id = get_option('dbem_events_page')  ;
@@ -494,6 +484,7 @@ function dbem_add_options($reset=0) {
 	'dbem_small_calendar_event_title_format' => DEFAULT_SMALL_CALENDAR_EVENT_TITLE_FORMAT,
 	'dbem_small_calendar_event_title_separator' => DEFAULT_SMALL_CALENDAR_EVENT_TITLE_SEPARATOR, 
 	'dbem_hello_to_user' => 1,
+	'dbem_conversion_needed' => 0,
 	'dbem_use_select_for_locations' => DEFAULT_USE_SELECT_FOR_LOCATIONS,
 	'dbem_attributes_enabled' => DEFAULT_ATTRIBUTES_ENABLED,
 	'dbem_recurrence_enabled' => DEFAULT_RECURRENCE_ENABLED,
