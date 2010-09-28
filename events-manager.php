@@ -160,6 +160,7 @@ function dbem_install() {
 	if (get_option('dbem_events_page') && !get_option('dbem_version')) 
 		dbem_migrate_old_events();
   
+ 	$version = get_option('dbem_version')  ;
 	if ($version<5) {
   		update_option('dbem_conversion_needed', 1); 
 	}
