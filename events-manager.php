@@ -500,9 +500,10 @@ function dbem_add_options($reset=0) {
 		
 }
 function dbem_add_option($key, $value, $reset) {
-	$option = get_option($key);
-	if (empty($option) || $reset)
+	$option_val = get_option($key,"non_existing");
+	if ($option_val=="non_existing" || $reset) {
 		update_option($key, $value);
+	}
 }      
 
 function dbem_create_events_page(){
