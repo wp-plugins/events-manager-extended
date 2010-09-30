@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 
 Manage events and display them in your blog. Includes recurring events, location management, calendar, Google map integration, RSVP. 
              
@@ -207,8 +207,9 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: updating a recurrent event with booking enabled, deleted all existing bookings for each event of the recurrence
 
 = 3.1.4 = 
-* Improvement: use the wordpress defined charset and collation for the DB tables, this will benifit those with weird character sets
+* Improvement: use the wordpress defined charset and collation for the DB tables, this will benefit those with weird character sets
 * Bugfix: Changing the registration (number of reserved places) of a user for an event works again
 * Bugfix: the showperiod option to the [events_list] resulted in non-translated names for month/day. Has been fixed.
+* Bugfix: the special events page no longer changes the menu title
 * Feature: #_ATTENDEES shortcode available, will return a html-list of names attending the event
 * Feature: when editing an event, you can now make it recurrent

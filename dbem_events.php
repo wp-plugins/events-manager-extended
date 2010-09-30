@@ -488,7 +488,6 @@ function dbem_events_page_content() {
 			$page_body = dbem_replace_placeholders ( $single_event_format, $event );
 			return $page_body;
 		}
-		return $events_body;
 	} else {
 		// Multiple events page
 		$_GET ['scope'] ? $scope = dbem_sanitize_request($_GET ['scope']) : $scope = "future";
@@ -526,7 +525,7 @@ function dbem_filter_events_page($data) {
 }
 add_filter ( 'the_content', 'dbem_filter_events_page' );
 
-function dbem_events_page_title($data) {
+function dbem_event_page_title($data) {
 	$events_page_id = get_option ( 'dbem_events_page' );
 	$events_page = get_page ( $events_page_id );
 	$events_page_title = $events_page->post_title;
@@ -569,9 +568,16 @@ function dbem_events_page_title($data) {
 		return $data;
 	}
 }
-// to make sure that in pages lists the title is dbem_events_page_title, and not overwritten by the previous filter
-add_filter ( 'the_title', 'dbem_events_page_title' );
-add_filter ( 'single_post_title', 'dbem_events_page_title' );
+add_filter ( 'single_post_title', 'dbem_event_page_title' );
+
+function dbem_filter_the_title($data) {
+	if (in_the_loop()) {
+		return dbem_event_page_title($data);
+	} else {
+		return $data;
+	}
+}
+add_filter ( 'the_title', 'dbem_filter_the_title' );
 
 // filter out the events page in the get_pages call
 function dbem_filter_get_pages($data) {
@@ -582,7 +588,6 @@ function dbem_filter_get_pages($data) {
 			if ($data [$i]->ID == $events_page_id) {
 				$list_events_page = get_option ( 'dbem_list_events_page' );
 				if ($list_events_page) {
-					$data [$i]->post_title = get_option ( 'dbem_events_page_title' );
 					$output [] = $data [$i];
 				}
 			} else {
