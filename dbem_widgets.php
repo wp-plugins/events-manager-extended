@@ -148,7 +148,7 @@ class WP_Widget_dbem_calendar extends WP_Widget {
   </p>		
   <p>
     <label for="<?php echo $this->get_field_id('long_events'); ?>"><?php _e('Show Long Events?', 'dbem'); ?>:</label>
-    <input type="checkbox" id="<?php echo $this->get_field_id('long_events'); ?>" name="<?php echo $this->get_field_name('scope'); ?>" value="1" <?php echo ($long_events) ? 'checked="checked"':'' ;?> />
+    <input type="checkbox" id="<?php echo $this->get_field_id('long_events'); ?>" name="<?php echo $this->get_field_name('long_events'); ?>" value="1" <?php echo ($long_events) ? 'checked="checked"':'' ;?> />
   </p>
 <?php
 		  if(get_option('dbem_categories_enabled')) {

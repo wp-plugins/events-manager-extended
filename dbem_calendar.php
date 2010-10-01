@@ -283,6 +283,8 @@ function dbem_get_calendar($args="") {
 				//If $long_events is set then show a date as eventful if there is an multi-day event which runs during that day
 				$event_start_date = strtotime($event['event_start_date']);
 				$event_end_date = strtotime($event['event_end_date']);
+				if ($event_end_date < $event_start_date)
+					$event_end_date=$event_start_date;
 				while( $event_start_date <= $event_end_date ) {
 					$event_eventful_date = date('Y-m-d', $event_start_date);
 					//Only show events on the day that they start
