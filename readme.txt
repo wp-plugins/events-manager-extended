@@ -217,3 +217,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.1.5 = 
 * Bugfix: calendar ajax fixes for full, long_events and category option
 * Cleanup: strip many trailing spaces, and resolve all possible php warnings
+* Feature: honeypot field implemented, this is a hidden field that humans can't see, but a bot will enter something in it and that's something we can check on

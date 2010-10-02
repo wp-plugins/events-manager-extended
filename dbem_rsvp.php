@@ -44,6 +44,10 @@ function dbem_add_booking_form($event_id) {
 				      <input type='text' name='captcha_check'></td></tr>
 				";
 		}
+		// also add a honeypot field: if it gets completed with data, 
+		// it's a bot, since a humand can't see this
+		$module .= "<tr><input type='hidden' name='honeypot_check'></td></tr>";
+		
 		$module .= "
 		</table>
 		<p>".__('(* marks a required field)', 'dbem')."</p>
@@ -124,6 +128,7 @@ function dbem_book_seats() {
 	$bookerPhone = stripslashes($_POST['bookerPhone']); 
 	$bookedSeats = intval($_POST['bookedSeats']);
 	$bookerComment = stripslashes($_POST['bookerComment']);
+	$honeypot_check = stripslashes($_POST['honeypot_check']);
 	$event_id = intval($_POST['event_id']);
 	$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
 	
@@ -133,6 +138,10 @@ function dbem_book_seats() {
 	}
   	if(!empty($msg)) {
 		$result = __('You entered an incorrect code','dbem');
+	} elseif ($honeypot_check != "") {
+		// a bot fills this in, but a human never will, since it's
+		// a hidden field
+		$result = __('You are a bad boy','dbem');
   	} elseif (!$bookerName || !$bookerEmail || !$bookerPhone || !$bookedSeats) {
 	// if any of name, email, phone or bookedseats are empty: return an error
 		$result = __('Please fill in all the required fields','dbem');
