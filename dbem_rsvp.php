@@ -270,8 +270,8 @@ function dbem_bookings_table($event_id) {
 	}
 	$available_seats = dbem_get_available_seats($event_id);
 	$booked_seats = dbem_get_booked_seats($event_id);
-	$table .= "<tfoot><tr><th scope='row' colspan='4'>Booked seats:</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>            
-						 <tr><th scope='row' colspan='4'>Available seats:</th><td class='booking-result' id='available-seats'>$available_seats</td></tr></tfoot>
+	$table .= "<tfoot><tr><th scope='row' colspan='4'>".__('Booked spaces','dbem').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>            
+						 <tr><th scope='row' colspan='4'>".__('Available spaces','dbem').":</th><td class='booking-result' id='available-seats'>$available_seats</td></tr></tfoot>
 							</table></div>
 							<div class='tablenav'>
 								<div class='alignleft actions'>
@@ -280,8 +280,7 @@ function dbem_bookings_table($event_id) {
 								</div>
 								<br class='clear'/>
 						 	</div>
-
-						</form>";    
+						</form>";
   echo $table;
 }
 

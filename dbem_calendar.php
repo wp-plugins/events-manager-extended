@@ -32,18 +32,18 @@ function dbem_get_calendar($args="") {
 	$start_of_week = get_option('start_of_week');
 
  	global $wpdb;    
-	if(isset($_GET['calmonth']) && $_GET['calmonth'] != '')   {
-		$month =  dbem_sanitize_request($_GET['calmonth']) ;
-	} else {
+	//if(isset($_GET['calmonth']) && $_GET['calmonth'] != '')   {
+	//	$month =  dbem_sanitize_request($_GET['calmonth']) ;
+	//} else {
 		if ($month == '')
 			$month = date('m'); 
-	}
-	if(isset($_GET['calyear']) && $_GET['calyear'] != '')   {
-		$year =  dbem_sanitize_request($_GET['calyear']) ;
-	} else {
-		if (!isset($year) || $year == '')
+	//}
+	//if(isset($_GET['calyear']) && $_GET['calyear'] != '')   {
+	//	$year =  dbem_sanitize_request($_GET['calyear']) ;
+	//} else {
+		if ($year == '')
 			$year = date('Y');
-	}
+	//}
 	$date = mktime(0,0,0,$month, date('d'), $year); 
 	$day = date('d', $date); 
 	// $month = date('m', $date); 
@@ -136,13 +136,14 @@ function dbem_get_calendar($args="") {
 	$weeks = array_chunk($new_count, 7); 
 
 	$full ? $link_extra_class = "full-link" : $link_extra_class = '';
+	$long_events ? $link_extra_class .= " long_events" : "";
 	// the real links are created via jquery when clicking on the prev-month or next-month class-links
 	$previous_link = "<a class='prev-month $link_extra_class' href=\"#\">&lt;&lt;</a>"; 
 	$next_link = "<a class='next-month $link_extra_class' href=\"#\">&gt;&gt;</a>";  
 
 	$random = (rand(100,200));
 	$full ? $class = 'dbem-calendar-full' : $class='dbem-calendar';
-	$calendar="<div class='$class' id='dbem-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div>";
+	$calendar="<div class='$class' id='dbem-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div><div class='cat_chosen' style='display:none' >$category</div>";
 	
  	$weekdays = array(__('Sunday'),__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'));
 	$n = 0 ;
@@ -381,39 +382,49 @@ function dbem_ajaxize_calendar() {
 				e.preventDefault();
 				tableDiv = $j_dbem_calendar(this).closest('table').parent();
 				($j_dbem_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;   
-				prevMonthCalendar(tableDiv, fullcalendar);
+				($j_dbem_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;   
+				prevMonthCalendar(tableDiv, fullcalendar, long_events);
 			} );
 			$j_dbem_calendar('a.next-month').click(function(e){
 				e.preventDefault();
 				tableDiv = $j_dbem_calendar(this).closest('table').parent();
 				($j_dbem_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;     
-				nextMonthCalendar(tableDiv, fullcalendar);
+				($j_dbem_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;   
+				nextMonthCalendar(tableDiv, fullcalendar, long_events);
 			} );
 		}    
-		function prevMonthCalendar(tableDiv, fullcalendar) {  
+		function prevMonthCalendar(tableDiv, fullcalendar, showlong_events) {  
 			if (fullcalendar === undefined) {
 			    fullcalendar = 0;
-			  }
-			month_n = tableDiv.children('div.month_n').html();                                
+			}
+			if (showlong_events === undefined) {
+			    showlong_events = 0;
+			}
+			month_n = tableDiv.children('div.month_n').html();
 			year_n = tableDiv.children('div.year_n').html();
+			cat_chosen = tableDiv.children('div.cat_chosen').html();
 			parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
 		   	if (parseInt(month_n,10) == 1)
-					year_n = parseInt(year_n,10) -1;
-			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar}, function(data){
+				year_n = parseInt(year_n,10) -1;
+			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
 				tableDiv.html(data);
 				initCalendar();
 			});
 		}
-		function nextMonthCalendar(tableDiv, fullcalendar) {
+		function nextMonthCalendar(tableDiv, fullcalendar, showlong_events) {
 			if (fullcalendar === undefined) {
 			    fullcalendar = 0;
-			  }
-			month_n = tableDiv.children('div.month_n').html();                                
+			}
+			if (showlong_events === undefined) {
+			    showlong_events = 0;
+			}
+			month_n = tableDiv.children('div.month_n').html();
 			year_n = tableDiv.children('div.year_n').html();
+			cat_chosen = tableDiv.children('div.cat_chosen').html();
 			parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
 		   	if (parseInt(month_n,10) == 12)
-					year_n = parseInt(year_n,10) + 1;
-			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar}, function(data){
+				year_n = parseInt(year_n,10) + 1;
+			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
 				tableDiv.html(data);
 				initCalendar();
 			});
@@ -438,9 +449,12 @@ add_action('wp_head', 'dbem_ajaxize_calendar');
 function dbem_filter_calendar_ajax() {
 	if(isset($_GET['ajaxCalendar']) && $_GET['ajaxCalendar'] == true) {
 		(isset($_GET['full']) && $_GET['full'] == 1) ? $full = 1 : $full = 0;
-		// $month = dbem_sanitize_request($_GET['month']); 
-		// $year = dbem_sanitize_request($_GET['year']);
-		dbem_get_calendar('echo=1&full='.$full);
+		(isset($_GET['long_events']) && $_GET['long_events'] == 1) ? $long_events = 1 : $long_events = 0;
+		(isset($_GET['category'])) ? $category = intval($_GET['category']) : $category = 0;
+		(isset($_GET['calmonth'])) ? $month = dbem_sanitize_request($_GET['calmonth']) : $month = ''; 
+		(isset($_GET['calyear'])) ? $year = dbem_sanitize_request($_GET['calyear']) : $year = ''; 
+		// $calyear = dbem_sanitize_request($_GET['calyear']);
+		dbem_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year);
 		die();
 	}
 }
