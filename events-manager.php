@@ -128,7 +128,7 @@ add_filter('dbem_notes', 'prepend_attachment');
 // RSS general filters
 add_filter('dbem_general_rss', 'strip_tags');
 add_filter('dbem_general_rss', 'ent2ncr', 8);
-add_filter('dbem_general_rss', 'wp_specialchars');
+add_filter('dbem_general_rss', 'esc_html');
 // RSS content filter
 add_filter('dbem_notes_rss', 'convert_chars', 8);
 add_filter('dbem_notes_rss', 'ent2ncr', 8);
@@ -550,12 +550,14 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 	foreach($results[0] as $resultKey => $result) {
 		//Strip string of placeholder and just leave the reference
 		$attRef = substr( substr($result, 0, strpos($result, '}')), 6 );
-		$attString = $event['event_attributes'][$attRef];
-		if( trim($attString) == '' && $results[1][$resultKey] != '' ){
-			//Check to see if we have a second set of braces;
-			$attString = substr( $results[1][$resultKey], 1, strlen(trim($results[1][$resultKey]))-2 );
+		if (isset($event['event_attributes'][$attRef])) {
+			$attString = $event['event_attributes'][$attRef];
+			if( trim($attString) == '' && $results[1][$resultKey] != '' ){
+				//Check to see if we have a second set of braces;
+				$attString = substr( $results[1][$resultKey], 1, strlen(trim($results[1][$resultKey]))-2 );
+			}
+			$format = str_replace($result, $attString ,$format );
 		}
-		$format = str_replace($result, $attString ,$format );
 	}
 
 	// and now all the other placeholders

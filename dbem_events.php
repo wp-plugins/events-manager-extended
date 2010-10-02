@@ -1158,14 +1158,23 @@ function dbem_event_form($event, $title, $element) {
 		$use_select_for_locations=1;
 	}
 	$saved_bydays = array();
+
+	$show_recurrent_form = 0;
 	// change prefix according to event/recurrence
 	if (isset($_GET ['action']) && $_GET ['action'] == "edit_recurrence") {
 		$pref = "recurrence_";
 		$form_destination = "admin.php?page=events-manager&action=update_recurrence&recurrence_id=" . $element;
 		$saved_bydays = explode ( ",", $event ['recurrence_byday'] );
+		$show_recurrent_form = 1;
 	} else {
 		$pref = "event_";
 		$form_destination = "admin.php?page=events-manager&action=update_event&event_id=" . $element;
+		if ($event ['recurrence_id']) {
+			# editing a single event of an recurrence: don't show the recurrence form
+			$show_recurrent_form = 0;
+		} else {
+			$show_recurrent_form = 1;
+		}
 	}
 	
 	$locale_code = substr ( get_locale (), 0, 2 );
@@ -1180,19 +1189,19 @@ function dbem_event_form($event, $title, $element) {
 	$localised_end_example = str_replace ( "yy", "2008", str_replace ( "mm", "11", str_replace ( "dd", "28", $localised_date_format ) ) );
 	
 	if ($event [$pref . 'start_date'] != "") {
-		preg_match ( "/(\d{4})-(\d{2})-(\d{2})/", $event [$pref. 'start_date'], $matches );
+		preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event [$pref. 'start_date'], $matches );
 		$year = $matches [1];
-		$month = $matches [2];
-		$day = $matches [3];
+		$month = sprintf("%02d",$matches [2]);
+		$day = sprintf("%02d",$matches [3]);
 		$localised_date = str_replace ( "yy", $year, str_replace ( "mm", $month, str_replace ( "dd", $day, $localised_date_format ) ) );
 	} else {
 		$localised_date = "";
 	}
 	if ($event [$pref . 'end_date'] != "") {
-		preg_match ( "/(\d{4})-(\d{2})-(\d{2})/", $event [$pref . 'end_date'], $matches );
+		preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event [$pref . 'end_date'], $matches );
 		$end_year = $matches [1];
-		$end_month = $matches [2];
-		$end_day = $matches [3];
+		$end_month = sprintf("%02d",$matches [2]);
+		$end_day = sprintf("%02d",$matches [3]);
 		$localised_end_date = str_replace ( "yy", $end_year, str_replace ( "mm", $end_month, str_replace ( "dd", $end_day, $localised_date_format ) ) );
 	} else {
 		$localised_end_date = "";
@@ -1237,7 +1246,7 @@ function dbem_event_form($event, $title, $element) {
 				<!-- SIDEBAR -->
 				<div id="side-info-column" class='inner-sidebar'>
 					<div id='side-sortables' class="meta-box-sortables">
-						<?php if(get_option('dbem_recurrence_enabled')) : ?>
+						<?php if(get_option('dbem_recurrence_enabled') && $show_recurrent_form ) : ?>
 						<!-- recurrence postbox -->
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
@@ -1302,6 +1311,7 @@ function dbem_event_form($event, $title, $element) {
 							</div>
 						</div>
 						<?php endif; ?>
+
 						<?php if(get_option('dbem_rsvp_enabled')) : ?>
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
@@ -1517,10 +1527,9 @@ function dbem_event_form($event, $title, $element) {
 										<th><?php _e('Location','dbem') ?></th>
 										<td> 
 											<select name="location-select-id" id='location-select-id' size="1">
-												<?php 
-												$selected_location=$locations[0];
-												foreach($locations as $location) :
-												$count++;
+											<?php 
+											$selected_location=$locations[0];
+											foreach($locations as $location) :
 												$selected = "";
 												if(isset($event['location_id']))  { 
 													$location_id =  $event['location_id'];
@@ -1529,10 +1538,10 @@ function dbem_event_form($event, $title, $element) {
 														$selected = "selected='selected' ";
 													}
 												}
-		?>
+											?>
 			<option value="<?php echo $location['location_id'] ?>" <?php echo $selected ?>><?php echo dbem_sanitize_html($location['location_name']) ?></option>
-		<?php endforeach; ?>
-	</select>
+											<?php endforeach; ?>
+											</select>
 											<input type='hidden' name='location-select-name' value='<?php echo dbem_sanitize_html($selected_location['location_name'])?>'/>
 											<input type='hidden' name='location-select-town' value='<?php echo dbem_sanitize_html($selected_location['location_town'])?>'/>
 											<input type='hidden' name='location-select-address' value='<?php echo dbem_sanitize_html($selected_location['location_address'])?>'/>  		

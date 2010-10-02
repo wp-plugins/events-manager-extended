@@ -14,13 +14,13 @@ Events Manager Extended is based on the older Events Manager plugin, improving a
 
 Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports recurring events, venues data, RSVP and maps. With Events Manager Extended you can plan and publish your tour, or let people reserve spaces for your weekly meetings. You can then add events list, calendars and description to your blog using a sidebar widget or shortcodes; if you are a web designer you can simply employ the template tags provided by Events Manager Extended. 
 
-Events Manager Extended integrates with Google Maps; thanks the geocoding, Events Manager Extended can find the location of your events, and accordingly display a map. To enable Google Maps integration, you used to need a Google maps API key, but since the update to Google Maps API v3, this is no longer needed.
+Events Manager Extended integrates with Google Maps; thanks the geocoding, Events Manager Extended can find the location of your events, and accordingly display a map.
 
 Events Manager Extended provides also a RSS feed, to keep your subscribers updated about the events you're organising.
 
 Events Manager Extended is fully customisable; you can customise the amount of data displayed and their format in events lists, pages and in the RSS feed. You can choose to show or hide the events page, and change its title.   
 
-Events Manager Extended is fully localisable and already partially localised in Italian, Spanish, German and Swedish.
+Events Manager Extended is fully localisable and already partially localised in Italian, Spanish, German, Swedish, French and Dutch.
 
 For more information visit the [Documentation Page](http://www.e-dynamics.be/wordpress/) and [Support Forum](http://www.e-dynamics.be/bbpress/).
 
@@ -216,3 +216,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.1.5 = 
 * Bugfix: calendar ajax fixes for full, long_events and category option
+* Cleanup: strip many trailing spaces, and resolve all possible php warnings

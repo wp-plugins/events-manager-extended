@@ -293,6 +293,15 @@ function dbem_get_recurrence_desc($recurrence_id) {
 		}
 	}
 	if ($recurrence['recurrence_freq'] == 'weekly')  {
+		if (!$recurrence['recurrence_byday']) {
+			# no weekdays given for the recurrence, so we use the
+			# so we use the day of the week of the startdate as
+			# reference
+			$recurrence['recurrence_byday']=mysql2date('w',$recurrence['recurrence_start_date']);
+			# Sunday is 7, not 0
+			if ($recurrence['recurrence_byday']==0)
+				$recurrence['recurrence_byday']=7; 
+		}
 		$weekday_array = explode(",", $recurrence['recurrence_byday']);
 		$natural_days = array();
 		foreach($weekday_array as $day)
@@ -301,18 +310,22 @@ function dbem_get_recurrence_desc($recurrence_id) {
 		if ($recurrence['recurrence_interval'] > 1 ) {
 			$freq_desc = ", ".sprintf (__("every %s weeks", 'dbem'), $recurrence['recurrence_interval']);
 		}
-		
 	} 
 	if ($recurrence['recurrence_freq'] == 'monthly')  {
-		 $weekday_array = explode(",", $recurrence['recurrence_byday']);
-			$natural_days = array();
-			foreach($weekday_array as $day)
-				array_push($natural_days, $weekdays_name[$day-1]);
-			$freq_desc = sprintf (($monthweek_name[$recurrence['recurrence_byweekno']]), implode(" and ", $natural_days));
+		if (!$recurrence['recurrence_byday']) {
+			# no monthday given for the recurrence, so we use the
+			# so we use the day of the month of the startdate as
+			# reference
+			$recurrence['recurrence_byday']=mysql2date('e',$recurrence['recurrence_start_date']);
+		}
+		$weekday_array = explode(",", $recurrence['recurrence_byday']);
+		$natural_days = array();
+		foreach($weekday_array as $day)
+			array_push($natural_days, $weekdays_name[$day-1]);
+		$freq_desc = sprintf (($monthweek_name[$recurrence['recurrence_byweekno']]), implode(" and ", $natural_days));
 		if ($recurrence['recurrence_interval'] > 1 ) {
 			$freq_desc .= ", ".sprintf (__("every %s months",'dbem'), $recurrence['recurrence_interval']);
 		}
-		
 	}
 	$output .= $freq_desc;
 	return  $output;

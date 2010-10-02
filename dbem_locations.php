@@ -165,13 +165,13 @@ function dbem_locations_edit_layout($location, $message = "") {
 function dbem_locations_table_layout($locations, $new_location, $message = "") {
 	$destination = admin_url("admin.php");
 	if (!is_array($new_location)) {
-		$location = array();
-		$location['location_name'] = '';
-		$location['location_address'] = '';
-		$location['location_town'] = '';
-		$location['location_latitude'] = '';
-		$location['location_longitude'] = '';
-		$location['location_description'] = '';
+		$new_location = array();
+		$new_location['location_name'] = '';
+		$new_location['location_address'] = '';
+		$new_location['location_town'] = '';
+		$new_location['location_latitude'] = '';
+		$new_location['location_longitude'] = '';
+		$new_location['location_description'] = '';
 	}
 
 	ob_start();
@@ -250,7 +250,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								<div id="titlediv" class="form-field form-required">
 								  <label for="location_name"><?php _e('Location name', 'dbem') ?></label>
 						 		  <input name="location_name" id="title" type="text" value="<?php echo htmlspecialchars($new_location['location_name']); ?>" size="40" />
-			  					  <input type="hidden" name="translated_location_name" value="<?php echo dbem_sanitize_html($location['location_name']); ?>" />
+			  					  <input type="hidden" name="translated_location_name" value="<?php echo dbem_sanitize_html($new_location['location_name']); ?>" />
 								  <p><?php _e('The name of the location', 'dbem') ?>.</p>
 								</div>
 

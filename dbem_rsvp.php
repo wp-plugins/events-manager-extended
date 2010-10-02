@@ -310,36 +310,35 @@ function dbem_bookings_compact_table($event_id) {
 						</tr>
 					</tfoot>
 					<tbody>" ;
-			foreach ($bookings as $booking) {
-				($booking['booking_comment']) ? $baloon = " <img src='".DBEM_PLUGIN_URL."images/baloon.png' title='".__('Comment:','dbem')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";
-				$pending_string="";
-				if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
-					$pending_string=__('(pending)','dbem');
-				}
-				$table .= 
-				"<tr id='booking-".$booking['booking_id']."'> 
-					<td><a id='booking-check-".$booking['booking_id']."' class='bookingdelbutton'>X</a></td>
-					<td><a title=\"".htmlspecialchars($booking['person_email'])." - ".htmlspecialchars($booking['person_phone'])."\">".htmlspecialchars($booking['person_name'])."</a>$baloon</td>
-					<td>".$booking['booking_seats']." $pending_string </td>
-				 </tr>";
+		foreach ($bookings as $booking) {
+			($booking['booking_comment']) ? $baloon = " <img src='".DBEM_PLUGIN_URL."images/baloon.png' title='".__('Comment:','dbem')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";
+			$pending_string="";
+			if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
+				$pending_string=__('(pending)','dbem');
 			}
+			$table .= 
+			"<tr id='booking-".$booking['booking_id']."'> 
+				<td><a id='booking-check-".$booking['booking_id']."' class='bookingdelbutton'>X</a></td>
+				<td><a title=\"".htmlspecialchars($booking['person_email'])." - ".htmlspecialchars($booking['person_phone'])."\">".htmlspecialchars($booking['person_name'])."</a>$baloon</td>
+				<td>".$booking['booking_seats']." $pending_string </td>
+			 </tr>";
+		}
 	 
-			$table .=  "</tbody>
-		 		</table>
-		 		</div>
-		 		
+		$table .=  "</tbody>
+	 		</table>
+	 		</div>
+			<br class='clear'/>
+		 	<div id='major-publishing-actions'>
+			<div id='publishing-action'> 
+				<a id='printable'  target='' href='$printable_address'>".__('Printable view','dbem')."</a>
 				<br class='clear'/>
-		 		<div id='major-publishing-actions'>
-				<div id='publishing-action'> 
-					<a id='printable'  target='' href='$printable_address'>".__('Printable view','dbem')."</a>
-					<br class='clear'/>
-		 		</div>
-				<br class='clear'/>
-		 		</div> ";
-		 } else {
-			$table .= "<p><em>".__('No responses yet!')."</em></p>";
-		 } 
-  echo $table;
+		 	</div>
+			<br class='clear'/>
+		 	</div> ";
+	} else {
+		$table = "<p><em>".__('No responses yet!')."</em></p>";
+	} 
+	echo $table;
 }
 
 function dbem_get_bookings_for($event_ids,$pending=0) {
