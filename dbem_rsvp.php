@@ -2,9 +2,21 @@
 $form_add_message = "";
 $form_delete_message = "";
 function dbem_add_booking_form($event_id) {
-	global $form_add_message;
-	//$message = dbem_catch_rsvp();
+	global $form_add_message, $current_user;
+	get_currentuserinfo();
  
+	$bookerName="";
+	$bookerEmail="";
+	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
+	if ($dbem_rsvp_registered_users_only) {
+		// we require a user to be WP registered to be able to book
+		if (!$current_user->ID) {
+			return;
+		} else {
+			$bookerName=$current_user->display_name;
+			$bookerEmail=$current_user->user_email;
+		}
+	}
 	$destination = "?".$_SERVER['QUERY_STRING']."#dbem-rsvp-message";
 
 	// you can book the available number of seats, with a max of 10 per time
@@ -29,8 +41,8 @@ function dbem_add_booking_form($event_id) {
 	
 		$module  .= "<form id='dbem-rsvp-form' name='booking-form' method='post' action='$destination'>
 			<table class='dbem-rsvp-form'>
-				<tr><th scope='row'>".__('Name', 'dbem')."*:</th><td><input type='text' name='bookerName' value=''/></td></tr>
-				<tr><th scope='row'>".__('E-Mail', 'dbem')."*:</th><td><input type='text' name='bookerEmail' value=''/></td></tr>
+				<tr><th scope='row'>".__('Name', 'dbem')."*:</th><td><input type='text' name='bookerName' value='$bookerName'/></td></tr>
+				<tr><th scope='row'>".__('E-Mail', 'dbem')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail'/></td></tr>
 				<tr><th scope='row'>".__('Phone number', 'dbem')."*:</th><td><input type='text' name='bookerPhone' value=''/></td></tr>
 				<tr><th scope='row'>".__('Seats', 'dbem')."*:</th><td><select name='bookedSeats' >";
 		foreach($booked_places_options as $option) {
@@ -68,6 +80,10 @@ function dbem_add_booking_form($event_id) {
 function dbem_delete_booking_form() {
 	global $form_delete_message;
 	
+	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
+	if ($dbem_rsvp_registered_users_only && !is_user_logged_in()) {
+		return;
+	}
 	$destination = "?".$_SERVER['QUERY_STRING'];
 	$module = "<h3>".__('Cancel your booking', 'dbem')."</h3><br/>";
 	
@@ -90,7 +106,7 @@ function dbem_delete_booking_form() {
 
 
 function dbem_catch_rsvp() {
-  	global $form_add_message;
+ 	global $form_add_message;
 	global $form_delete_message; 
 	$result = "";
 
@@ -98,6 +114,11 @@ function dbem_catch_rsvp() {
 		// the captcha needs a session
 		if (!session_id())
 			session_start();
+	}
+
+	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
+	if ($dbem_rsvp_registered_users_only && !$is_user_logged_in()) {
+		return;
 	}
 
 	if (isset($_POST['eventAction']) && $_POST['eventAction'] == 'add_booking') { 

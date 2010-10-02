@@ -218,3 +218,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: calendar ajax fixes for full, long_events and category option
 * Cleanup: strip many trailing spaces, and resolve all possible php warnings
 * Feature: honeypot field implemented, this is a hidden field that humans can't see, but a bot will enter something in it and that's something we can check on
+* Feature: you can now require that people need to be registered to wordpress in order to make a booking
