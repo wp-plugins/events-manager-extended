@@ -162,11 +162,9 @@ function dbem_events_subpanel() {
 		$location ['location_latitude'] = isset($_POST ['location_latitude']) ? $_POST ['location_latitude'] : '';
 		$location ['location_longitude'] = isset($_POST ['location_longitude']) ? $_POST ['location_longitude'] : '';
 		$location ['location_description'] = "";
-		/* Marcus Begin Edit */
 		//switched to WP TinyMCE field
 		//$event ['event_notes'] = stripslashes ( $_POST ['event_notes'] );
 		$event ['event_notes'] = isset($_POST ['content']) ? stripslashes($_POST ['content']) : '';
-		/* Marcus End Edit */
 		$event ['event_page_title_format'] = stripslashes ( $_POST ['event_page_title_format'] );
 		$event ['event_single_event_format'] = stripslashes ( $_POST ['event_single_event_format'] );
 		$event ['event_contactperson_email_body'] = stripslashes ( $_POST ['event_contactperson_email_body'] );
@@ -365,12 +363,10 @@ function dbem_options_subpanel() {
 <h3><?php _e ( 'Events format', 'dbem' ); ?></h3>
 <table class="form-table">
  	<?php
- 	/* Marcus Begin Edit */
 	dbem_options_textarea ( __ ( 'Default event list format header', 'dbem' ), 'dbem_event_list_item_format_header', __( 'This content will appear just above your code for the default event list format. Default is blank', 'dbem' ) );
  	dbem_options_textarea ( __ ( 'Default event list format', 'dbem' ), 'dbem_event_list_item_format', __ ( 'The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href="http://www.php.net/manual/en/function.date.php">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM starttime/endtime notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event.', 'dbem' ) );
 	dbem_options_textarea ( __ ( 'Default event list format footer', 'dbem' ), 'dbem_event_list_item_format_footer', __ ( 'This content will appear just below your code for the default event list format. Default is blank', 'dbem' ) );
 
- 	/* Marcus End Edit */
 	dbem_options_input_text ( __ ( 'Single event page title format', 'dbem' ), 'dbem_event_page_title_format', __ ( 'The format of a single event page title. Follow the previous formatting instructions.', 'dbem' ) );
 	dbem_options_textarea ( __ ( 'Default single event format', 'dbem' ), 'dbem_single_event_format', __ ( 'The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings.', 'dbem' ).__('<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask directions to the event.','dbem').__('<br/> Use <code>#_CATEGORIES</code> to insert a comma seperated list of categories an event is in.','dbem').__('<br/> Use <code>#_ATTENDEES</code> to get a list of the names attending the event.','dbem') );
 	dbem_options_input_text ( __ ( 'Events page title', 'dbem' ), 'dbem_events_page_title', __ ( 'The title on the multiple events page.', 'dbem' ) );
@@ -1363,10 +1359,8 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'Category', 'dbem' ); ?>
 								</span></h3>
 							<div class="inside">
-										<?php
+							<?php
 							$categories = dbem_get_categories();
-							?>
-<?php
 							foreach ( $categories as $category) {
                                                                 if ($event['event_category_ids'] && in_array($category['category_id'],explode(",",$event['event_category_ids']))) {
                                                                         $selected = "checked='checked'";
@@ -1374,11 +1368,10 @@ function dbem_event_form($event, $title, $element) {
 									$selected = "";
 								}
 								?>
-<input type="checkbox" name="event_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?>><?php echo $category['category_name']; ?><br />
-<?php
+<input type="checkbox" name="event_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?> /><?php echo $category['category_name']; ?><br />
+							<?php
 							}
-						?>
-								</p>
+							?>
 							</div>
 						</div> 
 						<?php endif; ?>
@@ -1409,9 +1402,9 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'Recurrence dates', 'dbem' ); ?>
 							</h3>
 							<div class="inside">
-								<input id="localised-date" type="text" name="localised_event_date" value="<?php echo $localised_date?>" style="display: none;" readonly />
+								<input id="localised-date" type="text" name="localised_event_date" value="<?php echo $localised_date?>" style="display: none;" readonly="readonly" />
 								<input id="date-to-submit" type="text" name="event_date" value="<?php echo $event [$pref . 'start_date']?>" style="background: #FCFFAA" />
-								<input id="localised-end-date" type="text" name="localised_event_end_date" value="<?php echo $localised_end_date?>" style="display: none;" readonly />
+								<input id="localised-end-date" type="text" name="localised_event_end_date" value="<?php echo $localised_end_date?>" style="display: none;" readonly="readonly" />
 								<input id="end-date-to-submit" type="text" name="event_end_date" value="<?php echo $event [$pref . 'end_date']?>" style="background: #FCFFAA" />
 								<br />
 								<span id='event-date-explanation'>
@@ -1609,11 +1602,9 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'Details', 'dbem' ); ?>
 							</h3>
 							<div class="inside">
-								<?php/* Marcus Begin Edit */ ?>
 								<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
 									<?php the_editor($event ['event_notes']); ?>
 								</div>
-								<?php/* Marcus End Edit */ ?>
 								<br />
 								<?php _e ( 'Details about the event', 'dbem' )?>
 							</div>
@@ -1732,19 +1723,15 @@ function updateIntervalSelectors () {
 function updateShowHideRecurrence () {
 	if($j_dbem_event('input#event-recurrence').attr("checked")) {
 		$j_dbem_event("#event_recurrence_pattern").fadeIn();
-		/* Marcus Begin Edit */
 		//Edited this and the one below so dates always can have an end date
 		//$j_dbem_event("input#localised-end-date").fadeIn();
-		/* Marcus End Edit */ 
 		$j_dbem_event("#event-date-explanation").hide();
 		$j_dbem_event("#recurrence-dates-explanation").show();
 		$j_dbem_event("h3#recurrence-dates-title").show();
 		$j_dbem_event("h3#event-date-title").hide();
 	} else {
 		$j_dbem_event("#event_recurrence_pattern").hide();
-		/* Marcus Begin Edit */
 		//$j_dbem_event("input#localised-end-date").hide();
-		/* Marcus End Edit */ 
 		$j_dbem_event("#recurrence-dates-explanation").hide();
 		$j_dbem_event("#event-date-explanation").show();
 		$j_dbem_event("h3#recurrence-dates-title").hide();
@@ -1765,9 +1752,7 @@ $j_dbem_event(document).ready( function() {
  
 	$j_dbem_event("#recurrence-dates-explanation").hide();
 	$j_dbem_event("#localised-date").show();
-	/* Marcus Begin Edit */
 	$j_dbem_event("#localised-end-date").show();
-	/* Marcus End Edit */
 
 	$j_dbem_event("#date-to-submit").hide();
 	$j_dbem_event("#end-date-to-submit").hide(); 
@@ -2227,7 +2212,6 @@ function dbem_alert_events_page() {
 }
 add_action ( 'admin_notices', 'dbem_alert_events_page' );
 
-/* Marcus Begin Edit */
 //This adds the tinymce editor
 function dbem_tinymce(){
 	global $plugin_page;
@@ -2243,6 +2227,5 @@ function dbem_tinymce(){
 	}
 }
 add_action ( 'admin_init', 'dbem_tinymce' );
-/* Marcus End Edit */
 
 ?>
