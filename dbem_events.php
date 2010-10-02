@@ -669,6 +669,8 @@ function dbem_get_events_list($limit = 10, $scope = "future", $order = "ASC", $f
 	if ($format == ''){
 		$orig_format = true;
 		$format = get_option ( 'dbem_event_list_item_format' );
+	} else {
+		$orig_format = false;
 	}
 	$events = dbem_get_events ( $limit, $scope, $order, '', '', $category );
 	$output = "";

@@ -513,7 +513,6 @@ function dbem_global_map($atts) {
 	  eventful = $eventful;
 	  scope = '$scope';
 	  events_page_link = '$events_page_link';
-	  location_infos = '$location_infos';
 	  joiner = '$joiner'
 	//-->
 	</script>";

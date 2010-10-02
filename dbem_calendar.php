@@ -289,7 +289,7 @@ function dbem_get_calendar($args="") {
 				while( $event_start_date <= $event_end_date ) {
 					$event_eventful_date = date('Y-m-d', $event_start_date);
 					//Only show events on the day that they start
-					if( is_array($eventful_days[$event_eventful_date]) ) {
+					if(isset($eventful_days[$event_eventful_date]) &&  is_array($eventful_days[$event_eventful_date]) ) {
 						$eventful_days[$event_eventful_date][] = $event; 
 					} else {
 						$eventful_days[$event_eventful_date] = array($event);

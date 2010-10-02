@@ -726,6 +726,7 @@ function dbem_get_user_phone($user_id) {
 
 // got from http://davidwalsh.name/php-email-encode-prevent-spam
 function dbem_ascii_encode($e) {
+    $output = "";
     for ($i = 0; $i < strlen($e); $i++) { $output .= '&#'.ord($e[$i]).';'; }
     return $output;
 }
