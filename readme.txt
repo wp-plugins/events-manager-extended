@@ -213,3 +213,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: the special events page no longer changes the menu title
 * Feature: #_ATTENDEES shortcode available, will return a html-list of names attending the event
 * Feature: when editing an event, you can now make it recurrent
+
+= 3.1.5 = 
+* Bugfix: calendar ajax fixes for full, long_events and category option
