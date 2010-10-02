@@ -550,14 +550,17 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 	foreach($results[0] as $resultKey => $result) {
 		//Strip string of placeholder and just leave the reference
 		$attRef = substr( substr($result, 0, strpos($result, '}')), 6 );
+		$attString = "";
 		if (isset($event['event_attributes'][$attRef])) {
 			$attString = $event['event_attributes'][$attRef];
-			if( trim($attString) == '' && $results[1][$resultKey] != '' ){
-				//Check to see if we have a second set of braces;
-				$attString = substr( $results[1][$resultKey], 1, strlen(trim($results[1][$resultKey]))-2 );
-			}
-			$format = str_replace($result, $attString ,$format );
 		}
+		if( trim($attString) == ''
+			&& isset($results[1][$resultKey])
+			&& $results[1][$resultKey] != '' ) {
+			//Check to see if we have a second set of braces;
+			$attString = substr( $results[1][$resultKey], 1, strlen(trim($results[1][$resultKey]))-2 );
+		}
+		$format = str_replace($result, $attString ,$format );
 	}
 
 	// and now all the other placeholders
