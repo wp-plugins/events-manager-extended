@@ -41,12 +41,12 @@ function dbem_add_booking_form($event_id) {
 		if (get_option('dbem_captcha_for_booking')) {
 			$module .= "
 				<tr><th scope='row'>".__('Please fill in the code displayed here', 'dbem').":</th><td><img src='".DBEM_PLUGIN_URL."captcha.php'><br>
-				      <input type='text' name='captcha_check'></td></tr>
+				      <input type='text' name='captcha_check' /></td></tr>
 				";
 		}
 		// also add a honeypot field: if it gets completed with data, 
 		// it's a bot, since a humand can't see this
-		$module .= "<tr><input type='hidden' name='honeypot_check'></td></tr>";
+		$module .= "<tr><input type='hidden' name='honeypot_check' value='' /></td></tr>";
 		
 		$module .= "
 		</table>
