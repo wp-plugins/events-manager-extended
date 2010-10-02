@@ -3,9 +3,9 @@ function dbem_people_page() {
 	// Managing AJAX booking removal
  	if(isset($_GET['action']) && $_GET['action'] == 'remove_booking') {
 		if(isset($_POST['booking_id']))
-			dbem_delete_booking($_POST['booking_id']);   
-	}   
-	?>  
+			dbem_delete_booking($_POST['booking_id']);
+	}
+	?>
 	
 	<div class='wrap'> 
 	<div id="icon-users" class="icon32"><br/></div>
@@ -15,15 +15,15 @@ function dbem_people_page() {
 	</div> 
 
 	<?php
-}    
+}
 
 add_action('init','dbem_ajax_actions'); 
 function dbem_ajax_actions() {
  	if(isset($_GET['dbem_ajax_action']) && $_GET['dbem_ajax_action'] == 'booking_data') {
-		if(isset($_GET['id']))   
+		if(isset($_GET['id']))
 			echo "[ {bookedSeats:".dbem_get_booked_seats($_GET['id']).", availableSeats:".dbem_get_available_seats($_GET['id'])."}]"; 
-		die();  
-	}  
+		die();
+	}
 	if(isset($_GET['action']) && $_GET['action'] == 'printable'){
 		if(isset($_GET['event_id']))
 			dbem_printable_booking_report(intval($_GET['event_id']));
@@ -31,9 +31,9 @@ function dbem_ajax_actions() {
 	
 	if(isset($_GET['query']) && $_GET['query'] == 'GlobalMapData') { 
 		dbem_global_map_json($_GET['eventful'],$_GET['scope']);		
-	 	die();   
+	 	die();
  	}
-}   
+}
 
 function dbem_global_map_json($eventful = false, $scope = "all") {
 	$json = '{"locations":[';
@@ -44,14 +44,14 @@ function dbem_global_map_json($eventful = false, $scope = "all") {
 		foreach($location as $key => $value) {
 			# no newlines allowed, otherwise no map is shown
 			$value=preg_replace("/\r\n|\n\r|\n/","<br />",dbem_sanitize_html($value));
-		 	$json_location[] = '"'.$key.'":"'.$value.'"';  
+		 	$json_location[] = '"'.$key.'":"'.$value.'"';
 		}
 		$tmp_loc=dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location);
 		# no newlines allowed, otherwise no map is shown
 		$tmp_loc=preg_replace("/\r\n|\n\r|\n/","<br />",$tmp_loc);
 		$json_location[] = '"location_balloon":"'.dbem_sanitize_html($tmp_loc).'"';
 		$json_locations[] = "{".implode(",",$json_location)."}";
-	}        
+	}
 	$json .= implode(",", $json_locations); 
 	$json .= "]}" ;
 	echo $json;
@@ -61,7 +61,7 @@ function dbem_printable_booking_report($event_id) {
 	$event = dbem_get_event($event_id);
 	$bookings =  dbem_get_bookings_for($event_id);
 	$available_seats = dbem_get_available_seats($event_id);
-	$booked_seats = dbem_get_booked_seats($event_id);   
+	$booked_seats = dbem_get_booked_seats($event_id);
 	$stylesheet = DBEM_PLUGIN_URL."events_manager.css";
 	?>
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -77,7 +77,7 @@ function dbem_printable_booking_report($event_id) {
 			<div id="container">
 			<h1>Bookings for <?php echo $event['event_name'];?></h1> 
 			<p><?php echo dbem_replace_placeholders("#d #M #Y", $event)?></p>
-			<p><?php echo dbem_replace_placeholders("#_LOCATION, #_ADDRESS, #_TOWN", $event)?></p>   
+			<p><?php echo dbem_replace_placeholders("#_LOCATION, #_ADDRESS, #_TOWN", $event)?></p>
 			<h2><?php _e('Bookings data', 'dbem');?></h2>
 			<table id="bookings-table">
 				<tr>
@@ -108,10 +108,10 @@ function dbem_printable_booking_report($event_id) {
 				</tr>
 				<tr id='available-seats'>
 					<td colspan='3'>&nbsp;</td> 
-					<td class='total-label'><?php _e('Available', 'dbem')?>:</td>  
+					<td class='total-label'><?php _e('Available', 'dbem')?>:</td>
 					<td class='seats-number'><?php echo $available_seats; ?></td>
 				</tr>
-			</table>  
+			</table>
 			</div>
 		</body>
 		</html>
@@ -152,7 +152,7 @@ function dbem_people_table() {
 		}
 
 		$table .= "</table>";
-		echo $table;   
+		echo $table;
 	}
 } 
 
@@ -177,7 +177,7 @@ function dbem_get_person($person_id) {
 function dbem_get_people() {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
-	$sql = "SELECT *  FROM $people_table";    
+	$sql = "SELECT *  FROM $people_table";
 	$result = $wpdb->get_results($sql, ARRAY_A);
 	return $result;
 }
@@ -190,14 +190,14 @@ function dbem_add_person($name, $email, $phone = "") {
 	$phone = dbem_sanitize_request($phone);
 	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone) VALUES ('$name', '$email', '$phone');";
 	$wpdb->query($sql);
-	$new_person = dbem_get_person_by_name_and_email($name, $email);  
+	$new_person = dbem_get_person_by_name_and_email($name, $email);
 	return ($new_person);
 }
 
-add_action('edit_user_profile', 'dbem_phone_field') ;    
+add_action('edit_user_profile', 'dbem_phone_field') ;
 function dbem_phone_field() {
 	?>
-	<h3><?php _e('Phone number', 'dbem')?></h3>     
+	<h3><?php _e('Phone number', 'dbem')?></h3>
 	<table class='form-table'>
 		<tr>
 			<th><?php _e('Phone number','dbem');?></th>
@@ -206,7 +206,7 @@ function dbem_phone_field() {
 		</tr>
 	</table>
 	<?php
-}       
+}
 
 add_action('profile_update','dbem_update_phone');
 function dbem_update_phone($user_ID) {
@@ -218,8 +218,8 @@ function dbem_update_phone($user_ID) {
 
 function dbem_get_indexed_users() {
 	global $wpdb;
-	$sql = "SELECT display_name, ID FROM $wpdb->users";  
-	$users = $wpdb->get_results($sql, ARRAY_A);  
+	$sql = "SELECT display_name, ID FROM $wpdb->users";
+	$users = $wpdb->get_results($sql, ARRAY_A);
 	$indexed_users = array();
 	foreach($users as $user) 
 		$indexed_users[$user['ID']] = $user['display_name'];

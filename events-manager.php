@@ -33,13 +33,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 define('DBEM_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('DBEM_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
-define('RECURRENCE_TBNAME','dbem_recurrence'); //TABLE NAME   
-define('LOCATIONS_TBNAME','dbem_locations'); //TABLE NAME  
+define('RECURRENCE_TBNAME','dbem_recurrence'); //TABLE NAME
+define('LOCATIONS_TBNAME','dbem_locations'); //TABLE NAME
 define('BOOKINGS_TBNAME','dbem_bookings'); //TABLE NAME
-define('PEOPLE_TBNAME','dbem_people'); //TABLE NAME  
-define('BOOKING_PEOPLE_TBNAME','dbem_bookings_people'); //TABLE NAME  
+define('PEOPLE_TBNAME','dbem_people'); //TABLE NAME
+define('BOOKING_PEOPLE_TBNAME','dbem_bookings_people'); //TABLE NAME
 define('CATEGORIES_TBNAME', 'dbem_categories');
-define('DEFAULT_EVENT_PAGE_NAME', 'Events');   
+define('DEFAULT_EVENT_PAGE_NAME', 'Events');
 define('DBEM_PAGE','<!--DBEM_EVENTS_PAGE-->'); //EVENTS PAGE
 define('MIN_CAPABILITY', 'edit_posts');	// Minimum user level to access calendars
 define('SETTING_CAPABILITY', 'activate_plugins');	// Minimum user level to access calendars
@@ -49,22 +49,22 @@ define('DEFAULT_EVENTS_PAGE_TITLE',__('Events','dbem') ) ;
 define('DEFAULT_EVENT_PAGE_TITLE_FORMAT', '#_NAME'); 
 define('DEFAULT_RSS_DESCRIPTION_FORMAT',"#j #M #y - #H:#i <br/>#_LOCATION <br/>#_ADDRESS <br/>#_TOWN");
 define('DEFAULT_RSS_TITLE_FORMAT',"#_NAME");
-define('DEFAULT_MAP_TEXT_FORMAT', '<strong>#_LOCATION</strong><p>#_ADDRESS</p><p>#_TOWN</p>');     
+define('DEFAULT_MAP_TEXT_FORMAT', '<strong>#_LOCATION</strong><p>#_ADDRESS</p><p>#_TOWN</p>');
 define('DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT','<li>#_LINKEDNAME<ul><li>#j #M #y</li><li>#_TOWN</li></ul></li>');
-define('DEFAULT_NO_EVENTS_MESSAGE', __('No events', 'dbem'));  
+define('DEFAULT_NO_EVENTS_MESSAGE', __('No events', 'dbem'));
 define('DEFAULT_SINGLE_LOCATION_FORMAT', '<p>#_ADDRESS</p><p>#_TOWN</p>'); 
 define('DEFAULT_LOCATION_PAGE_TITLE_FORMAT', '#_NAME'); 
 define('DEFAULT_LOCATION_BALLOON_FORMAT', "<strong>#_NAME</strong><br/>#_ADDRESS - #_TOWN<br/><a href='#_LOCATIONPAGEURL'>Details</a>");
 define('DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT', "<li>#_NAME - #j #M #Y - #H:#i</li>");
 define('DEFAULT_LOCATION_NO_EVENTS_MESSAGE', __('<li>No events in this location</li>', 'dbem'));
 define("IMAGE_UPLOAD_DIR", "wp-content/uploads/locations-pics");
-define('DEFAULT_IMAGE_MAX_WIDTH', 700);  
-define('DEFAULT_IMAGE_MAX_HEIGHT', 700);  
+define('DEFAULT_IMAGE_MAX_WIDTH', 700);
+define('DEFAULT_IMAGE_MAX_HEIGHT', 700);
 define('DEFAULT_IMAGE_MAX_SIZE', 204800); 
-define('DEFAULT_FULL_CALENDAR_EVENT_FORMAT', '<li>#_LINKEDNAME</li>');    
+define('DEFAULT_FULL_CALENDAR_EVENT_FORMAT', '<li>#_LINKEDNAME</li>');
 define('DEFAULT_SMALL_CALENDAR_EVENT_TITLE_FORMAT', "#_NAME" );
-define('DEFAULT_SMALL_CALENDAR_EVENT_TITLE_SEPARATOR', ", ");  
-define('DEFAULT_USE_SELECT_FOR_LOCATIONS', false);      
+define('DEFAULT_SMALL_CALENDAR_EVENT_TITLE_SEPARATOR', ", ");
+define('DEFAULT_USE_SELECT_FOR_LOCATIONS', false);
 define('DEFAULT_ATTRIBUTES_ENABLED', true);
 define('DEFAULT_RECURRENCE_ENABLED', true);
 define('DEFAULT_RSVP_ENABLED', true);
@@ -73,7 +73,7 @@ define('DEFAULT_GMAP_ENABLED', true);
 
 // DEBUG constant for developing
 // if you are hacking this plugin, set to TRUE, a log will show in admin pages
-define('DEBUG', false);     
+define('DEBUG', false);
 
 // fix all superglobals
 if (get_magic_quotes_gpc()) {
@@ -86,19 +86,19 @@ if (get_magic_quotes_gpc()) {
 // INCLUDES
 include("captcha_check.php");
 include("dbem_events.php");
-include("dbem_calendar.php");      
+include("dbem_calendar.php");
 include("dbem_widgets.php");
-include("dbem_rsvp.php");     
+include("dbem_rsvp.php");
 include("dbem_locations.php"); 
 include("dbem_people.php");
-include("dbem_recurrence.php");    
+include("dbem_recurrence.php");
 include("dbem_UI_helpers.php");
 include("dbem_categories.php");
 include("dbem_attributes.php");
 
 require_once("phpmailer/dbem_phpmailer.php") ;
 //require_once("phpmailer/language/phpmailer.lang-en.php") ;
-  
+ 
 // Localised date formats as in the jquery UI datepicker plugin
 $localised_date_formats = array("am" => "dd.mm.yy","ar" => "dd/mm/yy", "bg" => "dd.mm.yy", "ca" => "mm/dd/yy", "cs" => "dd.mm.yy", "da" => "dd-mm-yy", "de" =>"dd.mm.yy", "es" => "dd/mm/yy", "en" => "mm/dd/yy", "fi" => "dd.mm.yy", "fr" => "dd/mm/yy", "he" => "dd/mm/yy", "hu" => "yy-mm-dd", "hy" => "dd.mm.yy", "id" => "dd/mm/yy", "is" => "dd/mm/yy", "it" => "dd/mm/yy", "ja" => "yy/mm/dd", "ko" => "yy-mm-dd", "lt" => "yy-mm-dd", "lv" => "dd-mm-yy", "nl" => "dd.mm.yy", "no" => "yy-mm-dd", "pl" => "yy-mm-dd", "pt" => "dd/mm/yy", "ro" => "mm/dd/yy", "ru" => "dd.mm.yy", "sk" => "dd.mm.yy", "sv" => "yy-mm-dd", "th" => "dd/mm/yy", "tr" => "dd.mm.yy", "ua" => "dd.mm.yy", "uk" => "dd.mm.yy", "us" => "mm/dd/yy", "CN" => "yy-mm-dd", "TW" => "yy/mm/dd");
 
@@ -119,7 +119,7 @@ register_activation_hook(__FILE__,'dbem_install');
 add_filter('dbem_general', 'wptexturize');
 add_filter('dbem_general', 'convert_chars');
 add_filter('dbem_general', 'trim');
-// filters for the notes field  (corresponding to those of  "the _content")   
+// filters for the notes field  (corresponding to those of  "the _content")
 add_filter('dbem_notes', 'wptexturize');
 add_filter('dbem_notes', 'convert_smilies');
 add_filter('dbem_notes', 'convert_chars');
@@ -130,12 +130,12 @@ add_filter('dbem_general_rss', 'strip_tags');
 add_filter('dbem_general_rss', 'ent2ncr', 8);
 add_filter('dbem_general_rss', 'wp_specialchars');
 // RSS content filter
-add_filter('dbem_notes_rss', 'convert_chars', 8);    
+add_filter('dbem_notes_rss', 'convert_chars', 8);
 add_filter('dbem_notes_rss', 'ent2ncr', 8);
 
 add_filter('dbem_notes_map', 'convert_chars', 8);
 add_filter('dbem_notes_map', 'js_escape');
-      
+ 
 /* Creating the wp_events table to store event data*/
 function dbem_install() {
  	// Creates the events table if necessary
@@ -159,7 +159,7 @@ function dbem_install() {
 	
 	if (get_option('dbem_events_page') && !get_option('dbem_version')) 
 		dbem_migrate_old_events();
-  
+
  	$version = get_option('dbem_version')  ;
 	if ($version<5) {
   		update_option('dbem_conversion_needed', 1); 
@@ -197,8 +197,7 @@ function dbem_create_events_table($charset,$collate) {
 	$table_name = $wpdb->prefix.EVENTS_TBNAME;
 	
 	if(!($wpdb->get_var("SHOW TABLES LIKE '$old_table_name'") != $old_table_name)) { 
-		// upgrading from previous versions             
-		    
+		// upgrading from previous versions
 		$sql = "ALTER TABLE $old_table_name RENAME $table_name;";
 		$wpdb->query($sql); 
 	}
@@ -258,7 +257,7 @@ function dbem_create_events_table($charset,$collate) {
 				VALUES ('Traditional music session', '$in_four_weeks', '20:00:00', '22:00:00', 2)");
 		$wpdb->query("INSERT INTO ".$table_name." (event_name, event_start_date, event_start_time, event_end_time, location_id)
 					VALUES ('6 Nations, Italy VS Ireland', '$in_one_year','22:00:00', '24:00:00', 3)");
-	} else {  
+	} else {
 		// eventual maybe_add_column() for later versions
 		maybe_add_column($table_name, 'event_start_date', "alter table $table_name add event_start_date date NOT NULL;"); 
 		maybe_add_column($table_name, 'event_end_date', "alter table $table_name add event_end_date date NULL;");
@@ -266,7 +265,7 @@ function dbem_create_events_table($charset,$collate) {
 		maybe_add_column($table_name, 'event_end_time', "alter table $table_name add event_end_time time NOT NULL;"); 
 		maybe_add_column($table_name, 'event_rsvp', "alter table $table_name add event_rsvp bool DEFAULT 0;");
 		maybe_add_column($table_name, 'event_seats', "alter table $table_name add event_seats mediumint(9) DEFAULT 0;");
-		maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) DEFAULT 0;");    
+		maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) DEFAULT 0;");
 		maybe_add_column($table_name, 'recurrence_id', "alter table $table_name add recurrence_id mediumint(9) DEFAULT 0;"); 
 		maybe_add_column($table_name, 'event_contactperson_id', "alter table $table_name add event_contactperson_id mediumint(9) DEFAULT 0;");
 		maybe_add_column($table_name, 'event_attributes', "alter table $table_name add event_attributes text NULL;"); 
@@ -416,8 +415,8 @@ function dbem_create_categories_table($charset,$collate) {
 	}
 }
 
-function dbem_migrate_old_events() {         
-	global $wpdb;  
+function dbem_migrate_old_events() {
+	global $wpdb;
 		
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;
 	$sql = "SELECT event_id, event_time, event_venue, event_address, event_town FROM $events_table";
@@ -428,11 +427,11 @@ function dbem_migrate_old_events() {
 		$location = array('location_name' => $event['event_venue'], 'location_address' => $event['event_address'], 'location_town' => $event['event_town']);
 		$related_location = dbem_get_identical_location($location); 
 		if ($related_location)  {
-			$event['location_id'] = $related_location['location_id'];     
+			$event['location_id'] = $related_location['location_id'];
 		} else {
 		   	$new_location = dbem_insert_location($location);
 			$event['location_id']= $new_location['location_id'];
-		}                                 
+		}
 		// migrating event_time to event_start_date and event_start_time
 		$event['event_start_date'] = substr($event['event_time'],0,10); 
 	   	$event['event_start_time'] = substr($event['event_time'],11,8);
@@ -453,7 +452,7 @@ function dbem_add_options($reset=0) {
 	'dbem_display_calendar_in_events_page' => 0,
 	'dbem_single_event_format' => DEFAULT_SINGLE_EVENT_FORMAT,
 	'dbem_event_page_title_format' => DEFAULT_EVENT_PAGE_TITLE_FORMAT,
-	'dbem_list_events_page' => 0,   
+	'dbem_list_events_page' => 0,
 	'dbem_events_page_title' => DEFAULT_EVENTS_PAGE_TITLE,
 	'dbem_no_events_message' => __('No events','dbem'),
 	'dbem_location_page_title_format' => DEFAULT_LOCATION_PAGE_TITLE_FORMAT,
@@ -469,14 +468,14 @@ function dbem_add_options($reset=0) {
 	'dbem_default_contact_person' => 1,
 	'dbem_captcha_for_booking' => 0 ,
 	'dbem_rsvp_mail_notify_is_active' => 0 ,
-	'dbem_contactperson_email_body' => preg_replace("/<br ?\/?>/", "\n", $contact_person_email_body_localizable),        
+	'dbem_contactperson_email_body' => preg_replace("/<br ?\/?>/", "\n", $contact_person_email_body_localizable),
 	'dbem_respondent_email_body' => preg_replace("/<br ?\/?>/", "\n", $respondent_email_body_localizable),
 	'dbem_registration_pending_email_body' => preg_replace("/<br ?\/?>/", "\n", $registration_pending_email_body_localizable),
 	'dbem_registration_denied_email_body' => preg_replace("/<br ?\/?>/", "\n", $registration_denied_email_body_localizable),
 	'dbem_rsvp_mail_port' => 25,
 	'dbem_smtp_host' => 'localhost',
 	'dbem_mail_sender_name' => '',
-	'dbem_rsvp_mail_send_method' => 'smtp',  
+	'dbem_rsvp_mail_send_method' => 'smtp',
 	'dbem_rsvp_mail_SMTPAuth' => 0,
 	'dbem_image_max_width' => DEFAULT_IMAGE_MAX_WIDTH,
 	'dbem_image_max_height' => DEFAULT_IMAGE_MAX_HEIGHT,
@@ -504,7 +503,7 @@ function dbem_add_option($key, $value, $reset) {
 	if ($option_val=="non_existing" || $reset) {
 		update_option($key, $value);
 	}
-}      
+}
 
 function dbem_create_events_page(){
 	global $wpdb;
@@ -517,10 +516,10 @@ function dbem_create_events_page(){
 	if($int_post_id = wp_insert_post($postarr)){
 		update_option('dbem_events_page', $int_post_id);
 	}
-}   
+}
 
 // Create the Manage Events and the Options submenus 
-add_action('admin_menu','dbem_create_events_submenu');     
+add_action('admin_menu','dbem_create_events_submenu');
 function dbem_create_events_submenu () {
 	  if(function_exists('add_submenu_page')) {
 	  	add_object_page(__('Events', 'dbem'),__('Events', 'dbem'),MIN_CAPABILITY,'events-manager','dbem_events_subpanel', DBEM_PLUGIN_URL.'images/calendar-16.png');
@@ -565,7 +564,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 	preg_match_all("/#@?_?[A-Za-z0-9]+/", $format, $placeholders);
 	foreach($placeholders[0] as $result) {
 		// echo "RESULT: $result <br>";
-		// matches all fields placeholder  
+		// matches all fields placeholder
 		//TODO CUSTOM FIX FOR Brian
 		// EVENTUALLY REMOVE 
 		if (preg_match('/#_JCCSTARTTIME/', $result)) { 
@@ -606,7 +605,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		}
 		if (preg_match('/#_12HENDTIME/', $result)) {
 			$AMorPM = "AM"; 
-			$hour = substr($event['event_end_time'], 0,2);   
+			$hour = substr($event['event_end_time'], 0,2);
 			$minute = substr($event['event_end_time'], 3,2);
 			// 12:00 in 24H time = 12:00PM
 			// 13:01 in 24H time = 01:01PM
@@ -683,7 +682,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 
 	 	if (preg_match('/#_(NOTES|EXCERPT)/', $result)) {
 			$field = "event_".ltrim(strtolower($result), "#_");
-		 	$field_value = $event[$field];      
+		 	$field_value = $event[$field];
 			
 			if ($target == "html") {
 				//If excerpt, we use more link text
@@ -717,19 +716,19 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 
 	 	if (preg_match('/#_NAME/', $result)) {
 			$field = "event_name";
-		 	$field_value = $event[$field];      
+		 	$field_value = $event[$field];
 			$field_value = dbem_sanitize_html($field_value);
-			if ($target == "html") {    
+			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
 		  	} else {
 				$field_value = apply_filters('dbem_general_rss', $field_value);
 			}
 			$event_string = str_replace($result, $field_value , $event_string ); 
-	 	}  
-	  
+	 	}
+
 		if (preg_match('/#_(ADDRESS|TOWN)/', $result)) {
 			$field = "location_".ltrim(strtolower($result), "#_");
-		 	$field_value = $event[$field];      
+		 	$field_value = $event[$field];
 			$field_value = dbem_sanitize_html($field_value);
 			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
@@ -738,10 +737,10 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			}
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
-	  
+
 		if (preg_match('/#_LOCATION$/', $result)) {
 			$field = "location_name";
-		 	$field_value = $event[$field];     
+		 	$field_value = $event[$field];
 			$field_value = dbem_sanitize_html($field_value);
 			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
@@ -770,13 +769,13 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			$name = dbem_get_user_name($user_id);
 			$event_string = str_replace($result, $name, $event_string );
 		}
-		if (preg_match('/#_CONTACTEMAIL$/', $result)) {         
+		if (preg_match('/#_CONTACTEMAIL$/', $result)) {
 			$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
       			$email = dbem_get_user_email($user_id);
 			// ascii encode for primitive harvesting protection ...
 			$event_string = str_replace($result, dbem_ascii_encode($email), $event_string );
 		}
-		if (preg_match('/#_CONTACTPHONE$/', $result)) {   
+		if (preg_match('/#_CONTACTPHONE$/', $result)) {
 			$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
       			$phone = dbem_get_user_phone($user_id);
 			// ascii encode for primitive harvesting protection ...
@@ -788,9 +787,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				else
 					$location_image = "";
 				$event_string = str_replace($result, $location_image , $event_string ); 
-		 	}
-	  
-		 if (preg_match('/#_(LOCATIONPAGEURL)/', $result)) { 
+	 	}
+
+		if (preg_match('/#_(LOCATIONPAGEURL)/', $result)) { 
 			$events_page_link = dbem_get_events_page(true, false);
 			if (stristr($events_page_link, "?"))
 			 	$joiner = "&";
@@ -802,34 +801,34 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 
 		// matches all PHP date placeholders for startdate
 		if (preg_match('/^#[dDjlNSwzWFmMntLoYy]$/', $result)) {
-			$event_string = str_replace($result, mysql2date(ltrim($result, "#"), $event['event_start_date']),$event_string );  
+			$event_string = str_replace($result, mysql2date(ltrim($result, "#"), $event['event_start_date']),$event_string );
 		}
 		
 		// matches all PHP time placeholders for enddate
 		if (preg_match('/^#@[dDjlNSwzWFmMntLoYy]$/', $result)) {
 			$event_string = str_replace($result, mysql2date(ltrim($result, "#@"), $event['event_end_date']), $event_string ); 
-	 	}		    
+	 	}
 		
 		// matches all PHP time placeholders for starttime
-		if (preg_match('/^#[aABgGhHisueIOPTZcrU]$/', $result)) {   
+		if (preg_match('/^#[aABgGhHisueIOPTZcrU]$/', $result)) {
 			// mysql2date expects a date-part in the string as well, since the value $event['event_start_time'] does not have this,
 			// we add a default date to it (2010-10-10)
 			$event_string = str_replace($result, mysql2date(ltrim($result, "#"), "2010-10-10 ".$event['event_start_time']),$event_string ); 
 			//echo $event['event_start_time'];
 			//echo mysql2date('h:i A', '2010-10-10 23:35:00')."<br/>"; 
-			// echo $event_string;  
+			// echo $event_string;
 		}
 		
 		// matches all PHP time placeholders for endtime
 		if (preg_match('/^#@[aABgGhHisueIOPTZcrU]$/', $result)) {
-			$event_string = str_replace($result, mysql2date(ltrim($result, "#@"), "2010-10-10 ".$event['event_end_time']),$event_string );  
+			$event_string = str_replace($result, mysql2date(ltrim($result, "#@"), "2010-10-10 ".$event['event_end_time']),$event_string );
 		}
 		
 		//Add a placeholder for categories
 		if (preg_match('/^#_CATEGORIES$/', $result)) {
 	      		$categories = dbem_get_event_categories($event['event_id']);
 			$field_value = dbem_sanitize_html(join(",",$categories));
-			if ($target == "html") {    
+			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
 		  	} else {
 				$field_value = apply_filters('dbem_general_rss', $field_value);
@@ -837,7 +836,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 			$event_string = str_replace($result, $field_value, $event_string );
 		}
 	}
-		     
+
 	// for extra date formatting, eg. #_{d/m/Y}
 	preg_match_all("/#@?_\{[A-Za-z0-9 -\/,\.\\\]+\}/", $format, $results);
 	foreach($results[0] as $result) {
@@ -859,8 +858,8 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 
 function dbem_date_to_unix_time($date) {
 		$unix_time = mktime(0, 0, 0, substr($date,5,2), substr($date,8,2), substr($date,0,4));
-		return $unix_time;   
-}   
+		return $unix_time;
+}
 function dbem_sanitize_request( $value ) {
 #	if( get_magic_quotes_gpc() ) 
 #		$value = stripslashes( $value );

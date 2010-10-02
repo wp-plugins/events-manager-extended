@@ -1,7 +1,7 @@
 <?php 
 function dbem_option_items($array, $saved_value) {
 	$output = "";
-	foreach($array as $key => $item) {    
+	foreach($array as $key => $item) {
 		$selected ='';
 		if ($key == $saved_value)
 			$selected = "selected='selected'";
@@ -17,7 +17,7 @@ function dbem_checkbox_items($name, $array, $saved_values, $horizontal = true) {
 		
 		$checked = "";
 		if (in_array($key, $saved_values))
-			$checked = "checked='checked'";  
+			$checked = "checked='checked'";
 		$output .=  "<input type='checkbox' name='$name' value='$key' $checked /> $item ";
 		if(!$horizontal)	
 			$output .= "<br/>\n";
@@ -65,23 +65,23 @@ function dbem_options_radio_binary($title, $name, $description) {
 		 
 	   	<tr valign="top" id='<?php echo $name;?>_row'>
 	   		<th scope="row"><?php _e($title,'dbem'); ?></th>
-	   		<td>   
+	   		<td>
 				<input id="<?php echo $name ?>_yes" name="<?php echo $name ?>" type="radio" value="1" <?php if($list_events_page) echo "checked='checked'"; ?> /><?php _e('Yes'); ?> <br />
 				<input  id="<?php echo $name ?>_no" name="<?php echo $name ?>" type="radio" value="0" <?php if(!$list_events_page) echo "checked='checked'"; ?> /><?php _e('No'); ?> <br />
 				<?php echo $description; ?>
 			</td>
 	   	</tr>
 <?php	
-}  
+}
 function dbem_options_select($title, $name, $list, $description) {
 		$option_value = get_option($name); ?>
 	 
 	   	<tr valign="top" id='<?php echo $name;?>_row'>
 	   		<th scope="row"><?php _e($title,'dbem'); ?></th>
-	   		<td>   
+	   		<td>
 				<select name="<?php echo $name; ?>" > 
-					<?php foreach($list as $key => $value) {   
-	 					"$key" == $option_value ? $selected = "selected='selected' " : $selected = '';       
+					<?php foreach($list as $key => $value) {
+	 					"$key" == $option_value ? $selected = "selected='selected' " : $selected = '';
 	          echo "<option value='$key' $selected>$value</option>";
 				  } ?>
 				</select> <br/>

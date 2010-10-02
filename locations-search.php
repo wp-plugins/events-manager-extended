@@ -1,4 +1,4 @@
-<?php   
+<?php
 require_once('../../../wp-load.php');
 if(isset($_GET['id']) && $_GET['id'] != "") {
 	$location = dbem_get_location($_GET['id']);
@@ -6,14 +6,14 @@ if(isset($_GET['id']) && $_GET['id'] != "") {
 	
 } else {
 
-	$locations = dbem_get_locations();        
-	$return = array();       
+	$locations = dbem_get_locations();
+	$return = array();
 
 	foreach($locations as $item) {
 	  	$record = array();
 	  	$record['id']      = $item['location_id'];
 	  	$record['name']    = dbem_sanitize_html($item['location_name']); 
-		$record['address'] = dbem_sanitize_html($item['location_address']);   
+		$record['address'] = dbem_sanitize_html($item['location_address']);
 		$record['town']    = dbem_sanitize_html($item['location_town']); 
 	  	$return[]  = $record;
 	}
@@ -28,10 +28,10 @@ if(isset($_GET['id']) && $_GET['id'] != "") {
 			$rows =array();
 			foreach($row as $key => $value)
 				$location[] = "'$key' : '".str_replace("'", "\'", $value)."'";
-			echo ("{".implode(" , ", $location)." }\n");	    
+			echo ("{".implode(" , ", $location)." }\n");
 		 }
 		
 	}
-	    
+
 }
 ?>

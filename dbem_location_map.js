@@ -1,4 +1,4 @@
-$j_dbem_locations=jQuery.noConflict();   
+$j_dbem_locations=jQuery.noConflict();
 // console.log("eventful: " + eventful + " scope " + scope);
 
 $j_dbem_locations(document.body).unload(function() {
@@ -14,13 +14,13 @@ function loadGMap() {
 	if (document.getElementById("dbem_global_map")) {
 		var locations;
 		$j_dbem_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
-			locations = data.locations;    
+			locations = data.locations;
 			var latitudes = new Array();
 			var longitudes = new Array();
 			var max_latitude = -500.1;
 			var min_latitude = 500.1;
 			var max_longitude = -500.1;
-			var min_longitude = 500.1;    
+			var min_longitude = 500.1;
 
 			var mapCenter = new google.maps.LatLng(45.4213477,10.952397);
 			var myOptions = {
@@ -49,7 +49,7 @@ function loadGMap() {
 			});
 
 			//console.log("Latitudes: " + latitudes + " MAX: " + max_latitude + " MIN: " + min_latitude);
-			//console.log("Longitudes: " + longitudes +  " MAX: " + max_longitude + " MIN: " + min_longitude);    
+			//console.log("Longitudes: " + longitudes +  " MAX: " + max_longitude + " MIN: " + min_longitude);
 
 			center_lat = min_latitude + (max_latitude - min_latitude)/2;
 			center_lon = min_longitude + (max_longitude - min_longitude)/2;
@@ -119,7 +119,7 @@ function loadGMap() {
 
 	// and now for the normal maps (if any)
 	var divs = document.getElementsByTagName('div');
-	for (var i = 0; i < divs.length; i++){                      
+	for (var i = 0; i < divs.length; i++) {
 		divname = divs[i].id; 
 		if(divname.indexOf("dbem-location-map_") == 0) { 
 			var map_id = divname.replace("dbem-location-map_","");
