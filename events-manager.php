@@ -902,18 +902,20 @@ function dbem_sanitize_html( $value, $do_convert=1 ) {
 }
 
 function admin_show_warnings() {
-	$say_hello = get_option ( 'dbem_hello_to_user' );
-	if ($say_hello == 1)
-		dbem_hello_to_new_user ();
-
-	$conversion_needed = get_option ( 'dbem_conversion_needed' );
-	if ($conversion_needed == 1)
-		dbem_explain_conversion_needed ();
-
 	$db_version = get_option ('dbem_version');
-	if ($db_version < DBEM_DB_VERSION)
+	if ($db_version < DBEM_DB_VERSION) {
+	// first the important warning
 		dbem_explain_deactivation_needed();
+	} else {
+	// now the normal warnings
+		$say_hello = get_option ( 'dbem_hello_to_user' );
+		if ($say_hello == 1)
+			dbem_hello_to_new_user ();
 
+		$conversion_needed = get_option ( 'dbem_conversion_needed' );
+		if ($conversion_needed == 1)
+			dbem_explain_conversion_needed ();
+	}
 }
 
 function dbem_explain_deactivation_needed() {
