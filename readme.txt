@@ -73,17 +73,15 @@ height: 400px;
 .dbem-location-balloon {  
         color: #FF7146;  
 }  
+
+You can start from events_manager.css as a base and just change the parts you want.  
+Warning: when wordpress updates a plugin automatically, it removes the plugin directory completely. So be sure to have a backup of myown.css somewhere to put back in place afterwards.
   
 For the multiple locations map, see the shortcode [locations_map] with its possible parameters on the documentation site.
 
 = Can I customise the event page? =
 
 Sure, you can do that by editing the page and changing its [template](http://codex.wordpress.org/Pages#Page_Templates). For heavy customisation, you can use the some of the plugin's own conditional tags, described in the *Template Tags* section.
-
-= Can I customise the event lists, etc? = 
-
-Yes, you can use css to match the id and classes of the events markup.  
-See the include file events_manager.css to get started (or change that file, but remeber it gets overwritten with any update).
 
 = How does Events Manager Extended work? =   
 
