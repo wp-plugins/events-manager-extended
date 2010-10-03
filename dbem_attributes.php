@@ -28,6 +28,7 @@ function dbem_attributes_form($event) {
 	?>
 	<div class="wrap">
 		<h2><?php _e('Attributes','dbem'); ?></h2>
+	<?php if( count( $attributes ) > 0 ) { ?> 
 		<p><?php _e('Add attributes here','dbem'); ?></p>
 		<table class="form-table">
 			<thead>
@@ -107,5 +108,10 @@ function dbem_attributes_form($event) {
 		</table>
 	</div>
 	<?php
+	} else {
+	?>
+		<p><?php _e('No attributes defined yet. If you want attributes, you first need to define/use some in the Settings page. See the section about custom attributes on the documention site for more info.','dbem'); ?></p>
+	<?php
+	} //endif count attributes
 }
 ?>

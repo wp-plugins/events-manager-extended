@@ -569,7 +569,7 @@ function dbem_event_page_title($data) {
 add_filter ( 'single_post_title', 'dbem_event_page_title' );
 
 function dbem_filter_the_title($data) {
-	if (in_the_loop()) {
+	if (in_the_loop() && dbem_is_events_page()) {
 		return dbem_event_page_title($data);
 	} else {
 		return $data;

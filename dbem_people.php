@@ -191,18 +191,16 @@ function dbem_get_people() {
 }
 
 function dbem_add_person($name, $email, $phone, $wp_id) {
-	global $wpdb, $current_user; 
+	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
 	$name = dbem_sanitize_request($name);
 	$email = dbem_sanitize_request($email);
 	$phone = dbem_sanitize_request($phone);
 	$wp_id = dbem_sanitize_request($wp_id);
-	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone) VALUES ('$name', '$email', '$phone', '$wp_id');";
+	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone, wp_id) VALUES ('$name', '$email', '$phone', '$wp_id');";
 	$wpdb->query($sql);
 	if ($dbem_rsvp_registered_users_only) {
-		get_currentuserinfo();
-		$booker_wp_id=$current_user->ID;
-		$new_person = dbem_get_person_by_wp_id($booker_wp_id);
+		$new_person = dbem_get_person_by_wp_id($wp_id);
 	} else {
 		$new_person = dbem_get_person_by_name_and_email($name, $email);
 	}
