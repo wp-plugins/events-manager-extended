@@ -425,10 +425,14 @@ function dbem_get_bookings_for($event_ids,$pending=0) {
 }
 
 function dbem_get_bookings_list_for($event_id) {
-	$attendees=dbem_get_bookings_for($event_id);
-	if ($attendees) {
+	global $wpdb; 
+	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
+	$sql = "SELECT DISTINCT person_id FROM $bookings_table WHERE event_id = $event_id";
+	$persons = $wpdb->get_results($sql, ARRAY_A);
+	if ($persons) {
 		$res="<ul class='dbem_bookings_list_ul'>";
-		foreach ($attendees as $attendee) {
+		foreach ($persons as $person) {
+			$attendee=dbem_get_person($person['person_id']);
 			$res.="<li class='dbem_bookings_list_li'>".$attendee['person_name']."</li>";
 		}
 		$res.="</ul>";
