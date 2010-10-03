@@ -213,6 +213,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: when editing an event, you can now make it recurrent
 
 = 3.1.5 = 
+* Bugfix: don't overwrite widget content any more
 * Bugfix: calendar ajax fixes for full, long_events and category option
 * Cleanup: strip many trailing spaces, and resolve all possible php warnings
 * Feature: honeypot field implemented, this is a hidden field that humans can't see, but a bot will enter something in it and that's something we can check on

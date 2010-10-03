@@ -511,10 +511,10 @@ function dbem_events_count_for($date) {
 
 // filter function to call the event page when appropriate
 function dbem_filter_events_page($data) {
-	//$is_events_post = (get_the_ID () == get_option ( 'dbem_events_page' ));
-	//$events_page_id = get_option ( 'dbem_events_page' );
-	//if (is_page ( $events_page_id ) && $is_events_post) {
-	if (dbem_is_events_page()) {
+	// we change the content of the page only if we're "in the loop",
+	// otherwise this filter also gets applied if eg. a widget calls
+	// the_content or the_excerpt to get the content of a page
+	if (in_the_loop() && dbem_is_events_page()) {
 		return dbem_events_page_content ();
 	} else {
 		return $data;
