@@ -159,6 +159,7 @@ function dbem_book_seats() {
 	$bookerComment = stripslashes($_POST['bookerComment']);
 	$honeypot_check = stripslashes($_POST['honeypot_check']);
 	$event_id = intval($_POST['event_id']);
+	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
 	if ($dbem_rsvp_registered_users_only) {
 		// we require a user to be WP registered to be able to book
 		get_currentuserinfo();
