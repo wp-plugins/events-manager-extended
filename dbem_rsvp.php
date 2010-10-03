@@ -302,7 +302,7 @@ function dbem_are_seats_available_for($event_id, $seats) {
 function dbem_bookings_table($event_id) {
 	$bookings =  dbem_get_bookings_for($event_id);
 	$destination = admin_url("edit.php"); 
-	$table = "<form id='bookings-filter' method='get' action='$destination'>
+	$result = "<form id='bookings-filter' method='get' action='$destination'>
 						<input type='hidden' name='page' value='events-manager'/>
 						<input type='hidden' name='action' value='edit_event'/>
 						<input type='hidden' name='event_id' value='$event_id'/>
@@ -310,11 +310,11 @@ function dbem_bookings_table($event_id) {
 						<div class='wrap'>
 							<h2>Bookings</h2>
 						<table id='dbem-bookings-table' class='widefat post fixed'>";
-	$table .="<thead>
+	$result .="<thead>
 							<tr><th class='manage-column column-cb check-column' scope='col'>&nbsp;</th><th class='manage-column ' scope='col'>Booker</th><th scope='col'>E-mail</th><th scope='col'>Phone number</th><th scope='col'>Seats</th></tr>
 						</thead>" ;
 	foreach ($bookings as $booking) {
-		$table .= "<tr> <td><input type='checkbox' value='".$booking['booking_id']."' name='bookings[]'/></td>
+		$result .= "<tr> <td><input type='checkbox' value='".$booking['booking_id']."' name='bookings[]'/></td>
 										<td>".htmlspecialchars($booking['person_name'])."</td>
 										<td>".htmlspecialchars($booking['person_email'])."</td>
 										<td>".htmlspecialchars($booking['person_phone'])."</td>
@@ -322,7 +322,7 @@ function dbem_bookings_table($event_id) {
 	}
 	$available_seats = dbem_get_available_seats($event_id);
 	$booked_seats = dbem_get_booked_seats($event_id);
-	$table .= "<tfoot><tr><th scope='row' colspan='4'>".__('Booked spaces','dbem').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>
+	$result .= "<tfoot><tr><th scope='row' colspan='4'>".__('Booked spaces','dbem').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>
 						 <tr><th scope='row' colspan='4'>".__('Available spaces','dbem').":</th><td class='booking-result' id='available-seats'>$available_seats</td></tr></tfoot>
 							</table></div>
 							<div class='tablenav'>
@@ -333,7 +333,7 @@ function dbem_bookings_table($event_id) {
 								<br class='clear'/>
 						 	</div>
 						</form>";
-  echo $table;
+	echo $result;
 }
 
 function dbem_bookings_compact_table($event_id) {
@@ -534,6 +534,7 @@ function dbem_registration_seats_form_table($event_id=0) {
 <div id="icon-events" class="icon32"><br />
 </div>
 <h2><?php _e ('Change reserved spaces or cancel registrations','dbem'); ?></h2>
+<?php admin_show_warnings();?>
   	<form id="posts-filter" action="" method="post">
 	<input type='hidden' name='page' value='events-manager-registration-seats' />
 	<div class="tablenav">
@@ -665,6 +666,7 @@ function dbem_registration_approval_form_table($event_id=0) {
 <div id="icon-events" class="icon32"><br />
 </div>
 <h2><?php _e ('Pending Approvals','dbem'); ?></h2>
+<?php admin_show_warnings();?>
   	<form id="posts-filter" action="" method="post">
 	<input type='hidden' name='page' value='events-manager-registration-approval' />
 	<div class="tablenav">

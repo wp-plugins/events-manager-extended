@@ -340,6 +340,7 @@ function dbem_options_subpanel() {
 <div id='icon-options-general' class='icon32'><br />
 </div>
 <h2><?php _e ( 'Event Manager Options', 'dbem' ); ?></h2>
+<?php admin_show_warnings();?>
 <form id="dbem_options_form" method="post" action="options.php">
 <h3><?php _e ( 'General options', 'dbem' ); ?></h3>
 <table class="form-table">
@@ -955,28 +956,6 @@ function dbem_duplicate_event($event_id) {
 	}
 }
 
-function dbem_explain_conversion_needed() {
-	$advice = sprintf(__("<p>It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>."),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
-	?>
-<div id="message" class="updated"> <?php echo $advice; ?> </div>
-<?php
-}
-
-function dbem_hello_to_new_user() {
-	$current_user = wp_get_current_user ();
-	$advice = sprintf ( __ ( "<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> 
-	<p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>
-	<p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>
-	<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'dbem' ), $current_user->display_name, admin_url("widgets.php"), 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', admin_url("admin.php?page=events-manager-options"), admin_url("admin.php?page=events-manager&disable_hello_to_user=true") );
-	?>
-<div id="message" class="updated">
-		<?php
-	echo $advice;
-	?>
-	</div>
-<?php
-}
-
 function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) {
 	$events_count = count ( dbem_get_events ( 0, $scope ) );
 	$use_events_end = get_option ( 'dbem_use_event_end' );
@@ -987,13 +966,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 </div>
 <h2><?php echo $title; ?></h2>
 	<?php
-	$say_hello = get_option ( 'dbem_hello_to_user' );
-	if ($say_hello == 1)
-		dbem_hello_to_new_user ();
-
-	$conversion_needed = get_option ( 'dbem_conversion_needed' );
-	if ($conversion_needed == 1)
-		dbem_explain_conversion_needed ();
+		admin_show_warnings();
 	?>
   	<!--<div id='new-event' class='switch-tab'><a href="<?php
 	echo admin_url("admin.php?page=events-manager&action=edit_event")?>><?php
@@ -1151,6 +1124,8 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 function dbem_event_form($event, $title, $element) {
 	
 	global $localised_date_formats;
+	admin_show_warnings();
+
 	$use_select_for_locations = get_option('dbem_use_select_for_locations');
 	// qtranslate there? Then we need the select, otherwise locations will be created again...
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {

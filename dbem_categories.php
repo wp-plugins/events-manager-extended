@@ -2,6 +2,7 @@
 function dbem_categories_subpanel() {      
 	global $wpdb;
 	
+	admin_show_warnings();
 	if(isset($_GET['action']) && $_GET['action'] == "edit") { 
 		// edit category  
 		dbem_categories_edit_layout();

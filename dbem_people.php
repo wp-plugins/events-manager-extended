@@ -10,8 +10,7 @@ function dbem_people_page() {
 	<div class='wrap'> 
 	<div id="icon-users" class="icon32"><br/></div>
 	<h2>People</h2>
-	
-	<?php dbem_people_table(); ?>
+	<?php admin_show_warnings(); dbem_people_table(); ?>
 	</div> 
 
 	<?php

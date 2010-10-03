@@ -30,6 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
+define('DBEM_DB_VERSION', 6);
 define('DBEM_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('DBEM_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -160,11 +161,11 @@ function dbem_install() {
 	if (get_option('dbem_events_page') && !get_option('dbem_version')) 
 		dbem_migrate_old_events();
 
- 	$version = get_option('dbem_version')  ;
-	if ($version<5) {
+ 	$db_version = get_option('dbem_version')  ;
+	if ($db_version<5) {
   		update_option('dbem_conversion_needed', 1); 
 	}
-  	update_option('dbem_version', 5); 
+  	update_option('dbem_version', DBEM_DB_VERSION); 
 	// Create events page if necessary
  	$events_page_id = get_option('dbem_events_page')  ;
 	if ($events_page_id != "" ) {
@@ -191,7 +192,7 @@ function dbem_convert_charset($table,$charset,$collate) {
 
 function dbem_create_events_table($charset,$collate) {
 	global $wpdb, $user_level;
-	$version = get_option('dbem_version');
+	$db_version = get_option('dbem_version');
 	
 	$old_table_name = $wpdb->prefix."events";
 	$table_name = $wpdb->prefix.EVENTS_TBNAME;
@@ -274,11 +275,11 @@ function dbem_create_events_table($charset,$collate) {
 		maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
 		maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
 		maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
-		if ($version<3) {
+		if ($db_version<3) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_name text;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_notes longtext;");
 		}
-		if ($version<4) {
+		if ($db_version<4) {
 			$wpdb->query("ALTER TABLE $table_name CHANGE event_category_id event_category_ids text default NULL;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_author mediumint(9) DEFAULT 0;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_contactperson_id mediumint(9) DEFAULT 0;");
@@ -287,7 +288,7 @@ function dbem_create_events_table($charset,$collate) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_id mediumint(9) DEFAULT 0;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_rsvp bool DEFAULT 0;");
 		}
-		if ($version<4) {
+		if ($db_version<4) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_rsvp bool DEFAULT 0;");
 		}
 	}
@@ -295,7 +296,7 @@ function dbem_create_events_table($charset,$collate) {
 
 function dbem_create_recurrence_table($charset,$collate) {
 	global $wpdb, $user_level;
-	$version = get_option('dbem_version');
+	$db_version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.RECURRENCE_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -313,10 +314,10 @@ function dbem_create_recurrence_table($charset,$collate) {
 		dbDelta($sql);
 	} else {
 		// Fix buggy columns
-		if ($version<3) {
+		if ($db_version<3) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
 		}
-		if ($version<4) {
+		if ($db_version<4) {
 			$wpdb->query("ALTER TABLE $table_name DROP COLUMN recurrence_name, DROP COLUMN recurrence_start_time, DROP COLUMN recurrence_end_time, DROP COLUMN recurrence_notes, DROP COLUMN location_id, DROP COLUMN event_contactperson_id, DROP COLUMN event_category_id, DROP COLUMN event_page_title_format, DROP COLUMN event_single_event_format, DROP COLUMN event_contactperson_email_body, DROP COLUMN event_respondent_email_body, DROP COLUMN registration_requires_approval ");
 		}
 	}
@@ -324,7 +325,7 @@ function dbem_create_recurrence_table($charset,$collate) {
 
 function dbem_create_locations_table($charset,$collate) {
 	global $wpdb, $user_level;
-	$version = get_option('dbem_version');
+	$db_version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.LOCATIONS_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -352,7 +353,7 @@ function dbem_create_locations_table($charset,$collate) {
 		$wpdb->query("INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude)
 					VALUES ('Taaffes Bar', '19 Shop Street','Galway', 53.2725, -9.05321)");
 	} else {
-		if ($version<3) {
+		if ($db_version<3) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY location_name text NOT NULL ;");
 		}
 	}
@@ -360,7 +361,7 @@ function dbem_create_locations_table($charset,$collate) {
 
 function dbem_create_bookings_table($charset,$collate) {
 	global $wpdb, $user_level;
-	$version = get_option('dbem_version');
+	$db_version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.BOOKINGS_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -377,7 +378,7 @@ function dbem_create_bookings_table($charset,$collate) {
 	} else {
 		maybe_add_column($table_name, 'booking_comment', "ALTER TABLE $table_name add booking_comment text DEFAULT NULL;"); 
 		maybe_add_column($table_name, 'booking_approved', "ALTER TABLE $table_name add booking_approved bool DEFAULT 0;"); 
-		if ($version<3) {
+		if ($db_version<3) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_id mediumint(9) NOT NULL;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY person_id mediumint(9) NOT NULL;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY booking_seats mediumint(9) NOT NULL;");
@@ -898,5 +899,50 @@ function dbem_sanitize_html( $value, $do_convert=1 ) {
 	} else {
 		return $value;
 	}
+}
+
+function admin_show_warnings() {
+	$say_hello = get_option ( 'dbem_hello_to_user' );
+	if ($say_hello == 1)
+		dbem_hello_to_new_user ();
+
+	$conversion_needed = get_option ( 'dbem_conversion_needed' );
+	if ($conversion_needed == 1)
+		dbem_explain_conversion_needed ();
+
+	$db_version = get_option ('dbem_version');
+	if ($db_version < DBEM_DB_VERSION)
+		dbem_explain_deactivation_needed();
+
+}
+
+function dbem_explain_deactivation_needed() {
+	$advice = sprintf(__("<p>It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen."));
+	?>
+<div id="message" class="updated"> <?php echo $advice; ?> </div>
+<?php
+}
+
+function dbem_explain_conversion_needed() {
+	$advice = sprintf(__("<p>It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>."),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
+	?>
+<div id="message" class="updated"> <?php echo $advice; ?> </div>
+<?php
+}
+
+function dbem_hello_to_new_user() {
+	global $current_user;
+	get_currentuserinfo();
+	$advice = sprintf ( __ ( "<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> 
+	<p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>
+	<p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>
+	<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'dbem' ), $current_user->display_name, admin_url("widgets.php"), 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', admin_url("admin.php?page=events-manager-options"), admin_url("admin.php?page=events-manager&disable_hello_to_user=true") );
+	?>
+<div id="message" class="updated">
+		<?php
+	echo $advice;
+	?>
+	</div>
+<?php
 }
 ?>
