@@ -7,7 +7,7 @@ function dbem_add_booking_form($event_id) {
 	$bookerName="";
 	$bookerEmail="";
 	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
-	$readonly="readonly=\"readonly\"";
+	$readonly="disabled=\"disabled\"";
 	if ($dbem_rsvp_registered_users_only) {
 		// we require a user to be WP registered to be able to book
 		if (!is_user_logged_in()) {
