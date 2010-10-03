@@ -126,23 +126,23 @@ function dbem_people_table() {
 		_e("No people have responded to your events yet!", 'dbem');
 	} else { 
 		$table = "<p>".__('This table collects the data about the people who responded to your events', 'dbem')."</p>";	
-		$table .=" <table id='dbem-people-table' class='widefat post fixed'>\n
-							<thead>
-								<tr>
-									<th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>\n
-									<th class='manage-column ' scope='col'>Name</th>\n
-									<th scope='col'>E-mail</th>\n
-									<th scope='col'>Phone number</th>\n
-							 </tr>\n
-							</thead>\n
-							<tfoot>
-								<tr>
-									<th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>\n
-									<th class='manage-column ' scope='col'>Name</th>\n
-									<th scope='col'>E-mail</th>\n
-									<th scope='col'>Phone number</th>\n
-							 </tr>\n
-							</tfoot>\n
+		$table .=" <table id='dbem-people-table' class='widefat post fixed'>
+				<thead>
+				<tr>
+				<th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
+				<th class='manage-column ' scope='col'>Name</th>
+				<th scope='col'>E-mail</th>
+				<th scope='col'>Phone number</th>
+				</tr>
+				</thead>
+				<tfoot>
+				<tr>
+				<th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
+				<th class='manage-column ' scope='col'>Name</th>
+				<th scope='col'>E-mail</th>
+				<th scope='col'>Phone number</th>
+				</tr>
+				</tfoot>
 			" ;
 		foreach ($people as $person) {
 				$table .= "<tr> <td>&nbsp;</td>
@@ -166,6 +166,15 @@ function dbem_get_person_by_name_and_email($name, $email) {
 	return $result;
 }
 
+function dbem_get_person_by_wp_id($wp_id) {
+	global $wpdb; 
+	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
+	$wp_id = dbem_sanitize_request($wp_id);
+	$sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE wp_id = '$wp_id';" ;
+	$result = $wpdb->get_row($sql, ARRAY_A);
+	return $result;
+}
+
 function dbem_get_person($person_id) {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
@@ -182,15 +191,22 @@ function dbem_get_people() {
 	return $result;
 }
 
-function dbem_add_person($name, $email, $phone = "") {
-	global $wpdb; 
+function dbem_add_person($name, $email, $phone, $wp_id) {
+	global $wpdb, $current_user; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
 	$name = dbem_sanitize_request($name);
 	$email = dbem_sanitize_request($email);
 	$phone = dbem_sanitize_request($phone);
-	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone) VALUES ('$name', '$email', '$phone');";
+	$wp_id = dbem_sanitize_request($wp_id);
+	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone) VALUES ('$name', '$email', '$phone', '$wp_id');";
 	$wpdb->query($sql);
-	$new_person = dbem_get_person_by_name_and_email($name, $email);
+	if ($dbem_rsvp_registered_users_only) {
+		get_currentuserinfo();
+		$booker_wp_id=$current_user->ID;
+		$new_person = dbem_get_person_by_wp_id($booker_wp_id);
+	} else {
+		$new_person = dbem_get_person_by_name_and_email($name, $email);
+	}
 	return ($new_person);
 }
 

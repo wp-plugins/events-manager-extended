@@ -395,9 +395,12 @@ function dbem_create_people_table($charset,$collate) {
 			person_name tinytext NOT NULL, 
 			person_email tinytext NOT NULL,
 			person_phone tinytext NOT NULL,
+			wp_id bigint(20) unsigned DEFAULT NULL,
 			UNIQUE KEY (person_id)
 			) $charset $collate;";
 		dbDelta($sql);
+	} else {
+		maybe_add_column($table_name, 'wp_id', "ALTER TABLE $table_name add wp_id bigint(20) unsigned DEFAULT NULL;"); 
 	}
 } 
 
@@ -477,6 +480,7 @@ function dbem_add_options($reset=0) {
 	'dbem_mail_sender_name' => '',
 	'dbem_rsvp_mail_send_method' => 'smtp',
 	'dbem_rsvp_mail_SMTPAuth' => 0,
+	'dbem_rsvp_registered_users_only' => 0,
 	'dbem_image_max_width' => DEFAULT_IMAGE_MAX_WIDTH,
 	'dbem_image_max_height' => DEFAULT_IMAGE_MAX_HEIGHT,
 	'dbem_image_max_size' => DEFAULT_IMAGE_MAX_SIZE,

@@ -3,16 +3,17 @@ $form_add_message = "";
 $form_delete_message = "";
 function dbem_add_booking_form($event_id) {
 	global $form_add_message, $current_user;
-	get_currentuserinfo();
  
 	$bookerName="";
 	$bookerEmail="";
 	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
+	$readonly="readonly=\"readonly\"";
 	if ($dbem_rsvp_registered_users_only) {
 		// we require a user to be WP registered to be able to book
-		if (!$current_user->ID) {
+		if (!is_user_logged_in()) {
 			return;
 		} else {
+			get_currentuserinfo();
 			$bookerName=$current_user->display_name;
 			$bookerEmail=$current_user->user_email;
 		}
@@ -41,9 +42,9 @@ function dbem_add_booking_form($event_id) {
 	
 		$module  .= "<form id='dbem-rsvp-form' name='booking-form' method='post' action='$destination'>
 			<table class='dbem-rsvp-form'>
-				<tr><th scope='row'>".__('Name', 'dbem')."*:</th><td><input type='text' name='bookerName' value='$bookerName'/></td></tr>
-				<tr><th scope='row'>".__('E-Mail', 'dbem')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail'/></td></tr>
-				<tr><th scope='row'>".__('Phone number', 'dbem')."*:</th><td><input type='text' name='bookerPhone' value=''/></td></tr>
+				<tr><th scope='row'>".__('Name', 'dbem')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
+				<tr><th scope='row'>".__('E-Mail', 'dbem')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
+				<tr><th scope='row'>".__('Phone number', 'dbem')."*:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
 				<tr><th scope='row'>".__('Seats', 'dbem')."*:</th><td><select name='bookedSeats' >";
 		foreach($booked_places_options as $option) {
 			$module .= $option."\n";
@@ -106,6 +107,7 @@ function dbem_delete_booking_form() {
 
 
 function dbem_catch_rsvp() {
+	global $current_user;
  	global $form_add_message;
 	global $form_delete_message; 
 	$result = "";
@@ -117,7 +119,7 @@ function dbem_catch_rsvp() {
 	}
 
 	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
-	if ($dbem_rsvp_registered_users_only && !$is_user_logged_in()) {
+	if ($dbem_rsvp_registered_users_only && !is_user_logged_in()) {
 		return;
 	}
 
@@ -127,9 +129,16 @@ function dbem_catch_rsvp() {
   	} 
 
 	if (isset($_POST['eventAction']) && $_POST['eventAction'] == 'delete_booking') { 
-		$bookerName = $_POST['bookerName'];
-		$bookerEmail = $_POST['bookerEmail'];
-		$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
+		if ($dbem_rsvp_registered_users_only) {
+			// we require a user to be WP registered to be able to book
+			get_currentuserinfo();
+			$booker_wp_id=$current_user->ID;
+			$booker = dbem_get_person_by_wp_id($booker_wp_id); 
+		} else {
+			$bookerName = $_POST['bookerName'];
+			$bookerEmail = $_POST['bookerEmail'];
+			$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
+		}
 	  	if ($booker) {
 			$person_id = $booker['person_id'];
 			$result = dbem_delete_booking_by_person_id($person_id);
@@ -144,14 +153,26 @@ function dbem_catch_rsvp() {
 add_action('init','dbem_catch_rsvp');
  
 function dbem_book_seats() {
-	$bookerName = stripslashes($_POST['bookerName']);
-	$bookerEmail = stripslashes($_POST['bookerEmail']);
+	global $current_user;
 	$bookerPhone = stripslashes($_POST['bookerPhone']); 
 	$bookedSeats = intval($_POST['bookedSeats']);
 	$bookerComment = stripslashes($_POST['bookerComment']);
 	$honeypot_check = stripslashes($_POST['honeypot_check']);
 	$event_id = intval($_POST['event_id']);
-	$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
+	if ($dbem_rsvp_registered_users_only) {
+		// we require a user to be WP registered to be able to book
+		get_currentuserinfo();
+		$booker_wp_id=$current_user->ID;
+		// we also need name and email for sending the mail
+		$bookerEmail = $current_user->user_email;
+		$bookerName = $current_user->display_name;
+		$booker = dbem_get_person_by_wp_id($booker_wp_id); 
+	} else {
+		$booker_wp_id=0;
+		$bookerEmail = stripslashes($_POST['bookerEmail']);
+		$bookerName = stripslashes($_POST['bookerName']);
+		$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
+	}
 	
 	$msg="";
 	if (get_option('dbem_captcha_for_booking')) {
@@ -169,7 +190,7 @@ function dbem_book_seats() {
 	} else {
 	   if ($bookedSeats && dbem_are_seats_available_for($event_id, $bookedSeats)) {
 	   	if (!$booker) {
-   			$booker = dbem_add_person($bookerName, $bookerEmail, $bookerPhone);
+   			$booker = dbem_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id);
 	   	}
 		dbem_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
 		
