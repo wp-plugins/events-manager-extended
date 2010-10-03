@@ -123,7 +123,7 @@ table.dbem-calendar-table td {
 table.dbem-calendar.table tr.days-names {
 	font-weight: bold;
 }
-table.dbem-calendar-table td.eventless-pre, .dbem-calendar td.eventless-post {
+table.dbem-calendar-table td.eventless-pre, table.dbem-calendar-table td.eventless-post {
 	color: #ccc;
 }
 table.dbem-calendar-table td.eventful a, table.dbem-calendar-table td.eventful-today a {
