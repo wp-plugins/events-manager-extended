@@ -662,7 +662,8 @@ function dbem_get_events_list($limit = 10, $scope = "future", $order = "ASC", $f
 		$r = wp_parse_args ( $limit, $defaults );
 		extract ( $r );
 		$echo = (bool) $r ['echo'];
-		$category = ( preg_match('/^([0-9],?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
+		// for AND categories: the user enters "+" and this gets translated to " " by wp_parse_args
+		$category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
 	}
 	if ($scope == "")
 		$scope = "future";
@@ -837,9 +838,18 @@ function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_of
 		$category = explode(',', $category);
 		$category_conditions = array();
 		foreach($category as $cat){
-			$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
+			if (is_numeric($cat))
+				$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
 		}
 		$conditions [] = "(".implode(' OR', $category_conditions).")";
+	   }elseif( preg_match('/^([0-9] ?)+$/', $category) ){
+		$category = explode(' ', $category);
+		$category_conditions = array();
+		foreach($category as $cat){
+			if (is_numeric($cat))
+				$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
+		}
+		$conditions [] = "(".implode(' AND', $category_conditions).")";
 	   }
 	}
 	
