@@ -220,3 +220,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: honeypot field implemented, this is a hidden field that humans can't see, but a bot will enter something in it and that's something we can check on
 * Feature: you can now require that people need to be registered to wordpress in order to make a booking
 * Feature: next to "OR" for categories, you can now have "AND" as well: [events_list category=1,3] is for "OR", [events_list category=1+3] is for "AND"
+
+= 3.1.6 =
+* Bugfix: booking name/email fields were readonly, has been fixed
