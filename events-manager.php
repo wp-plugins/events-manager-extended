@@ -678,7 +678,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$joiner = "&";
 			else
 				$joiner = "?";
-			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".dbem_sanitize_html($event['event_name'])."'>".dbem_sanitize_html($event['event_name'])."</a>" , $event_string );
+			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".dbem_trans_sanitize_html($event['event_name'])."'>".dbem_trans_sanitize_html($event['event_name'])."</a>" , $event_string );
 		} 
 
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
@@ -706,7 +706,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				//$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
 				// we call the sanitize_html function so the qtranslate
 				// does it's thing anyway
-				$field_value = dbem_sanitize_html($field_value,0);
+				$field_value = dbem_trans_sanitize_html($field_value,0);
 			} else {
 				if ($target == "map") {
 					$field_value = apply_filters('dbem_notes_map', $field_value);
@@ -727,7 +727,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 	 	if (preg_match('/#_NAME/', $result)) {
 			$field = "event_name";
 		 	$field_value = $event[$field];
-			$field_value = dbem_sanitize_html($field_value);
+			$field_value = dbem_trans_sanitize_html($field_value);
 			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
 		  	} else {
@@ -739,7 +739,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_(ADDRESS|TOWN)/', $result)) {
 			$field = "location_".ltrim(strtolower($result), "#_");
 		 	$field_value = $event[$field];
-			$field_value = dbem_sanitize_html($field_value);
+			$field_value = dbem_trans_sanitize_html($field_value);
 			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
 			} else { 
@@ -751,7 +751,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_LOCATION$/', $result)) {
 			$field = "location_name";
 		 	$field_value = $event[$field];
-			$field_value = dbem_sanitize_html($field_value);
+			$field_value = dbem_trans_sanitize_html($field_value);
 			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
 			} else {
@@ -837,7 +837,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		//Add a placeholder for categories
 		if (preg_match('/^#_CATEGORIES$/', $result)) {
 	      		$categories = dbem_get_event_categories($event['event_id']);
-			$field_value = dbem_sanitize_html(join(",",$categories));
+			$field_value = dbem_trans_sanitize_html(join(",",$categories));
 			if ($target == "html") {
 				$field_value = apply_filters('dbem_general', $field_value); 
 		  	} else {
@@ -892,13 +892,17 @@ function escapeMe(&$val) {
 	$val = mysql_real_escape_string($val);
 }
 
-function dbem_sanitize_html( $value, $do_convert=1 ) {
+function dbem_trans_sanitize_html( $value, $do_convert=1 ) {
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
 	if ($do_convert) {
-		return htmlspecialchars($value,ENT_QUOTES);
+		return dbem_sanitize_html($value);
 	} else {
 		return $value;
 	}
+}
+
+function dbem_sanitize_html( $value ) {
+	return htmlspecialchars($value,ENT_QUOTES);
 }
 
 function admin_show_warnings() {

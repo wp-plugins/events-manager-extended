@@ -96,7 +96,7 @@ class WP_Widget_dbem_list extends WP_Widget {
 ?>
   <p>
     <label for="<?php echo $this->get_field_id('format'); ?>"><?php _e('List item format','dbem'); ?>:</label>
-    <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo htmlspecialchars($format);?></textarea>
+    <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo dbem_sanitize_html($format);?></textarea>
   </p> 
 <?php
     }

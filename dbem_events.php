@@ -254,7 +254,7 @@ function dbem_events_subpanel() {
 			}
 			
 			//$wpdb->query($sql); 
-			echo "<div id='message' class='updated fade'><p>".dbem_sanitize_html($feedback_message)."</p></div>";
+			echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
 			$events = dbem_get_events ( 0, "future" );
 			dbem_events_table ( $events, 10, "Future events", "future", $offset );
 		} else {
@@ -1051,7 +1051,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 			$style = "";
 			$today = date ( "Y-m-d" );
 			
-			$location_summary = "<b>" . dbem_sanitize_html($event ['location_name']) . "</b><br/>" . dbem_sanitize_html($event ['location_address']) . " - " . dbem_sanitize_html($event ['location_town']);
+			$location_summary = "<b>" . dbem_trans_sanitize_html($event ['location_name']) . "</b><br/>" . dbem_trans_sanitize_html($event ['location_address']) . " - " . dbem_trans_sanitize_html($event ['location_town']);
 			
 			if ($event ['event_start_date'] < $today)
 				$style = "style ='background-color: #FADDB7;'";
@@ -1059,14 +1059,14 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 	  <tr <?php echo "$class $style"; ?>>
 			<td><input type='checkbox' class='row-selector' value='<?php echo $event ['event_id']; ?>' name='events[]' /></td>
 			<td><strong>
-			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event ['event_id']); ?>"><?php echo dbem_sanitize_html($event ['event_name']); ?></a>
+			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event ['event_id']); ?>"><?php echo dbem_trans_sanitize_html($event ['event_name']); ?></a>
 			</strong>
 			<?php
 			$categories = explode(',', $event ['event_category_ids']);
 			foreach($categories as $cat){
 				$category = dbem_get_category($cat);
 				if($category)
-					echo "<br/><span title='".__ ( 'Category', 'dbem' ).": ".dbem_sanitize_html($category['category_name'])."'>".dbem_sanitize_html($category['category_name'])."</span>";
+					echo "<br/><span title='".__ ( 'Category', 'dbem' ).": ".dbem_trans_sanitize_html($category['category_name'])."'>".dbem_trans_sanitize_html($category['category_name'])."</span>";
 			}
 			?> 
 			</td>
@@ -1205,7 +1205,7 @@ function dbem_event_form($event, $title, $element) {
 	<form id="eventForm" method="post" 	action="<?php echo $form_destination; ?>">
 		<div class="wrap">
 			<div id="icon-events" class="icon32"><br /></div>
-			<h2><?php echo dbem_sanitize_html($title); ?></h2>
+			<h2><?php echo dbem_trans_sanitize_html($title); ?></h2>
 			<?php
 			if ($event ['recurrence_id']) {
 				?>
@@ -1436,7 +1436,7 @@ function dbem_event_form($event, $title, $element) {
 								</span>
 							</h3>
 							<div class="inside">
-								<textarea name="event_page_title_format" id="event_page_title_format" rows="6" cols="60"><?php echo htmlspecialchars($event['event_page_title_format']);?></textarea>
+								<textarea name="event_page_title_format" id="event_page_title_format" rows="6" cols="60"><?php echo dbem_sanitize_html($event['event_page_title_format']);?></textarea>
 								<br />
 								<p><?php _e ( 'The format of the single event title.','dbem');?>
 								<br />
@@ -1453,7 +1453,7 @@ function dbem_event_form($event, $title, $element) {
 								</span>
 							</h3>
 							<div class="inside">
-								<textarea name="event_single_event_format" id="event_single_event_format" rows="6" cols="60"><?php echo htmlspecialchars($event ['event_single_event_format']);?></textarea>
+								<textarea name="event_single_event_format" id="event_single_event_format" rows="6" cols="60"><?php echo dbem_sanitize_html($event ['event_single_event_format']);?></textarea>
 								<br />
 								<p><?php _e ( 'The format of the single event page.','dbem');?>
 								<br />
@@ -1470,7 +1470,7 @@ function dbem_event_form($event, $title, $element) {
 								</span>
 							</h3>
 							<div class="inside">
-								<textarea name="event_contactperson_email_body" id="event_contactperson_email_body" rows="6" cols="60"><?php echo htmlspecialchars($event['event_contactperson_email_body']);?></textarea>
+								<textarea name="event_contactperson_email_body" id="event_contactperson_email_body" rows="6" cols="60"><?php echo dbem_sanitize_html($event['event_contactperson_email_body']);?></textarea>
 								<br />
 								<p><?php _e ( 'The format of the email which will be sent to the contact person.','dbem');?>
 								<br />
@@ -1487,7 +1487,7 @@ function dbem_event_form($event, $title, $element) {
 								</span>
 							</h3>
 							<div class="inside">
-								<textarea name="event_respondent_email_body" id="event_respondent_email_body" rows="6" cols="60"><?php echo htmlspecialchars($event['event_respondent_email_body']);?></textarea>
+								<textarea name="event_respondent_email_body" id="event_respondent_email_body" rows="6" cols="60"><?php echo dbem_sanitize_html($event['event_respondent_email_body']);?></textarea>
 								<br />
 								<p><?php _e ( 'The format of the email which will be sent to the respondent.','dbem');?>
 								<br />
@@ -1520,17 +1520,17 @@ function dbem_event_form($event, $title, $element) {
 													}
 												}
 											?>
-			<option value="<?php echo $location['location_id'] ?>" <?php echo $selected ?>><?php echo dbem_sanitize_html($location['location_name']) ?></option>
+			<option value="<?php echo $location['location_id'] ?>" <?php echo $selected ?>><?php echo dbem_trans_sanitize_html($location['location_name']) ?></option>
 											<?php endforeach; ?>
 											</select>
-											<input type='hidden' name='location-select-name' value='<?php echo dbem_sanitize_html($selected_location['location_name'])?>'/>
-											<input type='hidden' name='location-select-town' value='<?php echo dbem_sanitize_html($selected_location['location_town'])?>'/>
-											<input type='hidden' name='location-select-address' value='<?php echo dbem_sanitize_html($selected_location['location_address'])?>'/>  		
+											<input type='hidden' name='location-select-name' value='<?php echo dbem_trans_sanitize_html($selected_location['location_name'])?>'/>
+											<input type='hidden' name='location-select-town' value='<?php echo dbem_trans_sanitize_html($selected_location['location_town'])?>'/>
+											<input type='hidden' name='location-select-address' value='<?php echo dbem_trans_sanitize_html($selected_location['location_address'])?>'/>  		
 										</td>
 									<?php } else { ?>
 										<th><?php _e ( 'Name','dbem' )?>
 											&nbsp;</th>
-										<td><input name="translated_location_name" type="hidden" value="<?php echo dbem_sanitize_html($event ['location_name'])?>" /><input id="location_name" type="text" name="location_name" value="<?php echo dbem_sanitize_html($event ['location_name'])?>" /></td>
+										<td><input name="translated_location_name" type="hidden" value="<?php echo dbem_trans_sanitize_html($event ['location_name'])?>" /><input id="location_name" type="text" name="location_name" value="<?php echo dbem_trans_sanitize_html($event ['location_name'])?>" /></td>
 									<?php } ?>
 									<?php
 										$gmap_is_active = get_option ( 'dbem_gmap_is_active' );

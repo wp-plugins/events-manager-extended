@@ -103,29 +103,29 @@ function dbem_locations_edit_layout($location, $message = "") {
 			<!-- we need titlediv and title for qtranslate as ID -->
 			<div id="titlediv" class="form-field form-required">
 			  <label for="location_name"><?php _e('Location name', 'dbem') ?></label>
-			  <input name="location_name" id="title" type="text" value="<?php echo htmlspecialchars($location['location_name']); ?>" size="40" />
-			  <input type="hidden" name="translated_location_name" value="<?php echo dbem_sanitize_html($location['location_name']); ?>" />
+			  <input name="location_name" id="title" type="text" value="<?php echo dbem_sanitize_html($location['location_name']); ?>" size="40" />
+			  <input type="hidden" name="translated_location_name" value="<?php echo dbem_trans_sanitize_html($location['location_name']); ?>" />
 			  <p><?php _e('The name of the location', 'dbem') ?>.</p>
 			</div>
 			<div class="form-field">
 			   <label for="location_address"><?php _e('Location address', 'dbem') ?></label>
-			   <input id="location_address" name="location_address" type="text" value="<?php echo htmlspecialchars($location['location_address']); ?>" size="40"  />
+			   <input id="location_address" name="location_address" type="text" value="<?php echo dbem_sanitize_html($location['location_address']); ?>" size="40"  />
 			   <p><?php _e('The address of the location', 'dbem') ?>.</p>
 			</div>
  
 			<div class="form-field ">
 			   <label for="location_town"><?php _e('Location town', 'dbem') ?></label>
-			   <input name="location_town" id="location_town" type="text" value="<?php echo htmlspecialchars($location['location_town']); ?>" size="40"  />
+			   <input name="location_town" id="location_town" type="text" value="<?php echo dbem_sanitize_html($location['location_town']); ?>" size="40"  />
 			   <p><?php _e('The town of the location', 'dbem') ?>.</p>
 			</div>
 								
 			<div class="form-field" style="display:none;">
 			   <label for="location_latitude">LAT</label>
-			   <input id="location_latitude" name="location_latitude" type="text" value="<?php echo htmlspecialchars($location['location_latitude']); ?>" size="40"  />
+			   <input id="location_latitude" name="location_latitude" type="text" value="<?php echo dbem_sanitize_html($location['location_latitude']); ?>" size="40"  />
 			</div>
 			<div class="form-field" style="display:none;">
 			   <label for="location_longitude">LONG</label>
-			   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo htmlspecialchars($location['location_longitude']); ?>" size="40"  />
+			   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo dbem_sanitize_html($location['location_longitude']); ?>" size="40"  />
 			</div>
 			<div class="form-field">
 			   <label for="location_image"><?php _e('Location image', 'dbem') ?></label>
@@ -217,9 +217,9 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								<?php foreach ($locations as $this_location) : ?>	
 								<tr>
 									<td><input type="checkbox" class ="row-selector" value="<?php echo $this_location['location_id'] ?>" name="locations[]"/></td>
-									<td><a href="<?php echo admin_url("admin.php?page=events-manager-locations&action=edit&location_ID=".$this_location['location_id']); ?>"><?php echo dbem_sanitize_html($this_location['location_name']); ?></a></td>
-									<td><?php echo dbem_sanitize_html($this_location['location_address']); ?></td>
-									<td><?php echo dbem_sanitize_html($this_location['location_town']); ?></td>
+									<td><a href="<?php echo admin_url("admin.php?page=events-manager-locations&action=edit&location_ID=".$this_location['location_id']); ?>"><?php echo dbem_trans_sanitize_html($this_location['location_name']); ?></a></td>
+									<td><?php echo dbem_trans_sanitize_html($this_location['location_address']); ?></td>
+									<td><?php echo dbem_trans_sanitize_html($this_location['location_town']); ?></td>
 								</tr>
 								<?php endforeach; ?>
 							</tbody>
@@ -251,30 +251,30 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								<input type="hidden" name="action" value="addlocation" />
 								<div id="titlediv" class="form-field form-required">
 								  <label for="location_name"><?php _e('Location name', 'dbem') ?></label>
-						 		  <input name="location_name" id="title" type="text" value="<?php echo htmlspecialchars($new_location['location_name']); ?>" size="40" />
-			  					  <input type="hidden" name="translated_location_name" value="<?php echo dbem_sanitize_html($new_location['location_name']); ?>" />
+						 		  <input name="location_name" id="title" type="text" value="<?php echo dbem_sanitize_html($new_location['location_name']); ?>" size="40" />
+			  					  <input type="hidden" name="translated_location_name" value="<?php echo dbem_trans_sanitize_html($new_location['location_name']); ?>" />
 								  <p><?php _e('The name of the location', 'dbem') ?>.</p>
 								</div>
 
 								<div class="form-field">
 								   <label for="location_address"><?php _e('Location address', 'dbem') ?></label>
-								   <input id="location_address" name="location_address" type="text" value="<?php echo htmlspecialchars($new_location['location_address']); ?>" size="40"  />
+								   <input id="location_address" name="location_address" type="text" value="<?php echo dbem_sanitize_html($new_location['location_address']); ?>" size="40"  />
 								   <p><?php _e('The address of the location', 'dbem') ?>.</p>
 								</div>
  
 								<div class="form-field ">
 								   <label for="location_town"><?php _e('Location town', 'dbem') ?></label>
-								   <input id="location_town" name="location_town" type="text" value="<?php echo htmlspecialchars($new_location['location_town']); ?>" size="40"  />
+								   <input id="location_town" name="location_town" type="text" value="<?php echo dbem_sanitize_html($new_location['location_town']); ?>" size="40"  />
 								   <p><?php _e('The town of the location', 'dbem') ?>.</p>
 								</div>
 								
 								<div class="form-field" style="display:none;">
 								   <label for="location_latitude">LAT</label>
-								   <input id="location_latitude" name="location_latitude" type="text" value="<?php echo htmlspecialchars($new_location['location_latitude']); ?>" size="40"  />
+								   <input id="location_latitude" name="location_latitude" type="text" value="<?php echo dbem_sanitize_html($new_location['location_latitude']); ?>" size="40"  />
 								</div>
 								<div class="form-field" style="display:none;">
 								   <label for="location_longitude">LONG</label>
-								   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo htmlspecialchars($new_location['location_longitude']); ?>" size="40"  />
+								   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo dbem_sanitize_html($new_location['location_longitude']); ?>" size="40"  />
 								</div>
 								
 								<div class="form-field">
@@ -562,7 +562,7 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 			if ($field == "location_description") {
 				// no real sanitizing needed, but possible translation
 				// this is the same as for an event in fact
-				$field_value = dbem_sanitize_html($field_value,0);
+				$field_value = dbem_trans_sanitize_html($field_value,0);
 				if ($target == "html")
 					$field_value = apply_filters('dbem_notes', $field_value);
 				else
@@ -571,7 +571,7 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 				  else
 				 	$field_value = apply_filters('dbem_notes_rss', $field_value);
 		  	} else {
-				$field_value = dbem_sanitize_html($field_value);
+				$field_value = dbem_trans_sanitize_html($field_value);
 				if ($target == "html")
 					$field_value = apply_filters('dbem_general', $field_value); 
 				else 
@@ -582,7 +582,7 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 
 		if (preg_match('/#_(IMAGE)/', $result)) {
         		if($location['location_image_url'] != '')
-				$location_image = "<img src='".$location['location_image_url']."' alt='".dbem_sanitize_html($location['location_name'])."'/>";
+				$location_image = "<img src='".$location['location_image_url']."' alt='".dbem_trans_sanitize_html($location['location_name'])."'/>";
 			else
 				$location_image = "";
 			$location_string = str_replace($result, $location_image , $location_string ); 

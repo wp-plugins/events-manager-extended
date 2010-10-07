@@ -2,7 +2,7 @@
 require_once('../../../wp-load.php');
 if(isset($_GET['id']) && $_GET['id'] != "") {
 	$location = dbem_get_location($_GET['id']);
-	echo '{"id":"'.$location['location_id'].'" , "name"  : "'.dbem_sanitize_html($location['location_name']).'","town" : "'.dbem_sanitize_html($location['location_town']).'","address" : "'.dbem_sanitize_html($location['location_address']).'" }';
+	echo '{"id":"'.$location['location_id'].'" , "name"  : "'.dbem_trans_sanitize_html($location['location_name']).'","town" : "'.dbem_trans_sanitize_html($location['location_town']).'","address" : "'.dbem_trans_sanitize_html($location['location_address']).'" }';
 	
 } else {
 
@@ -12,9 +12,9 @@ if(isset($_GET['id']) && $_GET['id'] != "") {
 	foreach($locations as $item) {
 	  	$record = array();
 	  	$record['id']      = $item['location_id'];
-	  	$record['name']    = dbem_sanitize_html($item['location_name']); 
-		$record['address'] = dbem_sanitize_html($item['location_address']);
-		$record['town']    = dbem_sanitize_html($item['location_town']); 
+	  	$record['name']    = dbem_trans_sanitize_html($item['location_name']); 
+		$record['address'] = dbem_trans_sanitize_html($item['location_address']);
+		$record['town']    = dbem_trans_sanitize_html($item['location_town']); 
 	  	$return[]  = $record;
 	}
 

@@ -316,9 +316,9 @@ function dbem_bookings_table($event_id) {
 						</thead>" ;
 	foreach ($bookings as $booking) {
 		$result .= "<tr> <td><input type='checkbox' value='".$booking['booking_id']."' name='bookings[]'/></td>
-										<td>".htmlspecialchars($booking['person_name'])."</td>
-										<td>".htmlspecialchars($booking['person_email'])."</td>
-										<td>".htmlspecialchars($booking['person_phone'])."</td>
+										<td>".dbem_sanitize_html($booking['person_name'])."</td>
+										<td>".dbem_sanitize_html($booking['person_email'])."</td>
+										<td>".dbem_sanitize_html($booking['person_phone'])."</td>
 										<td>".$booking['booking_seats']."</td></tr>";
 	}
 	$available_seats = dbem_get_available_seats($event_id);
@@ -372,7 +372,7 @@ function dbem_bookings_compact_table($event_id) {
 			$table .= 
 			"<tr id='booking-".$booking['booking_id']."'> 
 				<td><a id='booking-check-".$booking['booking_id']."' class='bookingdelbutton'>X</a></td>
-				<td><a title=\"".htmlspecialchars($booking['person_email'])." - ".htmlspecialchars($booking['person_phone'])."\">".htmlspecialchars($booking['person_name'])."</a>$baloon</td>
+				<td><a title=\"".dbem_sanitize_html($booking['person_email'])." - ".dbem_sanitize_html($booking['person_phone'])."\">".dbem_sanitize_html($booking['person_name'])."</a>$baloon</td>
 				<td>".$booking['booking_seats']." $pending_string </td>
 			 </tr>";
 		}
