@@ -406,7 +406,7 @@ function dbem_ajaxize_calendar() {
 		   	if (parseInt(month_n,10) == 1)
 				year_n = parseInt(year_n,10) -1;
 			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
-				tableDiv.html(data);
+				tableDiv.replaceWith(data);
 				initCalendar();
 			});
 		}
@@ -424,7 +424,7 @@ function dbem_ajaxize_calendar() {
 		   	if (parseInt(month_n,10) == 12)
 				year_n = parseInt(year_n,10) + 1;
 			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
-				tableDiv.html(data);
+				tableDiv.replaceWith(data);
 				initCalendar();
 			});
 		}
