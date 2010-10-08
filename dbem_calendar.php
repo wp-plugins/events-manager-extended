@@ -459,11 +459,4 @@ function dbem_filter_calendar_ajax() {
 }
 add_action('init','dbem_filter_calendar_ajax');
 
-function dbem_full_calendar() {
-	echo "<p>Demo di <code>dbem_full_calendar</code></p>"  ;
-	echo '<div id="jMonthCalendar"></div>';
-	dbem_get_calendar("full=1");
-}
-
-
 ?>

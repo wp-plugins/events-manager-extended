@@ -543,7 +543,6 @@ function dbem_create_events_submenu () {
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
 		$plugin_page = add_submenu_page('events-manager', __('Change Registration', 'dbem'), __('Change Registration', 'dbem'), MIN_CAPABILITY, 'events-manager-registration-seats', "dbem_registration_seats_page");
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
-		//add_submenu_page('events-manager', 'Test ', 'Test ', 8, 'test', 'dbem_recurrence_test');
 		$plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','dbem'),__('Settings','dbem'), SETTING_CAPABILITY, "events-manager-options", 'dbem_options_subpanel');
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
   	}
