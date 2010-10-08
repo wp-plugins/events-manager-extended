@@ -1023,6 +1023,8 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 	<input id="post-query-submit" class="button-secondary" type="submit" value="<?php _e ( 'Filter' )?>" />
 	</div>
 	<div class="clear"></div>
+
+	</div>
 	<?php
 	if (empty ( $events )) {
 		_e ('No events', 'dbem');
@@ -1104,13 +1106,6 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 	} // end of table
 	?>
 
-	<div class='tablenav'>
-	<div class="alignleft actions"><br class='clear' />
-	</div>
-	<br class='clear' />
-	</div>
-
-	</div>
 	</form>
 
 <?php
