@@ -162,7 +162,7 @@ function dbem_install() {
 		dbem_migrate_old_events();
 
  	$db_version = get_option('dbem_version')  ;
-	if ($db_version<5) {
+	if ($db_version && $db_version<5) {
   		update_option('dbem_conversion_needed', 1); 
 	}
   	update_option('dbem_version', DBEM_DB_VERSION); 
