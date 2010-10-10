@@ -1034,7 +1034,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 	$scope_names ['all'] = __ ( 'All events', 'dbem' );
 	$scope_names ['future'] = __ ( 'Future events', 'dbem' );
 
-	$event_status_array = fill_status_array ();
+	$event_status_array = status_array ();
 	?> 
 		
   	<form id="posts-filter" action="" method="get">
@@ -1186,7 +1186,7 @@ function dbem_event_form($event, $title, $element) {
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
 		$use_select_for_locations=1;
 	}
-	$event_status_array = fill_status_array ();
+	$event_status_array = status_array ();
 	$saved_bydays = array();
 
 	$show_recurrent_form = 0;
