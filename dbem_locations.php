@@ -1,25 +1,20 @@
 <?php
 $feedback_message = "";
  
-add_action('init', 'dbem_intercept_locations_actions');
-function dbem_intercept_locations_actions() {
-	if(isset($_GET['page']) && $_GET['page'] == "events-manager-locations" &&
-  	   isset($_GET['doaction2']) && $_GET['doaction2'] == "Delete" &&
-	   isset($_GET['action2']) && $_GET['action2'] == "delete") {
+function dbem_locations_page() {
+	if (isset($_GET['action']) && $_GET['action'] == "delete") { 
 		$locations = $_GET['locations'];
 		foreach($locations as $location_ID) {
 		 	dbem_delete_location($location_ID);
 		}
-	}
-}
-
-function dbem_locations_page() {
-	if(isset($_GET['action']) && $_GET['action'] == "edit") { 
+		$locations = dbem_get_locations();
+		dbem_locations_table_layout($locations, null, "");
+	} elseif (isset($_GET['action']) && $_GET['action'] == "edit") { 
 		// edit location
 		$location_id = $_GET['location_ID'];
 		$location = dbem_get_location($location_id);
 		dbem_locations_edit_layout($location);
-	} elseif(isset($_POST['action']) && $_POST['action'] == "editedlocation") { 
+	} elseif (isset($_POST['action']) && $_POST['action'] == "editedlocation") { 
 		// location update required
 		$location = array();
 		$location['location_id'] = $_POST['location_ID'];
@@ -191,9 +186,8 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 			<div id="col-container">
 				<div id="col-right">
 			 	 <div class="col-wrap">
-				 	 <form id="bookings-filter" method="get" action="<?php echo $destination ?>">
+				 	 <form id="locations-filter" method="get" action="<?php echo $destination ?>">
 						<input type="hidden" name="page" value="events-manager-locations"/>
-						<input type="hidden" name="action" value="edit_location"/>
 						
 						<?php if (count($locations)>0) : ?>
 						<table class="widefat">
@@ -228,8 +222,8 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 
 						<div class="tablenav">
 							<div class="alignleft actions">
-							<input type="hidden" name="action2" value="delete"/>
-						 	<input class="button-secondary action" type="submit" name="doaction2" value="Delete"/>
+							<input type="hidden" name="action" value="delete"/>
+						 	<input class="button-secondary action" type="submit" name="doaction" value="Delete"/>
 							<br class="clear"/> 
 							</div>
 							<br class="clear"/>
@@ -247,7 +241,8 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 							<div id="ajax-response"/>
 					  	<h3><?php _e('Add location', 'dbem') ?></h3>
 						    <?php admin_show_warnings(); ?>
-							 <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="admin.php?page=events-manager-locations" class="add:the-list: validate">
+							 <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="<?php echo $destination ?>" class="add:the-list: validate">
+								<input type="hidden" name="page" value="events-manager-locations"/>
 								<input type="hidden" name="action" value="addlocation" />
 								<div id="titlediv" class="form-field form-required">
 								  <label for="location_name"><?php _e('Location name', 'dbem') ?></label>
@@ -666,7 +661,7 @@ function dbem_locations_autocomplete() {
 		$use_select_for_locations=1;
 	}
 
-	if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
+	if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-new_event')) {
 		?>
 		<link rel="stylesheet" href="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-autocomplete/jquery.autocomplete.css" type="text/css"/>
 

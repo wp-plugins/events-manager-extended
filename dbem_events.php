@@ -2069,7 +2069,7 @@ function dbem_admin_map_script() {
 				// We check on the new/edit event because this javascript is also executed for editing locations, and then we don't care
 				// about the use_select_for_locations parameter
 				if (
-					((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) && 
+					((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-new_event')) && 
 		      			(get_option('dbem_use_select_for_locations') || function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage'))) { ?>
 				eventLocation = $j_dbem_admin("input[name='location-select-name']").val(); 
 			  	eventTown = $j_dbem_admin("input[name='location-select-town']").val();
