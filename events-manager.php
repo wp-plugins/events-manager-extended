@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('DBEM_DB_VERSION', 6);
+define('DBEM_DB_VERSION', 7);
 define('DBEM_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('DBEM_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -211,6 +211,7 @@ function dbem_create_events_table($charset,$collate) {
 		// Creating the events table
 		$sql = "CREATE TABLE ".$table_name." (
 			event_id mediumint(9) NOT NULL AUTO_INCREMENT,
+			event_status mediumint(9) DEFAULT 1,
 			event_author mediumint(9) DEFAULT 0,
 			event_name text NOT NULL,
 			event_start_time time NOT NULL,
@@ -260,6 +261,7 @@ function dbem_create_events_table($charset,$collate) {
 					VALUES ('6 Nations, Italy VS Ireland', '$in_one_year','22:00:00', '24:00:00', 3)");
 	} else {
 		// eventual maybe_add_column() for later versions
+		maybe_add_column($table_name, 'event_status', "alter table $table_name add event_status mediumint(9) DEFAULT 1;"); 
 		maybe_add_column($table_name, 'event_start_date', "alter table $table_name add event_start_date date NOT NULL;"); 
 		maybe_add_column($table_name, 'event_end_date', "alter table $table_name add event_end_date date NULL;");
 		maybe_add_column($table_name, 'event_start_time', "alter table $table_name add event_start_time time NOT NULL;"); 
@@ -288,7 +290,7 @@ function dbem_create_events_table($charset,$collate) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY recurrence_id mediumint(9) DEFAULT 0;");
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_rsvp bool DEFAULT 0;");
 		}
-		if ($db_version<4) {
+		if ($db_version<5) {
 			$wpdb->query("ALTER TABLE $table_name MODIFY event_rsvp bool DEFAULT 0;");
 		}
 	}
@@ -906,7 +908,7 @@ function dbem_sanitize_html( $value ) {
 
 function admin_show_warnings() {
 	$db_version = get_option ('dbem_version');
-	if ($db_version < DBEM_DB_VERSION) {
+	if ($db_version && $db_version < DBEM_DB_VERSION) {
 	// first the important warning
 		dbem_explain_deactivation_needed();
 	} else {

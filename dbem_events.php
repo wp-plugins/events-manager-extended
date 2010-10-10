@@ -5,6 +5,7 @@ function dbem_new_event_page() {
 	$event = array (
     "event_id" => '',
     "event_name" => '',
+    "event_status" => 3,
     "event_date" => '',
     "event_day" => '',
     "event_month" => '',
@@ -107,6 +108,7 @@ function dbem_events_subpanel() {
 		$event = array ();
 		$location = array ();
 		$event ['event_name'] = isset($_POST ['event_name']) ? stripslashes ( $_POST ['event_name'] ) : '';
+		$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : 3;
 		// Set event end time to event time if not valid
 		// if (!_dbem_is_date_valid($event['event_end_date']))
 		// 	$event['event_end_date'] = $event['event-date'];
@@ -506,7 +508,19 @@ function dbem_events_page_content() {
 function dbem_events_count_for($date) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . EVENTS_TBNAME;
-	$sql = "SELECT COUNT(*) FROM  $table_name WHERE (event_start_date  like '$date') OR (event_start_date <= '$date' AND event_end_date >= '$date');";
+	$conditions = array ();
+	if (!is_admin()) {
+		if (is_user_logged_in()) {
+			$conditions [] = "event_status IN (1,2)";
+		} else {
+			$conditions [] = "event_status=1";
+		}
+	}
+	$conditions [] = "((event_start_date  like '$date') OR (event_start_date <= '$date' AND event_end_date >= '$date'))";
+	$where = implode ( " AND ", $conditions );
+	if ($where != "")
+		$where = " WHERE " . $where;
+	$sql = "SELECT COUNT(*) FROM  $table_name $where";
 	return $wpdb->get_var ( $sql );
 }
 
@@ -811,6 +825,10 @@ function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_of
 	$today = strftime ( '%Y-%m-%d', mktime ( $hours, $minutes, $seconds, $month, $day, $year ) );
 	
 	$conditions = array ();
+	// if we're not in the admin itf, we don't want draft events
+	if (!is_admin()) {
+		$conditions [] = " event_status in (1,2)";
+	}
 	if (preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope )) {
 		//$conditions [] = " event_start_date like '$scope'";
 		$conditions [] = " (event_start_date  like '$scope') OR (event_start_date <= '$scope' AND event_end_date >= '$scope')";
@@ -877,6 +895,9 @@ function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_of
 		//$wpdb->print_error(); 
 		$inflated_events = array ();
 		foreach ( $events as $this_event ) {
+			if ($event ['event_status'] == 2 && !is_user_logged_in()) {
+				continue;
+			}
 			
 			if ($this_event ['location_id'] ) {
 				$this_location = dbem_get_location ( $this_event ['location_id'] );
@@ -899,6 +920,20 @@ function dbem_get_event($event_id) {
 	global $wpdb;
 	$event_id = intval($event_id);
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
+	$conditions = array ();
+	$conditions [] = "event_id = $event_id";
+
+	// if we're not in the admin itf, we don't want draft events
+	if (!is_admin()) {
+		if (is_user_logged_in()) {
+			$conditions [] = "event_status IN (1,2)";
+		} else {
+			$conditions [] = "event_status=1";
+		}
+	}
+	$where = implode ( " AND ", $conditions );
+	if ($where != "")
+		$where = " WHERE " . $where;
 	$sql = "SELECT *, 
 		   	DATE_FORMAT(event_start_date, '%Y-%m-%e') AS 'event_date', 
 			DATE_FORMAT(event_start_date, '%e') AS 'event_day',
@@ -917,7 +952,7 @@ function dbem_get_event($event_id) {
 			DATE_FORMAT(event_end_time, '%h:%i%p') AS 'event_end_12h_time',
 			DATE_FORMAT(event_end_time, '%H:%i') AS 'event_end_24h_time'
 		FROM $events_table
-		WHERE event_id = $event_id";
+		$where";
 	
 	//$wpdb->show_errors(true);
 	$event = $wpdb->get_row ( $sql, ARRAY_A );
@@ -993,6 +1028,11 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 	$scope_names ['past'] = __ ( 'Past events', 'dbem' );
 	$scope_names ['all'] = __ ( 'All events', 'dbem' );
 	$scope_names ['future'] = __ ( 'Future events', 'dbem' );
+
+	$event_status_array = array ();
+	$event_status_array[1] = __ ( 'Public', 'dbem' );
+	$event_status_array[2] = __ ( 'Private', 'dbem' );
+	$event_status_array[5] = __ ( 'Draft', 'dbem' );
 	
 	?> 
 		
@@ -1037,6 +1077,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 			<th class='manage-column column-cb check-column' scope='col'><input
 				class='select-all' type="checkbox" value='1' /></th>
 			<th><?php _e ( 'Name', 'dbem' ); ?></th>
+	  	   	<th><?php _e ( 'Status', 'dbem' ); ?></th>
 	  	   	<th></th>
 	  	   	<th><?php _e ( 'Location', 'dbem' ); ?></th>
 			<th colspan="2"><?php _e ( 'Date and time', 'dbem' ); ?></th>
@@ -1069,6 +1110,13 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 				$category = dbem_get_category($cat);
 				if($category)
 					echo "<br/><span title='".__ ( 'Category', 'dbem' ).": ".dbem_trans_sanitize_html($category['category_name'])."'>".dbem_trans_sanitize_html($category['category_name'])."</span>";
+			}
+			?> 
+			</td>
+			<td>
+			<?php
+			if (isset ($event_status_array[$event['event_status']])) {
+				echo $event_status_array[$event['event_status']];
 			}
 			?> 
 			</td>
@@ -1137,6 +1185,10 @@ function dbem_event_form($event, $title, $element) {
 		$use_select_for_locations=1;
 	}
 	$saved_bydays = array();
+	$event_status_array = array ();
+	$event_status_array[1] = __ ( 'Public', 'dbem' );
+	$event_status_array[2] = __ ( 'Private', 'dbem' );
+	$event_status_array[5] = __ ( 'Draft', 'dbem' );
 
 	$show_recurrent_form = 0;
 	// change prefix according to event/recurrence
@@ -1225,6 +1277,29 @@ function dbem_event_form($event, $title, $element) {
 				<!-- SIDEBAR -->
 				<div id="side-info-column" class='inner-sidebar'>
 					<div id='side-sortables' class="meta-box-sortables">
+						<div class="postbox ">
+							<div class="handlediv" title="Click to toggle."><br />
+							</div>
+							<h3 class='hndle'><span>
+								<?php _e ( 'Event Status', 'dbem' ); ?>
+								</span></h3>
+							<div class="inside">
+								<p><?php _e('Status','dbem'); ?>
+								<select id="event_status" name="event_status">
+									<?php
+										foreach ( $event_status_array as $key=>$value) {
+			                                                                if ($event['event_status'] && ($event['event_status']==$key)) {
+												$selected = "selected='selected'";
+                                       				                        } else {
+												$selected = "";
+											}
+											echo "<option value='$key' $selected>$value</option>";
+										}
+								?>
+								</select>
+								</p>
+							</div>
+						</div>
 						<?php if(get_option('dbem_recurrence_enabled') && $show_recurrent_form ) : ?>
 						<!-- recurrence postbox -->
 						<div class="postbox ">
@@ -1301,8 +1376,8 @@ function dbem_event_form($event, $title, $element) {
 							<div class="inside">
 								<p><?php _e('Contact','dbem'); ?>
 									<?php
-		wp_dropdown_users ( array ('name' => 'event_contactperson_id', 'show_option_none' => __ ( "Select...", 'dbem' ), 'selected' => $event ['event_contactperson_id'] ) );
-		?>
+									wp_dropdown_users ( array ('name' => 'event_contactperson_id', 'show_option_none' => __ ( "Select...", 'dbem' ), 'selected' => $event ['event_contactperson_id'] ) );
+									?>
 								</p>
 							</div>
 						</div>
@@ -1366,9 +1441,7 @@ function dbem_event_form($event, $title, $element) {
 						<!-- we need titlediv for qtranslate as ID -->
 						<div id="titlediv" class="stuffbox">
 							<h3>
-								<?php
-			_e ( 'Name', 'dbem' );
-			?>
+								<?php _e ( 'Name', 'dbem' ); ?>
 							</h3>
 							<div class="inside">
 								<!-- we need title for qtranslate as ID -->

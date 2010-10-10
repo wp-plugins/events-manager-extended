@@ -228,7 +228,9 @@ function dbem_get_calendar($args="") {
 	$limit_pre=date("Y-m-d", mktime(0,0,0,$month_pre, 1 , $year_pre));
 	$number_of_days_post=dbem_days_in_month($month_post, $year_post);
 	$limit_post=date("Y-m-d", mktime(0,0,0,$month_post, $number_of_days_post , $year_post));
+
 	$events_table = $wpdb->prefix.EVENTS_TBNAME; 
+        $conditions = array ();
 	if ($category && get_option('dbem_categories_enabled')) {
 		//show a specific category
 		if ($category != '' && is_numeric($category)){
@@ -239,15 +241,27 @@ function dbem_get_calendar($args="") {
 			foreach($category as $cat){
 				$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
 			}
-			$cat_condition = "AND (".implode(' OR', $category_conditions).")";
+			$conditions[] = "(".implode(' OR', $category_conditions).")";
 		}
-	} else {
-		$cat_condition = "";
 	}
-	$sql = "SELECT event_id, 
-		event_name, 
+
+        if (!is_admin()) {
+                if (is_user_logged_in()) {
+                        $conditions [] = "event_status IN (1,2)";
+                } else {
+                        $conditions [] = "event_status=1";
+                }
+        }
+        $conditions [] = "((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post'))";
+        $where = implode ( " AND ", $conditions );
+        if ($where != "")
+                $where = " WHERE " . $where;
+
+	$sql = "SELECT event_id,
+		event_status,
+		event_name,
 	 	event_start_date,
-		event_start_time, 
+		event_start_time,
 		event_end_date,
 		event_category_ids,
 		location_id,
@@ -259,7 +273,8 @@ function dbem_get_calendar($args="") {
 		DATE_FORMAT(event_start_time, '%i') AS 'event_mm'
 
 		FROM $events_table 
-		WHERE ((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post')) $cat_condition ORDER BY event_start_date ASC, event_start_time ASC";
+		$where
+		ORDER BY event_start_date ASC, event_start_time ASC";
 
 	$events=$wpdb->get_results($sql, ARRAY_A);
 
@@ -273,6 +288,9 @@ function dbem_get_calendar($args="") {
 	if($events){	
 		//Go through the events and slot them into the right d-m index
 		foreach($events as $event) {
+			if ($event ['event_status'] == 2 && !is_user_logged_in()) {
+				continue;
+			}
 			if ($event ['location_id'] ) {
 				$this_location = dbem_get_location ( $event ['location_id'] );
 				$event ['location_name'] = $this_location ['location_name'];

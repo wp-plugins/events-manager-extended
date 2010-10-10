@@ -227,3 +227,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.1.7 =
 * Bugfix: tablenav issue causing events list to dissapear in the admin interface using IE7
 * Bugfix: ajax fix for calendar (thanks to wsherliker)
+* Feature: status field for events: Public, Private, Draft

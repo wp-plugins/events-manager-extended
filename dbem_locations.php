@@ -344,7 +344,7 @@ function dbem_get_locations($eventful = false, $scope="all") {
 	// and some fields from the events table contain carriage returns, which can't be passed along
 	// The function dbem_global_map_json tries to remove these, but the data is not needed and better be safe than sorry
 	if ($eventful == 'true') {
-		$sql = "SELECT $locations_table.* from $locations_table JOIN $events_table ON $locations_table.location_id = $events_table.location_id WHERE $locations_table.location_name != '' $condition";
+		$sql = "SELECT $locations_table.* from $locations_table JOIN $events_table ON $locations_table.location_id = $events_table.location_id WHERE $events_table.event_status in (1,2) AND $locations_table.location_name != '' $condition";
 	} else {
 		$sql = "SELECT * FROM $locations_table WHERE location_name != '' ORDER BY location_name";
 	}
@@ -352,7 +352,7 @@ function dbem_get_locations($eventful = false, $scope="all") {
 	return $locations;
 }
 
-function dbem_get_location($location_id) { 
+function dbem_get_location($location_id=0) { 
 	global $wpdb;
 
 	$location=array();
@@ -469,7 +469,7 @@ function dbem_delete_location($location) {
 function dbem_location_has_events($location_id) {
 	global $wpdb;	
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;
-	$sql = "SELECT event_id FROM $events_table WHERE location_id = $location_id";
+	$sql = "SELECT event_id FROM $events_table WHERE event_status in (1,2) AND location_id = $location_id";
  	$affected_events = $wpdb->get_results($sql);
 	return (count($affected_events) > 0);
 }
