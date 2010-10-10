@@ -108,7 +108,12 @@ function dbem_events_subpanel() {
 		$event = array ();
 		$location = array ();
 		$event ['event_name'] = isset($_POST ['event_name']) ? stripslashes ( $_POST ['event_name'] ) : '';
-		$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : 3;
+		// if input from user side (via form), the status is always draft
+		if (!is_admin()) {
+			$event ['event_status'] = 5;
+		} else {
+			$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : 3;
+		}
 		// Set event end time to event time if not valid
 		// if (!_dbem_is_date_valid($event['event_end_date']))
 		// 	$event['event_end_date'] = $event['event-date'];
@@ -1029,11 +1034,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 	$scope_names ['all'] = __ ( 'All events', 'dbem' );
 	$scope_names ['future'] = __ ( 'Future events', 'dbem' );
 
-	$event_status_array = array ();
-	$event_status_array[1] = __ ( 'Public', 'dbem' );
-	$event_status_array[2] = __ ( 'Private', 'dbem' );
-	$event_status_array[5] = __ ( 'Draft', 'dbem' );
-	
+	$event_status_array = fill_status_array ();
 	?> 
 		
   	<form id="posts-filter" action="" method="get">
@@ -1174,6 +1175,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 </div>
 <?php
 }
+
 function dbem_event_form($event, $title, $element) {
 	
 	global $localised_date_formats;
@@ -1184,11 +1186,8 @@ function dbem_event_form($event, $title, $element) {
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
 		$use_select_for_locations=1;
 	}
+	$event_status_array = fill_status_array ();
 	$saved_bydays = array();
-	$event_status_array = array ();
-	$event_status_array[1] = __ ( 'Public', 'dbem' );
-	$event_status_array[2] = __ ( 'Private', 'dbem' );
-	$event_status_array[5] = __ ( 'Draft', 'dbem' );
 
 	$show_recurrent_form = 0;
 	// change prefix according to event/recurrence
@@ -1277,6 +1276,8 @@ function dbem_event_form($event, $title, $element) {
 				<!-- SIDEBAR -->
 				<div id="side-info-column" class='inner-sidebar'>
 					<div id='side-sortables' class="meta-box-sortables">
+						<?php if(is_admin()) : ?>
+						<!-- status postbox -->
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
 							</div>
@@ -1300,6 +1301,7 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
+						<?php endif; ?>
 						<?php if(get_option('dbem_recurrence_enabled') && $show_recurrent_form ) : ?>
 						<!-- recurrence postbox -->
 						<div class="postbox ">
@@ -2284,4 +2286,11 @@ function dbem_tinymce(){
 }
 add_action ( 'admin_init', 'dbem_tinymce' );
 
+function status_array() {
+	$event_status_array = array();
+	$event_status_array[1] = __ ( 'Public', 'dbem' );
+	$event_status_array[2] = __ ( 'Private', 'dbem' );
+	$event_status_array[5] = __ ( 'Draft', 'dbem' );
+	return $event_status_array;
+}
 ?>
