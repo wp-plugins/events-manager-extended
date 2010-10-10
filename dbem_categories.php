@@ -3,7 +3,7 @@ function dbem_categories_subpanel() {
 	global $wpdb;
 	
 	admin_show_warnings();
-	if(isset($_GET['action']) && $_GET['action'] == "edit") { 
+	if(isset($_GET['action']) && $_GET['action'] == "editcat") { 
 		// edit category  
 		dbem_categories_edit_layout();
 	} else {
@@ -76,7 +76,8 @@ function dbem_categories_table_layout($message = "") {
 				<?-- begin col-right -->
 				<div id='col-right'>
 			 	 <div class='col-wrap'>
-				 	 <form id='bookings-filter' method='post' action='".admin_url("admin.php?page=events-manager-categories")."'>
+				 	 <form id='bookings-filter' method='post' action='".$destination."'>
+						<input type='hidden' name='page' value='events-manager-categories'/>";
 						<input type='hidden' name='action' value='delete'/>";
 						if (count($categories)>0) {
 							$table .= "<table class='widefat'>
@@ -99,8 +100,8 @@ function dbem_categories_table_layout($message = "") {
 								$table .= "		
 									<tr>
 									<td><input type='checkbox' class ='row-selector' value='".$this_category['category_id']."' name='categories[]'/></td>
-									<td><a href='".admin_url("admin.php?page=events-manager-categories&action=edit&category_ID=".$this_category['category_id'])."'>".$this_category['category_id']."</a></td>
-									<td><a href='".admin_url("admin.php?page=events-manager-categories&action=edit&category_ID=".$this_category['category_id'])."'>".$this_category['category_name']."</a></td>
+									<td><a href='".admin_url("admin.php?page=events-manager-categories&action=editcat&category_ID=".$this_category['category_id'])."'>".$this_category['category_id']."</a></td>
+									<td><a href='".admin_url("admin.php?page=events-manager-categories&action=editcat&category_ID=".$this_category['category_id'])."'>".$this_category['category_name']."</a></td>
 									</tr>
 								";
 							}
