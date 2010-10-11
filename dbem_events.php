@@ -936,11 +936,21 @@ function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_of
 			$offset";
 	$wpdb->show_errors = true;
 	$events = $wpdb->get_results ( $sql, ARRAY_A );
+	$current_userid=get_current_user_id();
 	if (! empty ( $events )) {
 		//$wpdb->print_error(); 
 		$inflated_events = array ();
 		foreach ( $events as $this_event ) {
-			if ($event ['event_status'] == 2 && !is_user_logged_in()) {
+			if ($this_event ['event_status'] == 2 && !is_user_logged_in()) {
+				continue;
+			}
+			// if we're not in the admin itf, we don't want draft events
+			if (!is_admin() && $this_event ['event_status'] == 5) {
+				continue;
+			}
+			// if we're in the admin itf, return only the events for which you have the right to change anything
+			if (is_admin() && !(current_user_can( EDIT_CAPABILITY) ||
+			    (current_user_can( MIN_CAPABILITY) && ($this_event['event_creator_id']==$current_userid || $this_event['event_contactperson_id']==$current_userid)))) {  
 				continue;
 			}
 			
