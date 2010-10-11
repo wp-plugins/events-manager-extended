@@ -108,12 +108,7 @@ function dbem_events_subpanel() {
 		$event = array ();
 		$location = array ();
 		$event ['event_name'] = isset($_POST ['event_name']) ? stripslashes ( $_POST ['event_name'] ) : '';
-		// if input from user side (via form), the status is always draft
-		if (!is_admin()) {
-			$event ['event_status'] = 5;
-		} else {
-			$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : 3;
-		}
+		$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : 3;
 		// Set event end time to event time if not valid
 		// if (!_dbem_is_date_valid($event['event_end_date']))
 		// 	$event['event_end_date'] = $event['event-date'];
