@@ -228,3 +228,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: tablenav issue causing events list to dissapear in the admin interface using IE7
 * Bugfix: ajax fix for calendar (thanks to wsherliker)
 * Feature: status field for events: Public, Private, Draft
+* Feature: permissions now being checked for creation/editing of events:
+	- a user with role "Editor" can do anything
+	- with role "Author" you can only add events or edit existing events for which you are the creator or the contact person
+	- with role "Contributor" you can only add events *in draft* or edit existing events for which you are the creator or the contact person

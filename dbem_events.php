@@ -1,52 +1,58 @@
 <?php
 
 function dbem_new_event_page() {
+	// check the user is allowed to make changes
+	if ( !current_user_can( MIN_CAPABILITY  ) ) {
+		return;
+	}
+
 	$title = __ ( "Insert New Event", 'dbem' );
 	$event = array (
-    "event_id" => '',
-    "event_name" => '',
-    "event_status" => 3,
-    "event_date" => '',
-    "event_day" => '',
-    "event_month" => '',
-    "event_year" => '',
-    "event_end_date" => '',
-    "event_start_date" => '',
-    "event_start_time" => '',
-    "event_start_12h_time" => '',
-    "event_end_time" => '',
-    "event_end_12h_time" => '',
-    "event_notes" => '',
-    "event_rsvp" => 0,
-    "registration_requires_approval" => 0,
-    "event_seats" => 0,
-    "event_freq" => '',
-    "location_id" => 0,
-    "event_contactperson_id" => 0,
-    "event_category_ids" => '',
-    "event_attributes" => '',
-    "event_page_title_format" => '',
-    "event_single_event_format" => '',
-    "event_contactperson_email_body" => '',
-    "event_respondent_email_body" => '',
-    "recurrence_id" => 0,
-    "recurrence_interval" => '',
-    "recurrence_byweekno" => '',
-    "recurrence_byday" => '',
-    "location_name" => '',
-    "location_address" => '',
-    "location_town" => '',
-    "location_latitude" => '',
-    "location_longitude" => '',
-    "location_image_url" => ''
+		"event_id" => '',
+		"event_name" => '',
+		"event_status" => 3,
+		"event_date" => '',
+		"event_day" => '',
+		"event_month" => '',
+		"event_year" => '',
+		"event_end_date" => '',
+		"event_start_date" => '',
+		"event_start_time" => '',
+		"event_start_12h_time" => '',
+		"event_end_time" => '',
+		"event_end_12h_time" => '',
+		"event_notes" => '',
+		"event_rsvp" => 0,
+		"registration_requires_approval" => 0,
+		"event_seats" => 0,
+		"event_freq" => '',
+		"location_id" => 0,
+		"event_creator_id" => 0,
+		"event_contactperson_id" => 0,
+		"event_category_ids" => '',
+		"event_attributes" => '',
+		"event_page_title_format" => '',
+		"event_single_event_format" => '',
+		"event_contactperson_email_body" => '',
+		"event_respondent_email_body" => '',
+		"recurrence_id" => 0,
+		"recurrence_interval" => '',
+		"recurrence_byweekno" => '',
+		"recurrence_byday" => '',
+		"location_name" => '',
+		"location_address" => '',
+		"location_town" => '',
+		"location_latitude" => '',
+		"location_longitude" => '',
+		"location_image_url" => ''
 	);
 	dbem_event_form ( $event, $title, '' );
 }
 
 function dbem_events_subpanel() {
 	global $wpdb;
+
 	$action = isset($_GET ['action']) ? $_GET ['action'] : '';
-	$action2 = isset($_GET ['action2']) ? $_GET ['action2'] : '';
 	$event_ID = isset($_GET ['event_id']) ? intval($_GET ['event_id']) : '';
 	$recurrence_ID = isset($_GET ['recurrence_id']) ? intval($_GET ['recurrence_id']) : '';
 	$scope = isset($_GET ['scope']) ? $_GET ['scope'] : '';
@@ -54,12 +60,18 @@ function dbem_events_subpanel() {
 	$order = isset($_GET ['order']) ? $_GET ['order'] : '';
 	$selectedEvents = isset($_GET ['events']) ? $_GET ['events'] : '';
 	
+	// check the user is allowed to do anything
+	if ( !current_user_can( MIN_CAPABILITY ) ) {
+		$action="";
+	}
+	$current_userid=get_current_user_id();
+
 	// Disable Hello to new user if requested
-	if (isset ( $_GET ['disable_hello_to_user'] ) && $_GET ['disable_hello_to_user'] == 'true')
+	if (current_user_can( SETTING_CAPABILITY ) && isset ( $_GET ['disable_hello_to_user'] ) && $_GET ['disable_hello_to_user'] == 'true')
 		update_option ( 'dbem_hello_to_user', 0 );
 
 	// do the UTF-8 conversion if wanted
-	if (isset ( $_GET ['do_character_conversion'] ) && $_GET ['do_character_conversion'] == 'true' && $wpdb->has_cap('collation')) {
+	if (current_user_can( SETTING_CAPABILITY ) && isset ( $_GET ['do_character_conversion'] ) && $_GET ['do_character_conversion'] == 'true' && $wpdb->has_cap('collation')) {
                 if ( ! empty($wpdb->charset)) {
                         $charset = "CHARACTER SET $wpdb->charset";
 			$collate="";
@@ -86,29 +98,34 @@ function dbem_events_subpanel() {
 	
 	// DELETE action
 	if ($action == 'deleteEvents') {
-		//  $sql="DELETE FROM ".$event_table_name." WHERE event_id='"."$event_ID"."'";
-		
-		// TODO eventual error if ID in non-existant
-		//$wpdb->query($sql);
 		foreach ( $selectedEvents as $event_ID ) {
                         $tmp_event = array();
                         $tmp_event = dbem_get_event ( $event_ID );
-                        if ($tmp_event['recurrence_id']>0) {
-                                dbem_remove_recurrence ( $tmp_event['recurrence_id'] );
-                        } else {
-                                dbem_delete_event ( $event_ID );
+			if (current_user_can( EDIT_CAPABILITY) ||
+			    (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_creator_id']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
+                        	if ($tmp_event['recurrence_id']>0) {
+					dbem_remove_recurrence ( $tmp_event['recurrence_id'] );
+				} else {
+					dbem_delete_event ( $event_ID );
+				}
                         }
 		}
 		
 		$events = dbem_get_events ( 0, "future" );
 		dbem_events_table ( $events, 10, "Future events", "future", $offset );
 	}
+
 	// UPDATE or CREATE action
 	if ($action == 'update_event' || $action == 'update_recurrence') {
 		$event = array ();
 		$location = array ();
 		$event ['event_name'] = isset($_POST ['event_name']) ? stripslashes ( $_POST ['event_name'] ) : '';
-		$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : 3;
+		if (!current_user_can( AUTHOR_CAPABILITY)) {
+			// user can create an event, but not approve it: status remains draft
+			$event['event_status']=5;	
+		} else {
+			$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : 5;
+		}
 		// Set event end time to event time if not valid
 		// if (!_dbem_is_date_valid($event['event_end_date']))
 		// 	$event['event_end_date'] = $event['event-date'];
@@ -211,13 +228,12 @@ function dbem_events_subpanel() {
 				if ($related_location) {
 					$event ['location_id'] = $related_location ['location_id'];
 				} else {
-				
 					$new_location = dbem_insert_location ( $location );
 					$event ['location_id'] = $new_location ['location_id'];
-					//print_r($new_location);
 				}
 			}
 			if (! $event_ID && ! $recurrence_ID) {
+				$event['event_creator_id']=$current_userid;
 				// new event or new recurrence
 				if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
 					//insert new recurrence
@@ -231,26 +247,38 @@ function dbem_events_subpanel() {
 			} else {
 				// something exists
 				if ($recurrence_ID) {
-					// UPDATE old recurrence
-					$recurrence ['recurrence_id'] = $recurrence_ID;
-					//print_r($recurrence); 
-					if (dbem_update_recurrence ($event, $recurrence ))
-						$feedback_message = __ ( 'Recurrence updated!', 'dbem' );
-					else
-						$feedback_message = __ ( 'Something went wrong with the recurrence update...', 'dbem' );
-				} else {
-					if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
-						// we go from single event to recurrence: create the recurrence and delete the single event
-						dbem_insert_recurrent_event ( $event, $recurrence );
-                                		dbem_delete_event ( $event_ID );
-						$feedback_message = __ ( 'New recurrent event inserted!', 'dbem' );
+					$tmp_recurrence = dbem_get_recurrence ( $recurrence_ID );
+					if (current_user_can( EDIT_CAPABILITY) ||
+					    (current_user_can( MIN_CAPABILITY) && ($tmp_recurrence['event_creator_id']==$current_userid || $tmp_recurrence['event_contactperson_id']==$current_userid))) {
+						// UPDATE old recurrence
+						$recurrence ['recurrence_id'] = $recurrence_ID;
+						//print_r($recurrence); 
+						if (dbem_update_recurrence ($event, $recurrence ))
+							$feedback_message = __ ( 'Recurrence updated!', 'dbem' );
+						else
+							$feedback_message = __ ( 'Something went wrong with the recurrence update...', 'dbem' );
 					} else {
-						// UPDATE old event
-						// unlink from recurrence in case it was generated by one
-						$event ['recurrence_id'] = 0;
-						$where ['event_id'] = $event_ID;
-						$result = $wpdb->update ( $event_table_name, $event, $where );
-						$feedback_message = "'" . $event ['event_name'] . "' " . __ ( 'updated', 'dbem' ) . "!";
+						$feedback_message = __('You have no right to update','dbem'). " '" . $tmp_event ['event_name'] . "' !";
+					}
+				} else {
+					$tmp_event = dbem_get_event ( $event_ID );
+					if (current_user_can( EDIT_CAPABILITY) ||
+					    (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_creator_id']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {
+						if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
+							// we go from single event to recurrence: create the recurrence and delete the single event
+							dbem_insert_recurrent_event ( $event, $recurrence );
+                                			dbem_delete_event ( $event_ID );
+							$feedback_message = __ ( 'New recurrent event inserted!', 'dbem' );
+						} else {
+							// UPDATE old event
+							// unlink from recurrence in case it was generated by one
+							$event ['recurrence_id'] = 0;
+							$where ['event_id'] = $event_ID;
+							$result = $wpdb->update ( $event_table_name, $event, $where );
+							$feedback_message = "'" . $event ['event_name'] . "' " . __ ( 'updated', 'dbem' ) . "!";
+						}
+					} else {
+						$feedback_message = __('You have no right to update','dbem'). " '" . $tmp_event ['event_name'] . "' !";
 					}
 				}
 			}
@@ -258,7 +286,7 @@ function dbem_events_subpanel() {
 			//$wpdb->query($sql); 
 			echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
 			$events = dbem_get_events ( 0, "future" );
-			dbem_events_table ( $events, 10, "Future events", "future", $offset );
+			dbem_events_table ( $events, 20, "Future events", "future", $offset );
 		} else {
 			// validation unsuccessful			
 			echo "<div id='message' class='error '>
@@ -270,36 +298,54 @@ function dbem_events_subpanel() {
 	if ($action == 'edit_event') {
 		if (! $event_ID) {
 			$title = __ ( "Insert New Event", 'dbem' );
+			dbem_event_form ( $event, $title, $event_ID );
 		} else {
 			$event = dbem_get_event ( $event_ID );
-			$title = __ ( "Edit Event", 'dbem' ) . " '" . $event ['event_name'] . "'";
+			if (current_user_can( EDIT_CAPABILITY) ||
+			    (current_user_can( MIN_CAPABILITY) && ($event['event_creator_id']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
+							// UPDATE old event
+				$title = __ ( "Edit Event", 'dbem' ) . " '" . $event ['event_name'] . "'";
+				dbem_event_form ( $event, $title, $event_ID );
+			} else {
+				$feedback_message = __('You have no right to update','dbem'). " '" . $event ['event_name'] . "' !";
+				echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
+				$events = dbem_get_events ( 0, "future" );
+				dbem_events_table ( $events, 10, "Future events", "future", $offset );
+			}
 		}
 		
-		//$event=$wpdb->get_row($sql, ARRAY_A);
-		// Enter new events and updates old ones
-		// DEBUG: echo"Nome: $event->event_name";
-		
-		dbem_event_form ( $event, $title, $event_ID );
 	}
+
 	//Add duplicate event if requested
 	if ($action == 'duplicate_event') {
-		dbem_duplicate_event ( $event_ID );
+		$event = dbem_get_event ( $event_ID );
+		if (current_user_can( EDIT_CAPABILITY) ||
+		    (current_user_can( MIN_CAPABILITY) && ($event['event_creator_id']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
+			dbem_duplicate_event ( $event_ID );
+		} else {
+			$feedback_message = __('You have no right to update','dbem'). " '" . $event ['event_name'] . "' !";
+			echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
+			$events = dbem_get_events ( 0, "future" );
+			dbem_events_table ( $events, 20, "Future events", "future", $offset );
+		}
 	}
 	if ($action == 'edit_recurrence') {
 		$event_ID = intval($_GET ['recurrence_id']);
 		$recurrence = dbem_get_recurrence ( $event_ID );
-		$title = __ ( "Reschedule", 'dbem' ) . " '" . $recurrence ['event_name'] . "'";
-		dbem_event_form ( $recurrence, $title, $event_ID );
-	}
-	
-	if ($action == 'update_recurrence') {
-		//print_r($recurrence);
-	//die('update recurrence!');
+		if (current_user_can( EDIT_CAPABILITY) ||
+		    (current_user_can( MIN_CAPABILITY) && ($recurrence['event_creator_id']==$current_userid || $recurrence['event_contactperson_id']==$current_userid))) {
+			$title = __ ( "Reschedule", 'dbem' ) . " '" . $recurrence ['event_name'] . "'";
+			dbem_event_form ( $recurrence, $title, $event_ID );
+		} else {
+			$feedback_message = __('You have no right to update','dbem'). " '" . $recurrence ['event_name'] . "' !";
+			echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
+			$events = dbem_get_events ( 0, "future" );
+			dbem_events_table ( $events, 20, "Future events", "future", $offset );
+		}
 	}
 	
 	if ($action == "-1" || $action == "") {
 		// No action, only showing the events list
-		
 		switch ($scope) {
 			case "past" :
 				$title = __ ( 'Past Events', 'dbem' );
@@ -612,7 +658,6 @@ function dbem_filter_get_pages($data) {
 add_filter ( 'get_pages', 'dbem_filter_get_pages' );
 
 //
-// TODO: ROBA NUOVA DA RIORDINARE
 // ADMIN CSS for debug
 function dbem_admin_css() {
 	$css = "
@@ -980,12 +1025,12 @@ function dbem_duplicate_event($event_id) {
 	if( $result !== false) {
 		//Get the ID of the new item
 		$event_ID = $wpdb->insert_id;
-		$event = dbem_get_event ( $event_id );
-		$event['event_id'] = $event_id;
+		$event = dbem_get_event ( $event_ID );
+		$event['event_id'] = $event_ID;
 		//Now we edit the duplicated item
 		$title = __ ( "Edit Event", 'dbem' ) . " '" . $event ['event_name'] . "'";
 		echo "<div id='message' class='updated below-h2'>You are now editing the duplicated event.</div>";
-		dbem_event_form ( $event, $title, $event_id );
+		dbem_event_form ( $event, $title, $event_ID );
 	} else {
 		echo "<div class='error'><p>There was an error duplicating the event. Try again maybe? Here are the errors:</p>";
 		foreach ($EZSQL_ERROR as $errorArray) {

@@ -77,7 +77,7 @@ function dbem_categories_table_layout($message = "") {
 				<div id='col-right'>
 			 	 <div class='col-wrap'>
 				 	 <form id='bookings-filter' method='post' action='".$destination."'>
-						<input type='hidden' name='page' value='events-manager-categories'/>";
+						<input type='hidden' name='page' value='events-manager-categories'/>
 						<input type='hidden' name='action' value='delete'/>";
 						if (count($categories)>0) {
 							$table .= "<table class='widefat'>
