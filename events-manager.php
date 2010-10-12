@@ -875,9 +875,14 @@ function eme_sanitize_html( $value ) {
 function admin_show_warnings() {
 	$db_version = get_option('eme_version');
 	$old_db_version = get_option('dbem_version');
-	if (($db_version && $db_version < EME_DB_VERSION) || (!$db_version && $old_db_version)) {
-	// first the important warning
+	if ($db_version && $db_version < EME_DB_VERSION) {
+		// first the important warning
 		eme_explain_deactivation_needed();
+	} elseif (!$db_version && $old_db_version) {
+		// transfer from dbem to eme warning
+		?>
+		<div id="message" class="updated">You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace "dbem" by "eme" in these. After that, please deacticate/reactivate the plugin to adjust for the new version.</div>
+		<?php
 	} else {
 	// now the normal warnings
 		$say_hello = get_option('eme_hello_to_user' );
