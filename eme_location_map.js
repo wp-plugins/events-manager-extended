@@ -11,7 +11,7 @@ $j_eme_locations(document).ready(function() {
 
 function loadGMap() {
 	// first the global map (if present)
-	if (document.getElementById("dbem_global_map")) {
+	if (document.getElementById("eme_global_map")) {
 		var locations;
 		$j_eme_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
 			locations = data.locations;
@@ -32,7 +32,7 @@ function loadGMap() {
 				},
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			}
-			var map = new google.maps.Map(document.getElementById("dbem_global_map"), myOptions);
+			var map = new google.maps.Map(document.getElementById("eme_global_map"), myOptions);
 			var infowindow = new google.maps.InfoWindow();
 
 			$j_eme_locations.each(locations, function(i, item) {
@@ -72,14 +72,14 @@ function loadGMap() {
 				var li_element = "<li id='location-"+item.location_id
 						 + "' style='list-style-type: upper-alpha'><a >"
 						 + item.location_name+"</a></li>";
-				var location_info = "<div class=\"dbem-location-balloon\"><strong>"+ item.location_name
+				var location_info = "<div class=\"eme-location-balloon\"><strong>"+ item.location_name
 						    + "</strong><br/>" + item.location_address + ", "
 						    + item.location_town + "<br/><small><a href='" + events_page_link
 						    + joiner + "location_id=" + item.location_id + "'>Details<a></div>";
 				customIcon = "http://www.google.com/mapfiles/marker" + letter + ".png";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
-				var balloon_id = "dbem-location-balloon-id";
-				var balloon_content = "<div id=\""+balloon_id+"\" class=\"dbem-location-balloon\">"+location_info+"</div>";
+				var balloon_id = "eme-location-balloon-id";
+				var balloon_content = "<div id=\""+balloon_id+"\" class=\"eme-location-balloon\">"+location_info+"</div>";
 				infowindow.balloon_id = balloon_id;
 				var marker = new google.maps.Marker({
 					position: point,
@@ -94,7 +94,7 @@ function loadGMap() {
 				//		content: location_info,
 				//		pixelOffset: pixoff
 				//});
-				$j_eme_locations('ol#dbem_locations_list').append(li_element);
+				$j_eme_locations('ol#eme_locations_list').append(li_element);
 				$j_eme_locations('li#location-'+item.location_id+' a').click(function() {
 					infowindow.setContent(balloon_content);
 					infowindow.open(map,marker);
@@ -121,8 +121,8 @@ function loadGMap() {
 	var divs = document.getElementsByTagName('div');
 	for (var i = 0; i < divs.length; i++) {
 		divname = divs[i].id; 
-		if(divname.indexOf("dbem-location-map_") == 0) { 
-			var map_id = divname.replace("dbem-location-map_","");
+		if(divname.indexOf("eme-location-map_") == 0) { 
+			var map_id = divname.replace("eme-location-map_","");
 			var lat_id = window['latitude_'+map_id]; 
 			var lon_id = window['longitude_'+map_id]; 
 			var map_text_id = window['map_text_'+map_id]; 
@@ -138,9 +138,9 @@ function loadGMap() {
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			}
 			var s_map = new google.maps.Map(divs[i], myOptions);
-			var s_balloon_id= "dbem-location-balloon-"+map_id;
+			var s_balloon_id= "eme-location-balloon-"+map_id;
 			var s_infowindow = new google.maps.InfoWindow({
-				content: "<div id=\"" + s_balloon_id +"\" class=\"dbem-location-balloon\">"+map_text_id+"</div>",
+				content: "<div id=\"" + s_balloon_id +"\" class=\"eme-location-balloon\">"+map_text_id+"</div>",
 				balloon_id: s_balloon_id
 			});
 			// we add the infowinfow object to the marker object, then we can call it in the 

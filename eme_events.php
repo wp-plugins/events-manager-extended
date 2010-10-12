@@ -290,7 +290,7 @@ function eme_events_subpanel() {
 		} else {
 			// validation unsuccessful			
 			echo "<div id='message' class='error '>
-						<p>" . __ ( "Ach, there's a problem here:", "dbem" ) . " $validation_result</p>
+						<p>" . __ ( "Ach, there's a problem here:", "eme" ) . " $validation_result</p>
 				  </div>";
 			eme_event_form ( $event, "Edit event $event_ID", $event_ID );
 		}
@@ -521,7 +521,7 @@ function eme_events_page_content() {
 			$stored_format = get_option('eme_event_list_item_format' );
 			//Add headers and footers to the events list
 			$single_event_format_header = get_option('eme_event_list_item_format_header' );
-			$single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='dbem_events_list'>";
+			$single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
 			$single_event_format_footer = get_option('eme_event_list_item_format_footer' );
 			$single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
 			return $single_event_format_header .  eme_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
@@ -540,7 +540,7 @@ function eme_events_page_content() {
 			$events_body = eme_get_calendar ('full=1');
 		}else{
 			$single_event_format_header = get_option('eme_event_list_item_format_header' );
-			$single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='dbem_events_list'>";
+			$single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
 			$single_event_format_footer = get_option('eme_event_list_item_format_footer' );
 			$single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
 			$events_body = $single_event_format_header . eme_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
@@ -741,9 +741,9 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 			$themonth = mysql2date ("F,Y", $event['event_start_date']);
 			$theday = mysql2date (get_option('date_format'), $event['event_start_date']);
 			if ($showperiod == "monthly" && $themonth != $curmonth) {
-				$output .= "<li class='dbem_period'>$themonth</li>";
+				$output .= "<li class='eme_period'>$themonth</li>";
 			} elseif ($showperiod == "daily" && $theday != $curday) {
-				$output .= "<li class='dbem_period'>$theday</li>";
+				$output .= "<li class='eme_period'>$theday</li>";
 			}
 			//  $localised_date = mysql2date("j M Y", $event->event_time);
 			$output .= eme_replace_placeholders ( $format, $event );
@@ -753,13 +753,13 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 		//Add headers and footers to output
 		if( $orig_format ){
 			$single_event_format_header = get_option('eme_event_list_item_format_header' );
-			$single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='dbem_events_list'>";
+			$single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
 			$single_event_format_footer = get_option('eme_event_list_item_format_footer' );
 			$single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
 			$output =  $single_event_format_header .  $output . $single_event_format_footer;
 		}
 	} else {
-		$output = "<ul class='dbem-no-events'><li>" . get_option('eme_no_events_message' ) . "</li></ul>";
+		$output = "<ul class='eme-no-events'><li>" . get_option('eme_no_events_message' ) . "</li></ul>";
 	}
 	if ($echo)
 		echo $output;
@@ -1636,7 +1636,7 @@ function eme_event_form($event, $title, $element) {
 								<?php _e ( 'Location', 'eme' ); ?>
 							</h3>
 							<div class="inside">
-								<table id="dbem-location-data">
+								<table id="eme-location-data">
 									<tr>
 									<?php  if($use_select_for_locations) {
 										$locations = eme_get_locations();
@@ -2113,7 +2113,7 @@ function eme_admin_map_script() {
 							position: results[0].geometry.location
 						});
 						var infowindow = new google.maps.InfoWindow({
-							content: '<div class=\"dbem-location-balloon\"><strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p></div>',
+							content: '<div class=\"eme-location-balloon\"><strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p></div>',
 						});
 						infowindow.open(map,marker);
 						$j_eme_admin('input#location_latitude').val(results[0].geometry.location.lat());

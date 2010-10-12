@@ -19,7 +19,7 @@ function eme_add_booking_form($event_id) {
 			$bookerEmail=$current_user->user_email;
 		}
 	}
-	$destination = "?".$_SERVER['QUERY_STRING']."#dbem-rsvp-message";
+	$destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
 
 	// you can book the available number of seats, with a max of 10 per time
 	$max = eme_get_available_seats($event_id);
@@ -30,19 +30,19 @@ function eme_add_booking_form($event_id) {
 	if ($max == 0) {
 		$ret_string = "";
 		if(!empty($form_add_message))
-			$ret_string .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
-		 return $ret_string."<div class='dbem-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div>";
+			$ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
+		 return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div>";
 	}
 
 	$module = "<h3>".__('Book now!','eme')."</h3><br/>";
 	if(!empty($form_add_message))
-		$module .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
+		$module .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
 	$booked_places_options = array();
 	for ( $i = 1; $i <= $max; $i++) 
 		array_push($booked_places_options, "<option value='$i'>$i</option>");
 	
-		$module  .= "<form id='dbem-rsvp-form' name='booking-form' method='post' action='$destination'>
-			<table class='dbem-rsvp-form'>
+		$module  .= "<form id='eme-rsvp-form' name='booking-form' method='post' action='$destination'>
+			<table class='eme-rsvp-form'>
 				<tr><th scope='row'>".__('Name', 'eme')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
 				<tr><th scope='row'>".__('E-Mail', 'eme')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
 				<tr><th scope='row'>".__('Phone number', 'eme')."*:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
@@ -90,10 +90,10 @@ function eme_delete_booking_form() {
 	$module = "<h3>".__('Cancel your booking', 'eme')."</h3><br/>";
 	
 	if(!empty($form_delete_message))
-		$module .= "<div class='dbem-rsvp-message'>$form_delete_message</div>";
+		$module .= "<div class='eme-rsvp-message'>$form_delete_message</div>";
 
 	$module  .= "<form name='booking-delete-form' method='post' action='$destination'>
-			<table class='dbem-rsvp-form'>
+			<table class='eme-rsvp-form'>
 				<tr><th scope='row'>".__('Name', 'eme').":</th><td><input type='text' name='bookerName' value=''/></td></tr>
 		  	<tr><th scope='row'>".__('E-Mail', 'eme').":</th><td><input type='text' name='bookerEmail' value=''/></td></tr>
 		  	<input type='hidden' name='eme_eventAction' value='delete_booking'/>
@@ -308,7 +308,7 @@ function eme_bookings_table($event_id) {
 						<input type='hidden' name='action' value='delete_bookings'/>
 						<div class='wrap'>
 							<h2>Bookings</h2>
-						<table id='dbem-bookings-table' class='widefat post fixed'>";
+						<table id='eme-bookings-table' class='widefat post fixed'>";
 	$result .="<thead>
 							<tr><th class='manage-column column-cb check-column' scope='col'>&nbsp;</th><th class='manage-column ' scope='col'>Booker</th><th scope='col'>E-mail</th><th scope='col'>Phone number</th><th scope='col'>Seats</th></tr>
 						</thead>" ;
@@ -346,7 +346,7 @@ function eme_bookings_compact_table($event_id) {
 		$table = 
 		"<div class='wrap'>
 				<h4>$count_respondents ".__('respondents so far').":</h4>
-				<table id='dbem-bookings-table-$event_id' class='widefat post fixed'>
+				<table id='eme-bookings-table-$event_id' class='widefat post fixed'>
 					<thead>
 						<tr>
 							<th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
@@ -429,14 +429,14 @@ function eme_get_bookings_list_for($event_id) {
 	$sql = "SELECT DISTINCT person_id FROM $bookings_table WHERE event_id = $event_id";
 	$persons = $wpdb->get_results($sql, ARRAY_A);
 	if ($persons) {
-		$res="<ul class='dbem_bookings_list_ul'>";
+		$res="<ul class='eme_bookings_list_ul'>";
 		foreach ($persons as $person) {
 			$attendee=eme_get_person($person['person_id']);
-			$res.="<li class='dbem_bookings_list_li'>".$attendee['person_name']."</li>";
+			$res.="<li class='eme_bookings_list_li'>".$attendee['person_name']."</li>";
 		}
 		$res.="</ul>";
 	} else {
-		$res="<p class='dbem_no_bookings'>".__('No responses yet!')."</p>";
+		$res="<p class='eme_no_bookings'>".__('No responses yet!')."</p>";
 	}
 	return $res;
 }
@@ -788,7 +788,7 @@ function eme_get_user_name($user_id) {
  	return $wpdb->get_var( $wpdb->prepare($sql) );
 }
 function eme_get_user_phone($user_id) {
-	return get_usermeta($user_id, 'dbem_phone');
+	return get_usermeta($user_id, 'eme_phone');
 }
 
 // got from http://davidwalsh.name/php-email-encode-prevent-spam

@@ -225,11 +225,11 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: booking name/email fields were readonly, has been fixed
 
 = 3.1.7 =
-* Bugfix: tablenav issue causing events list to dissapear in the admin interface using IE7
+* Bugfix: tablenav issue caused events list to dissapear in the admin interface using IE7
 * Bugfix: ajax fix for calendar (thanks to wsherliker)
 * Feature: status field for events: Public, Private, Draft
 * Feature: permissions now being checked for creation/editing of events:
 	- a user with role "Editor" can do anything
 	- with role "Author" you can only add events or edit existing events for which you are the creator or the contact person
 	- with role "Contributor" you can only add events *in draft* or edit existing events for which you are the creator or the contact person
-* Renamed all dbem_* functions to eme_ functions, just not the css and DB tables yet (later)
+* Renamed all dbem_* functions to eme_ functions, just not the css and DB tables yet (later). As a result people using the API in their templates will need to change these to match the new naming convention.

@@ -1,11 +1,11 @@
-$j_dbem_locations=jQuery.noConflict();
+$j_eme_locations=jQuery.noConflict();
 // console.log("eventful: " + eventful + " scope " + scope);
 
-$j_dbem_locations(document.body).unload(function() {
+$j_eme_locations(document.body).unload(function() {
 	GUnload();
 });
 
-$j_dbem_locations(document).ready(function() {
+$j_eme_locations(document).ready(function() {
 	loadMapScript();
 });
 
@@ -649,9 +649,9 @@ InfoBox.prototype.close = function () {
 		,closeBoxMargin: "10px 2px 2px 2px"
 	};
 	// first the global map (if present)
-	if (document.getElementById("dbem_global_map")) {
+	if (document.getElementById("eme_global_map")) {
 		var locations;
-		$j_dbem_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
+		$j_eme_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
 			locations = data.locations;
 			var latitudes = new Array();
 			var longitudes = new Array();
@@ -671,11 +671,11 @@ InfoBox.prototype.close = function () {
 				},
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 			}
-			var map = new google.maps.Map(document.getElementById("dbem_global_map"), myOptions);
+			var map = new google.maps.Map(document.getElementById("eme_global_map"), myOptions);
 			//var infowindow = new google.maps.InfoWindow();
 			var infowindow = new InfoBox(myBalloonOptions);
 
-			$j_dbem_locations.each(locations, function(i, item) {
+			$j_eme_locations.each(locations, function(i, item) {
 				latitudes.push(item.location_latitude);
 				longitudes.push(item.location_longitude);
 				if (parseFloat(item.location_latitude) > max_latitude)
@@ -706,13 +706,13 @@ InfoBox.prototype.close = function () {
 			map.setCenter(new google.maps.LatLng(center_lat + vertical_compensation,center_lon)); 
 			var letters = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O');
 
-			$j_dbem_locations.each(locations, function(i, item) {
+			$j_eme_locations.each(locations, function(i, item) {
 				var letter = letters[i];
 
 				var li_element = "<li id='location-"+item.location_id
 						 + "' style='list-style-type: upper-alpha'><a >"
 						 + item.location_name+"</a></li>";
-				//var location_info = "<div class=\"dbem-location-balloon\"><strong>"+ item.location_name
+				//var location_info = "<div class=\"eme-location-balloon\"><strong>"+ item.location_name
 				//		    + "</strong><br/>" + item.location_address + ", "
 				//		    + item.location_town + "<br/><small><a href='" + events_page_link
 				//		    + joiner + "location_id=" + item.location_id + "'>Details<a></div>";
@@ -735,8 +735,8 @@ InfoBox.prototype.close = function () {
 				//		content: location_info,
 				//		pixelOffset: pixoff
 				//});
-				$j_dbem_locations('ol#dbem_locations_list').append(li_element);
-				$j_dbem_locations('li#location-'+item.location_id+' a').click(function() {
+				$j_eme_locations('ol#eme_locations_list').append(li_element);
+				$j_eme_locations('li#location-'+item.location_id+' a').click(function() {
 					infowindow.close();
 					infowindow.setContent(location_info);
 					infowindow.open(map,marker);
@@ -761,8 +761,8 @@ InfoBox.prototype.close = function () {
 	var divs = document.getElementsByTagName('div');
 	for (var i = 0; i < divs.length; i++) {
 		divname = divs[i].id; 
-		if(divname.indexOf("dbem-location-map_") == 0) { 
-			var map_id = divname.replace("dbem-location-map_","");
+		if(divname.indexOf("eme-location-map_") == 0) { 
+			var map_id = divname.replace("eme-location-map_","");
 			var lat_id = window['latitude_'+map_id]; 
 			var lon_id = window['longitude_'+map_id]; 
 			var map_text_id = window['map_text_'+map_id]; 
@@ -779,7 +779,7 @@ InfoBox.prototype.close = function () {
 			}
 			var s_map = new google.maps.Map(divs[i], myOptions);
 			//var s_infowindow = new google.maps.InfoWindow({
-			//var content= "<div class=\"dbem-location-balloon\">"+map_text_id+"</div>";
+			//var content= "<div class=\"eme-location-balloon\">"+map_text_id+"</div>";
 			var s_infowindow = new InfoBox(myBalloonOptions);
 			var location_info = document.createElement("div");
 			location_info.style.cssText = "border: 1px solid black; margin-top: 8px; background: yellow; padding: 5px;";

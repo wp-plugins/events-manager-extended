@@ -399,7 +399,7 @@ function eme_validate_location($location) {
 	$troubles = "";
 	foreach ($location_required_fields as $field => $description) {
 		if ($location[$field] == "" ) {
-			$troubles .= "<li>".$description.__(" is missing!", "dbem")."</li>";
+			$troubles .= "<li>".$description.__(" is missing!", "eme")."</li>";
 		}
 	}
 	if ($_FILES['location_image']['size'] > 0 ) { 
@@ -518,7 +518,7 @@ function eme_global_map($atts) {
 	//-->
 	</script>";
 	//$result .= "<script src='".EME_PLUGIN_URL."eme_global_map.js' type='text/javascript'></script>";
-	$result .= "<ol id='dbem_locations_list'></ol>"; 
+	$result .= "<ol id='eme_locations_list'></ol>"; 
 	
 	} else {
 		$result = "";
@@ -622,14 +622,14 @@ function eme_single_location_map($location) {
 		// we can't create a unique <div>-id based on location id, because you can have multiple maps on the sampe page for
 		// different events but they can go to the same location...
 		$id_base = preg_replace("/\./","_",microtime(1));
-		$id="dbem-location-map_".$id_base;
+		$id="eme-location-map_".$id_base;
 		$latitude_string="latitude_".$id_base;
 		$longitude_string="longitude_".$id_base;
 		$map_text_string="map_text_".$id_base;
 		#$latitude_string="latitude";
 		#$longitude_string="longitude";
    		//$map_div = "<div id='$id' style=' background: green; width: 400px; height: 300px'></div>" ;
-   		$map_div = "<div id='$id' class=\"dbem-location-map\"></div>" ;
+   		$map_div = "<div id='$id' class=\"eme-location-map\"></div>" ;
    		$map_div .= "<script type='text/javascript'>
   			<!--// 
   		$latitude_string = parseFloat('".$location['location_latitude']."');

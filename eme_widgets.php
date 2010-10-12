@@ -1,10 +1,10 @@
 <?php
 
-class WP_Widget_dbem_list extends WP_Widget {
-	function WP_Widget_dbem_list() {
-		$widget_ops = array('classname' => 'widget_dbem_list', 'description' => __( 'Events List','eme' ) );
-		$this->WP_Widget('dbem_list', __('Events List','eme'), $widget_ops);
-		$this->alt_option_name = 'widget_dbem_list';
+class WP_Widget_eme_list extends WP_Widget {
+	function WP_Widget_eme_list() {
+		$widget_ops = array('classname' => 'widget_eme_list', 'description' => __( 'Events List','eme' ) );
+		$this->WP_Widget('eme_list', __('Events List','eme'), $widget_ops);
+		$this->alt_option_name = 'widget_eme_list';
 	}
 	function widget( $args, $instance ) {
 		extract($args);
@@ -102,11 +102,11 @@ class WP_Widget_dbem_list extends WP_Widget {
     }
 }		
 
-class WP_Widget_dbem_calendar extends WP_Widget {
-	function WP_Widget_dbem_calendar() {
-		$widget_ops = array('classname' => 'widget_dbem_calendar', 'description' => __( 'Events Calendar', 'eme' ) );
-		$this->WP_Widget('dbem_calendar', __('Events Calendar','eme'), $widget_ops);
-		$this->alt_option_name = 'widget_dbem_calendar';
+class WP_Widget_eme_calendar extends WP_Widget {
+	function WP_Widget_eme_calendar() {
+		$widget_ops = array('classname' => 'widget_eme_calendar', 'description' => __( 'Events Calendar', 'eme' ) );
+		$this->WP_Widget('eme_calendar', __('Events Calendar','eme'), $widget_ops);
+		$this->alt_option_name = 'widget_eme_calendar';
 	}
 	function widget( $args, $instance ) {
 		extract($args);
@@ -172,8 +172,8 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 }
 
 function eme_load_widgets() {
-	register_widget( 'WP_Widget_dbem_list' );
-	register_widget( 'WP_Widget_dbem_calendar' );
+	register_widget( 'WP_Widget_eme_list' );
+	register_widget( 'WP_Widget_eme_calendar' );
 }
 add_action( 'widgets_init', 'eme_load_widgets' );
 

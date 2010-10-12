@@ -1,28 +1,28 @@
-table#dbem-bookings-table tfoot td.booking-result {
+table#eme-bookings-table tfoot td.booking-result {
 	font-weight: bold;
    	background:#6D6D6D url(../../../wp-admin/images/menu-bits.gif) repeat-x scroll left top;      
 	color: #eee;
 }
 
-table#dbem-bookings-table tfoot th {
+table#eme-bookings-table tfoot th {
 	text-align: right;
 	padding-right: 1em;
 }    
 
-table.dbem-rsvp-form  {
+table.eme-rsvp-form  {
 	width: 80%;
 }  
-table.dbem-rsvp-form th { 
+table.eme-rsvp-form th { 
 	text-align: right;
 	width: 35%;
 }
 
-table.dbem-rsvp-form td { 
+table.eme-rsvp-form td { 
 	padding-left: 1em;
 	text-align: left;
 }      
 
-div.dbem-rsvp-message {     
+div.eme-rsvp-message {     
 	margin-bottom: 1em;
 	background-color: #FDDD73;
 	padding: 5px;
@@ -92,48 +92,48 @@ div#icon-events{
 	background:url('images/calendar-32.png') no-repeat center;
 }
 
-table#dbem-location-data th {
+table#eme-location-data th {
 	text-align: right;
 	width: 50px;
 }
-#dbem_global_map {
+#eme_global_map {
 	line-height: 100%;
 }
-.dbem-location-map {
+.eme-location-map {
 	background: green;
 	width: 400px;
 	height: 300px;
 	line-height: 100%;
 }
-.dbem-location-balloon {
+.eme-location-balloon {
 	font-size: 95%;  
 	line-height: 100%;
 }
 /* for google maps to work ok in IE, we need at least 690px as max-width for the images */
-#dbem_global_map img,
-.dbem-location-map img {
+#eme_global_map img,
+.eme-location-map img {
 	max-width: none !important;
 	background: none !important;
 }
 
-table.dbem-calendar-table td {
+table.eme-calendar-table td {
 	padding: 2px 4px;
 	text-align: center;
 }
-table.dbem-calendar.table tr.days-names {
+table.eme-calendar.table tr.days-names {
 	font-weight: bold;
 }
-table.dbem-calendar-table td.eventless-pre, table.dbem-calendar-table td.eventless-post {
+table.eme-calendar-table td.eventless-pre, table.eme-calendar-table td.eventless-post {
 	color: #ccc;
 }
-table.dbem-calendar-table td.eventful a, table.dbem-calendar-table td.eventful-today a {
+table.eme-calendar-table td.eventful a, table.eme-calendar-table td.eventful-today a {
   font-weight: bold;
   color: #FD7E29;
 }
-table.dbem-calendar-table td.eventless-today {
+table.eme-calendar-table td.eventless-today {
    background-color: #CFCFCF;  
 }
-table.dbem-calendar-table thead {
+table.eme-calendar-table thead {
 	font-size: 120%;  
 	font-weight: bold;  
 }
@@ -146,7 +146,7 @@ table.fullcalendar td {
 	height: 50px;             
 	border: 1px solid #888;
 }
-.dbem-calendar-full ul {
+.eme-calendar-full ul {
 	font-size: 80%;     
 	list-style: none;
 }
