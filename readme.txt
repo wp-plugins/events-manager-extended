@@ -232,4 +232,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 	- a user with role "Editor" can do anything
 	- with role "Author" you can only add events or edit existing events for which you are the creator or the contact person
 	- with role "Contributor" you can only add events *in draft* or edit existing events for which you are the creator or the contact person
-* Renamed all dbem_* functions to eme_ functions, just not the css and DB tables yet (later). As a result people using the API in their templates will need to change these to match the new naming convention.
+* Renamed all dbem_* functions to eme_ functions, just not the DB tables yet (later). As a result there are some actions required:
+	- people using the API in their templates will need to change these to match the new naming convention (just rename "dbem_" to "eme_")
+	- people using their own CSS will need to change these as well ((just rename "dbem_" to "eme_")
