@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('EME_DB_VERSION', 8);
+define('EME_DB_VERSION', 1);
 define('EME_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -881,10 +881,17 @@ function admin_show_warnings() {
 	} elseif (!$db_version && $old_db_version) {
 		// transfer from dbem to eme warning
 		?>
-		<div id="message" class="updated">You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace "dbem" by "eme" in these. After that, please deacticate/reactivate the plugin to adjust for the new version.</div>
+		<div id="message" class="updated">You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace "dbem" by "eme" in your custom templates or CSS. After that, please deacticate/reactivate the plugin to adjust for the new version.</div>
 		<?php
 	} else {
-	// now the normal warnings
+		if ($db_version && $db_version==1) {
+			// transfer from dbem to eme warning
+			?>
+			<div id="message" class="updated">You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace "dbem" by "eme" in your custom templates or CSS.</div>
+			<?php
+		}
+
+		// now the normal warnings
 		$say_hello = get_option('eme_hello_to_user' );
 		if ($say_hello == 1)
 			eme_hello_to_new_user ();
