@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.1.6
+Stable tag: 3.2.0
 
 Manage events and display them in your blog. Includes private, public, draft and recurring events; location management; calendar; Google map integration; RSVP + RSVP management. 
              
