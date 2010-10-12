@@ -2055,7 +2055,7 @@ $j_eme_event(document).ready( function() {
 
 function eme_admin_map_script() {
 	if ((isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] == 'events-manager-locations') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
-		if (! (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'dbem_delete')) {
+		if (! (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'eme_delete')) {
 			// single event page
 
 			if (isset($_REQUEST ['event_id']))

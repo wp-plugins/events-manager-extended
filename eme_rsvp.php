@@ -504,8 +504,12 @@ function eme_registration_seats_page() {
 		} else {
        		 	$action = isset($_POST ['action']) ? $_POST ['action'] : '';
 			$bookings = isset($_POST ['bookings']) ? $_POST ['bookings'] : array();
+			$selected_bookings = isset($_POST ['selected_bookings']) ? $_POST ['selected_bookings'] : array();
 			$bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
 			foreach ( $bookings as $key=>$booking_id ) {
+				if (!in_array($booking_id,$selected_bookings)) {
+					continue;
+				}
 				// make sure the seats are integers
 				$bookings_seats[$key]=intval($bookings_seats[$key]);
 				$booking = eme_get_booking ($booking_id);
@@ -598,7 +602,8 @@ function eme_registration_seats_form_table($event_id=0) {
 				$style = "style ='background-color: #FADDB7;'";
 			?>
 	  	<tr <?php echo "$class $style"; ?>>
-			<td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='bookings[]' /></td>
+			<td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='selected_bookings[]' />
+			    <input type='hidden' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='bookings[]' /></td>
 			<td><strong>
 			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
 			</strong>
@@ -639,8 +644,12 @@ function eme_registration_approval_page() {
 		// do the actions if required
 		$action = isset($_POST ['action']) ? $_POST ['action'] : '';
 		$pending_bookings = isset($_POST ['pending_bookings']) ? $_POST ['pending_bookings'] : array();
+		$selected_bookings = isset($_POST ['selected_bookings']) ? $_POST ['selected_bookings'] : array();
 		$bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
 		foreach ( $pending_bookings as $key=>$booking_id ) {
+			if (!in_array($booking_id,$selected_bookings)) {
+				continue;
+			}
 			$booking = eme_get_booking ($booking_id);
 			$person  = eme_get_person ($booking['person_id']);
 			// update the db
@@ -732,7 +741,8 @@ function eme_registration_approval_form_table($event_id=0) {
 				$style = "style ='background-color: #FADDB7;'";
 			?>
 	  	<tr <?php echo "$class $style"; ?>>
-			<td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='pending_bookings[]' /></td>
+			<td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='selected_bookings[]' /></td>
+			    <input type='hidden' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='pending_bookings[]' /></td>
 			<td><strong>
 			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
 			</strong>
