@@ -517,7 +517,7 @@ function eme_global_map($atts) {
 	  joiner = '$joiner'
 	//-->
 	</script>";
-	//$result .= "<script src='".DBEM_PLUGIN_URL."eme_global_map.js' type='text/javascript'></script>";
+	//$result .= "<script src='".EME_PLUGIN_URL."eme_global_map.js' type='text/javascript'></script>";
 	$result .= "<ol id='dbem_locations_list'></ol>"; 
 	
 	} else {
@@ -637,7 +637,7 @@ function eme_single_location_map($location) {
   		$map_text_string = '$map_text';
 		//-->
 		</script>";
-		// $map_div .= "<script src='".DBEM_PLUGIN_URL."eme_single_location_map.js' type='text/javascript'></script>";
+		// $map_div .= "<script src='".EME_PLUGIN_URL."eme_single_location_map.js' type='text/javascript'></script>";
 	} else {
 		$map_div = "";
 	}
@@ -667,11 +667,11 @@ function eme_locations_autocomplete() {
 
 	if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-new_event')) {
 		?>
-		<link rel="stylesheet" href="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-autocomplete/jquery.autocomplete.css" type="text/css"/>
+		<link rel="stylesheet" href="<?php echo EME_PLUGIN_URL; ?>js/jquery-autocomplete/jquery.autocomplete.css" type="text/css"/>
 
-		<script src="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-autocomplete/lib/jquery.bgiframe.min.js" type="text/javascript"></script>
-		<script src="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-autocomplete/lib/jquery.ajaxQueue.js" type="text/javascript"></script> 
-		<script src="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
+		<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-autocomplete/lib/jquery.bgiframe.min.js" type="text/javascript"></script>
+		<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-autocomplete/lib/jquery.ajaxQueue.js" type="text/javascript"></script> 
+		<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-autocomplete/jquery.autocomplete.min.js" type="text/javascript"></script>
 
 		<script type="text/javascript">
 		//<![CDATA[
@@ -681,7 +681,7 @@ function eme_locations_autocomplete() {
 			var gmap_enabled = <?php echo get_option('dbem_gmap_is_active'); ?>; 
 
 		   <?php if(!$use_select_for_locations) :?>
-			$("input#location_name").autocomplete("<?php echo DBEM_PLUGIN_URL; ?>locations-search.php", {
+			$("input#location_name").autocomplete("<?php echo EME_PLUGIN_URL; ?>locations-search.php", {
 				width: 260,
 				selectFirst: false,
 				formatItem: function(row) {
@@ -707,7 +707,7 @@ function eme_locations_autocomplete() {
 			});
 			<?php else : ?>
 			$('#location-select-id').change(function() {
-				$.getJSON("<?php echo DBEM_PLUGIN_URL; ?>locations-search.php",{id: $(this).val()}, function(data){
+				$.getJSON("<?php echo EME_PLUGIN_URL; ?>locations-search.php",{id: $(this).val()}, function(data){
 					eventLocation = data.name;
 					eventAddress = data.address;
 					eventTown = data.town;

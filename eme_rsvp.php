@@ -54,7 +54,7 @@ function eme_add_booking_form($event_id) {
 				<tr><th scope='row'>".__('Comment', 'eme').":</th><td><textarea name='bookerComment'></textarea></td></tr>";
 		if (get_option('dbem_captcha_for_booking')) {
 			$module .= "
-				<tr><th scope='row'>".__('Please fill in the code displayed here', 'eme').":</th><td><img src='".DBEM_PLUGIN_URL."captcha.php'><br>
+				<tr><th scope='row'>".__('Please fill in the code displayed here', 'eme').":</th><td><img src='".EME_PLUGIN_URL."captcha.php'><br>
 				      <input type='text' name='captcha_check' /></td></tr>
 				";
 		}
@@ -362,7 +362,7 @@ function eme_bookings_compact_table($event_id) {
 					</tfoot>
 					<tbody>" ;
 		foreach ($bookings as $booking) {
-			($booking['booking_comment']) ? $baloon = " <img src='".DBEM_PLUGIN_URL."images/baloon.png' title='".__('Comment:','eme')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";
+			($booking['booking_comment']) ? $baloon = " <img src='".EME_PLUGIN_URL."images/baloon.png' title='".__('Comment:','eme')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";
 			$pending_string="";
 			if (eme_event_needs_approval($event_id) && !$booking['booking_approved']) {
 				$pending_string=__('(pending)','eme');
@@ -473,18 +473,18 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
 
 	if($action!="") {
 		if ($action == 'approveRegistration') {
-			dbem_send_mail(__('Reservation confirmed','eme'),$booker_body, $bookerEmail);
+			eme_send_mail(__('Reservation confirmed','eme'),$booker_body, $bookerEmail);
 		} elseif ($action == 'denyRegistration') {
-			dbem_send_mail(__('Reservation denied','eme'),$denied_body, $bookerEmail);
+			eme_send_mail(__('Reservation denied','eme'),$denied_body, $bookerEmail);
 		}
 	} else {
 		// send different mails depending on approval or not
 		if ($event['registration_requires_approval']) {
-			dbem_send_mail(__("Approval required for new booking",'eme'), $contact_body, $contact_email);
-			dbem_send_mail(__('Reservation pending','eme'),$pending_body, $bookerEmail);
+			eme_send_mail(__("Approval required for new booking",'eme'), $contact_body, $contact_email);
+			eme_send_mail(__('Reservation pending','eme'),$pending_body, $bookerEmail);
 		} else {
-			dbem_send_mail(__("New booking",'eme'), $contact_body, $contact_email);
-			dbem_send_mail(__('Reservation confirmed','eme'),$booker_body, $bookerEmail);
+			eme_send_mail(__("New booking",'eme'), $contact_body, $contact_email);
+			eme_send_mail(__('Reservation confirmed','eme'),$booker_body, $bookerEmail);
 		}
 	}
 } 

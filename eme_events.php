@@ -1792,16 +1792,16 @@ function _dbem_is_time_valid($time) {
 // Enqueing jQuery script to make sure it's loaded
 function eme_enqueue_scripts() {
 	wp_enqueue_script ( 'jquery' );
-	// wp_enqueue_script('datepicker',DBEM_PLUGIN_URL.'jquery-ui-datepicker/jquery-ui-personalized-1.6b.js', array('jquery') );
+	// wp_enqueue_script('datepicker',EME_PLUGIN_URL.'jquery-ui-datepicker/jquery-ui-personalized-1.6b.js', array('jquery') );
 }
 add_action ( 'template_redirect', 'eme_enqueue_scripts' );
 
 // General script to make sure hidden fields are shown when containing data
 function eme_admin_general_script() {
 	?>
-<script src="<?php echo DBEM_PLUGIN_URL; ?>eme.js" type="text/javascript"></script>
-<script src="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.js" type="text/javascript"></script>
-<script src="<?php echo DBEM_PLUGIN_URL; ?>js/timeentry/jquery.timeentry.js" type="text/javascript"></script>
+<script src="<?php echo EME_PLUGIN_URL; ?>eme.js" type="text/javascript"></script>
+<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.js" type="text/javascript"></script>
+<script src="<?php echo EME_PLUGIN_URL; ?>js/timeentry/jquery.timeentry.js" type="text/javascript"></script>
 <?php
 	
 	// Check if the locale is there and loads it
@@ -1812,11 +1812,11 @@ function eme_admin_general_script() {
 	if (preg_match ( "/en|sk|zh|us|uk/", $locale_code ))
 		$show24Hours = 'false';
 	
-	$locale_file = DBEM_PLUGIN_URL. "/js/jquery-ui-datepicker/i18n/ui.datepicker-$locale_code.js";
+	$locale_file = EME_PLUGIN_URL. "/js/jquery-ui-datepicker/i18n/ui.datepicker-$locale_code.js";
 	// for english, no translation code is needed
 	if ($locale_code != "en") {
 		?>
-<script src="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-ui-datepicker/i18n/ui.datepicker-<?php echo $locale_code; ?>.js" type="text/javascript"></script>
+<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/i18n/ui.datepicker-<?php echo $locale_code; ?>.js" type="text/javascript"></script>
 <?php
 	}
 	?>
@@ -1824,7 +1824,7 @@ function eme_admin_general_script() {
 
 <style type='text/css' media='all'>
 @import
-	"<?php echo DBEM_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.css"
+	"<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.css"
 	;
 </style>
 <script type="text/javascript">
@@ -2280,21 +2280,21 @@ function substitute_rss($data) {
 		return $data;
 }
 function eme_general_css() {
-	echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
-	$file_name= DBEM_PLUGIN_DIR."myown.css";
+	echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
+	$file_name= EME_PLUGIN_DIR."myown.css";
 	if (file_exists($file_name)) {
-		echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."myown.css' type='text/css'/>\n";
+		echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."myown.css' type='text/css'/>\n";
 	}
 	$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
 	if ($gmap_is_active) {
-		echo "<script type='text/javascript' src='".DBEM_PLUGIN_URL."eme_location_map.js'></script>\n";
+		echo "<script type='text/javascript' src='".EME_PLUGIN_URL."eme_location_map.js'></script>\n";
 	}
 }
 function eme_admin_general_css() {
-	echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
-	$file_name= DBEM_PLUGIN_DIR."/events-manager-extended/myown.css";
+	echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
+	$file_name= EME_PLUGIN_DIR."/events-manager-extended/myown.css";
 	if (file_exists($file_name)) {
-		echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."myown.css' type='text/css'/>\n";
+		echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."myown.css' type='text/css'/>\n";
 	}
 }
 add_action ( 'wp_head', 'eme_general_css' );

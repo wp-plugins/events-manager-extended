@@ -61,7 +61,7 @@ function eme_printable_booking_report($event_id) {
 	$bookings =  eme_get_bookings_for($event_id);
 	$available_seats = eme_get_available_seats($event_id);
 	$booked_seats = eme_get_booked_seats($event_id);
-	$stylesheet = DBEM_PLUGIN_URL."events_manager.css";
+	$stylesheet = EME_PLUGIN_URL."events_manager.css";
 	?>
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 			"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

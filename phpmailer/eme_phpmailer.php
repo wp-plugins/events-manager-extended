@@ -1,6 +1,6 @@
 <?php
 // phpmailer support
-function dbem_send_mail($subject="no title",$body="No message specified", $receiver='') {
+function eme_send_mail($subject="no title",$body="No message specified", $receiver='') {
 
 	global $smtpsettings, $phpmailer, $cformsSettings;
 

@@ -31,8 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Setting constants
 define('DBEM_DB_VERSION', 7);
-define('DBEM_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
-define('DBEM_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
+define('EME_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
+define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
 define('RECURRENCE_TBNAME','dbem_recurrence'); //TABLE NAME
 define('LOCATIONS_TBNAME','dbem_locations'); //TABLE NAME
@@ -41,7 +41,6 @@ define('PEOPLE_TBNAME','dbem_people'); //TABLE NAME
 define('BOOKING_PEOPLE_TBNAME','dbem_bookings_people'); //TABLE NAME
 define('CATEGORIES_TBNAME', 'dbem_categories');
 define('DEFAULT_EVENT_PAGE_NAME', 'Events');
-define('DBEM_PAGE','<!--DBEM_EVENTS_PAGE-->'); //EVENTS PAGE
 define('MIN_CAPABILITY', 'edit_posts');	// Minimum user level to edit own events
 define('AUTHOR_CAPABILITY', 'publish_posts');	// Minimum user level to put an event in public/private state
 define('EDIT_CAPABILITY', 'edit_others_posts');	// Minimum user level to edit any event
@@ -500,7 +499,7 @@ function eme_create_events_page(){
 add_action('admin_menu','eme_create_events_submenu');
 function eme_create_events_submenu () {
 	  if(function_exists('add_submenu_page')) {
-	  	add_object_page(__('Events', 'eme'),__('Events', 'eme'),MIN_CAPABILITY,'events-manager','eme_events_subpanel', DBEM_PLUGIN_URL.'images/calendar-16.png');
+	  	add_object_page(__('Events', 'eme'),__('Events', 'eme'),MIN_CAPABILITY,'events-manager','eme_events_subpanel', EME_PLUGIN_URL.'images/calendar-16.png');
 	   	// Add a submenu to the custom top-level menu: 
 		$plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),MIN_CAPABILITY,'events-manager','eme_events_subpanel');
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
