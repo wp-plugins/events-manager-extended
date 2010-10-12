@@ -91,18 +91,18 @@ if (get_magic_quotes_gpc()) {
 
 // INCLUDES
 include("captcha_check.php");
-include("dbem_events.php");
-include("dbem_calendar.php");
-include("dbem_widgets.php");
-include("dbem_rsvp.php");
-include("dbem_locations.php"); 
-include("dbem_people.php");
-include("dbem_recurrence.php");
-include("dbem_UI_helpers.php");
-include("dbem_categories.php");
-include("dbem_attributes.php");
+include("eme_events.php");
+include("eme_calendar.php");
+include("eme_widgets.php");
+include("eme_rsvp.php");
+include("eme_locations.php"); 
+include("eme_people.php");
+include("eme_recurrence.php");
+include("eme_UI_helpers.php");
+include("eme_categories.php");
+include("eme_attributes.php");
 
-require_once("phpmailer/dbem_phpmailer.php") ;
+require_once("phpmailer/eme_phpmailer.php") ;
 //require_once("phpmailer/language/phpmailer.lang-en.php") ;
  
 // Localised date formats as in the jquery UI datepicker plugin
