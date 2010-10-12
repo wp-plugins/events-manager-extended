@@ -228,10 +228,8 @@ function dbem_events_subpanel() {
 				if ($related_location) {
 					$event ['location_id'] = $related_location ['location_id'];
 				} else {
-					if (current_user_can( EDIT_CAPABILITY)) { 
-						$new_location = dbem_insert_location ( $location );
-						$event ['location_id'] = $new_location ['location_id'];
-					}
+					$new_location = dbem_insert_location ( $location );
+					$event ['location_id'] = $new_location ['location_id'];
 				}
 			}
 			if (! $event_ID && ! $recurrence_ID) {
