@@ -172,6 +172,10 @@ function eme_install() {
   	update_option('eme_version', EME_DB_VERSION); 
 	// Create events page if necessary
  	$events_page_id = get_option('eme_events_page')  ;
+ 	if (!$events_page_id && get_option('dbem_events_page')) {
+ 		$events_page_id = get_option('dbem_events_page')  ;
+	}
+
 	if ($events_page_id != "" ) {
 		query_posts("page_id=$events_page_id");
 		$count = 0;
