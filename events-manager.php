@@ -876,7 +876,8 @@ function eme_sanitize_html( $value ) {
 
 function admin_show_warnings() {
 	$db_version = get_option('eme_version');
-	if ($db_version && $db_version < EME_DB_VERSION) {
+	$old_db_version = get_option('dbem_version');
+	if (($db_version && $db_version < EME_DB_VERSION) || (!$db_version && $old_db_version)) {
 	// first the important warning
 		eme_explain_deactivation_needed();
 	} else {
