@@ -6,7 +6,7 @@ function dbem_locations_page() {
 		$message = __('You have no right to update locations!','dbem');
 		$locations = dbem_get_locations();
 		dbem_locations_table_layout($locations, null, $message);
-	elseif (isset($_GET['action']) && $_GET['action'] == "edit") { 
+	} elseif (isset($_GET['action']) && $_GET['action'] == "edit") { 
 		// edit location
 		$location_id = $_GET['location_ID'];
 		$location = dbem_get_location($location_id);
