@@ -142,8 +142,8 @@ function eme_get_calendar($args="") {
 	$next_link = "<a class='next-month $link_extra_class' href=\"#\">&gt;&gt;</a>";
 
 	$random = (rand(100,200));
-	$full ? $class = 'dbem-calendar-full' : $class='dbem-calendar';
-	$calendar="<div class='$class' id='dbem-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div><div class='cat_chosen' style='display:none' >$category</div>";
+	$full ? $class = 'eme-calendar-full' : $class='eme-calendar';
+	$calendar="<div class='$class' id='eme-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div><div class='cat_chosen' style='display:none' >$category</div>";
 	
  	$weekdays = array(__('Sunday'),__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'));
 	$n = 0 ;
@@ -163,7 +163,7 @@ function eme_get_calendar($args="") {
 
 	$full ? $fullclass = 'fullcalendar' : $fullclass='';
 	// Build the heading portion of the calendar table 
-	$calendar .=  "<table class='dbem-calendar-table $fullclass'>\n". 
+	$calendar .=  "<table class='eme-calendar-table $fullclass'>\n". 
 	   	"<thead>\n<tr>\n".
 		"<td>$previous_link</td><td class='month_name' colspan='5'>$month_name $year</td><td>$next_link</td>\n". 
 		"</tr>\n</thead>\n".	

@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.1.6
+Version: 3.2.0
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
@@ -165,13 +165,20 @@ function eme_install() {
 	eme_create_categories_table($charset,$collate);
 	eme_add_options();
 	
- 	$db_version = get_option('eme_version')  ;
-	if ($db_version && $db_version<5) {
+ 	$db_version = get_option('eme_version');
+	if (!$db_version && get_option('dbem_version')) {
+		$db_version = get_option('dbem_version');
+	}
+	if ($db_version && $db_version<7) {
   		update_option('eme_conversion_needed', 1); 
 	}
   	update_option('eme_version', EME_DB_VERSION); 
 	// Create events page if necessary
- 	$events_page_id = get_option('eme_events_page')  ;
+ 	$events_page_id = get_option('eme_events_page');
+ 	if (!$events_page_id && get_option('dbem_events_page')) {
+ 		$events_page_id = get_option('dbem_events_page')  ;
+	}
+
 	if ($events_page_id != "" ) {
 		query_posts("page_id=$events_page_id");
 		$count = 0;
@@ -469,9 +476,7 @@ function eme_add_options($reset=0) {
 	'eme_categories_enabled' => DEFAULT_CATEGORIES_ENABLED);
 	
 	foreach($eme_options as $key => $value){
-		#if(preg_match('/$dbem/', $key)){
-			eme_add_option($key, $value, $reset);
-		#}
+		eme_add_option($key, $value, $reset);
 	}
 		
 }
@@ -876,11 +881,26 @@ function eme_sanitize_html( $value ) {
 
 function admin_show_warnings() {
 	$db_version = get_option('eme_version');
+	$old_db_version = get_option('dbem_version');
 	if ($db_version && $db_version < EME_DB_VERSION) {
-	// first the important warning
+		// first the important warning
 		eme_explain_deactivation_needed();
+	} elseif (!$db_version && $old_db_version) {
+		// transfer from dbem to eme warning
+		$advice = __("You have installed the new version of Events Manager Extended. This version has among other things switched from 'dbem' to 'eme' for API calls (used in templates) and for CSS. So if you use these, please replace the string 'dbem' by 'eme' in your custom templates and/or CSS. After that, please deacticate/reactivate the plugin to adjust for the new version.",'eme');
+		?>
+		<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
+		<?php
 	} else {
-	// now the normal warnings
+		if ($old_db_version && $db_version==8) {
+			// transfer from dbem to eme warning
+			$advice = __("You have installed the new version of Events Manager Extended. This version has among other things switched from 'dbem' to 'eme' for API calls (used in templates) and for CSS. So if you use these, please replace the string 'dbem' by 'eme' in your custom templates and/or CSS.",'eme');
+			?>
+			<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
+			<?php
+		}
+
+		// now the normal warnings
 		$say_hello = get_option('eme_hello_to_user' );
 		if ($say_hello == 1)
 			eme_hello_to_new_user ();
@@ -892,16 +912,16 @@ function admin_show_warnings() {
 }
 
 function eme_explain_deactivation_needed() {
-	$advice = sprintf(__("<p>It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen."));
+	$advice = __("It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen.",'eme');
 	?>
-<div id="message" class="updated"> <?php echo $advice; ?> </div>
+<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
 <?php
 }
 
 function eme_explain_conversion_needed() {
-	$advice = sprintf(__("<p>It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>."),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
+	$advice = sprintf(__("It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>.",'eme'),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
 	?>
-<div id="message" class="updated"> <?php echo $advice; ?> </div>
+<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
 <?php
 }
 

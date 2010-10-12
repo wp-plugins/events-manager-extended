@@ -1,6 +1,6 @@
 <?php
 function eme_attributes_form($event) {
-	$dbem_data = $event['event_attributes'];
+	$eme_data = $event['event_attributes'];
 	//We also get a list of attribute names and create a ddm list (since placeholders are fixed)
 	$formats = 
 		get_option('eme_event_list_item_format' ).
@@ -45,8 +45,8 @@ function eme_attributes_form($event) {
 			<tbody id="mtm_body">
 				<?php
 				$count = 1;
-				if( is_array($dbem_data) and count($dbem_data) > 0){
-					foreach( $dbem_data as $name => $value){
+				if( is_array($eme_data) and count($eme_data) > 0){
+					foreach( $eme_data as $name => $value){
 						?>
 						<tr valign="top" id="mtm_<?php echo $count ?>">
 							<td scope="row">

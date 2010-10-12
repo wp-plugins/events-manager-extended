@@ -44,7 +44,7 @@ function eme_categories_subpanel() {
 		}
 		//die(print_r($_POST));
 		if ( is_numeric($validation_result) ) {
-			$message = (isset($message)) ? $message : __("Successfully {$_POST['action']}ed category", "dbem");
+			$message = (isset($message)) ? $message : __("Successfully {$_POST['action']}ed category", "eme");
 			eme_categories_table_layout($message);
 		} elseif ( $validation_result === false ) {
 			$message = (isset($message)) ? $message : __("There was a problem {$_POST['action']}ing your category, please try again.");						   

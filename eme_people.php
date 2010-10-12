@@ -18,7 +18,7 @@ function eme_people_page() {
 
 add_action('init','eme_ajax_actions'); 
 function eme_ajax_actions() {
- 	if(isset($_GET['dbem_ajax_action']) && $_GET['dbem_ajax_action'] == 'booking_data') {
+ 	if(isset($_GET['eme_ajax_action']) && $_GET['eme_ajax_action'] == 'booking_data') {
 		if(isset($_GET['id']))
 			echo "[ {bookedSeats:".eme_get_booked_seats($_GET['id']).", availableSeats:".eme_get_available_seats($_GET['id'])."}]"; 
 		die();
@@ -125,7 +125,7 @@ function eme_people_table() {
 		_e("No people have responded to your events yet!", 'eme');
 	} else { 
 		$table = "<p>".__('This table collects the data about the people who responded to your events', 'eme')."</p>";	
-		$table .=" <table id='dbem-people-table' class='widefat post fixed'>
+		$table .=" <table id='eme-people-table' class='widefat post fixed'>
 				<thead>
 				<tr>
 				<th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
@@ -199,7 +199,7 @@ function eme_add_person($name, $email, $phone, $wp_id) {
 	$wp_id = eme_sanitize_request($wp_id);
 	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone, wp_id) VALUES ('$name', '$email', '$phone', '$wp_id');";
 	$wpdb->query($sql);
-	if ($dbem_rsvp_registered_users_only) {
+	if ($eme_rsvp_registered_users_only) {
 		$new_person = eme_get_person_by_wp_id($wp_id);
 	} else {
 		$new_person = eme_get_person_by_name_and_email($name, $email);
@@ -214,7 +214,7 @@ function eme_phone_field() {
 	<table class='form-table'>
 		<tr>
 			<th><?php _e('Phone number','eme');?></th>
-			<td><input id="dbem_phone" class="regular-text" type="text" value="" name="dbem_phone"/> <br/>
+			<td><input id="eme_phone" class="regular-text" type="text" value="" name="eme_phone"/> <br/>
 			<?php _e('The phone number used by Events Manager when the user is indicated as the contact person for an event.','eme');?></td>
 		</tr>
 	</table>
@@ -223,8 +223,8 @@ function eme_phone_field() {
 
 add_action('profile_update','eme_update_phone');
 function eme_update_phone($user_ID) {
-	if(isset($_POST['dbem_phone']) && $_POST['dbem_phone'] != '') {
-		update_usermeta($user_ID,'dbem_phone', $_POST['dbem_phone']);
+	if(isset($_POST['eme_phone']) && $_POST['eme_phone'] != '') {
+		update_usermeta($user_ID,'eme_phone', $_POST['eme_phone']);
 	}
 	
 }

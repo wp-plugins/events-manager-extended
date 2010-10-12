@@ -4,9 +4,9 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.1.6
+Stable tag: 3.2.0
 
-Manage events and display them in your blog. Includes recurring events, location management, calendar, Google map integration, RSVP. 
+Manage events and display them in your blog. Includes private, public, draft and recurring events; location management; calendar; Google map integration; RSVP + RSVP management. 
              
 == Description ==
 
@@ -46,8 +46,14 @@ After the installation, Events Manager Extended add a top level "Events" menu to
 	Also fine grained control of the RSVP mails and the event layout are possible here, if the defaults you configured in the Settings page are not ok for this specific event.  
 *  The *Locations* page lets you add, delete and edit locations directly. Locations are automatically added with events if not present, but this interface lets you customise your locations data and add a picture. 
 *  The *Categories* page lets you add, delete and edit categories (if Categories are activated in the Settings page). 
-*  The *People* page serves as a gathering point for the information about the people who reserved a space in your events.
+*  The *People* page serves as a gathering point for the information about the people who reserved a space in your events. 
+*  The *Pending approvals* page is used to manage registrations/bookings for events that require approval 
+*  The *Change registration* page is used to change bookings for events 
 *  The *Settings* page allows a fine-grained control over the plugin. Here you can set the [format](#formatting-events) of events in the Events page.
+*  Access control is in place for managing events and such: 
+        - a user with role "Editor" can do anything 
+        - with role "Author" you can only add events or edit existing events for which you are the creator or the contact person 
+        - with role "Contributor" you can only add events *in draft* or edit existing events for which you are the creator or the contact person 
 
 Events list and calendars can be added to your blogs through widgets, shortcodes and template tags. See the full documentation at the [Events Manager Extended Support Page](http://www.e-dynamics.be/wordpress/).
  
@@ -66,11 +72,11 @@ For curiosity's sake, `<?php wp_head(); ?>` is an action hook, that is a functio
 
 Create a file called 'myown.css' in the plugin directory and put in there eg.:  
   
-.dbem-location-map {  
+.eme-location-map {  
 width: 600px;  
 height: 400px;  
 }  
-.dbem-location-balloon {  
+.eme-location-balloon {  
         color: #FF7146;  
 }  
 
@@ -123,7 +129,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Change: No seats available anymore? Then no booking form as well.
 * Change: Now an error is returned to the user if on a booking form not all required fields are filled in
 * Feature: Captcha added for booking form
-* Bugfix: The shortcode [locations_map] once again works, failure was also due to newlines in the location balloon (fix in function dbem_global_map_json in dbem_people.php)
+* Bugfix: The shortcode [locations_map] once again works, failure was also due to newlines in the location balloon (fix in function eme_global_map_json in dbem_people.php)
 * Rewrite of the widgets to the api used from wordpress 2.8 onwards, resulting in cleaner code and multi-instance widgets
 * Bugfix: Some html cleanup for w3 markup validation
 * Change: If the location name is empty: we don't show the map for the event
@@ -221,15 +227,17 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: you can now require that people need to be registered to wordpress in order to make a booking
 * Feature: next to "OR" for categories, you can now have "AND" as well: [events_list category=1,3] is for "OR", [events_list category=1+3] is for "AND"
 
-= 3.1.6 =
+= 3.1.6 = 
 * Bugfix: booking name/email fields were readonly, has been fixed
 
-= 3.1.7 =
-* Bugfix: tablenav issue causing events list to dissapear in the admin interface using IE7
+= 3.2.0 = 
+* Bugfix: tablenav issue caused events list to dissapear in the admin interface using IE7
 * Bugfix: ajax fix for calendar (thanks to wsherliker)
-* Feature: status field for events: Public, Private, Draft
+* Feature: status field for events: Public, Private, Draft. Private events are only visible for logged in users, draft events are not visible from the front end.
 * Feature: permissions now being checked for creation/editing of events:
 	- a user with role "Editor" can do anything
 	- with role "Author" you can only add events or edit existing events for which you are the creator or the contact person
 	- with role "Contributor" you can only add events *in draft* or edit existing events for which you are the creator or the contact person
-* Renamed all dbem_* functions to eme_ functions
+* Renamed all dbem_* functions to eme_ functions, just not the DB tables yet (later). As a result there are some actions required:
+	- people using the API in their templates will need to change these to match the new naming convention (just rename "dbem_" to "eme_")
+	- people using their own CSS will need to change these as well ((just rename "dbem_" to "eme_")
