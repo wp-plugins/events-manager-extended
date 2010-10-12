@@ -2,18 +2,22 @@
 $feedback_message = "";
  
 function dbem_locations_page() {
-	if (isset($_GET['action']) && $_GET['action'] == "delete") { 
-		$locations = $_GET['locations'];
+   	if (!current_user_can( EDIT_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
+		$message = __('You have no right to update locations!','dbem');
+		$locations = dbem_get_locations();
+		dbem_locations_table_layout($locations, null, $message);
+	elseif (isset($_GET['action']) && $_GET['action'] == "edit") { 
+		// edit location
+		$location_id = $_GET['location_ID'];
+		$location = dbem_get_location($location_id);
+		dbem_locations_edit_layout($location);
+	} elseif (isset($_POST['action']) && $_POST['action'] == "delete") { 
+		$locations = $_POST['locations'];
 		foreach($locations as $location_ID) {
 		 	dbem_delete_location($location_ID);
 		}
 		$locations = dbem_get_locations();
 		dbem_locations_table_layout($locations, null, "");
-	} elseif (isset($_GET['action']) && $_GET['action'] == "edit") { 
-		// edit location
-		$location_id = $_GET['location_ID'];
-		$location = dbem_get_location($location_id);
-		dbem_locations_edit_layout($location);
 	} elseif (isset($_POST['action']) && $_POST['action'] == "editedlocation") { 
 		// location update required
 		$location = array();
@@ -66,11 +70,11 @@ function dbem_locations_page() {
 			$locations = dbem_get_locations();
 			dbem_locations_table_layout($locations, $location, $message);
 		}
-	} else {
+   	} else {
 		// no action, just a locations list
 		$locations = dbem_get_locations();
 		dbem_locations_table_layout($locations, null, "");
-	}
+   	}
 }
 
 function dbem_locations_edit_layout($location, $message = "") {
@@ -186,7 +190,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 			<div id="col-container">
 				<div id="col-right">
 			 	 <div class="col-wrap">
-				 	 <form id="locations-filter" method="get" action="<?php echo $destination ?>">
+				 	 <form id="locations-filter" method="post" action="<?php echo $destination ?>">
 						<input type="hidden" name="page" value="events-manager-locations"/>
 						
 						<?php if (count($locations)>0) : ?>
@@ -722,37 +726,4 @@ function dbem_locations_autocomplete() {
 		<?php
 
 	}
-}
-
-
-function dbem_cache_location($event){
-	$related_location = dbem_get_location_by_name($event['location_name']);
-	if (!$related_location) {
-		dbem_insert_location_from_event($event);
-		return;
-	} 
-	if ($related_location->location_address != $event['location_address'] || $related_location->location_town != $event['location_town']  ) {
-		dbem_insert_location_from_event($event);
-	}
-}
-
-function dbem_get_location_by_name($name) {
-	global $wpdb;	
-	$sql = "SELECT location_id, 
-	location_name, 
-	location_address,
-	location_town
-	FROM ".$wpdb->prefix.LOCATIONS_TBNAME.
-	" WHERE location_name = '$name'";
-	$event = $wpdb->get_row($sql);	
-
-	return $event;
-}
-
-function dbem_insert_location_from_event($event) {
-	global $wpdb;	
-	$table_name = $wpdb->prefix.LOCATIONS_TBNAME;
-	$wpdb->query("INSERT INTO ".$table_name." (location_name, location_address, location_town)
-	VALUES ('".$event['location_name']."', '".$event['location_address']."','".$event['location_town']."')");
-
 }

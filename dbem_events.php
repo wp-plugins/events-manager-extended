@@ -122,9 +122,9 @@ function dbem_events_subpanel() {
 		$event ['event_name'] = isset($_POST ['event_name']) ? stripslashes ( $_POST ['event_name'] ) : '';
 		if (!current_user_can( AUTHOR_CAPABILITY)) {
 			// user can create an event, but not approve it: status remains draft
-			$event['event_status']=5;	
+			$event['event_status']=STATUS_DRAFT;	
 		} else {
-			$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : 5;
+			$event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : STATUS_DRAFT;
 		}
 		// Set event end time to event time if not valid
 		// if (!_dbem_is_date_valid($event['event_end_date']))
@@ -228,8 +228,10 @@ function dbem_events_subpanel() {
 				if ($related_location) {
 					$event ['location_id'] = $related_location ['location_id'];
 				} else {
-					$new_location = dbem_insert_location ( $location );
-					$event ['location_id'] = $new_location ['location_id'];
+					if (current_user_can( EDIT_CAPABILITY)) { 
+						$new_location = dbem_insert_location ( $location );
+						$event ['location_id'] = $new_location ['location_id'];
+					}
 				}
 			}
 			if (! $event_ID && ! $recurrence_ID) {
@@ -941,11 +943,11 @@ function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_of
 		//$wpdb->print_error(); 
 		$inflated_events = array ();
 		foreach ( $events as $this_event ) {
-			if ($this_event ['event_status'] == 2 && !is_user_logged_in()) {
+			if ($this_event ['event_status'] == STATUS_PRIVATE && !is_user_logged_in()) {
 				continue;
 			}
 			// if we're not in the admin itf, we don't want draft events
-			if (!is_admin() && $this_event ['event_status'] == 5) {
+			if (!is_admin() && $this_event ['event_status'] == STATUS_DRAFT) {
 				continue;
 			}
 			// if we're in the admin itf, return only the events for which you have the right to change anything
@@ -1326,7 +1328,7 @@ function dbem_event_form($event, $title, $element) {
 				<!-- SIDEBAR -->
 				<div id="side-info-column" class='inner-sidebar'>
 					<div id='side-sortables' class="meta-box-sortables">
-						<?php if(is_admin()) : ?>
+						<?php if(current_user_can( EDIT_CAPABILITY)) { ?>
 						<!-- status postbox -->
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
@@ -1351,7 +1353,9 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<?php endif; ?>
+						<?php } else { ?>
+						<input type="hidden" name="event_status" value=<?php echo STATUS_DRAFT; ?>>
+						<?php } ?>
 						<?php if(get_option('dbem_recurrence_enabled') && $show_recurrent_form ) : ?>
 						<!-- recurrence postbox -->
 						<div class="postbox ">
@@ -2338,9 +2342,9 @@ add_action ( 'admin_init', 'dbem_tinymce' );
 
 function status_array() {
 	$event_status_array = array();
-	$event_status_array[1] = __ ( 'Public', 'dbem' );
-	$event_status_array[2] = __ ( 'Private', 'dbem' );
-	$event_status_array[5] = __ ( 'Draft', 'dbem' );
+	$event_status_array[STATUS_PUBLIC] = __ ( 'Public', 'dbem' );
+	$event_status_array[STATUS_PRIVATE] = __ ( 'Private', 'dbem' );
+	$event_status_array[STATUS_DRAFT] = __ ( 'Draft', 'dbem' );
 	return $event_status_array;
 }
 ?>

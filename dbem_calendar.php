@@ -423,7 +423,7 @@ function dbem_ajaxize_calendar() {
 			parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
 		   	if (parseInt(month_n,10) == 1)
 				year_n = parseInt(year_n,10) -1;
-			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
+			$j_dbem_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
 				tableDiv.replaceWith(data);
 				initCalendar();
 			});
@@ -441,7 +441,7 @@ function dbem_ajaxize_calendar() {
 			parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
 		   	if (parseInt(month_n,10) == 12)
 				year_n = parseInt(year_n,10) + 1;
-			$j_dbem_calendar.get("<?php echo site_url(); ?>", {ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
+			$j_dbem_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
 				tableDiv.replaceWith(data);
 				initCalendar();
 			});
@@ -464,7 +464,7 @@ function dbem_ajaxize_calendar() {
 add_action('wp_head', 'dbem_ajaxize_calendar');
 
 function dbem_filter_calendar_ajax() {
-	if(isset($_GET['ajaxCalendar']) && $_GET['ajaxCalendar'] == true) {
+	if(isset($_GET['eme_ajaxCalendar']) && $_GET['eme_ajaxCalendar'] == true) {
 		(isset($_GET['full']) && $_GET['full'] == 1) ? $full = 1 : $full = 0;
 		(isset($_GET['long_events']) && $_GET['long_events'] == 1) ? $long_events = 1 : $long_events = 0;
 		(isset($_GET['category'])) ? $category = intval($_GET['category']) : $category = 0;

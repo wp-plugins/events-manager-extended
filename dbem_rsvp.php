@@ -66,7 +66,7 @@ function dbem_add_booking_form($event_id) {
 		</table>
 		<p>".__('(* marks a required field)', 'dbem')."</p>
 		<p><input type='submit' value='".__('Send your booking', 'dbem')."'/>
-		 <input type='hidden' name='eventAction' value='add_booking'/></p>
+		 <input type='hidden' name='eme_eventAction' value='add_booking'/></p>
 		 <input type='hidden' name='event_id' value='$event_id'/></p>
 	</form>";
 	// $module .= "dati inviati: ";
@@ -96,7 +96,7 @@ function dbem_delete_booking_form() {
 			<table class='dbem-rsvp-form'>
 				<tr><th scope='row'>".__('Name', 'dbem').":</th><td><input type='text' name='bookerName' value=''/></td></tr>
 		  	<tr><th scope='row'>".__('E-Mail', 'dbem').":</th><td><input type='text' name='bookerEmail' value=''/></td></tr>
-		  	<input type='hidden' name='eventAction' value='delete_booking'/>
+		  	<input type='hidden' name='eme_eventAction' value='delete_booking'/>
 		</table>
 		<input type='submit' value='".__('Cancel your booking', 'dbem')."'/>
 	</form>";
@@ -123,12 +123,12 @@ function dbem_catch_rsvp() {
 		return;
 	}
 
-	if (isset($_POST['eventAction']) && $_POST['eventAction'] == 'add_booking') { 
+	if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'add_booking') { 
 		$result = dbem_book_seats();
 		$form_add_message = $result;
   	} 
 
-	if (isset($_POST['eventAction']) && $_POST['eventAction'] == 'delete_booking') { 
+	if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'delete_booking') { 
 		if ($dbem_rsvp_registered_users_only) {
 			// we require a user to be WP registered to be able to book
 			get_currentuserinfo();
@@ -492,32 +492,34 @@ function dbem_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone
 function dbem_registration_seats_page() {
         global $wpdb;
 
-	// do the actions if required
-	if (isset($_GET['action']) && $_GET['action'] == "delete_bookings" && isset($_GET['bookings'])) {
-		$bookings = $_GET['bookings'];
-		if (is_array($bookings)) {
-			foreach($bookings as $booking_id) {
-				dbem_delete_booking(intval($booking_id));
+	if (current_user_can( EDIT_CAPABILITY)) {
+		// do the actions if required
+		if (isset($_GET['action']) && $_GET['action'] == "delete_bookings" && isset($_GET['bookings'])) {
+			$bookings = $_GET['bookings'];
+			if (is_array($bookings)) {
+				foreach($bookings as $booking_id) {
+					dbem_delete_booking(intval($booking_id));
+				}
 			}
-		}
-	} else {
-        	$action = isset($_POST ['action']) ? $_POST ['action'] : '';
-		$bookings = isset($_POST ['bookings']) ? $_POST ['bookings'] : array();
-		$bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
-		foreach ( $bookings as $key=>$booking_id ) {
-			// make sure the seats are integers
-			$bookings_seats[$key]=intval($bookings_seats[$key]);
-			$booking = dbem_get_booking ($booking_id);
-			$person  = dbem_get_person ($booking['person_id']);
-			// 0 seats is not possible, then you should remove the booking
-			if ($bookings_seats[$key]==0)
-				$bookings_seats[$key]=1;
-			if ($action == 'approveRegistration' && $booking['booking_seats']!= $bookings_seats[$key]) {
-				dbem_update_booking_seats($booking_id,$bookings_seats[$key]);
-				dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
-			} elseif ($action == 'denyRegistration') {
-				dbem_delete_booking($booking_id);
-				dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
+		} else {
+       		 	$action = isset($_POST ['action']) ? $_POST ['action'] : '';
+			$bookings = isset($_POST ['bookings']) ? $_POST ['bookings'] : array();
+			$bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
+			foreach ( $bookings as $key=>$booking_id ) {
+				// make sure the seats are integers
+				$bookings_seats[$key]=intval($bookings_seats[$key]);
+				$booking = dbem_get_booking ($booking_id);
+				$person  = dbem_get_person ($booking['person_id']);
+				// 0 seats is not possible, then you should remove the booking
+				if ($bookings_seats[$key]==0)
+					$bookings_seats[$key]=1;
+				if ($action == 'approveRegistration' && $booking['booking_seats']!= $bookings_seats[$key]) {
+					dbem_update_booking_seats($booking_id,$bookings_seats[$key]);
+					dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
+				} elseif ($action == 'denyRegistration') {
+					dbem_delete_booking($booking_id);
+					dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
+				}
 			}
 		}
 	}
@@ -633,26 +635,28 @@ function dbem_registration_seats_form_table($event_id=0) {
 function dbem_registration_approval_page() {
         global $wpdb;
 
-	// do the actions if required
-        $action = isset($_POST ['action']) ? $_POST ['action'] : '';
-	$pending_bookings = isset($_POST ['pending_bookings']) ? $_POST ['pending_bookings'] : array();
-	$bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
-	foreach ( $pending_bookings as $key=>$booking_id ) {
-		$booking = dbem_get_booking ($booking_id);
-		$person  = dbem_get_person ($booking['person_id']);
-		// update the db
-		if ($action == 'approveRegistration') {
-			dbem_approve_booking($booking_id);
-			// 0 seats is not possible, then you should remove the booking
-			if ($bookings_seats[$key]==0)
-				$bookings_seats[$key]=1;
-			if ($booking['booking_seats']!= intval($bookings_seats[$key]))
-				dbem_update_booking_seats($booking_id,intval($bookings_seats[$key]));
-		} elseif ($action == 'denyRegistration') {
-			dbem_delete_booking($booking_id);
+	if (current_user_can( EDIT_CAPABILITY)) {
+		// do the actions if required
+		$action = isset($_POST ['action']) ? $_POST ['action'] : '';
+		$pending_bookings = isset($_POST ['pending_bookings']) ? $_POST ['pending_bookings'] : array();
+		$bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
+		foreach ( $pending_bookings as $key=>$booking_id ) {
+			$booking = dbem_get_booking ($booking_id);
+			$person  = dbem_get_person ($booking['person_id']);
+			// update the db
+			if ($action == 'approveRegistration') {
+				dbem_approve_booking($booking_id);
+				// 0 seats is not possible, then you should remove the booking
+				if ($bookings_seats[$key]==0)
+					$bookings_seats[$key]=1;
+				if ($booking['booking_seats']!= intval($bookings_seats[$key]))
+					dbem_update_booking_seats($booking_id,intval($bookings_seats[$key]));
+			} elseif ($action == 'denyRegistration') {
+				dbem_delete_booking($booking_id);
+			}
+			// and then send the mail
+			dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
 		}
-		// and then send the mail
-		dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
 	}
 	// now show the menu
 	$event_id = isset($_POST ['event_id']) ? intval($_POST ['event_id']) : 0;

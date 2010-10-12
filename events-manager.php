@@ -73,6 +73,9 @@ define('DEFAULT_RECURRENCE_ENABLED', true);
 define('DEFAULT_RSVP_ENABLED', true);
 define('DEFAULT_CATEGORIES_ENABLED', true);
 define('DEFAULT_GMAP_ENABLED', true);
+define('STATUS_PUBLIC', 1);
+define('STATUS_PRIVATE', 2);
+define('STATUS_DRAFT', 5);
 
 // DEBUG constant for developing
 // if you are hacking this plugin, set to TRUE, a log will show in admin pages
@@ -503,15 +506,15 @@ function dbem_create_events_submenu () {
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
 		$plugin_page = add_submenu_page('events-manager', __('Add new', 'dbem'), __('Add new','dbem'), MIN_CAPABILITY, 'events-manager-new_event', "dbem_new_event_page");
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Locations', 'dbem'), __('Locations', 'dbem'), MIN_CAPABILITY, 'events-manager-locations', "dbem_locations_page");
+		$plugin_page = add_submenu_page('events-manager', __('Locations', 'dbem'), __('Locations', 'dbem'), EDIT_CAPABILITY, 'events-manager-locations', "dbem_locations_page");
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
-		$plugin_page = add_submenu_page('events-manager', __('Event Categories','dbem'),__('Categories','dbem'), SETTING_CAPABILITY, "events-manager-categories", 'dbem_categories_subpanel');
+		$plugin_page = add_submenu_page('events-manager', __('Event Categories','dbem'),__('Categories','dbem'), SETTINGS_CAPABILITY, "events-manager-categories", 'dbem_categories_subpanel');
                 add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
 		$plugin_page = add_submenu_page('events-manager', __('People', 'dbem'), __('People', 'dbem'), MIN_CAPABILITY, 'events-manager-people', "dbem_people_page");
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'dbem'), __('Pending Approvals', 'dbem'), MIN_CAPABILITY, 'events-manager-registration-approval', "dbem_registration_approval_page");
+		$plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'dbem'), __('Pending Approvals', 'dbem'), EDIT_CAPABILITY, 'events-manager-registration-approval', "dbem_registration_approval_page");
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Change Registration', 'dbem'), __('Change Registration', 'dbem'), MIN_CAPABILITY, 'events-manager-registration-seats', "dbem_registration_seats_page");
+		$plugin_page = add_submenu_page('events-manager', __('Change Registration', 'dbem'), __('Change Registration', 'dbem'), EDIT_CAPABILITY, 'events-manager-registration-seats', "dbem_registration_seats_page");
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
 		$plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','dbem'),__('Settings','dbem'), SETTING_CAPABILITY, "events-manager-options", 'dbem_options_subpanel');
 		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
