@@ -1799,7 +1799,7 @@ add_action ( 'template_redirect', 'eme_enqueue_scripts' );
 // General script to make sure hidden fields are shown when containing data
 function eme_admin_general_script() {
 	?>
-<script src="<?php echo DBEM_PLUGIN_URL; ?>dbem.js" type="text/javascript"></script>
+<script src="<?php echo DBEM_PLUGIN_URL; ?>eme.js" type="text/javascript"></script>
 <script src="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.js" type="text/javascript"></script>
 <script src="<?php echo DBEM_PLUGIN_URL; ?>js/timeentry/jquery.timeentry.js" type="text/javascript"></script>
 <?php
@@ -2287,7 +2287,7 @@ function eme_general_css() {
 	}
 	$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
 	if ($gmap_is_active) {
-		echo "<script type='text/javascript' src='".DBEM_PLUGIN_URL."dbem_location_map.js'></script>\n";
+		echo "<script type='text/javascript' src='".DBEM_PLUGIN_URL."eme_location_map.js'></script>\n";
 	}
 }
 function eme_admin_general_css() {
