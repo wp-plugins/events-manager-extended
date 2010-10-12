@@ -31,10 +31,10 @@ function dbem_add_booking_form($event_id) {
 		$ret_string = "";
 		if(!empty($form_add_message))
 			$ret_string .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
-		 return $ret_string."<div class='dbem-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'dbem')."</div>";
+		 return $ret_string."<div class='dbem-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div>";
 	}
 
-	$module = "<h3>".__('Book now!','dbem')."</h3><br/>";
+	$module = "<h3>".__('Book now!','eme')."</h3><br/>";
 	if(!empty($form_add_message))
 		$module .= "<div id='dbem-rsvp-message' class='dbem-rsvp-message'>$form_add_message</div>";
 	$booked_places_options = array();
@@ -43,18 +43,18 @@ function dbem_add_booking_form($event_id) {
 	
 		$module  .= "<form id='dbem-rsvp-form' name='booking-form' method='post' action='$destination'>
 			<table class='dbem-rsvp-form'>
-				<tr><th scope='row'>".__('Name', 'dbem')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
-				<tr><th scope='row'>".__('E-Mail', 'dbem')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
-				<tr><th scope='row'>".__('Phone number', 'dbem')."*:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
-				<tr><th scope='row'>".__('Seats', 'dbem')."*:</th><td><select name='bookedSeats' >";
+				<tr><th scope='row'>".__('Name', 'eme')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
+				<tr><th scope='row'>".__('E-Mail', 'eme')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
+				<tr><th scope='row'>".__('Phone number', 'eme')."*:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
+				<tr><th scope='row'>".__('Seats', 'eme')."*:</th><td><select name='bookedSeats' >";
 		foreach($booked_places_options as $option) {
 			$module .= $option."\n";
 		}
 		$module .= "</select></td></tr>
-				<tr><th scope='row'>".__('Comment', 'dbem').":</th><td><textarea name='bookerComment'></textarea></td></tr>";
+				<tr><th scope='row'>".__('Comment', 'eme').":</th><td><textarea name='bookerComment'></textarea></td></tr>";
 		if (get_option('dbem_captcha_for_booking')) {
 			$module .= "
-				<tr><th scope='row'>".__('Please fill in the code displayed here', 'dbem').":</th><td><img src='".DBEM_PLUGIN_URL."captcha.php'><br>
+				<tr><th scope='row'>".__('Please fill in the code displayed here', 'eme').":</th><td><img src='".DBEM_PLUGIN_URL."captcha.php'><br>
 				      <input type='text' name='captcha_check' /></td></tr>
 				";
 		}
@@ -64,8 +64,8 @@ function dbem_add_booking_form($event_id) {
 		
 		$module .= "
 		</table>
-		<p>".__('(* marks a required field)', 'dbem')."</p>
-		<p><input type='submit' value='".__('Send your booking', 'dbem')."'/>
+		<p>".__('(* marks a required field)', 'eme')."</p>
+		<p><input type='submit' value='".__('Send your booking', 'eme')."'/>
 		 <input type='hidden' name='eme_eventAction' value='add_booking'/></p>
 		 <input type='hidden' name='event_id' value='$event_id'/></p>
 	</form>";
@@ -87,18 +87,18 @@ function dbem_delete_booking_form() {
 		return;
 	}
 	$destination = "?".$_SERVER['QUERY_STRING'];
-	$module = "<h3>".__('Cancel your booking', 'dbem')."</h3><br/>";
+	$module = "<h3>".__('Cancel your booking', 'eme')."</h3><br/>";
 	
 	if(!empty($form_delete_message))
 		$module .= "<div class='dbem-rsvp-message'>$form_delete_message</div>";
 
 	$module  .= "<form name='booking-delete-form' method='post' action='$destination'>
 			<table class='dbem-rsvp-form'>
-				<tr><th scope='row'>".__('Name', 'dbem').":</th><td><input type='text' name='bookerName' value=''/></td></tr>
-		  	<tr><th scope='row'>".__('E-Mail', 'dbem').":</th><td><input type='text' name='bookerEmail' value=''/></td></tr>
+				<tr><th scope='row'>".__('Name', 'eme').":</th><td><input type='text' name='bookerName' value=''/></td></tr>
+		  	<tr><th scope='row'>".__('E-Mail', 'eme').":</th><td><input type='text' name='bookerEmail' value=''/></td></tr>
 		  	<input type='hidden' name='eme_eventAction' value='delete_booking'/>
 		</table>
-		<input type='submit' value='".__('Cancel your booking', 'dbem')."'/>
+		<input type='submit' value='".__('Cancel your booking', 'eme')."'/>
 	</form>";
 	// $module .= "dati inviati: ";
 	//  	$module .= $_POST['bookerName'];
@@ -143,7 +143,7 @@ function eme_catch_rsvp() {
 			$person_id = $booker['person_id'];
 			$result = dbem_delete_booking_by_person_id($person_id);
 		} else {
-			$result = __('There are no bookings associated to this name and e-mail', 'dbem');
+			$result = __('There are no bookings associated to this name and e-mail', 'eme');
 		}
 		$form_delete_message = $result; 
   	} 
@@ -180,14 +180,14 @@ function dbem_book_seats() {
 		$msg = response_check_captcha("captcha_check",1);
 	}
   	if(!empty($msg)) {
-		$result = __('You entered an incorrect code','dbem');
+		$result = __('You entered an incorrect code','eme');
 	} elseif ($honeypot_check != "") {
 		// a bot fills this in, but a human never will, since it's
 		// a hidden field
-		$result = __('You are a bad boy','dbem');
+		$result = __('You are a bad boy','eme');
   	} elseif (!$bookerName || !$bookerEmail || !$bookerPhone || !$bookedSeats) {
 	// if any of name, email, phone or bookedseats are empty: return an error
-		$result = __('Please fill in all the required fields','dbem');
+		$result = __('Please fill in all the required fields','eme');
 	} else {
 	   if ($bookedSeats && dbem_are_seats_available_for($event_id, $bookedSeats)) {
 	   	if (!$booker) {
@@ -195,13 +195,13 @@ function dbem_book_seats() {
 	   	}
 		dbem_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
 		
-		$result = __('Your booking has been recorded','dbem');
+		$result = __('Your booking has been recorded','eme');
 		$mailing_is_active = get_option('dbem_rsvp_mail_notify_is_active');
 		if($mailing_is_active) {
 			dbem_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,"");
 		} 
 	   } else {
-		$result = __('Booking cannot be made: not enough seats available!', 'dbem');
+		$result = __('Booking cannot be made: not enough seats available!', 'eme');
 	   }
 	}
 	return $result;
@@ -250,28 +250,28 @@ function dbem_delete_booking_by_person_id($person_id) {
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
 	$sql = "DELETE FROM $bookings_table WHERE person_id = $person_id";
 	$wpdb->query($sql);
-	return __('Booking deleted', 'dbem');
+	return __('Booking deleted', 'eme');
 }
 function dbem_delete_booking($booking_id) {
 	global $wpdb;
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
 	$sql = "DELETE FROM $bookings_table WHERE booking_id = $booking_id";
 	$wpdb->query($sql);
-	return __('Booking deleted', 'dbem');
+	return __('Booking deleted', 'eme');
 }
 function dbem_approve_booking($booking_id) {
 	global $wpdb;
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
 	$sql = "UPDATE $bookings_table SET booking_approved='1' WHERE booking_id = $booking_id";
 	$wpdb->query($sql);
-	return __('Booking approved', 'dbem');
+	return __('Booking approved', 'eme');
 }
 function dbem_update_booking_seats($booking_id,$seats) {
 	global $wpdb;
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
 	$sql = "UPDATE $bookings_table SET booking_seats='$seats' WHERE booking_id = $booking_id";
 	$wpdb->query($sql);
-	return __('Booking approved', 'dbem');
+	return __('Booking approved', 'eme');
 }
 
 function dbem_get_available_seats($event_id) {
@@ -321,8 +321,8 @@ function dbem_bookings_table($event_id) {
 	}
 	$available_seats = dbem_get_available_seats($event_id);
 	$booked_seats = dbem_get_booked_seats($event_id);
-	$result .= "<tfoot><tr><th scope='row' colspan='4'>".__('Booked spaces','dbem').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>
-						 <tr><th scope='row' colspan='4'>".__('Available spaces','dbem').":</th><td class='booking-result' id='available-seats'>$available_seats</td></tr></tfoot>
+	$result .= "<tfoot><tr><th scope='row' colspan='4'>".__('Booked spaces','eme').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>
+						 <tr><th scope='row' colspan='4'>".__('Available spaces','eme').":</th><td class='booking-result' id='available-seats'>$available_seats</td></tr></tfoot>
 							</table></div>
 							<div class='tablenav'>
 								<div class='alignleft actions'>
@@ -350,22 +350,22 @@ function dbem_bookings_compact_table($event_id) {
 					<thead>
 						<tr>
 							<th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
-							<th class='manage-column ' scope='col'>".__('Respondent', 'dbem')."</th>
-							<th scope='col'>".__('Spaces', 'dbem')."</th>
+							<th class='manage-column ' scope='col'>".__('Respondent', 'eme')."</th>
+							<th scope='col'>".__('Spaces', 'eme')."</th>
 					 	</tr>
 					</thead>
 					<tfoot>
 						<tr>
-							<th scope='row' colspan='2'>".__('Booked spaces','dbem').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>
-			 			<tr><th scope='row' colspan='2'>".__('Available spaces','dbem').":</th><td class='booking-result' id='available-seats'>$available_seats</td>
+							<th scope='row' colspan='2'>".__('Booked spaces','eme').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>
+			 			<tr><th scope='row' colspan='2'>".__('Available spaces','eme').":</th><td class='booking-result' id='available-seats'>$available_seats</td>
 						</tr>
 					</tfoot>
 					<tbody>" ;
 		foreach ($bookings as $booking) {
-			($booking['booking_comment']) ? $baloon = " <img src='".DBEM_PLUGIN_URL."images/baloon.png' title='".__('Comment:','dbem')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";
+			($booking['booking_comment']) ? $baloon = " <img src='".DBEM_PLUGIN_URL."images/baloon.png' title='".__('Comment:','eme')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";
 			$pending_string="";
 			if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
-				$pending_string=__('(pending)','dbem');
+				$pending_string=__('(pending)','eme');
 			}
 			$table .= 
 			"<tr id='booking-".$booking['booking_id']."'> 
@@ -381,7 +381,7 @@ function dbem_bookings_compact_table($event_id) {
 			<br class='clear'/>
 		 	<div id='major-publishing-actions'>
 			<div id='publishing-action'> 
-				<a id='printable'  target='' href='$printable_address'>".__('Printable view','dbem')."</a>
+				<a id='printable'  target='' href='$printable_address'>".__('Printable view','eme')."</a>
 				<br class='clear'/>
 		 	</div>
 			<br class='clear'/>
@@ -473,18 +473,18 @@ function dbem_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone
 
 	if($action!="") {
 		if ($action == 'approveRegistration') {
-			dbem_send_mail(__('Reservation confirmed','dbem'),$booker_body, $bookerEmail);
+			dbem_send_mail(__('Reservation confirmed','eme'),$booker_body, $bookerEmail);
 		} elseif ($action == 'denyRegistration') {
-			dbem_send_mail(__('Reservation denied','dbem'),$denied_body, $bookerEmail);
+			dbem_send_mail(__('Reservation denied','eme'),$denied_body, $bookerEmail);
 		}
 	} else {
 		// send different mails depending on approval or not
 		if ($event['registration_requires_approval']) {
-			dbem_send_mail(__("Approval required for new booking",'dbem'), $contact_body, $contact_email);
-			dbem_send_mail(__('Reservation pending','dbem'),$pending_body, $bookerEmail);
+			dbem_send_mail(__("Approval required for new booking",'eme'), $contact_body, $contact_email);
+			dbem_send_mail(__('Reservation pending','eme'),$pending_body, $bookerEmail);
 		} else {
-			dbem_send_mail(__("New booking",'dbem'), $contact_body, $contact_email);
-			dbem_send_mail(__('Reservation confirmed','dbem'),$booker_body, $bookerEmail);
+			dbem_send_mail(__("New booking",'eme'), $contact_body, $contact_email);
+			dbem_send_mail(__('Reservation confirmed','eme'),$booker_body, $bookerEmail);
 		}
 	}
 } 
@@ -534,7 +534,7 @@ function dbem_registration_seats_form_table($event_id=0) {
 <div class="wrap">
 <div id="icon-events" class="icon32"><br />
 </div>
-<h2><?php _e ('Change reserved spaces or cancel registrations','dbem'); ?></h2>
+<h2><?php _e ('Change reserved spaces or cancel registrations','eme'); ?></h2>
 <?php admin_show_warnings();?>
   	<form id="posts-filter" action="" method="post">
 	<input type='hidden' name='page' value='events-manager-registration-seats' />
@@ -543,8 +543,8 @@ function dbem_registration_seats_form_table($event_id=0) {
 	<div class="alignleft actions">
 	<select name="action">
 	<option value="-1" selected="selected"><?php _e ( 'Bulk Actions' ); ?></option>
-	<option value="approveRegistration"><?php _e ( 'Update registration','dbem' ); ?></option>
-	<option value="denyRegistration"><?php _e ( 'Deny registration','dbem' ); ?></option>
+	<option value="approveRegistration"><?php _e ( 'Update registration','eme' ); ?></option>
+	<option value="denyRegistration"><?php _e ( 'Deny registration','eme' ); ?></option>
 	</select>
 	<input type="submit" value="<?php _e ( 'Apply' ); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
 	<select name="event_id">
@@ -571,10 +571,10 @@ function dbem_registration_seats_form_table($event_id=0) {
 		<tr>
 			<th class='manage-column column-cb check-column' scope='col'><input
 				class='select-all' type="checkbox" value='1' /></th>
-			<th><?php _e ( 'Name', 'dbem' ); ?></th>
-			<th><?php _e ( 'Date and time', 'dbem' ); ?></th>
-			<th><?php _e ('Booker','dbem'); ?></th>
-			<th><?php _e ('Seats','dbem'); ?></th>
+			<th><?php _e ( 'Name', 'eme' ); ?></th>
+			<th><?php _e ( 'Date and time', 'eme' ); ?></th>
+			<th><?php _e ('Booker','eme'); ?></th>
+			<th><?php _e ('Seats','eme'); ?></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -668,7 +668,7 @@ function dbem_registration_approval_form_table($event_id=0) {
 <div class="wrap">
 <div id="icon-events" class="icon32"><br />
 </div>
-<h2><?php _e ('Pending Approvals','dbem'); ?></h2>
+<h2><?php _e ('Pending Approvals','eme'); ?></h2>
 <?php admin_show_warnings();?>
   	<form id="posts-filter" action="" method="post">
 	<input type='hidden' name='page' value='events-manager-registration-approval' />
@@ -677,8 +677,8 @@ function dbem_registration_approval_form_table($event_id=0) {
 	<div class="alignleft actions">
 	<select name="action">
 	<option value="-1" selected="selected"><?php _e ( 'Bulk Actions' ); ?></option>
-	<option value="approveRegistration"><?php _e ( 'Approve registration','dbem' ); ?></option>
-	<option value="denyRegistration"><?php _e ( 'Deny registration','dbem' ); ?></option>
+	<option value="approveRegistration"><?php _e ( 'Approve registration','eme' ); ?></option>
+	<option value="denyRegistration"><?php _e ( 'Deny registration','eme' ); ?></option>
 	</select>
 	<input type="submit" value="<?php _e ( 'Apply' ); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
 	<select name="event_id">
@@ -705,10 +705,10 @@ function dbem_registration_approval_form_table($event_id=0) {
 		<tr>
 			<th class='manage-column column-cb check-column' scope='col'><input
 				class='select-all' type="checkbox" value='1' /></th>
-			<th><?php _e ( 'Name', 'dbem' ); ?></th>
-			<th><?php _e ( 'Date and time', 'dbem' ); ?></th>
-			<th><?php _e ('Booker','dbem'); ?></th>
-			<th><?php _e ('Seats','dbem'); ?></th>
+			<th><?php _e ( 'Name', 'eme' ); ?></th>
+			<th><?php _e ( 'Date and time', 'eme' ); ?></th>
+			<th><?php _e ('Booker','eme'); ?></th>
+			<th><?php _e ('Seats','eme'); ?></th>
 		</tr>
 	</thead>
 	<tbody>

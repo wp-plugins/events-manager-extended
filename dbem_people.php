@@ -77,19 +77,19 @@ function dbem_printable_booking_report($event_id) {
 			<h1>Bookings for <?php echo $event['event_name'];?></h1> 
 			<p><?php echo dbem_replace_placeholders("#d #M #Y", $event)?></p>
 			<p><?php echo dbem_replace_placeholders("#_LOCATION, #_ADDRESS, #_TOWN", $event)?></p>
-			<h2><?php _e('Bookings data', 'dbem');?></h2>
+			<h2><?php _e('Bookings data', 'eme');?></h2>
 			<table id="bookings-table">
 				<tr>
-					<th scope='col'><?php _e('Name', 'dbem')?></th>
-					<th scope='col'><?php _e('E-mail', 'dbem')?></th>
-					<th scope='col'><?php _e('Phone number', 'dbem')?></th> 
-					<th scope='col'><?php _e('Seats', 'dbem')?></th>
-					<th scope='col'><?php _e('Comment', 'dbem')?></th> 
+					<th scope='col'><?php _e('Name', 'eme')?></th>
+					<th scope='col'><?php _e('E-mail', 'eme')?></th>
+					<th scope='col'><?php _e('Phone number', 'eme')?></th> 
+					<th scope='col'><?php _e('Seats', 'eme')?></th>
+					<th scope='col'><?php _e('Comment', 'eme')?></th> 
 				<?php
 				foreach($bookings as $booking) {
 					$pending_string="";
 					if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
-						$pending_string=__('(pending)','dbem');
+						$pending_string=__('(pending)','eme');
 					}
 			       ?>
 				<tr>
@@ -102,12 +102,12 @@ function dbem_printable_booking_report($event_id) {
 			   	<?php } ?>
 			  	<tr id='booked-seats'>
 					<td colspan='3'>&nbsp;</td>
-					<td class='total-label'><?php _e('Booked', 'dbem')?>:</td>
+					<td class='total-label'><?php _e('Booked', 'eme')?>:</td>
 					<td class='seats-number'><?php echo $booked_seats; ?></td>
 				</tr>
 				<tr id='available-seats'>
 					<td colspan='3'>&nbsp;</td> 
-					<td class='total-label'><?php _e('Available', 'dbem')?>:</td>
+					<td class='total-label'><?php _e('Available', 'eme')?>:</td>
 					<td class='seats-number'><?php echo $available_seats; ?></td>
 				</tr>
 			</table>
@@ -122,9 +122,9 @@ function dbem_printable_booking_report($event_id) {
 function dbem_people_table() {
 	$people = dbem_get_people();
 	if (count($people) < 1 ) {
-		_e("No people have responded to your events yet!", 'dbem');
+		_e("No people have responded to your events yet!", 'eme');
 	} else { 
-		$table = "<p>".__('This table collects the data about the people who responded to your events', 'dbem')."</p>";	
+		$table = "<p>".__('This table collects the data about the people who responded to your events', 'eme')."</p>";	
 		$table .=" <table id='dbem-people-table' class='widefat post fixed'>
 				<thead>
 				<tr>
@@ -210,12 +210,12 @@ function dbem_add_person($name, $email, $phone, $wp_id) {
 add_action('edit_user_profile', 'eme_phone_field') ;
 function eme_phone_field() {
 	?>
-	<h3><?php _e('Phone number', 'dbem')?></h3>
+	<h3><?php _e('Phone number', 'eme')?></h3>
 	<table class='form-table'>
 		<tr>
-			<th><?php _e('Phone number','dbem');?></th>
+			<th><?php _e('Phone number','eme');?></th>
 			<td><input id="dbem_phone" class="regular-text" type="text" value="" name="dbem_phone"/> <br/>
-			<?php _e('The phone number used by Events Manager when the user is indicated as the contact person for an event.','dbem');?></td>
+			<?php _e('The phone number used by Events Manager when the user is indicated as the contact person for an event.','eme');?></td>
 		</tr>
 	</table>
 	<?php

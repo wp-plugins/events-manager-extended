@@ -27,19 +27,19 @@ function dbem_attributes_form($event) {
 	}
 	?>
 	<div class="wrap">
-		<h2><?php _e('Attributes','dbem'); ?></h2>
+		<h2><?php _e('Attributes','eme'); ?></h2>
 	<?php if( count( $attributes ) > 0 ) { ?> 
-		<p><?php _e('Add attributes here','dbem'); ?></p>
+		<p><?php _e('Add attributes here','eme'); ?></p>
 		<table class="form-table">
 			<thead>
 				<tr valign="top">
-					<td><strong><?php _e('Attribute Name','dbem'); ?></strong></td>
-					<td><strong><?php _e('Value','dbem'); ?></strong></td>
+					<td><strong><?php _e('Attribute Name','eme'); ?></strong></td>
+					<td><strong><?php _e('Value','eme'); ?></strong></td>
 				</tr>
 			</thead>    
 			<tfoot>
 				<tr valign="top">
-					<td colspan="3"><a href="#" id="mtm_add_tag"><?php _e('Add new tag','dbem'); ?></a></td>
+					<td colspan="3"><a href="#" id="mtm_add_tag"><?php _e('Add new tag','eme'); ?></a></td>
 				</tr>
 			</tfoot>
 			<tbody id="mtm_body">
@@ -53,7 +53,7 @@ function dbem_attributes_form($event) {
 								<select name="mtm_<?php echo $count ?>_ref">
 									<?php
 									if( !in_array($name, $attributes) ){
-										echo "<option value='$name'>$name (".__('Not defined in templates', 'dbem').")</option>";
+										echo "<option value='$name'>$name (".__('Not defined in templates', 'eme').")</option>";
 									}
 									foreach( $attributes as $attribute ){
 										if( $attribute == $name ) {
@@ -64,7 +64,7 @@ function dbem_attributes_form($event) {
 									}
 									?>
 								</select>
-								<a href="#" rel="<?php echo $count ?>"><?php _e('Remove','dbem'); ?></a>
+								<a href="#" rel="<?php echo $count ?>"><?php _e('Remove','eme'); ?></a>
 							</td>
 							<td>
 								<input type="text" size="40" name="mtm_<?php echo $count ?>_name" value="<?php echo $value ?>" />
@@ -85,7 +85,7 @@ function dbem_attributes_form($event) {
 									}
 									?>
 								</select>
-								<a href="#" rel="<?php echo $count ?>"><?php _e('Remove','dbem'); ?></a>
+								<a href="#" rel="<?php echo $count ?>"><?php _e('Remove','eme'); ?></a>
 							</td>
 							<td>
 								<input type="text" size="40" name="mtm_<?php echo $count ?>_name" value="" />
@@ -96,7 +96,7 @@ function dbem_attributes_form($event) {
 						?>
 						<tr valign="top">
 							<td scope="row" colspan='2'>
-							<?php _e('In order to use attributes, you must define some in your templates, otherwise they\'ll never show. Go to Events > Settings to add attribute placeholders.', 'dbem'); ?>
+							<?php _e('In order to use attributes, you must define some in your templates, otherwise they\'ll never show. Go to Events > Settings to add attribute placeholders.', 'eme'); ?>
 							</td>
 						</tr>
 						<?php
@@ -110,7 +110,7 @@ function dbem_attributes_form($event) {
 	<?php
 	} else {
 	?>
-		<p><?php _e('No attributes defined yet. If you want attributes, you first need to define/use some in the Settings page. See the section about custom attributes on the documention site for more info.','dbem'); ?></p>
+		<p><?php _e('No attributes defined yet. If you want attributes, you first need to define/use some in the Settings page. See the section about custom attributes on the documention site for more info.','eme'); ?></p>
 	<?php
 	} //endif count attributes
 }

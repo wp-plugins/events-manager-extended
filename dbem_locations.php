@@ -3,7 +3,7 @@ $feedback_message = "";
  
 function eme_locations_page() {
    	if (!current_user_can( EDIT_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
-		$message = __('You have no right to update locations!','dbem');
+		$message = __('You have no right to update locations!','eme');
 		$locations = dbem_get_locations();
 		dbem_locations_table_layout($locations, null, $message);
 	} elseif (isset($_GET['action']) && $_GET['action'] == "edit") { 
@@ -39,7 +39,7 @@ function eme_locations_page() {
 			dbem_update_location($location); 
 			if ($_FILES['location_image']['size'] > 0 )
 				dbem_upload_location_picture($location);
-			$message = __('The location has been updated.', 'dbem');
+			$message = __('The location has been updated.', 'eme');
 			$locations = dbem_get_locations();
 			dbem_locations_table_layout($locations, $location, $message);
 		} else {
@@ -62,7 +62,7 @@ function eme_locations_page() {
 				dbem_upload_location_picture($new_location);
 			}
 					
-			//RESETME $message = __('The location has been added.', 'dbem'); 
+			//RESETME $message = __('The location has been added.', 'eme'); 
 			$locations = dbem_get_locations();
 			dbem_locations_table_layout($locations, null,$message);
 		} else {
@@ -85,7 +85,7 @@ function dbem_locations_edit_layout($location, $message = "") {
 				<br/>
 			</div>
 				
-			<h2><?php _e('Edit location', 'dbem') ?></h2>
+			<h2><?php _e('Edit location', 'eme') ?></h2>
 			    <?php admin_show_warnings(); ?>
 	 		
 			<?php if($message != "") : ?>
@@ -101,21 +101,21 @@ function dbem_locations_edit_layout($location, $message = "") {
 			
 			<!-- we need titlediv and title for qtranslate as ID -->
 			<div id="titlediv" class="form-field form-required">
-			  <label for="location_name"><?php _e('Location name', 'dbem') ?></label>
+			  <label for="location_name"><?php _e('Location name', 'eme') ?></label>
 			  <input name="location_name" id="title" type="text" value="<?php echo dbem_sanitize_html($location['location_name']); ?>" size="40" />
 			  <input type="hidden" name="translated_location_name" value="<?php echo dbem_trans_sanitize_html($location['location_name']); ?>" />
-			  <p><?php _e('The name of the location', 'dbem') ?>.</p>
+			  <p><?php _e('The name of the location', 'eme') ?>.</p>
 			</div>
 			<div class="form-field">
-			   <label for="location_address"><?php _e('Location address', 'dbem') ?></label>
+			   <label for="location_address"><?php _e('Location address', 'eme') ?></label>
 			   <input id="location_address" name="location_address" type="text" value="<?php echo dbem_sanitize_html($location['location_address']); ?>" size="40"  />
-			   <p><?php _e('The address of the location', 'dbem') ?>.</p>
+			   <p><?php _e('The address of the location', 'eme') ?>.</p>
 			</div>
  
 			<div class="form-field ">
-			   <label for="location_town"><?php _e('Location town', 'dbem') ?></label>
+			   <label for="location_town"><?php _e('Location town', 'eme') ?></label>
 			   <input name="location_town" id="location_town" type="text" value="<?php echo dbem_sanitize_html($location['location_town']); ?>" size="40"  />
-			   <p><?php _e('The town of the location', 'dbem') ?>.</p>
+			   <p><?php _e('The town of the location', 'eme') ?>.</p>
 			</div>
 								
 			<div class="form-field" style="display:none;">
@@ -127,9 +127,9 @@ function dbem_locations_edit_layout($location, $message = "") {
 			   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo dbem_sanitize_html($location['location_longitude']); ?>" size="40"  />
 			</div>
 			<div class="form-field">
-			   <label for="location_image"><?php _e('Location image', 'dbem') ?></label>
+			   <label for="location_image"><?php _e('Location image', 'eme') ?></label>
 			   <input id="location_image" name="location_image" type="file" size="35" />
-			   <p><?php _e('Select an image to upload', 'dbem') ?>.</p>
+			   <p><?php _e('Select an image to upload', 'eme') ?>.</p>
 			</div>
 			<?php 
 				$gmap_is_active = get_option('dbem_gmap_is_active');
@@ -141,20 +141,20 @@ function dbem_locations_edit_layout($location, $message = "") {
 				}
 				?>
 			</div>
-		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found','dbem') ?></p></div>
+		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found','eme') ?></p></div>
 	 		<div id="event-map" style="width: 450px; height: 300px; background: green; display: hide; margin-right:8px"></div>
 	 		<br style="clear:both;" />
 			<?php endif; ?>
 			<div id="poststuff">
-				<label for="location_description"><?php _e('Location description', 'dbem') ?></label>
+				<label for="location_description"><?php _e('Location description', 'eme') ?></label>
 				<div class="inside">
 					<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
 						<?php the_editor($location['location_description']); ?>
 					</div>
-					<?php _e('A description of the Location. You may include any kind of info here.', 'dbem') ?>
+					<?php _e('A description of the Location. You may include any kind of info here.', 'eme') ?>
 				</div>
 			</div>
-			<p class="submit"><input type="submit" class="button-primary" name="submit" value="<?php _e('Update location', 'dbem') ?>" /></p>
+			<p class="submit"><input type="submit" class="button-primary" name="submit" value="<?php _e('Update location', 'eme') ?>" /></p>
 
 			</form>
 		</div>
@@ -180,7 +180,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 			<div id="icon-edit" class="icon32">
 				<br/>
 			</div>
- 	 		<h2><?php _e('Locations', 'dbem') ?></h2>
+ 	 		<h2><?php _e('Locations', 'eme') ?></h2>
 	 		
 			<?php if($message != "") : ?>
 				<div id="message" class="updated fade below-h2" style="background-color: rgb(255, 251, 204);">
@@ -198,17 +198,17 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 							<thead>
 								<tr>
 									<th class="manage-column column-cb check-column" scope="col"><input type="checkbox" class="select-all" value="1"/></th>
-									<th><?php _e('Name', 'dbem') ?></th>
-									<th><?php _e('Address', 'dbem') ?></th>
-									<th><?php _e('Town', 'dbem') ?></th>
+									<th><?php _e('Name', 'eme') ?></th>
+									<th><?php _e('Address', 'eme') ?></th>
+									<th><?php _e('Town', 'eme') ?></th>
 								</tr> 
 							</thead>
 							<tfoot>
 								<tr>
 									<th class="manage-column column-cb check-column" scope="col"><input type="checkbox" class="select-all" value="1"/></th>
-									<th><?php _e('Name', 'dbem') ?></th>
-									<th><?php _e('Address', 'dbem') ?></th>
-									<th><?php _e('Town', 'dbem') ?></th>
+									<th><?php _e('Name', 'eme') ?></th>
+									<th><?php _e('Address', 'eme') ?></th>
+									<th><?php _e('Town', 'eme') ?></th>
 								</tr>
 							</tfoot>
 							<tbody>
@@ -233,7 +233,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 							<br class="clear"/>
 						</div>
 						<?php else: ?>
-							<p><?php _e('No venues have been inserted yet!', 'dbem') ?></p>
+							<p><?php _e('No venues have been inserted yet!', 'eme') ?></p>
 						<?php endif; ?>
 						</form>
 					</div>
@@ -243,28 +243,28 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 			  	<div class="col-wrap">
 						<div class="form-wrap"> 
 							<div id="ajax-response"/>
-					  	<h3><?php _e('Add location', 'dbem') ?></h3>
+					  	<h3><?php _e('Add location', 'eme') ?></h3>
 						    <?php admin_show_warnings(); ?>
 							 <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="<?php echo $destination ?>" class="add:the-list: validate">
 								<input type="hidden" name="page" value="events-manager-locations"/>
 								<input type="hidden" name="action" value="addlocation" />
 								<div id="titlediv" class="form-field form-required">
-								  <label for="location_name"><?php _e('Location name', 'dbem') ?></label>
+								  <label for="location_name"><?php _e('Location name', 'eme') ?></label>
 						 		  <input name="location_name" id="title" type="text" value="<?php echo dbem_sanitize_html($new_location['location_name']); ?>" size="40" />
 			  					  <input type="hidden" name="translated_location_name" value="<?php echo dbem_trans_sanitize_html($new_location['location_name']); ?>" />
-								  <p><?php _e('The name of the location', 'dbem') ?>.</p>
+								  <p><?php _e('The name of the location', 'eme') ?>.</p>
 								</div>
 
 								<div class="form-field">
-								   <label for="location_address"><?php _e('Location address', 'dbem') ?></label>
+								   <label for="location_address"><?php _e('Location address', 'eme') ?></label>
 								   <input id="location_address" name="location_address" type="text" value="<?php echo dbem_sanitize_html($new_location['location_address']); ?>" size="40"  />
-								   <p><?php _e('The address of the location', 'dbem') ?>.</p>
+								   <p><?php _e('The address of the location', 'eme') ?>.</p>
 								</div>
  
 								<div class="form-field ">
-								   <label for="location_town"><?php _e('Location town', 'dbem') ?></label>
+								   <label for="location_town"><?php _e('Location town', 'eme') ?></label>
 								   <input id="location_town" name="location_town" type="text" value="<?php echo dbem_sanitize_html($new_location['location_town']); ?>" size="40"  />
-								   <p><?php _e('The town of the location', 'dbem') ?>.</p>
+								   <p><?php _e('The town of the location', 'eme') ?>.</p>
 								</div>
 								
 								<div class="form-field" style="display:none;">
@@ -277,28 +277,28 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								</div>
 								
 								<div class="form-field">
-								   <label for="location_image"><?php _e('Location image', 'dbem') ?></label>
+								   <label for="location_image"><?php _e('Location image', 'eme') ?></label>
 								   <input id="location_image" name="location_image" type="file" size="35" />
-								    <p><?php _e('Select an image to upload', 'dbem') ?>.</p>
+								    <p><?php _e('Select an image to upload', 'eme') ?>.</p>
 								</div>
 								<?php 
 									$gmap_is_active = get_option('dbem_gmap_is_active');
                  					if ($gmap_is_active) :
 								 ?>	
-						 		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found','dbem') ?></p></div>
+						 		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found','eme') ?></p></div>
 							 		<div id="event-map" style="width: 450px; height: 300px; background: green; display: hide; margin-right:8px"></div>
 							 		<br style="clear:both;" />
 								 <?php endif; ?>
 									<div id="poststuff">
-										<label for="location_description"><?php _e('Location description', 'dbem') ?></label>
+										<label for="location_description"><?php _e('Location description', 'eme') ?></label>
 										<div class="inside">
 											<div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
 												<?php the_editor($new_location['location_description']); ?>
 											</div>
-											<?php _e('A description of the Location. You may include any kind of info here.', 'dbem') ?>
+											<?php _e('A description of the Location. You may include any kind of info here.', 'eme') ?>
 										</div>
 									</div>
-								 <p class="submit"><input type="submit" class="button" name="submit" value="<?php _e('Add location', 'dbem') ?>" /></p>
+								 <p class="submit"><input type="submit" class="button" name="submit" value="<?php _e('Add location', 'eme') ?>" /></p>
 							 </form>
 
 					  </div>
@@ -407,7 +407,7 @@ function dbem_validate_location($location) {
  	 		$mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
 			$maximum_size = get_option('dbem_image_max_size'); 
 			if ($_FILES['location_image']['size'] > $maximum_size) 
-	     			$troubles = "<li>".__('The image file is too big! Maximum size:', 'dbem')." $maximum_size</li>";
+	     			$troubles = "<li>".__('The image file is too big! Maximum size:', 'eme')." $maximum_size</li>";
 	  		list($width, $height, $type, $attr) = getimagesize($_FILES['location_image']['tmp_name']);
 			$maximum_width = get_option('dbem_image_max_width'); 
 			$maximum_height = get_option('dbem_image_max_height'); 
@@ -421,7 +421,7 @@ function dbem_validate_location($location) {
 	if ($troubles == "") {
 		return "OK";
 	} else {
-		$message = __('Ach, some problems here:', 'dbem')."<ul>\n$troubles</ul>";
+		$message = __('Ach, some problems here:', 'eme')."<ul>\n$troubles</ul>";
 		return $message; 
 	}
 }
@@ -481,7 +481,7 @@ function dbem_upload_location_picture($location) {
 	list($width, $height, $type, $attr) = getimagesize($_FILES['location_image']['tmp_name']);
 	$image_path = "../".IMAGE_UPLOAD_DIR."/location-".$location['location_id'].".".$mime_types[$type];
 	if (!move_uploaded_file($_FILES['location_image']['tmp_name'], $image_path)) 
-		$msg = "<p>".__('The image could not be loaded','dbem')."</p>";
+		$msg = "<p>".__('The image could not be loaded','eme')."</p>";
 }
 
 function dbem_delete_image_files_for_location_id($location_id) {
@@ -602,9 +602,9 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 function dbem_add_directions_form($location) {
 	$res = '
 <form action="http://maps.google.com/maps" method="get" target="_blank" style="text-align:left;">
-<label for="saddr">'.__('Your Street Address','dbem').'</label>
+<label for="saddr">'.__('Your Street Address','eme').'</label>
 <input type="text" name="saddr" id="saddr" value="" />
-<input type="submit" value="'.__('Get Directions','dbem').'" />
+<input type="submit" value="'.__('Get Directions','eme').'" />
 <input type="hidden" name="daddr" value="'.$location['location_address'].', '.$location['location_town'].'" />
 <input type="hidden" name="hl" value="'.$locale_code.'" />
 </form>';

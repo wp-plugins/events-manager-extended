@@ -48,18 +48,18 @@ define('EDIT_CAPABILITY', 'edit_others_posts');	// Minimum user level to edit an
 define('SETTING_CAPABILITY', 'activate_plugins');	// Minimum user level to edit settings
 define('DEFAULT_EVENT_LIST_ITEM_FORMAT', '<li>#j #M #Y - #H:#i<br/> #_LINKEDNAME<br/>#_TOWN </li>');
 define('DEFAULT_SINGLE_EVENT_FORMAT', '<p>#j #M #Y - #H:#i</p><p>#_TOWN</p>'); 
-define('DEFAULT_EVENTS_PAGE_TITLE',__('Events','dbem') ) ;
+define('DEFAULT_EVENTS_PAGE_TITLE',__('Events','eme') ) ;
 define('DEFAULT_EVENT_PAGE_TITLE_FORMAT', '#_NAME'); 
 define('DEFAULT_RSS_DESCRIPTION_FORMAT',"#j #M #y - #H:#i <br/>#_LOCATION <br/>#_ADDRESS <br/>#_TOWN");
 define('DEFAULT_RSS_TITLE_FORMAT',"#_NAME");
 define('DEFAULT_MAP_TEXT_FORMAT', '<strong>#_LOCATION</strong><p>#_ADDRESS</p><p>#_TOWN</p>');
 define('DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT','<li>#_LINKEDNAME<ul><li>#j #M #y</li><li>#_TOWN</li></ul></li>');
-define('DEFAULT_NO_EVENTS_MESSAGE', __('No events', 'dbem'));
+define('DEFAULT_NO_EVENTS_MESSAGE', __('No events', 'eme'));
 define('DEFAULT_SINGLE_LOCATION_FORMAT', '<p>#_ADDRESS</p><p>#_TOWN</p>'); 
 define('DEFAULT_LOCATION_PAGE_TITLE_FORMAT', '#_NAME'); 
 define('DEFAULT_LOCATION_BALLOON_FORMAT', "<strong>#_NAME</strong><br/>#_ADDRESS - #_TOWN<br/><a href='#_LOCATIONPAGEURL'>Details</a>");
 define('DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT', "<li>#_NAME - #j #M #Y - #H:#i</li>");
-define('DEFAULT_LOCATION_NO_EVENTS_MESSAGE', __('<li>No events in this location</li>', 'dbem'));
+define('DEFAULT_LOCATION_NO_EVENTS_MESSAGE', __('<li>No events in this location</li>', 'eme'));
 define("IMAGE_UPLOAD_DIR", "wp-content/uploads/locations-pics");
 define('DEFAULT_IMAGE_MAX_WIDTH', 700);
 define('DEFAULT_IMAGE_MAX_HEIGHT', 700);
@@ -108,15 +108,15 @@ require_once("phpmailer/dbem_phpmailer.php") ;
 // Localised date formats as in the jquery UI datepicker plugin
 $localised_date_formats = array("am" => "dd.mm.yy","ar" => "dd/mm/yy", "bg" => "dd.mm.yy", "ca" => "mm/dd/yy", "cs" => "dd.mm.yy", "da" => "dd-mm-yy", "de" =>"dd.mm.yy", "es" => "dd/mm/yy", "en" => "mm/dd/yy", "fi" => "dd.mm.yy", "fr" => "dd/mm/yy", "he" => "dd/mm/yy", "hu" => "yy-mm-dd", "hy" => "dd.mm.yy", "id" => "dd/mm/yy", "is" => "dd/mm/yy", "it" => "dd/mm/yy", "ja" => "yy/mm/dd", "ko" => "yy-mm-dd", "lt" => "yy-mm-dd", "lv" => "dd-mm-yy", "nl" => "dd.mm.yy", "no" => "yy-mm-dd", "pl" => "yy-mm-dd", "pt" => "dd/mm/yy", "ro" => "mm/dd/yy", "ru" => "dd.mm.yy", "sk" => "dd.mm.yy", "sv" => "yy-mm-dd", "th" => "dd/mm/yy", "tr" => "dd.mm.yy", "ua" => "dd.mm.yy", "uk" => "dd.mm.yy", "us" => "mm/dd/yy", "CN" => "yy-mm-dd", "TW" => "yy/mm/dd");
 
-//required fields
-$required_fields = array('event_name'); 
-$location_required_fields = array("location_name" => __('The location name', 'dbem'), "location_address" => __('The location address', 'dbem'), "location_town" => __('The location town', 'dbem'));
-
 add_action('init', 'eme_load_textdomain');
 function eme_load_textdomain() {
 	$thisDir = dirname( plugin_basename( __FILE__ ) );
-	load_plugin_textdomain('dbem', false, $thisDir.'/langs'); 
+	load_plugin_textdomain('eme', false, $thisDir.'/langs'); 
 }
+
+//required fields
+$required_fields = array('event_name'); 
+$location_required_fields = array("location_name" => __('The location name', 'eme'), "location_address" => __('The location address', 'eme'), "location_town" => __('The location town', 'eme'));
 
 // To enable activation through the activate function
 register_activation_hook(__FILE__,'dbem_install');
@@ -420,10 +420,10 @@ function dbem_create_categories_table($charset,$collate) {
 }
 
 function dbem_add_options($reset=0) {
-	$contact_person_email_body_localizable = __("#_RESPNAME (#_RESPEMAIL) will attend #_NAME on #m #d, #Y. He wants to reserve #_SPACES space(s).<br/>Now there are #_RESERVEDSPACES space(s) reserved, #_AVAILABLESPACES are still available.<br/><br/>Yours faithfully,<br/>Events Manager",'dbem') ;
-	$respondent_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>you have successfully reserved #_SPACES space(s) for #_NAME.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'dbem');
-	$registration_pending_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'dbem');
-	$registration_denied_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME has been denied.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'dbem');
+	$contact_person_email_body_localizable = __("#_RESPNAME (#_RESPEMAIL) will attend #_NAME on #m #d, #Y. He wants to reserve #_SPACES space(s).<br/>Now there are #_RESERVEDSPACES space(s) reserved, #_AVAILABLESPACES are still available.<br/><br/>Yours faithfully,<br/>Events Manager",'eme') ;
+	$respondent_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>you have successfully reserved #_SPACES space(s) for #_NAME.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
+	$registration_pending_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
+	$registration_denied_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME has been denied.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
 	
 	$dbem_options = array('dbem_event_list_item_format' => DEFAULT_EVENT_LIST_ITEM_FORMAT,
 	'dbem_display_calendar_in_events_page' => 0,
@@ -431,7 +431,7 @@ function dbem_add_options($reset=0) {
 	'dbem_event_page_title_format' => DEFAULT_EVENT_PAGE_TITLE_FORMAT,
 	'dbem_list_events_page' => 0,
 	'dbem_events_page_title' => DEFAULT_EVENTS_PAGE_TITLE,
-	'dbem_no_events_message' => __('No events','dbem'),
+	'dbem_no_events_message' => __('No events','eme'),
 	'dbem_location_page_title_format' => DEFAULT_LOCATION_PAGE_TITLE_FORMAT,
 	'dbem_location_baloon_format' => DEFAULT_LOCATION_BALLOON_FORMAT,
 	'dbem_location_event_list_item_format' => DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT,
@@ -488,7 +488,7 @@ function dbem_create_events_page(){
 	$postarr = array(
 		'post_status'=> 'publish',
 		'post_title' => DEFAULT_EVENT_PAGE_NAME,
-		'post_name'  => $wpdb->escape(__('events','dbem')),
+		'post_name'  => $wpdb->escape(__('events','eme')),
 		'post_type'  => 'page',
 	);
 	if($int_post_id = wp_insert_post($postarr)){
@@ -500,23 +500,23 @@ function dbem_create_events_page(){
 add_action('admin_menu','eme_create_events_submenu');
 function eme_create_events_submenu () {
 	  if(function_exists('add_submenu_page')) {
-	  	add_object_page(__('Events', 'dbem'),__('Events', 'dbem'),MIN_CAPABILITY,'events-manager','eme_events_subpanel', DBEM_PLUGIN_URL.'images/calendar-16.png');
+	  	add_object_page(__('Events', 'eme'),__('Events', 'eme'),MIN_CAPABILITY,'events-manager','eme_events_subpanel', DBEM_PLUGIN_URL.'images/calendar-16.png');
 	   	// Add a submenu to the custom top-level menu: 
 		$plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),MIN_CAPABILITY,'events-manager','eme_events_subpanel');
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
-		$plugin_page = add_submenu_page('events-manager', __('Add new', 'dbem'), __('Add new','dbem'), MIN_CAPABILITY, 'events-manager-new_event', "eme_new_event_page");
+		$plugin_page = add_submenu_page('events-manager', __('Add new', 'eme'), __('Add new','eme'), MIN_CAPABILITY, 'events-manager-new_event', "eme_new_event_page");
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Locations', 'dbem'), __('Locations', 'dbem'), EDIT_CAPABILITY, 'events-manager-locations', "eme_locations_page");
+		$plugin_page = add_submenu_page('events-manager', __('Locations', 'eme'), __('Locations', 'eme'), EDIT_CAPABILITY, 'events-manager-locations', "eme_locations_page");
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
-		$plugin_page = add_submenu_page('events-manager', __('Event Categories','dbem'),__('Categories','dbem'), SETTINGS_CAPABILITY, "events-manager-categories", 'eme_categories_subpanel');
+		$plugin_page = add_submenu_page('events-manager', __('Event Categories','eme'),__('Categories','eme'), SETTINGS_CAPABILITY, "events-manager-categories", 'eme_categories_subpanel');
                 add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
-		$plugin_page = add_submenu_page('events-manager', __('People', 'dbem'), __('People', 'dbem'), MIN_CAPABILITY, 'events-manager-people', "eme_people_page");
+		$plugin_page = add_submenu_page('events-manager', __('People', 'eme'), __('People', 'eme'), MIN_CAPABILITY, 'events-manager-people', "eme_people_page");
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'dbem'), __('Pending Approvals', 'dbem'), EDIT_CAPABILITY, 'events-manager-registration-approval', "eme_registration_approval_page");
+		$plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'eme'), __('Pending Approvals', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-approval', "eme_registration_approval_page");
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Change Registration', 'dbem'), __('Change Registration', 'dbem'), EDIT_CAPABILITY, 'events-manager-registration-seats', "eme_registration_seats_page");
+		$plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-seats', "eme_registration_seats_page");
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','dbem'),__('Settings','dbem'), SETTING_CAPABILITY, "events-manager-options", 'eme_options_subpanel');
+		$plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), SETTING_CAPABILITY, "events-manager-options", 'eme_options_subpanel');
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
   	}
 }
@@ -906,7 +906,7 @@ function dbem_hello_to_new_user() {
 	$advice = sprintf ( __ ( "<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> 
 	<p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>
 	<p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>
-	<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'dbem' ), $current_user->display_name, admin_url("widgets.php"), 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', admin_url("admin.php?page=events-manager-options"), admin_url("admin.php?page=events-manager&disable_hello_to_user=true") );
+	<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'eme' ), $current_user->display_name, admin_url("widgets.php"), 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', admin_url("admin.php?page=events-manager-options"), admin_url("admin.php?page=events-manager&disable_hello_to_user=true") );
 	?>
 <div id="message" class="updated">
 		<?php

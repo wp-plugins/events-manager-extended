@@ -2,13 +2,13 @@
 
 class WP_Widget_dbem_list extends WP_Widget {
 	function WP_Widget_dbem_list() {
-		$widget_ops = array('classname' => 'widget_dbem_list', 'description' => __( 'Events List','dbem' ) );
-		$this->WP_Widget('dbem_list', __('Events List','dbem'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_dbem_list', 'description' => __( 'Events List','eme' ) );
+		$this->WP_Widget('dbem_list', __('Events List','eme'), $widget_ops);
 		$this->alt_option_name = 'widget_dbem_list';
 	}
 	function widget( $args, $instance ) {
 		extract($args);
-		$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Events','dbem' ) : $instance['title'], $instance, $this->id_base);
+		$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Events','eme' ) : $instance['title'], $instance, $this->id_base);
 		$limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
 		$scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
 		$order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
@@ -18,7 +18,7 @@ class WP_Widget_dbem_list extends WP_Widget {
 		if ( $title)
 			echo $before_title . $title . $after_title;
 		$events_list = dbem_get_events_list($limit,$scope,$order,$format,false,$category);
-		if ($events_list == __('No events', 'dbem'))
+		if ($events_list == __('No events', 'eme'))
 			$events_list = "<li>$events_list</li>";
 		echo "<ul>$events_list</ul>";
 		echo $after_widget;
@@ -57,31 +57,31 @@ class WP_Widget_dbem_list extends WP_Widget {
 	<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
   </p>
   <p>
-    <label for="<?php echo $this->get_field_id('limit'); ?>"><?php _e('Number of events','dbem'); ?>: </label>
+    <label for="<?php echo $this->get_field_id('limit'); ?>"><?php _e('Number of events','eme'); ?>: </label>
     <input type="text" id="<?php echo $this->get_field_id('limit'); ?>" name="<?php echo $this->get_field_name('limit'); ?>" value="<?php echo $limit;?>" />
   </p>
   <p>
-    <label for="<?php echo $this->get_field_id('scope'); ?>"><?php _e('Scope of the events','dbem'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('scope'); ?>"><?php _e('Scope of the events','eme'); ?>:</label><br/>
   	<select id="<?php echo $this->get_field_id('scope'); ?>" name="<?php echo $this->get_field_name('scope'); ?>">
-   		<option value="future" <?php selected( $scope, 'future' ); ?>><?php _e('Future events','dbem'); ?></option>
-   		<option value="all" <?php selected( $scope, 'all' ); ?>><?php _e('All events','dbem'); ?></option>
-   		<option value="past" <?php selected( $scope, 'past' ); ?>><?php _e('Past events','dbem'); ?>:</option>
+   		<option value="future" <?php selected( $scope, 'future' ); ?>><?php _e('Future events','eme'); ?></option>
+   		<option value="all" <?php selected( $scope, 'all' ); ?>><?php _e('All events','eme'); ?></option>
+   		<option value="past" <?php selected( $scope, 'past' ); ?>><?php _e('Past events','eme'); ?>:</option>
     </select>
   </p>
   <p>
-    <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order of the events','dbem'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order of the events','eme'); ?>:</label><br/>
   	<select id="<?php echo $this->get_field_id('order'); ?>" name="<?php echo $this->get_field_name('order'); ?>">
-   		<option value="ASC" <?php selected( $order, 'ASC' ); ?>><?php _e('Ascendant','dbem'); ?></option>
-   		<option value="DESC" <?php selected( $order, 'DESC' ); ?>><?php _e('Descendant','dbem'); ?>:</option>
+   		<option value="ASC" <?php selected( $order, 'ASC' ); ?>><?php _e('Ascendant','eme'); ?></option>
+   		<option value="DESC" <?php selected( $order, 'DESC' ); ?>><?php _e('Descendant','eme'); ?>:</option>
  </select>
   </p>
 <?php
 		if(get_option('dbem_categories_enabled')) {
 ?>
   <p>
-    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','dbem'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br/>
   	<select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
-		<option value=""><?php _e ( 'Select...', 'dbem' ); ?>   </option>
+		<option value=""><?php _e ( 'Select...', 'eme' ); ?>   </option>
                 <?php
                     foreach ( $categories as $my_category ){
 		?>
@@ -95,7 +95,7 @@ class WP_Widget_dbem_list extends WP_Widget {
 		}
 ?>
   <p>
-    <label for="<?php echo $this->get_field_id('format'); ?>"><?php _e('List item format','dbem'); ?>:</label>
+    <label for="<?php echo $this->get_field_id('format'); ?>"><?php _e('List item format','eme'); ?>:</label>
     <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo dbem_sanitize_html($format);?></textarea>
   </p> 
 <?php
@@ -104,13 +104,13 @@ class WP_Widget_dbem_list extends WP_Widget {
 
 class WP_Widget_dbem_calendar extends WP_Widget {
 	function WP_Widget_dbem_calendar() {
-		$widget_ops = array('classname' => 'widget_dbem_calendar', 'description' => __( 'Events Calendar', 'dbem' ) );
-		$this->WP_Widget('dbem_calendar', __('Events Calendar','dbem'), $widget_ops);
+		$widget_ops = array('classname' => 'widget_dbem_calendar', 'description' => __( 'Events Calendar', 'eme' ) );
+		$this->WP_Widget('dbem_calendar', __('Events Calendar','eme'), $widget_ops);
 		$this->alt_option_name = 'widget_dbem_calendar';
 	}
 	function widget( $args, $instance ) {
 		extract($args);
-		$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Calendar','dbem' ) : $instance['title'], $instance, $this->id_base);
+		$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Calendar','eme' ) : $instance['title'], $instance, $this->id_base);
 		$long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;
 		$category = empty( $instance['category'] ) ? '' : $instance['category'];
 		echo $before_widget;
@@ -147,16 +147,16 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 	<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
   </p>		
   <p>
-    <label for="<?php echo $this->get_field_id('long_events'); ?>"><?php _e('Show Long Events?', 'dbem'); ?>:</label>
+    <label for="<?php echo $this->get_field_id('long_events'); ?>"><?php _e('Show Long Events?', 'eme'); ?>:</label>
     <input type="checkbox" id="<?php echo $this->get_field_id('long_events'); ?>" name="<?php echo $this->get_field_name('long_events'); ?>" value="1" <?php echo ($long_events) ? 'checked="checked"':'' ;?> />
   </p>
 <?php
 		  if(get_option('dbem_categories_enabled')) {
 ?>
   <p>
-    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','dbem'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br/>
   	<select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
-		<option value=""><?php _e ( 'Select...', 'dbem' ); ?>   </option>
+		<option value=""><?php _e ( 'Select...', 'eme' ); ?>   </option>
                 <?php
                     foreach ( $categories as $my_category ){
 		?>

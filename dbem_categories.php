@@ -4,7 +4,7 @@ function eme_categories_subpanel() {
 	
 	admin_show_warnings();
 	if (!current_user_can( SETTINGS_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
-		$message = __('You have no right to update categories!','dbem');
+		$message = __('You have no right to update categories!','eme');
 		dbem_categories_table_layout($message);
 	} elseif(isset($_GET['action']) && $_GET['action'] == "editcat") { 
 		// edit category  
@@ -64,7 +64,7 @@ function dbem_categories_table_layout($message = "") {
 			<div id='icon-edit' class='icon32'>
 				<br/>
 			</div>
- 	 		<h2>".__('Categories', 'dbem')."</h2>\n ";   
+ 	 		<h2>".__('Categories', 'eme')."</h2>\n ";   
 	 		
 			if($message != "") {
 				$table .= "
@@ -87,15 +87,15 @@ function dbem_categories_table_layout($message = "") {
 								<thead>
 									<tr>
 										<th class='manage-column column-cb check-column' scope='col'><input type='checkbox' class='select-all' value='1'/></th>
-										<th>".__('ID', 'dbem')."</th>
-										<th>".__('Name', 'dbem')."</th>
+										<th>".__('ID', 'eme')."</th>
+										<th>".__('Name', 'eme')."</th>
 									</tr>
 								</thead>
 								<tfoot>
 									<tr>
 										<th class='manage-column column-cb check-column' scope='col'><input type='checkbox' class='select-all' value='1'/></th>
-										<th>".__('ID', 'dbem')."</th>
-										<th>".__('Name', 'dbem')."</th>
+										<th>".__('ID', 'eme')."</th>
+										<th>".__('Name', 'eme')."</th>
 									</tr>
 								</tfoot>
 								<tbody>";
@@ -120,7 +120,7 @@ function dbem_categories_table_layout($message = "") {
 								<br class='clear'/>
 							</div>";
 						} else {
-								$table .= "<p>".__('No categories have been inserted yet!', 'dbem');
+								$table .= "<p>".__('No categories have been inserted yet!', 'eme');
 						}
 						 $table .= "
 						</form>
@@ -133,15 +133,15 @@ function dbem_categories_table_layout($message = "") {
 			  	<div class='col-wrap'>
 						<div class='form-wrap'>
 							<div id='ajax-response'/>
-					  	<h3>".__('Add category', 'dbem')."</h3>
+					  	<h3>".__('Add category', 'eme')."</h3>
 							 <form name='add' id='add' method='post' action='admin.php?page=events-manager-categories' class='add:the-list: validate'>
 							 	<input type='hidden' name='action' value='add' />
 							    <div class='form-field form-required'>
-							    	<label for='category_name'>".__('Category name', 'dbem')."</label>
+							    	<label for='category_name'>".__('Category name', 'eme')."</label>
 								 	<input id='category-name' name='category_name' id='category_name' type='text' value='' size='40' />
-								    <p>".__('The name of the category', 'dbem').".</p>
+								    <p>".__('The name of the category', 'eme').".</p>
 								 </div>
-								 <p class='submit'><input type='submit' class='button' name='submit' value='".__('Add category', 'dbem')."' /></p>
+								 <p class='submit'><input type='submit' class='button' name='submit' value='".__('Add category', 'eme')."' /></p>
 							 </form>
 					  </div>
 					</div>
@@ -161,7 +161,7 @@ function dbem_categories_edit_layout($message = "") {
 			<br/>
 		</div>
 			
-		<h2>".__('Edit category', 'dbem')."</h2>";   
+		<h2>".__('Edit category', 'eme')."</h2>";   
  		
 		if($message != "") {
 			$layout .= "
@@ -179,12 +179,12 @@ function dbem_categories_edit_layout($message = "") {
 		$layout .= "
 			<table class='form-table'>
 				<tr class='form-field form-required'>
-					<th scope='row' valign='top'><label for='category_name'>".__('Category name', 'dbem')."</label></th>
+					<th scope='row' valign='top'><label for='category_name'>".__('Category name', 'eme')."</label></th>
 					<td><input name='category_name' id='category-name' type='text' value='".$category['category_name']."' size='40'  /><br />
-		           ".__('The name of the category', 'dbem')."</td>
+		           ".__('The name of the category', 'eme')."</td>
 				</tr>
 			</table>
-		<p class='submit'><input type='submit' class='button-primary' name='submit' value='".__('Update category', 'dbem')."' /></p>
+		<p class='submit'><input type='submit' class='button-primary' name='submit' value='".__('Update category', 'eme')."' /></p>
 		</form>
 		   
    	

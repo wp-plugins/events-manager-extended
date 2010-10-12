@@ -30,10 +30,10 @@ function dbem_options_input_text($title, $name, $description) {
 	$value= preg_replace("/\r\n|\n\r|\n/","<br />",get_option($name));
 	?>
 	<tr valign="top" id='<?php echo $name;?>_row'>
-		<th scope="row"><?php _e($title, 'dbem') ?></th>
+		<th scope="row"><?php _e($title, 'eme') ?></th>
 	    <td>
 			<input name="<?php echo $name ?>" type="text" id="<?php echo $name ?>" style="width: 95%" value="<?php echo dbem_sanitize_html($value); ?>" size="45" /><br />
-						<?php _e($description, 'dbem') ?>
+						<?php _e($description, 'eme') ?>
 			</td>
 		</tr>
 	<?php
@@ -41,7 +41,7 @@ function dbem_options_input_text($title, $name, $description) {
 function dbem_options_input_password($title, $name, $description) {
 	?>
 	<tr valign="top" id='<?php echo $name;?>_row'>
-		<th scope="row"><?php _e($title, 'dbem') ?></th>
+		<th scope="row"><?php _e($title, 'eme') ?></th>
 	    <td>
 			<input name="<?php echo $name ?>" type="password" id="<?php echo $name ?>" style="width: 95%" value="<?php echo get_option($name); ?>" size="45" /><br />
 						<?php echo $description; ?>
@@ -53,7 +53,7 @@ function dbem_options_input_password($title, $name, $description) {
 function dbem_options_textarea($title, $name, $description) {
 	?>
 	<tr valign="top" id='<?php echo $name;?>_row'>
-		<th scope="row"><?php _e($title,'dbem')?></th>
+		<th scope="row"><?php _e($title,'eme')?></th>
 			<td><textarea name="<?php echo $name ?>" id="<?php echo $name ?>" rows="6" cols="60"><?php echo dbem_sanitize_html(get_option($name));?></textarea><br/>
 				<?php echo $description; ?></td>
 		</tr>
@@ -64,7 +64,7 @@ function dbem_options_radio_binary($title, $name, $description) {
 		$list_events_page = get_option($name); ?>
 		 
 	   	<tr valign="top" id='<?php echo $name;?>_row'>
-	   		<th scope="row"><?php _e($title,'dbem'); ?></th>
+	   		<th scope="row"><?php _e($title,'eme'); ?></th>
 	   		<td>
 				<input id="<?php echo $name ?>_yes" name="<?php echo $name ?>" type="radio" value="1" <?php if($list_events_page) echo "checked='checked'"; ?> /><?php _e('Yes'); ?> <br />
 				<input  id="<?php echo $name ?>_no" name="<?php echo $name ?>" type="radio" value="0" <?php if(!$list_events_page) echo "checked='checked'"; ?> /><?php _e('No'); ?> <br />
@@ -77,7 +77,7 @@ function dbem_options_select($title, $name, $list, $description) {
 		$option_value = get_option($name); ?>
 	 
 	   	<tr valign="top" id='<?php echo $name;?>_row'>
-	   		<th scope="row"><?php _e($title,'dbem'); ?></th>
+	   		<th scope="row"><?php _e($title,'eme'); ?></th>
 	   		<td>
 				<select name="<?php echo $name; ?>" > 
 					<?php foreach($list as $key => $value) {

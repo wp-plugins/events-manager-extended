@@ -228,12 +228,12 @@ function dbem_get_recurrence_desc($recurrence_id) {
 	$recurrence = $wpdb->get_row($sql, ARRAY_A);
 
 	$weekdays_name = array(__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'),__('Sunday'));
-	$monthweek_name = array('1' => __('the first %s of the month', 'dbem'),'2' => __('the second %s of the month', 'dbem'), '3' => __('the third %s of the month', 'dbem'), '4' => __('the fourth %s of the month', 'dbem'), '-1' => __('the last %s of the month', 'dbem'));
-	$output = sprintf (__('From %1$s to %2$s', 'dbem'),  $recurrence['recurrence_start_date'], $recurrence['recurrence_end_date']).", ";
+	$monthweek_name = array('1' => __('the first %s of the month', 'eme'),'2' => __('the second %s of the month', 'eme'), '3' => __('the third %s of the month', 'eme'), '4' => __('the fourth %s of the month', 'eme'), '-1' => __('the last %s of the month', 'eme'));
+	$output = sprintf (__('From %1$s to %2$s', 'eme'),  $recurrence['recurrence_start_date'], $recurrence['recurrence_end_date']).", ";
 	if ($recurrence['recurrence_freq'] == 'daily')  {
-		$freq_desc =__('everyday', 'dbem');
+		$freq_desc =__('everyday', 'eme');
 		if ($recurrence['recurrence_interval'] > 1 ) {
-			$freq_desc = sprintf (__("every %s days", 'dbem'), $recurrence['recurrence_interval']);
+			$freq_desc = sprintf (__("every %s days", 'eme'), $recurrence['recurrence_interval']);
 		}
 	}
 	if ($recurrence['recurrence_freq'] == 'weekly')  {
@@ -252,7 +252,7 @@ function dbem_get_recurrence_desc($recurrence_id) {
 			array_push($natural_days, $weekdays_name[$day-1]);
 		$output .= implode(" and ", $natural_days);
 		if ($recurrence['recurrence_interval'] > 1 ) {
-			$freq_desc = ", ".sprintf (__("every %s weeks", 'dbem'), $recurrence['recurrence_interval']);
+			$freq_desc = ", ".sprintf (__("every %s weeks", 'eme'), $recurrence['recurrence_interval']);
 		}
 	} 
 	if ($recurrence['recurrence_freq'] == 'monthly')  {
@@ -268,7 +268,7 @@ function dbem_get_recurrence_desc($recurrence_id) {
 			array_push($natural_days, $weekdays_name[$day-1]);
 		$freq_desc = sprintf (($monthweek_name[$recurrence['recurrence_byweekno']]), implode(" and ", $natural_days));
 		if ($recurrence['recurrence_interval'] > 1 ) {
-			$freq_desc .= ", ".sprintf (__("every %s months",'dbem'), $recurrence['recurrence_interval']);
+			$freq_desc .= ", ".sprintf (__("every %s months",'eme'), $recurrence['recurrence_interval']);
 		}
 	}
 	$output .= $freq_desc;
