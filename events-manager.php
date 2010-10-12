@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.1.6
+Version: 3.2.0
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('EME_DB_VERSION', 1);
+define('EME_DB_VERSION', 8);
 define('EME_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -165,13 +165,16 @@ function eme_install() {
 	eme_create_categories_table($charset,$collate);
 	eme_add_options();
 	
- 	$db_version = get_option('eme_version')  ;
-	if ($db_version && $db_version<5) {
+ 	$db_version = get_option('eme_version');
+	if (!$db_version && get_option('dbem_version')) {
+		$db_version = get_option('dbem_version');
+	}
+	if ($db_version && $db_version<7) {
   		update_option('eme_conversion_needed', 1); 
 	}
   	update_option('eme_version', EME_DB_VERSION); 
 	// Create events page if necessary
- 	$events_page_id = get_option('eme_events_page')  ;
+ 	$events_page_id = get_option('eme_events_page');
  	if (!$events_page_id && get_option('dbem_events_page')) {
  		$events_page_id = get_option('dbem_events_page')  ;
 	}
@@ -888,7 +891,7 @@ function admin_show_warnings() {
 		<div id="message" class="updated">You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace "dbem" by "eme" in your custom templates or CSS. After that, please deacticate/reactivate the plugin to adjust for the new version.</div>
 		<?php
 	} else {
-		if ($db_version && $db_version==1) {
+		if ($old_db_version && $db_version==8) {
 			// transfer from dbem to eme warning
 			?>
 			<div id="message" class="updated">You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace "dbem" by "eme" in your custom templates or CSS.</div>

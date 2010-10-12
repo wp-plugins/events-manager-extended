@@ -1335,15 +1335,16 @@ function eme_event_form($event, $title, $element) {
 							<div class="inside">
 								<p><?php _e('Status','eme'); ?>
 								<select id="event_status" name="event_status">
-									<?php
-										foreach ( $event_status_array as $key=>$value) {
-			                                                                if ($event['event_status'] && ($event['event_status']==$key)) {
-												$selected = "selected='selected'";
-                                       				                        } else {
-												$selected = "";
-											}
-											echo "<option value='$key' $selected>$value</option>";
+								<?php
+									foreach ( $event_status_array as $key=>$value) {
+										if ($event['event_status'] && ($event['event_status']==$key)) {
+											$selected = "selected='selected'";
+										} else {
+											$selected = "";
 										}
+										echo "<option value='$key' $selected>$value</option>";
+									}
+									_e('Private events are only visible for logged in users, draft events are not visible from the front end.','eme');
 								?>
 								</select>
 								</p>
