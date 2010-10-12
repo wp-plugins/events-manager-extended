@@ -469,9 +469,7 @@ function eme_add_options($reset=0) {
 	'eme_categories_enabled' => DEFAULT_CATEGORIES_ENABLED);
 	
 	foreach($eme_options as $key => $value){
-		#if(preg_match('/$dbem/', $key)){
-			eme_add_option($key, $value, $reset);
-		#}
+		eme_add_option($key, $value, $reset);
 	}
 		
 }
