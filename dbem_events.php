@@ -1,6 +1,6 @@
 <?php
 
-function dbem_new_event_page() {
+function eme_new_event_page() {
 	// check the user is allowed to make changes
 	if ( !current_user_can( MIN_CAPABILITY  ) ) {
 		return;
@@ -49,7 +49,7 @@ function dbem_new_event_page() {
 	dbem_event_form ( $event, $title, '' );
 }
 
-function dbem_events_subpanel() {
+function eme_events_subpanel() {
 	global $wpdb;
 
 	$action = isset($_GET ['action']) ? $_GET ['action'] : '';
@@ -380,7 +380,7 @@ function dbem_get_all_pages() {
 }
 
 // Function composing the options subpanel
-function dbem_options_subpanel() {
+function eme_options_subpanel() {
 	// dbem_options_register();
 	
 	?>
@@ -571,7 +571,7 @@ function dbem_events_count_for($date) {
 }
 
 // filter function to call the event page when appropriate
-function dbem_filter_events_page($data) {
+function eme_filter_events_page($data) {
 	// we change the content of the page only if we're "in the loop",
 	// otherwise this filter also gets applied if eg. a widget calls
 	// the_content or the_excerpt to get the content of a page
@@ -581,9 +581,9 @@ function dbem_filter_events_page($data) {
 		return $data;
 	}
 }
-add_filter ( 'the_content', 'dbem_filter_events_page' );
+add_filter ( 'the_content', 'eme_filter_events_page' );
 
-function dbem_event_page_title($data) {
+function eme_event_page_title($data) {
 	$events_page_id = get_option ( 'dbem_events_page' );
 	$events_page = get_page ( $events_page_id );
 	$events_page_title = $events_page->post_title;
@@ -626,19 +626,19 @@ function dbem_event_page_title($data) {
 		return $data;
 	}
 }
-add_filter ( 'single_post_title', 'dbem_event_page_title' );
+add_filter ( 'single_post_title', 'eme_event_page_title' );
 
-function dbem_filter_the_title($data) {
+function eme_filter_the_title($data) {
 	if (in_the_loop() && dbem_is_events_page()) {
 		return dbem_event_page_title($data);
 	} else {
 		return $data;
 	}
 }
-add_filter ( 'the_title', 'dbem_filter_the_title' );
+add_filter ( 'the_title', 'eme_filter_the_title' );
 
 // filter out the events page in the get_pages call
-function dbem_filter_get_pages($data) {
+function eme_filter_get_pages($data) {
 	$output = array ();
 	$events_page_id = get_option ( 'dbem_events_page' );
 	for($i = 0; $i < count ( $data ); ++ $i) {
@@ -655,11 +655,11 @@ function dbem_filter_get_pages($data) {
 	}
 	return $output;
 }
-add_filter ( 'get_pages', 'dbem_filter_get_pages' );
+add_filter ( 'get_pages', 'eme_filter_get_pages' );
 
 //
 // ADMIN CSS for debug
-function dbem_admin_css() {
+function eme_admin_css() {
 	$css = "
 	<style type='text/css'>
 	.debug{
@@ -706,7 +706,7 @@ function dbem_admin_css() {
 	echo $css;
 }
 
-add_action ( 'admin_print_scripts', 'dbem_admin_css' );
+add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // TEMPLATE TAGS
 
@@ -1351,8 +1351,6 @@ function dbem_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
-						<?php } else { ?>
-						<input type="hidden" name="event_status" value=<?php echo STATUS_DRAFT; ?>>
 						<?php } ?>
 						<?php if(get_option('dbem_recurrence_enabled') && $show_recurrent_form ) : ?>
 						<!-- recurrence postbox -->
@@ -1420,6 +1418,24 @@ function dbem_event_form($event, $title, $element) {
 						</div>
 						<?php endif; ?>
 
+						<?php if($event['event_creator_id']) : ?>
+						<!-- owner postbox -->
+						<div class="postbox ">
+							<div class="handlediv" title="Click to toggle."><br />
+							</div>
+							<h3 class='hndle'><span>
+								<?php _e ( 'Owner', 'dbem' ); ?>
+								</span></h3>
+							<div class="inside">
+								<p><?php _e('Creator of this event: ','dbem'); ?>
+									<?php
+									$owner_user_info = get_userdata($event['event_creator_id']);
+									echo dbem_sanitize_html($owner_user_info->display_name);
+									?>
+								</p>
+							</div>
+						</div>
+						<?php endif; ?>
 						<?php if(get_option('dbem_rsvp_enabled')) : ?>
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
@@ -1774,14 +1790,14 @@ function _dbem_is_time_valid($time) {
 	return ($result);
 }
 // Enqueing jQuery script to make sure it's loaded
-function dbem_enqueue_scripts() {
+function eme_enqueue_scripts() {
 	wp_enqueue_script ( 'jquery' );
 	// wp_enqueue_script('datepicker',DBEM_PLUGIN_URL.'jquery-ui-datepicker/jquery-ui-personalized-1.6b.js', array('jquery') );
 }
-add_action ( 'template_redirect', 'dbem_enqueue_scripts' );
+add_action ( 'template_redirect', 'eme_enqueue_scripts' );
 
 // General script to make sure hidden fields are shown when containing data
-function dbem_admin_general_script() {
+function eme_admin_general_script() {
 	?>
 <script src="<?php echo DBEM_PLUGIN_URL; ?>dbem.js" type="text/javascript"></script>
 <script src="<?php echo DBEM_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.js" type="text/javascript"></script>
@@ -2039,7 +2055,7 @@ $j_dbem_event(document).ready( function() {
 <?php
 }
 
-function dbem_admin_map_script() {
+function eme_admin_map_script() {
 	if ((isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] == 'events-manager-locations') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
 		if (! (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'dbem_delete')) {
 			// single event page
@@ -2169,7 +2185,7 @@ function dbem_admin_map_script() {
 }
 $gmap_is_active = get_option ( 'dbem_gmap_is_active' );
 if ($gmap_is_active) {
-	add_action ( 'admin_head', 'dbem_admin_map_script' );
+	add_action ( 'admin_head', 'eme_admin_map_script' );
 
 }
 
@@ -2205,7 +2221,7 @@ function dbem_rss_link_shortcode($atts) {
 }
 add_shortcode ( 'events_rss_link', 'dbem_rss_link_shortcode' );
 
-function dbem_rss() {
+function eme_rss() {
 	if (isset ( $_REQUEST ['dbem_rss'] ) && $_REQUEST ['dbem_rss'] == 'main') {
 		header ( "Content-type: text/xml" );
 		echo "<?xml version='1.0'?>\n";
@@ -2256,14 +2272,14 @@ Weblog Editor 2.0
 		die ();
 	}
 }
-add_action ( 'init', 'dbem_rss' );
+add_action ( 'init', 'eme_rss' );
 function substitute_rss($data) {
 	if (isset ( $_REQUEST ['event_id'] ))
 		return site_url ("/?dbem_rss=main");
 	else
 		return $data;
 }
-function dbem_general_css() {
+function eme_general_css() {
 	echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
 	$file_name= DBEM_PLUGIN_DIR."myown.css";
 	if (file_exists($file_name)) {
@@ -2274,15 +2290,15 @@ function dbem_general_css() {
 		echo "<script type='text/javascript' src='".DBEM_PLUGIN_URL."dbem_location_map.js'></script>\n";
 	}
 }
-function dbem_admin_general_css() {
+function eme_admin_general_css() {
 	echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
 	$file_name= DBEM_PLUGIN_DIR."/events-manager-extended/myown.css";
 	if (file_exists($file_name)) {
 		echo "<link rel='stylesheet' href='".DBEM_PLUGIN_URL."myown.css' type='text/css'/>\n";
 	}
 }
-add_action ( 'wp_head', 'dbem_general_css' );
-add_action ( 'admin_head', 'dbem_admin_general_css' );
+add_action ( 'wp_head', 'eme_general_css' );
+add_action ( 'admin_head', 'eme_admin_general_css' );
 //add_filter('feed_link','substitute_rss')
 
 function dbem_delete_event($event_id) {
@@ -2292,9 +2308,9 @@ function dbem_delete_event($event_id) {
 	$wpdb->query ( $sql );
 
 }
-add_filter ( 'favorite_actions', 'dbem_favorite_menu' );
+add_filter ( 'favorite_actions', 'eme_favorite_menu' );
 
-function dbem_favorite_menu($actions) {
+function eme_favorite_menu($actions) {
 	// add quick link to our favorite plugin
 	$actions ['admin.php?page=events-manager-new_event'] = array (__ ( 'Add an event', 'dbem' ), MIN_CAPABILITY );
 	return $actions;
@@ -2303,16 +2319,16 @@ function dbem_favorite_menu($actions) {
 ////////////////////////////////////
 // WP options registration
 ////////////////////////////////////
-function dbem_options_register() {
+function eme_options_register() {
 	$options = array ('dbem_events_page', 'dbem_display_calendar_in_events_page', 'dbem_use_event_end', 'dbem_event_list_item_format_header', 'dbem_event_list_item_format', 'dbem_event_list_item_format_footer', 'dbem_event_page_title_format', 'dbem_single_event_format', 'dbem_list_events_page', 'dbem_events_page_title', 'dbem_no_events_message', 'dbem_location_page_title_format', 'dbem_location_baloon_format', 'dbem_single_location_format', 'dbem_location_event_list_item_format', 'dbem_location_no_events_message', 'dbem_gmap_is_active', 'dbem_rss_main_title', 'dbem_rss_main_description', 'dbem_rss_title_format', 'dbem_rss_description_format', 'dbem_rsvp_mail_notify_is_active', 'dbem_contactperson_email_body', 'dbem_respondent_email_body', 'dbem_mail_sender_name', 'dbem_smtp_username', 'dbem_smtp_password', 'dbem_default_contact_person','dbem_captcha_for_booking', 'dbem_mail_sender_address', 'dbem_mail_receiver_address', 'dbem_smtp_host', 'dbem_rsvp_mail_send_method', 'dbem_rsvp_mail_port', 'dbem_rsvp_mail_SMTPAuth', 'dbem_rsvp_registered_users_only', 'dbem_image_max_width', 'dbem_image_max_height', 'dbem_image_max_size', 'dbem_full_calendar_event_format', 'dbem_use_select_for_locations', 'dbem_attributes_enabled', 'dbem_recurrence_enabled','dbem_rsvp_enabled','dbem_categories_enabled','dbem_small_calendar_event_title_format','dbem_small_calendar_event_title_seperator','dbem_registration_pending_email_body','dbem_registration_denied_email_body');
 	foreach ( $options as $opt ) {
 		register_setting ( 'dbem-options', $opt, '' );
 	}
 
 }
-add_action ( 'admin_init', 'dbem_options_register' );
+add_action ( 'admin_init', 'eme_options_register' );
 
-function dbem_alert_events_page() {
+function eme_alert_events_page() {
 	$events_page_id = get_option ( 'dbem_events_page' );
 	if (strpos ( $_SERVER ['SCRIPT_NAME'], 'post.php' ) && isset ( $_GET ['action'] ) && $_GET ['action'] == 'edit' && isset ( $_GET ['post'] ) && $_GET ['post'] == "$events_page_id") {
 		$message = sprintf ( __ ( "This page corresponds to <strong>Events Manager Extended</strong> events page. Its content will be overriden by <strong>Events Manager Extended</strong>. If you want to display your content, you can can assign another page to <strong>Events Manager Extended</strong> in the the <a href='%s'>Settings</a>. ", 'dbem' ), 'admin.php?page=events-manager-options' );
@@ -2320,10 +2336,10 @@ function dbem_alert_events_page() {
 		echo $notice;
 	}
 }
-add_action ( 'admin_notices', 'dbem_alert_events_page' );
+add_action ( 'admin_notices', 'eme_alert_events_page' );
 
 //This adds the tinymce editor
-function dbem_tinymce(){
+function eme_tinymce(){
 	global $plugin_page;
 	if ( in_array( $plugin_page, array('events-manager-locations', 'events-manager-new_event', 'events-manager') ) ) {
 		add_action( 'admin_print_footer_scripts', 'wp_tiny_mce', 25 );
@@ -2336,7 +2352,7 @@ function dbem_tinymce(){
 		wp_enqueue_script('quicktags');	
 	}
 }
-add_action ( 'admin_init', 'dbem_tinymce' );
+add_action ( 'admin_init', 'eme_tinymce' );
 
 function status_array() {
 	$event_status_array = array();

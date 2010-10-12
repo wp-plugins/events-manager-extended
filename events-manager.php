@@ -112,8 +112,8 @@ $localised_date_formats = array("am" => "dd.mm.yy","ar" => "dd/mm/yy", "bg" => "
 $required_fields = array('event_name'); 
 $location_required_fields = array("location_name" => __('The location name', 'dbem'), "location_address" => __('The location address', 'dbem'), "location_town" => __('The location town', 'dbem'));
 
-add_action('init', 'dbem_load_textdomain');
-function dbem_load_textdomain() {
+add_action('init', 'eme_load_textdomain');
+function eme_load_textdomain() {
 	$thisDir = dirname( plugin_basename( __FILE__ ) );
 	load_plugin_textdomain('dbem', false, $thisDir.'/langs'); 
 }
@@ -122,25 +122,25 @@ function dbem_load_textdomain() {
 register_activation_hook(__FILE__,'dbem_install');
 
 // filters for general events field (corresponding to those of  "the _title")
-add_filter('dbem_general', 'wptexturize');
-add_filter('dbem_general', 'convert_chars');
-add_filter('dbem_general', 'trim');
+add_filter('eme_general', 'wptexturize');
+add_filter('eme_general', 'convert_chars');
+add_filter('eme_general', 'trim');
 // filters for the notes field  (corresponding to those of  "the _content")
-add_filter('dbem_notes', 'wptexturize');
-add_filter('dbem_notes', 'convert_smilies');
-add_filter('dbem_notes', 'convert_chars');
-add_filter('dbem_notes', 'wpautop');
-add_filter('dbem_notes', 'prepend_attachment');
+add_filter('eme_notes', 'wptexturize');
+add_filter('eme_notes', 'convert_smilies');
+add_filter('eme_notes', 'convert_chars');
+add_filter('eme_notes', 'wpautop');
+add_filter('eme_notes', 'prepend_attachment');
 // RSS general filters
-add_filter('dbem_general_rss', 'strip_tags');
-add_filter('dbem_general_rss', 'ent2ncr', 8);
-add_filter('dbem_general_rss', 'esc_html');
+add_filter('eme_general_rss', 'strip_tags');
+add_filter('eme_general_rss', 'ent2ncr', 8);
+add_filter('eme_general_rss', 'esc_html');
 // RSS content filter
-add_filter('dbem_notes_rss', 'convert_chars', 8);
-add_filter('dbem_notes_rss', 'ent2ncr', 8);
+add_filter('eme_notes_rss', 'convert_chars', 8);
+add_filter('eme_notes_rss', 'ent2ncr', 8);
 
-add_filter('dbem_notes_map', 'convert_chars', 8);
-add_filter('dbem_notes_map', 'js_escape');
+add_filter('eme_notes_map', 'convert_chars', 8);
+add_filter('eme_notes_map', 'js_escape');
  
 /* Creating the wp_events table to store event data*/
 function dbem_install() {
@@ -497,27 +497,27 @@ function dbem_create_events_page(){
 }
 
 // Create the Manage Events and the Options submenus 
-add_action('admin_menu','dbem_create_events_submenu');
-function dbem_create_events_submenu () {
+add_action('admin_menu','eme_create_events_submenu');
+function eme_create_events_submenu () {
 	  if(function_exists('add_submenu_page')) {
-	  	add_object_page(__('Events', 'dbem'),__('Events', 'dbem'),MIN_CAPABILITY,'events-manager','dbem_events_subpanel', DBEM_PLUGIN_URL.'images/calendar-16.png');
+	  	add_object_page(__('Events', 'dbem'),__('Events', 'dbem'),MIN_CAPABILITY,'events-manager','eme_events_subpanel', DBEM_PLUGIN_URL.'images/calendar-16.png');
 	   	// Add a submenu to the custom top-level menu: 
-		$plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),MIN_CAPABILITY,'events-manager','dbem_events_subpanel');
-		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
-		$plugin_page = add_submenu_page('events-manager', __('Add new', 'dbem'), __('Add new','dbem'), MIN_CAPABILITY, 'events-manager-new_event', "dbem_new_event_page");
-		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Locations', 'dbem'), __('Locations', 'dbem'), EDIT_CAPABILITY, 'events-manager-locations', "dbem_locations_page");
-		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
-		$plugin_page = add_submenu_page('events-manager', __('Event Categories','dbem'),__('Categories','dbem'), SETTINGS_CAPABILITY, "events-manager-categories", 'dbem_categories_subpanel');
-                add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
-		$plugin_page = add_submenu_page('events-manager', __('People', 'dbem'), __('People', 'dbem'), MIN_CAPABILITY, 'events-manager-people', "dbem_people_page");
-		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'dbem'), __('Pending Approvals', 'dbem'), EDIT_CAPABILITY, 'events-manager-registration-approval', "dbem_registration_approval_page");
-		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Change Registration', 'dbem'), __('Change Registration', 'dbem'), EDIT_CAPABILITY, 'events-manager-registration-seats', "dbem_registration_seats_page");
-		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' ); 
-		$plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','dbem'),__('Settings','dbem'), SETTING_CAPABILITY, "events-manager-options", 'dbem_options_subpanel');
-		add_action( 'admin_head-'. $plugin_page, 'dbem_admin_general_script' );
+		$plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),MIN_CAPABILITY,'events-manager','eme_events_subpanel');
+		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
+		$plugin_page = add_submenu_page('events-manager', __('Add new', 'dbem'), __('Add new','dbem'), MIN_CAPABILITY, 'events-manager-new_event', "eme_new_event_page");
+		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+		$plugin_page = add_submenu_page('events-manager', __('Locations', 'dbem'), __('Locations', 'dbem'), EDIT_CAPABILITY, 'events-manager-locations', "eme_locations_page");
+		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
+		$plugin_page = add_submenu_page('events-manager', __('Event Categories','dbem'),__('Categories','dbem'), SETTINGS_CAPABILITY, "events-manager-categories", 'eme_categories_subpanel');
+                add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
+		$plugin_page = add_submenu_page('events-manager', __('People', 'dbem'), __('People', 'dbem'), MIN_CAPABILITY, 'events-manager-people', "eme_people_page");
+		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+		$plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'dbem'), __('Pending Approvals', 'dbem'), EDIT_CAPABILITY, 'events-manager-registration-approval', "eme_registration_approval_page");
+		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+		$plugin_page = add_submenu_page('events-manager', __('Change Registration', 'dbem'), __('Change Registration', 'dbem'), EDIT_CAPABILITY, 'events-manager-registration-seats', "eme_registration_seats_page");
+		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+		$plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','dbem'),__('Settings','dbem'), SETTING_CAPABILITY, "events-manager-options", 'eme_options_subpanel');
+		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
   	}
 }
 
@@ -663,9 +663,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				if($field == "event_excerpt") {
 					$matches = explode('<!--more-->', $event['event_notes']);
 					$field_value = $matches[0];
-					$field_value = apply_filters('dbem_notes_excerpt', $field_value);
+					$field_value = apply_filters('eme_notes_excerpt', $field_value);
 				} else {
-					$field_value = apply_filters('dbem_notes', $field_value);
+					$field_value = apply_filters('eme_notes', $field_value);
 				}
 				//$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
 				// we call the sanitize_html function so the qtranslate
@@ -673,14 +673,14 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				$field_value = dbem_trans_sanitize_html($field_value,0);
 			} else {
 				if ($target == "map") {
-					$field_value = apply_filters('dbem_notes_map', $field_value);
+					$field_value = apply_filters('eme_notes_map', $field_value);
 				} else {
 		  			if($field == "event_excerpt"){
 						$matches = explode('<!--more-->', $event['event_notes']);
 						$field_value = htmlentities($matches[0]);
-						$field_value = apply_filters('dbem_notes_rss', $field_value);
+						$field_value = apply_filters('eme_notes_rss', $field_value);
 					}else{
-						$field_value = apply_filters('dbem_notes_rss', $field_value);
+						$field_value = apply_filters('eme_notes_rss', $field_value);
 					}
 					$field_value = apply_filters('the_content_rss', $field_value);
 				}
@@ -693,9 +693,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		 	$field_value = $event[$field];
 			$field_value = dbem_trans_sanitize_html($field_value);
 			if ($target == "html") {
-				$field_value = apply_filters('dbem_general', $field_value); 
+				$field_value = apply_filters('eme_general', $field_value); 
 		  	} else {
-				$field_value = apply_filters('dbem_general_rss', $field_value);
+				$field_value = apply_filters('eme_general_rss', $field_value);
 			}
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
@@ -705,9 +705,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		 	$field_value = $event[$field];
 			$field_value = dbem_trans_sanitize_html($field_value);
 			if ($target == "html") {
-				$field_value = apply_filters('dbem_general', $field_value); 
+				$field_value = apply_filters('eme_general', $field_value); 
 			} else { 
-				$field_value = apply_filters('dbem_general_rss', $field_value); 
+				$field_value = apply_filters('eme_general_rss', $field_value); 
 			}
 			$event_string = str_replace($result, $field_value , $event_string ); 
 	 	}
@@ -717,9 +717,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		 	$field_value = $event[$field];
 			$field_value = dbem_trans_sanitize_html($field_value);
 			if ($target == "html") {
-				$field_value = apply_filters('dbem_general', $field_value); 
+				$field_value = apply_filters('eme_general', $field_value); 
 			} else {
-				$field_value = apply_filters('dbem_general_rss', $field_value); 
+				$field_value = apply_filters('eme_general_rss', $field_value); 
 			}
 			
 			$event_string = str_replace($result, $field_value , $event_string ); 
@@ -729,9 +729,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
                         if ($rsvp_is_active && $event['event_rsvp']) {
 				$field_value=dbem_get_bookings_list_for($event['event_id']);
 				if ($target == "html") {
-					$field_value = apply_filters('dbem_general', $field_value); 
+					$field_value = apply_filters('eme_general', $field_value); 
 				} else {
-					$field_value = apply_filters('dbem_general_rss', $field_value); 
+					$field_value = apply_filters('eme_general_rss', $field_value); 
 				}
 			}
 			
@@ -803,9 +803,9 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 	      		$categories = dbem_get_event_categories($event['event_id']);
 			$field_value = dbem_trans_sanitize_html(join(",",$categories));
 			if ($target == "html") {
-				$field_value = apply_filters('dbem_general', $field_value); 
+				$field_value = apply_filters('eme_general', $field_value); 
 		  	} else {
-				$field_value = apply_filters('dbem_general_rss', $field_value);
+				$field_value = apply_filters('eme_general_rss', $field_value);
 			}
 			$event_string = str_replace($result, $field_value, $event_string );
 		}

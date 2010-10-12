@@ -1,5 +1,5 @@
 <?php
-function dbem_categories_subpanel() {      
+function eme_categories_subpanel() {      
 	global $wpdb;
 	
 	admin_show_warnings();

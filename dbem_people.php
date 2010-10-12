@@ -1,5 +1,5 @@
 <?php
-function dbem_people_page() {
+function eme_people_page() {
 	// Managing AJAX booking removal
  	if(isset($_GET['action']) && $_GET['action'] == 'remove_booking') {
 		if(isset($_POST['booking_id']))
@@ -16,8 +16,8 @@ function dbem_people_page() {
 	<?php
 }
 
-add_action('init','dbem_ajax_actions'); 
-function dbem_ajax_actions() {
+add_action('init','eme_ajax_actions'); 
+function eme_ajax_actions() {
  	if(isset($_GET['dbem_ajax_action']) && $_GET['dbem_ajax_action'] == 'booking_data') {
 		if(isset($_GET['id']))
 			echo "[ {bookedSeats:".dbem_get_booked_seats($_GET['id']).", availableSeats:".dbem_get_available_seats($_GET['id'])."}]"; 
@@ -207,8 +207,8 @@ function dbem_add_person($name, $email, $phone, $wp_id) {
 	return ($new_person);
 }
 
-add_action('edit_user_profile', 'dbem_phone_field') ;
-function dbem_phone_field() {
+add_action('edit_user_profile', 'eme_phone_field') ;
+function eme_phone_field() {
 	?>
 	<h3><?php _e('Phone number', 'dbem')?></h3>
 	<table class='form-table'>
@@ -221,8 +221,8 @@ function dbem_phone_field() {
 	<?php
 }
 
-add_action('profile_update','dbem_update_phone');
-function dbem_update_phone($user_ID) {
+add_action('profile_update','eme_update_phone');
+function eme_update_phone($user_ID) {
 	if(isset($_POST['dbem_phone']) && $_POST['dbem_phone'] != '') {
 		update_usermeta($user_ID,'dbem_phone', $_POST['dbem_phone']);
 	}

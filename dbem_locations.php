@@ -1,7 +1,7 @@
 <?php
 $feedback_message = "";
  
-function dbem_locations_page() {
+function eme_locations_page() {
    	if (!current_user_can( EDIT_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
 		$message = __('You have no right to update locations!','dbem');
 		$locations = dbem_get_locations();
@@ -563,18 +563,18 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 				// this is the same as for an event in fact
 				$field_value = dbem_trans_sanitize_html($field_value,0);
 				if ($target == "html")
-					$field_value = apply_filters('dbem_notes', $field_value);
+					$field_value = apply_filters('eme_notes', $field_value);
 				else
 				  if ($target == "map")
-					$field_value = apply_filters('dbem_notes_map', $field_value);
+					$field_value = apply_filters('eme_notes_map', $field_value);
 				  else
-				 	$field_value = apply_filters('dbem_notes_rss', $field_value);
+				 	$field_value = apply_filters('eme_notes_rss', $field_value);
 		  	} else {
 				$field_value = dbem_trans_sanitize_html($field_value);
 				if ($target == "html")
-					$field_value = apply_filters('dbem_general', $field_value); 
+					$field_value = apply_filters('eme_general', $field_value); 
 				else 
-					$field_value = apply_filters('dbem_general_rss', $field_value); 
+					$field_value = apply_filters('eme_general_rss', $field_value); 
 			}
 			$location_string = str_replace($result, $field_value , $location_string ); 
 	 	}
@@ -656,9 +656,9 @@ function dbem_events_in_location_list($location, $scope = "") {
 	return $list;
 }
 
-add_action ('admin_head', 'dbem_locations_autocomplete');
+add_action ('admin_head', 'eme_locations_autocomplete');
 
-function dbem_locations_autocomplete() {
+function eme_locations_autocomplete() {
         $use_select_for_locations = get_option('dbem_use_select_for_locations');
 	// qtranslate there? Then we need the select
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {

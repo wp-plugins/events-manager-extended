@@ -386,7 +386,7 @@ function dbem_days_in_month($month, $year) {
 	return (date("t",mktime(0,0,0,$month,1,$year)));
 }
 
-function dbem_ajaxize_calendar() {
+function eme_ajaxize_calendar() {
 ?>
 	<script type='text/javascript'>
 		$j_dbem_calendar=jQuery.noConflict();
@@ -461,9 +461,9 @@ function dbem_ajaxize_calendar() {
 	
 <?php
 }
-add_action('wp_head', 'dbem_ajaxize_calendar');
+add_action('wp_head', 'eme_ajaxize_calendar');
 
-function dbem_filter_calendar_ajax() {
+function eme_filter_calendar_ajax() {
 	if(isset($_GET['eme_ajaxCalendar']) && $_GET['eme_ajaxCalendar'] == true) {
 		(isset($_GET['full']) && $_GET['full'] == 1) ? $full = 1 : $full = 0;
 		(isset($_GET['long_events']) && $_GET['long_events'] == 1) ? $long_events = 1 : $long_events = 0;
@@ -475,6 +475,6 @@ function dbem_filter_calendar_ajax() {
 		die();
 	}
 }
-add_action('init','dbem_filter_calendar_ajax');
+add_action('init','eme_filter_calendar_ajax');
 
 ?>

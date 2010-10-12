@@ -106,7 +106,7 @@ function dbem_delete_booking_form() {
 	return $module;
 }
 
-function dbem_catch_rsvp() {
+function eme_catch_rsvp() {
 	global $current_user;
  	global $form_add_message;
 	global $form_delete_message; 
@@ -150,7 +150,7 @@ function dbem_catch_rsvp() {
 	return $result;
 	
 }
-add_action('init','dbem_catch_rsvp');
+add_action('init','eme_catch_rsvp');
  
 function dbem_book_seats() {
 	global $current_user;
@@ -303,7 +303,7 @@ function dbem_bookings_table($event_id) {
 	$bookings =  dbem_get_bookings_for($event_id);
 	$destination = admin_url("edit.php"); 
 	$result = "<form id='bookings-filter' method='get' action='$destination'>
-						<input type='hidden' name='page' value='dbem_registration_seats_page'/>
+						<input type='hidden' name='page' value='eme_registration_seats_page'/>
 						<input type='hidden' name='event_id' value='$event_id'/>
 						<input type='hidden' name='action' value='delete_bookings'/>
 						<div class='wrap'>
@@ -489,7 +489,7 @@ function dbem_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone
 	}
 } 
 
-function dbem_registration_seats_page() {
+function eme_registration_seats_page() {
         global $wpdb;
 
 	if (current_user_can( EDIT_CAPABILITY)) {
@@ -632,7 +632,7 @@ function dbem_registration_seats_form_table($event_id=0) {
 </div>
 <?php
 }
-function dbem_registration_approval_page() {
+function eme_registration_approval_page() {
         global $wpdb;
 
 	if (current_user_can( EDIT_CAPABILITY)) {

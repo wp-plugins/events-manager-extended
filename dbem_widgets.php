@@ -171,10 +171,10 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 	}
 }
 
-function dbem_load_widgets() {
+function eme_load_widgets() {
 	register_widget( 'WP_Widget_dbem_list' );
 	register_widget( 'WP_Widget_dbem_calendar' );
 }
-add_action( 'widgets_init', 'dbem_load_widgets' );
+add_action( 'widgets_init', 'eme_load_widgets' );
 
 ?>
