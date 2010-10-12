@@ -231,7 +231,7 @@ function eme_get_calendar($args="") {
 
 	$events_table = $wpdb->prefix.EVENTS_TBNAME; 
         $conditions = array ();
-	if ($category && get_option('dbem_categories_enabled')) {
+	if ($category && get_option('eme_categories_enabled')) {
 		//show a specific category
 		if ($category != '' && is_numeric($category)){
 			$cat_condition = "AND FIND_IN_SET($category,event_category_ids)";
@@ -325,9 +325,9 @@ function eme_get_calendar($args="") {
 		}
 	}
 
-	$event_format = get_option('dbem_full_calendar_event_format'); 
-	$event_title_format = get_option('dbem_small_calendar_event_title_format');
-	$event_title_separator_format = get_option('dbem_small_calendar_event_title_separator');
+	$event_format = get_option('eme_full_calendar_event_format'); 
+	$event_title_format = get_option('eme_small_calendar_event_title_format');
+	$event_title_separator_format = get_option('eme_small_calendar_event_title_separator');
 	$cells = array() ;
 	foreach($eventful_days as $day_key => $events) {
 		//Set the date into the key
@@ -389,24 +389,24 @@ function eme_days_in_month($month, $year) {
 function eme_ajaxize_calendar() {
 ?>
 	<script type='text/javascript'>
-		$j_dbem_calendar=jQuery.noConflict();
-		$j_dbem_calendar(document).ready( function() {
+		$j_eme_calendar=jQuery.noConflict();
+		$j_eme_calendar(document).ready( function() {
 		   initCalendar();
 		});
 		
 		function initCalendar() {
-			$j_dbem_calendar('a.prev-month').click(function(e){
+			$j_eme_calendar('a.prev-month').click(function(e){
 				e.preventDefault();
-				tableDiv = $j_dbem_calendar(this).closest('table').parent();
-				($j_dbem_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
-				($j_dbem_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
+				tableDiv = $j_eme_calendar(this).closest('table').parent();
+				($j_eme_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
+				($j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
 				prevMonthCalendar(tableDiv, fullcalendar, long_events);
 			} );
-			$j_dbem_calendar('a.next-month').click(function(e){
+			$j_eme_calendar('a.next-month').click(function(e){
 				e.preventDefault();
-				tableDiv = $j_dbem_calendar(this).closest('table').parent();
-				($j_dbem_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
-				($j_dbem_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
+				tableDiv = $j_eme_calendar(this).closest('table').parent();
+				($j_eme_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
+				($j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
 				nextMonthCalendar(tableDiv, fullcalendar, long_events);
 			} );
 		}
@@ -423,7 +423,7 @@ function eme_ajaxize_calendar() {
 			parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
 		   	if (parseInt(month_n,10) == 1)
 				year_n = parseInt(year_n,10) -1;
-			$j_dbem_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
+			$j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
 				tableDiv.replaceWith(data);
 				initCalendar();
 			});
@@ -441,7 +441,7 @@ function eme_ajaxize_calendar() {
 			parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
 		   	if (parseInt(month_n,10) == 12)
 				year_n = parseInt(year_n,10) + 1;
-			$j_dbem_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
+			$j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
 				tableDiv.replaceWith(data);
 				initCalendar();
 			});
@@ -449,8 +449,8 @@ function eme_ajaxize_calendar() {
 		
 		// function reloadCalendar(e) {
 		// 	// e.preventDefault();
-		//  	console.log($j_dbem_calendar(this).parents('table'));
-		//     $j_dbem_calendar.get("<?php site_url(); ?>", {ajax: 'true'}, function(data){
+		//  	console.log($j_eme_calendar(this).parents('table'));
+		//     $j_eme_calendar.get("<?php site_url(); ?>", {ajax: 'true'}, function(data){
 		// 		tableDiv = table.parent();
 		// 		tableDiv.html(data);
 		//             });

@@ -6,9 +6,9 @@ function eme_add_booking_form($event_id) {
  
 	$bookerName="";
 	$bookerEmail="";
-	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
+	$eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
 	$readonly="";
-	if ($dbem_rsvp_registered_users_only) {
+	if ($eme_rsvp_registered_users_only) {
 		$readonly="disabled=\"disabled\"";
 		// we require a user to be WP registered to be able to book
 		if (!is_user_logged_in()) {
@@ -52,7 +52,7 @@ function eme_add_booking_form($event_id) {
 		}
 		$module .= "</select></td></tr>
 				<tr><th scope='row'>".__('Comment', 'eme').":</th><td><textarea name='bookerComment'></textarea></td></tr>";
-		if (get_option('dbem_captcha_for_booking')) {
+		if (get_option('eme_captcha_for_booking')) {
 			$module .= "
 				<tr><th scope='row'>".__('Please fill in the code displayed here', 'eme').":</th><td><img src='".EME_PLUGIN_URL."captcha.php'><br>
 				      <input type='text' name='captcha_check' /></td></tr>
@@ -82,8 +82,8 @@ function eme_add_booking_form($event_id) {
 function eme_delete_booking_form() {
 	global $form_delete_message;
 	
-	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
-	if ($dbem_rsvp_registered_users_only && !is_user_logged_in()) {
+	$eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
+	if ($eme_rsvp_registered_users_only && !is_user_logged_in()) {
 		return;
 	}
 	$destination = "?".$_SERVER['QUERY_STRING'];
@@ -112,14 +112,14 @@ function eme_catch_rsvp() {
 	global $form_delete_message; 
 	$result = "";
 
-	if (get_option('dbem_captcha_for_booking')) {
+	if (get_option('eme_captcha_for_booking')) {
 		// the captcha needs a session
 		if (!session_id())
 			session_start();
 	}
 
-	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
-	if ($dbem_rsvp_registered_users_only && !is_user_logged_in()) {
+	$eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
+	if ($eme_rsvp_registered_users_only && !is_user_logged_in()) {
 		return;
 	}
 
@@ -129,7 +129,7 @@ function eme_catch_rsvp() {
   	} 
 
 	if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'delete_booking') { 
-		if ($dbem_rsvp_registered_users_only) {
+		if ($eme_rsvp_registered_users_only) {
 			// we require a user to be WP registered to be able to book
 			get_currentuserinfo();
 			$booker_wp_id=$current_user->ID;
@@ -159,8 +159,8 @@ function eme_book_seats() {
 	$bookerComment = stripslashes($_POST['bookerComment']);
 	$honeypot_check = stripslashes($_POST['honeypot_check']);
 	$event_id = intval($_POST['event_id']);
-	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
-	if ($dbem_rsvp_registered_users_only) {
+	$eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
+	if ($eme_rsvp_registered_users_only) {
 		// we require a user to be WP registered to be able to book
 		get_currentuserinfo();
 		$booker_wp_id=$current_user->ID;
@@ -176,7 +176,7 @@ function eme_book_seats() {
 	}
 	
 	$msg="";
-	if (get_option('dbem_captcha_for_booking')) {
+	if (get_option('eme_captcha_for_booking')) {
 		$msg = response_check_captcha("captcha_check",1);
 	}
   	if(!empty($msg)) {
@@ -196,7 +196,7 @@ function eme_book_seats() {
 		eme_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
 		
 		$result = __('Your booking has been recorded','eme');
-		$mailing_is_active = get_option('dbem_rsvp_mail_notify_is_active');
+		$mailing_is_active = get_option('eme_rsvp_mail_notify_is_active');
 		if($mailing_is_active) {
 			eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,"");
 		} 
@@ -447,18 +447,18 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
 	if($event['event_contactperson_id'] && $event['event_contactperson_id']>0) 
 		$contact_id = $event['event_contactperson_id']; 
 	else
-		$contact_id = get_option('dbem_default_contact_person');
+		$contact_id = get_option('eme_default_contact_person');
 
 	$contact_name = eme_get_user_name($contact_id);
 	$contact_email = eme_get_user_email($contact_id);
  	
-	$contact_body = ( $event['event_contactperson_email_body'] != '' ) ? $event['event_contactperson_email_body'] : get_option ( 'dbem_contactperson_email_body' );
+	$contact_body = ( $event['event_contactperson_email_body'] != '' ) ? $event['event_contactperson_email_body'] : get_option('eme_contactperson_email_body' );
 	$contact_body = eme_replace_placeholders($contact_body, $event, "text");
-	$booker_body = ( $event['event_respondent_email_body'] != '' ) ? $event['event_respondent_email_body'] : get_option ( 'dbem_respondent_email_body' );
+	$booker_body = ( $event['event_respondent_email_body'] != '' ) ? $event['event_respondent_email_body'] : get_option('eme_respondent_email_body' );
 	$booker_body = eme_replace_placeholders($booker_body, $event, "text");
-	$pending_body = get_option ( 'dbem_registration_pending_email_body' );
+	$pending_body = get_option('eme_registration_pending_email_body' );
 	$pending_body = eme_replace_placeholders($pending_body, $event, "text");
-	$denied_body = get_option ( 'dbem_registration_denied_email_body' );
+	$denied_body = get_option('eme_registration_denied_email_body' );
 	$denied_body = eme_replace_placeholders($denied_body, $event, "text");
 	
 	// rsvp specific placeholders

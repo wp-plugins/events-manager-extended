@@ -1,31 +1,31 @@
-$j_dbem_booking=jQuery.noConflict();
+$j_eme_booking=jQuery.noConflict();
 
 function remove_booking() {
-	eventId = ($j_dbem_booking(this).parents('table:first').attr('id').split("-"))[3]; 
-	idToRemove = ($j_dbem_booking(this).parents('tr:first').attr('id').split("-"))[1];
-	$j_dbem_booking.ajax({
+	eventId = ($j_eme_booking(this).parents('table:first').attr('id').split("-"))[3]; 
+	idToRemove = ($j_eme_booking(this).parents('tr:first').attr('id').split("-"))[1];
+	$j_eme_booking.ajax({
   	  type: "POST",
 	    url: "admin.php?page=events-manager-people&action=remove_booking",
 	    data: "booking_id="+ idToRemove,
 	    success: function(){
-				$j_dbem_booking('tr#booking-' + idToRemove).fadeOut('slow');
+				$j_eme_booking('tr#booking-' + idToRemove).fadeOut('slow');
 				update_booking_data();
 	   		}
 	});
 }
  
 function update_booking_data () {
-  	$j_dbem_booking.getJSON("admin.php?page=events-manager-people&dbem_ajax_action=booking_data",{id: eventId, ajax: 'true'}, function(data){
+  	$j_eme_booking.getJSON("admin.php?page=events-manager-people&dbem_ajax_action=booking_data",{id: eventId, ajax: 'true'}, function(data){
   	  	booked = data[0].bookedSeats;
 		available = data[0].availableSeats; 
-		$j_dbem_booking('td#booked-seats').text(booked);
-		$j_dbem_booking('td#available-seats').text(available);
+		$j_eme_booking('td#booked-seats').text(booked);
+		$j_eme_booking('td#available-seats').text(available);
  	});
 }
 
-$j_dbem_booking(document).ready( function() {
+$j_eme_booking(document).ready( function() {
     // Managing bookings delete operations 
-	$j_dbem_booking('a.bookingdelbutton').click(remove_booking);
+	$j_eme_booking('a.bookingdelbutton').click(remove_booking);
 });
 
 jQuery(document).ready( function($) {

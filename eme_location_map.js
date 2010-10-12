@@ -1,11 +1,11 @@
-$j_dbem_locations=jQuery.noConflict();
+$j_eme_locations=jQuery.noConflict();
 // console.log("eventful: " + eventful + " scope " + scope);
 
-$j_dbem_locations(document.body).unload(function() {
+$j_eme_locations(document.body).unload(function() {
 	GUnload();
 });
 
-$j_dbem_locations(document).ready(function() {
+$j_eme_locations(document).ready(function() {
 	loadMapScript();
 });
 
@@ -13,7 +13,7 @@ function loadGMap() {
 	// first the global map (if present)
 	if (document.getElementById("dbem_global_map")) {
 		var locations;
-		$j_dbem_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
+		$j_eme_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
 			locations = data.locations;
 			var latitudes = new Array();
 			var longitudes = new Array();
@@ -35,7 +35,7 @@ function loadGMap() {
 			var map = new google.maps.Map(document.getElementById("dbem_global_map"), myOptions);
 			var infowindow = new google.maps.InfoWindow();
 
-			$j_dbem_locations.each(locations, function(i, item) {
+			$j_eme_locations.each(locations, function(i, item) {
 				latitudes.push(item.location_latitude);
 				longitudes.push(item.location_longitude);
 				if (parseFloat(item.location_latitude) > max_latitude)
@@ -66,7 +66,7 @@ function loadGMap() {
 			map.setCenter(new google.maps.LatLng(center_lat + vertical_compensation,center_lon)); 
 			var letters = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O');
 
-			$j_dbem_locations.each(locations, function(i, item) {
+			$j_eme_locations.each(locations, function(i, item) {
 				var letter = letters[i];
 
 				var li_element = "<li id='location-"+item.location_id
@@ -94,8 +94,8 @@ function loadGMap() {
 				//		content: location_info,
 				//		pixelOffset: pixoff
 				//});
-				$j_dbem_locations('ol#dbem_locations_list').append(li_element);
-				$j_dbem_locations('li#location-'+item.location_id+' a').click(function() {
+				$j_eme_locations('ol#dbem_locations_list').append(li_element);
+				$j_eme_locations('li#location-'+item.location_id+' a').click(function() {
 					infowindow.setContent(balloon_content);
 					infowindow.open(map,marker);
 				});

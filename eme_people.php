@@ -45,7 +45,7 @@ function eme_global_map_json($eventful = false, $scope = "all") {
 			$value=preg_replace("/\r\n|\n\r|\n/","<br />",eme_trans_sanitize_html($value));
 		 	$json_location[] = '"'.$key.'":"'.$value.'"';
 		}
-		$tmp_loc=eme_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location);
+		$tmp_loc=eme_replace_locations_placeholders(get_option('eme_location_baloon_format'), $location);
 		# no newlines allowed, otherwise no map is shown
 		$tmp_loc=preg_replace("/\r\n|\n\r|\n/","<br />",$tmp_loc);
 		$json_location[] = '"location_balloon":"'.eme_trans_sanitize_html($tmp_loc).'"';

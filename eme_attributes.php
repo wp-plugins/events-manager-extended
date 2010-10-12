@@ -3,18 +3,18 @@ function eme_attributes_form($event) {
 	$dbem_data = $event['event_attributes'];
 	//We also get a list of attribute names and create a ddm list (since placeholders are fixed)
 	$formats = 
-		get_option ( 'dbem_event_list_item_format' ).
-		get_option ( 'dbem_event_page_title_format' ).
-		get_option ( 'dbem_full_calendar_event_format' ).
-		get_option ( 'dbem_location_baloon_format' ).
-		get_option ( 'dbem_location_event_list_item_format' ).
-		get_option ( 'dbem_location_page_title_format' ).
-		get_option ( 'dbem_rss_description_format' ).
-		get_option ( 'dbem_rss_title_format' ).
-		get_option ( 'dbem_single_event_format' ).
-		get_option ( 'dbem_single_location_format' ).
-		get_option ( 'dbem_contactperson_email_body' ).
-		get_option ( 'dbem_respondent_email_body' );
+		get_option('eme_event_list_item_format' ).
+		get_option('eme_event_page_title_format' ).
+		get_option('eme_full_calendar_event_format' ).
+		get_option('eme_location_baloon_format' ).
+		get_option('eme_location_event_list_item_format' ).
+		get_option('eme_location_page_title_format' ).
+		get_option('eme_rss_description_format' ).
+		get_option('eme_rss_title_format' ).
+		get_option('eme_single_event_format' ).
+		get_option('eme_single_location_format' ).
+		get_option('eme_contactperson_email_body' ).
+		get_option('eme_respondent_email_body' );
 	//We now have one long string of formats
 	preg_match_all("/#_ATT\{.+?\}(\{.+?\})?/", $formats, $placeholders);
 	$attributes = array();

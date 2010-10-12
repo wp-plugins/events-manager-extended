@@ -132,7 +132,7 @@ function eme_locations_edit_layout($location, $message = "") {
 			   <p><?php _e('Select an image to upload', 'eme') ?>.</p>
 			</div>
 			<?php 
-				$gmap_is_active = get_option('dbem_gmap_is_active');
+				$gmap_is_active = get_option('eme_gmap_is_active');
                			if ($gmap_is_active) :
 			 ?>	
 			<div><?php 
@@ -282,7 +282,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
 								    <p><?php _e('Select an image to upload', 'eme') ?>.</p>
 								</div>
 								<?php 
-									$gmap_is_active = get_option('dbem_gmap_is_active');
+									$gmap_is_active = get_option('eme_gmap_is_active');
                  					if ($gmap_is_active) :
 								 ?>	
 						 		 	<div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found','eme') ?></p></div>
@@ -405,12 +405,12 @@ function eme_validate_location($location) {
 	if ($_FILES['location_image']['size'] > 0 ) { 
 		if (is_uploaded_file($_FILES['location_image']['tmp_name'])) {
  	 		$mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
-			$maximum_size = get_option('dbem_image_max_size'); 
+			$maximum_size = get_option('eme_image_max_size'); 
 			if ($_FILES['location_image']['size'] > $maximum_size) 
 	     			$troubles = "<li>".__('The image file is too big! Maximum size:', 'eme')." $maximum_size</li>";
 	  		list($width, $height, $type, $attr) = getimagesize($_FILES['location_image']['tmp_name']);
-			$maximum_width = get_option('dbem_image_max_width'); 
-			$maximum_height = get_option('dbem_image_max_height'); 
+			$maximum_width = get_option('eme_image_max_width'); 
+			$maximum_height = get_option('eme_image_max_height'); 
 	  		if (($width > $maximum_width) || ($height > $maximum_height)) 
 	     			$troubles .= "<li>". __('The image is too big! Maximum size allowed:')." $maximum_width x $maximum_height</li>";
 	  		if (($type!=1) && ($type!=2) && ($type!=3)) 
@@ -494,7 +494,7 @@ function eme_delete_image_files_for_location_id($location_id) {
 }
 
 function eme_global_map($atts) {
-	if (get_option('dbem_gmap_is_active') == '1') {
+	if (get_option('eme_gmap_is_active') == '1') {
 	extract(shortcode_atts(array(
 			'eventful' => "false",
 			'scope' => 'all',
@@ -612,8 +612,8 @@ function eme_add_directions_form($location) {
 }
 
 function eme_single_location_map($location) {
-	$gmap_is_active = get_option('dbem_gmap_is_active'); 
-	$map_text = addslashes(eme_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
+	$gmap_is_active = get_option('eme_gmap_is_active'); 
+	$map_text = addslashes(eme_replace_locations_placeholders(get_option('eme_location_baloon_format'), $location));
 	$map_text = preg_replace("/\r\n|\n\r|\n/","<br />",$map_text);
 	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
@@ -649,9 +649,9 @@ function eme_events_in_location_list($location, $scope = "") {
 	$list = "";
 	if (count($events) > 0) {
 		foreach($events as $event)
-			$list .= eme_replace_placeholders(get_option('dbem_location_event_list_item_format'), $event);
+			$list .= eme_replace_placeholders(get_option('eme_location_event_list_item_format'), $event);
 	} else {
-		$list = get_option('dbem_location_no_events_message');
+		$list = get_option('eme_location_no_events_message');
 	}
 	return $list;
 }
@@ -659,7 +659,7 @@ function eme_events_in_location_list($location, $scope = "") {
 add_action ('admin_head', 'eme_locations_autocomplete');
 
 function eme_locations_autocomplete() {
-        $use_select_for_locations = get_option('dbem_use_select_for_locations');
+        $use_select_for_locations = get_option('eme_use_select_for_locations');
 	// qtranslate there? Then we need the select
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
 		$use_select_for_locations=1;
@@ -678,7 +678,7 @@ function eme_locations_autocomplete() {
 		jQuery.noConflict();
 
 		jQuery(document).ready(function($) {
-			var gmap_enabled = <?php echo get_option('dbem_gmap_is_active'); ?>; 
+			var gmap_enabled = <?php echo get_option('eme_gmap_is_active'); ?>; 
 
 		   <?php if(!$use_select_for_locations) :?>
 			$("input#location_name").autocomplete("<?php echo EME_PLUGIN_URL; ?>locations-search.php", {

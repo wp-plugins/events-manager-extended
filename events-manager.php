@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('DBEM_DB_VERSION', 7);
+define('EME_DB_VERSION', 8);
 define('EME_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -165,13 +165,13 @@ function eme_install() {
 	eme_create_categories_table($charset,$collate);
 	eme_add_options();
 	
- 	$db_version = get_option('dbem_version')  ;
+ 	$db_version = get_option('eme_version')  ;
 	if ($db_version && $db_version<5) {
-  		update_option('dbem_conversion_needed', 1); 
+  		update_option('eme_conversion_needed', 1); 
 	}
-  	update_option('dbem_version', DBEM_DB_VERSION); 
+  	update_option('eme_version', EME_DB_VERSION); 
 	// Create events page if necessary
- 	$events_page_id = get_option('dbem_events_page')  ;
+ 	$events_page_id = get_option('eme_events_page')  ;
 	if ($events_page_id != "" ) {
 		query_posts("page_id=$events_page_id");
 		$count = 0;
@@ -196,7 +196,7 @@ function eme_convert_charset($table,$charset,$collate) {
 
 function eme_create_events_table($charset,$collate) {
 	global $wpdb;
-	$db_version = get_option('dbem_version');
+	$db_version = get_option('eme_version');
 	
 	$old_table_name = $wpdb->prefix."events";
 	$table_name = $wpdb->prefix.EVENTS_TBNAME;
@@ -300,7 +300,7 @@ function eme_create_events_table($charset,$collate) {
 
 function eme_create_recurrence_table($charset,$collate) {
 	global $wpdb;
-	$db_version = get_option('dbem_version');
+	$db_version = get_option('eme_version');
 	$table_name = $wpdb->prefix.RECURRENCE_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -329,7 +329,7 @@ function eme_create_recurrence_table($charset,$collate) {
 
 function eme_create_locations_table($charset,$collate) {
 	global $wpdb;
-	$db_version = get_option('dbem_version');
+	$db_version = get_option('eme_version');
 	$table_name = $wpdb->prefix.LOCATIONS_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -360,7 +360,7 @@ function eme_create_locations_table($charset,$collate) {
 
 function eme_create_bookings_table($charset,$collate) {
 	global $wpdb;
-	$db_version = get_option('dbem_version');
+	$db_version = get_option('eme_version');
 	$table_name = $wpdb->prefix.BOOKINGS_TBNAME;
 
 	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -424,51 +424,51 @@ function eme_add_options($reset=0) {
 	$registration_pending_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
 	$registration_denied_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME has been denied.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
 	
-	$dbem_options = array('dbem_event_list_item_format' => DEFAULT_EVENT_LIST_ITEM_FORMAT,
-	'dbem_display_calendar_in_events_page' => 0,
-	'dbem_single_event_format' => DEFAULT_SINGLE_EVENT_FORMAT,
-	'dbem_event_page_title_format' => DEFAULT_EVENT_PAGE_TITLE_FORMAT,
-	'dbem_list_events_page' => 0,
-	'dbem_events_page_title' => DEFAULT_EVENTS_PAGE_TITLE,
-	'dbem_no_events_message' => __('No events','eme'),
-	'dbem_location_page_title_format' => DEFAULT_LOCATION_PAGE_TITLE_FORMAT,
-	'dbem_location_baloon_format' => DEFAULT_LOCATION_BALLOON_FORMAT,
-	'dbem_location_event_list_item_format' => DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT,
-	'dbem_location_no_events_message' => DEFAULT_LOCATION_NO_EVENTS_MESSAGE,
-	'dbem_single_location_format' => DEFAULT_SINGLE_LOCATION_FORMAT,
-	'dbem_rss_main_title' => get_bloginfo('title')." - ".__('Events'),
-	'dbem_rss_main_description' => get_bloginfo('description')." - ".__('Events'),
-	'dbem_rss_description_format' => DEFAULT_RSS_DESCRIPTION_FORMAT,
-	'dbem_rss_title_format' => DEFAULT_RSS_TITLE_FORMAT,
-	'dbem_gmap_is_active'=> DEFAULT_GMAP_ENABLED,
-	'dbem_default_contact_person' => 1,
-	'dbem_captcha_for_booking' => 0 ,
-	'dbem_rsvp_mail_notify_is_active' => 0 ,
-	'dbem_contactperson_email_body' => preg_replace("/<br ?\/?>/", "\n", $contact_person_email_body_localizable),
-	'dbem_respondent_email_body' => preg_replace("/<br ?\/?>/", "\n", $respondent_email_body_localizable),
-	'dbem_registration_pending_email_body' => preg_replace("/<br ?\/?>/", "\n", $registration_pending_email_body_localizable),
-	'dbem_registration_denied_email_body' => preg_replace("/<br ?\/?>/", "\n", $registration_denied_email_body_localizable),
-	'dbem_rsvp_mail_port' => 25,
-	'dbem_smtp_host' => 'localhost',
-	'dbem_mail_sender_name' => '',
-	'dbem_rsvp_mail_send_method' => 'smtp',
-	'dbem_rsvp_mail_SMTPAuth' => 0,
-	'dbem_rsvp_registered_users_only' => 0,
-	'dbem_image_max_width' => DEFAULT_IMAGE_MAX_WIDTH,
-	'dbem_image_max_height' => DEFAULT_IMAGE_MAX_HEIGHT,
-	'dbem_image_max_size' => DEFAULT_IMAGE_MAX_SIZE,
-	'dbem_full_calendar_event_format' => DEFAULT_FULL_CALENDAR_EVENT_FORMAT,
-	'dbem_small_calendar_event_title_format' => DEFAULT_SMALL_CALENDAR_EVENT_TITLE_FORMAT,
-	'dbem_small_calendar_event_title_separator' => DEFAULT_SMALL_CALENDAR_EVENT_TITLE_SEPARATOR, 
-	'dbem_hello_to_user' => 1,
-	'dbem_conversion_needed' => 0,
-	'dbem_use_select_for_locations' => DEFAULT_USE_SELECT_FOR_LOCATIONS,
-	'dbem_attributes_enabled' => DEFAULT_ATTRIBUTES_ENABLED,
-	'dbem_recurrence_enabled' => DEFAULT_RECURRENCE_ENABLED,
-	'dbem_rsvp_enabled' => DEFAULT_RSVP_ENABLED,
-	'dbem_categories_enabled' => DEFAULT_CATEGORIES_ENABLED);
+	$eme_options = array('eme_event_list_item_format' => DEFAULT_EVENT_LIST_ITEM_FORMAT,
+	'eme_display_calendar_in_events_page' => 0,
+	'eme_single_event_format' => DEFAULT_SINGLE_EVENT_FORMAT,
+	'eme_event_page_title_format' => DEFAULT_EVENT_PAGE_TITLE_FORMAT,
+	'eme_list_events_page' => 0,
+	'eme_events_page_title' => DEFAULT_EVENTS_PAGE_TITLE,
+	'eme_no_events_message' => __('No events','eme'),
+	'eme_location_page_title_format' => DEFAULT_LOCATION_PAGE_TITLE_FORMAT,
+	'eme_location_baloon_format' => DEFAULT_LOCATION_BALLOON_FORMAT,
+	'eme_location_event_list_item_format' => DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT,
+	'eme_location_no_events_message' => DEFAULT_LOCATION_NO_EVENTS_MESSAGE,
+	'eme_single_location_format' => DEFAULT_SINGLE_LOCATION_FORMAT,
+	'eme_rss_main_title' => get_bloginfo('title')." - ".__('Events'),
+	'eme_rss_main_description' => get_bloginfo('description')." - ".__('Events'),
+	'eme_rss_description_format' => DEFAULT_RSS_DESCRIPTION_FORMAT,
+	'eme_rss_title_format' => DEFAULT_RSS_TITLE_FORMAT,
+	'eme_gmap_is_active'=> DEFAULT_GMAP_ENABLED,
+	'eme_default_contact_person' => 1,
+	'eme_captcha_for_booking' => 0 ,
+	'eme_rsvp_mail_notify_is_active' => 0 ,
+	'eme_contactperson_email_body' => preg_replace("/<br ?\/?>/", "\n", $contact_person_email_body_localizable),
+	'eme_respondent_email_body' => preg_replace("/<br ?\/?>/", "\n", $respondent_email_body_localizable),
+	'eme_registration_pending_email_body' => preg_replace("/<br ?\/?>/", "\n", $registration_pending_email_body_localizable),
+	'eme_registration_denied_email_body' => preg_replace("/<br ?\/?>/", "\n", $registration_denied_email_body_localizable),
+	'eme_rsvp_mail_port' => 25,
+	'eme_smtp_host' => 'localhost',
+	'eme_mail_sender_name' => '',
+	'eme_rsvp_mail_send_method' => 'smtp',
+	'eme_rsvp_mail_SMTPAuth' => 0,
+	'eme_rsvp_registered_users_only' => 0,
+	'eme_image_max_width' => DEFAULT_IMAGE_MAX_WIDTH,
+	'eme_image_max_height' => DEFAULT_IMAGE_MAX_HEIGHT,
+	'eme_image_max_size' => DEFAULT_IMAGE_MAX_SIZE,
+	'eme_full_calendar_event_format' => DEFAULT_FULL_CALENDAR_EVENT_FORMAT,
+	'eme_small_calendar_event_title_format' => DEFAULT_SMALL_CALENDAR_EVENT_TITLE_FORMAT,
+	'eme_small_calendar_event_title_separator' => DEFAULT_SMALL_CALENDAR_EVENT_TITLE_SEPARATOR, 
+	'eme_hello_to_user' => 1,
+	'eme_conversion_needed' => 0,
+	'eme_use_select_for_locations' => DEFAULT_USE_SELECT_FOR_LOCATIONS,
+	'eme_attributes_enabled' => DEFAULT_ATTRIBUTES_ENABLED,
+	'eme_recurrence_enabled' => DEFAULT_RECURRENCE_ENABLED,
+	'eme_rsvp_enabled' => DEFAULT_RSVP_ENABLED,
+	'eme_categories_enabled' => DEFAULT_CATEGORIES_ENABLED);
 	
-	foreach($dbem_options as $key => $value){
+	foreach($eme_options as $key => $value){
 		#if(preg_match('/$dbem/', $key)){
 			eme_add_option($key, $value, $reset);
 		#}
@@ -478,11 +478,17 @@ function eme_add_options($reset=0) {
 function eme_add_option($key, $value, $reset) {
 	$option_val = get_option($key,"non_existing");
 	if ($option_val=="non_existing" || $reset) {
-		update_option($key, $value);
+		$old_key=preg_replace("/^eme_/","dbem_",$key);
+		$old_value = get_option($old_key,"non_existing");
+		if ($old_value=="non_existing" || $reset) {
+			update_option($key, $value);
+		} else {
+			update_option($key, $old_value);
+		}
 	}
 }
 
-function eme_create_events_page(){
+function eme_create_events_page() {
 	global $wpdb;
 	$postarr = array(
 		'post_status'=> 'publish',
@@ -491,7 +497,7 @@ function eme_create_events_page(){
 		'post_type'  => 'page',
 	);
 	if($int_post_id = wp_insert_post($postarr)){
-		update_option('dbem_events_page', $int_post_id);
+		update_option('eme_events_page', $int_post_id);
 	}
 }
 
@@ -541,7 +547,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
 	// and now all the other placeholders
  	$event_string = $format;
-	$rsvp_is_active = get_option('dbem_rsvp_enabled'); 
+	$rsvp_is_active = get_option('eme_rsvp_enabled'); 
 	preg_match_all("/#@?_?[A-Za-z0-9]+/", $format, $placeholders);
 	foreach($placeholders[0] as $result) {
 		// matches all fields placeholder
@@ -738,18 +744,18 @@ function eme_replace_placeholders($format, $event, $target="html") {
 		}
 
 	 	if (preg_match('/#_CONTACTNAME$/', $result)) {
-      		$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
+      		$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
 			$name = eme_get_user_name($user_id);
 			$event_string = str_replace($result, $name, $event_string );
 		}
 		if (preg_match('/#_CONTACTEMAIL$/', $result)) {
-			$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
+			$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
       			$email = eme_get_user_email($user_id);
 			// ascii encode for primitive harvesting protection ...
 			$event_string = str_replace($result, eme_ascii_encode($email), $event_string );
 		}
 		if (preg_match('/#_CONTACTPHONE$/', $result)) {
-			$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
+			$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
       			$phone = eme_get_user_phone($user_id);
 			// ascii encode for primitive harvesting protection ...
 			$event_string = str_replace($result, eme_ascii_encode($phone), $event_string );
@@ -869,17 +875,17 @@ function eme_sanitize_html( $value ) {
 }
 
 function admin_show_warnings() {
-	$db_version = get_option ('dbem_version');
-	if ($db_version && $db_version < DBEM_DB_VERSION) {
+	$db_version = get_option('eme_version');
+	if ($db_version && $db_version < EME_DB_VERSION) {
 	// first the important warning
 		eme_explain_deactivation_needed();
 	} else {
 	// now the normal warnings
-		$say_hello = get_option ( 'dbem_hello_to_user' );
+		$say_hello = get_option('eme_hello_to_user' );
 		if ($say_hello == 1)
 			eme_hello_to_new_user ();
 
-		$conversion_needed = get_option ( 'dbem_conversion_needed' );
+		$conversion_needed = get_option('eme_conversion_needed' );
 		if ($conversion_needed == 1)
 			eme_explain_conversion_needed ();
 	}

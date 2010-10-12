@@ -76,7 +76,7 @@ class WP_Widget_dbem_list extends WP_Widget {
  </select>
   </p>
 <?php
-		if(get_option('dbem_categories_enabled')) {
+		if(get_option('eme_categories_enabled')) {
 ?>
   <p>
     <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br/>
@@ -151,7 +151,7 @@ class WP_Widget_dbem_calendar extends WP_Widget {
     <input type="checkbox" id="<?php echo $this->get_field_id('long_events'); ?>" name="<?php echo $this->get_field_name('long_events'); ?>" value="1" <?php echo ($long_events) ? 'checked="checked"':'' ;?> />
   </p>
 <?php
-		  if(get_option('dbem_categories_enabled')) {
+		  if(get_option('eme_categories_enabled')) {
 ?>
   <p>
     <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br/>
