@@ -1,5 +1,5 @@
 <?php
-function dbem_get_calendar_shortcode($atts) { 
+function eme_get_calendar_shortcode($atts) { 
 	extract(shortcode_atts(array(
 			'category' => 0,
 			'full' => 0,
@@ -8,12 +8,12 @@ function dbem_get_calendar_shortcode($atts) {
 			'echo' => 0,
 			'long_events' => 0
 		), $atts)); 
-	$result = dbem_get_calendar("full={$full}&month={$month}&year={$year}&echo={$echo}&long_events={$long_events}&category={$category}");
+	$result = eme_get_calendar("full={$full}&month={$month}&year={$year}&echo={$echo}&long_events={$long_events}&category={$category}");
 	return $result;
 }
-add_shortcode('events_calendar', 'dbem_get_calendar_shortcode');
+add_shortcode('events_calendar', 'eme_get_calendar_shortcode');
 
-function dbem_get_calendar($args="") {
+function eme_get_calendar($args="") {
 	global $wp_locale;
 
 	$defaults = array(
@@ -33,13 +33,13 @@ function dbem_get_calendar($args="") {
 
  	global $wpdb;
 	//if(isset($_GET['calmonth']) && $_GET['calmonth'] != '')   {
-	//	$month =  dbem_sanitize_request($_GET['calmonth']) ;
+	//	$month =  eme_sanitize_request($_GET['calmonth']) ;
 	//} else {
 		if ($month == '')
 			$month = date('m'); 
 	//}
 	//if(isset($_GET['calyear']) && $_GET['calyear'] != '')   {
-	//	$year =  dbem_sanitize_request($_GET['calyear']) ;
+	//	$year =  eme_sanitize_request($_GET['calyear']) ;
 	//} else {
 		if ($year == '')
 			$year = date('Y');
@@ -73,12 +73,12 @@ function dbem_get_calendar($args="") {
 	
 	// determine how many days are in the last month. 
 	if($month == 1) { 
-	   $num_days_last = dbem_days_in_month(12, ($year -1)); 
+	   $num_days_last = eme_days_in_month(12, ($year -1)); 
 	} else { 
-	  $num_days_last = dbem_days_in_month(($month-1), $year); 
+	  $num_days_last = eme_days_in_month(($month-1), $year); 
 	}
 	// determine how many days are in the current month. 
-	$num_days_current = dbem_days_in_month($month, $year);
+	$num_days_current = eme_days_in_month($month, $year);
 	// Build an array for the current days 
 	// in the month 
 	for($i = 1; $i <= $num_days_current; $i++){ 
@@ -226,7 +226,7 @@ function dbem_get_calendar($args="") {
 		$year_post=$year;
 	}
 	$limit_pre=date("Y-m-d", mktime(0,0,0,$month_pre, 1 , $year_pre));
-	$number_of_days_post=dbem_days_in_month($month_post, $year_post);
+	$number_of_days_post=eme_days_in_month($month_post, $year_post);
 	$limit_post=date("Y-m-d", mktime(0,0,0,$month_post, $number_of_days_post , $year_post));
 
 	$events_table = $wpdb->prefix.EVENTS_TBNAME; 
@@ -292,7 +292,7 @@ function dbem_get_calendar($args="") {
 				continue;
 			}
 			if ($event ['location_id'] ) {
-				$this_location = dbem_get_location ( $event ['location_id'] );
+				$this_location = eme_get_location ( $event ['location_id'] );
 				$event ['location_name'] = $this_location ['location_name'];
 				$event ['location_address'] = $this_location ['location_address'];
 				$event ['location_town'] = $this_location ['location_town'];
@@ -336,11 +336,11 @@ function dbem_get_calendar($args="") {
 		$cells[$day_key]['month'] = $event_date[1];
 		$events_titles = array();
 		foreach($events as $event) { 
-			$events_titles[] = dbem_replace_placeholders($event_title_format, $event);
+			$events_titles[] = eme_replace_placeholders($event_title_format, $event);
 		}
 		$link_title = implode($event_title_separator_format,$events_titles);
 		
-		$event_page_link = dbem_get_events_page(true, false);
+		$event_page_link = eme_get_events_page(true, false);
 		if (stristr($event_page_link, "?"))
 			//$joiner = "&amp;";
 			$joiner = "&";
@@ -353,7 +353,7 @@ function dbem_get_calendar($args="") {
 			$cells[$day_key]['cell'] .= "<ul>";
 		
 			foreach($events as $event) {
-				$cells[$day_key]['cell'] .= dbem_replace_placeholders($event_format, $event);
+				$cells[$day_key]['cell'] .= eme_replace_placeholders($event_format, $event);
 			} 
 			$cells[$day_key]['cell'] .= "</ul>";
    		}
@@ -382,7 +382,7 @@ function dbem_get_calendar($args="") {
 		return $output;
 }
 
-function dbem_days_in_month($month, $year) {
+function eme_days_in_month($month, $year) {
 	return (date("t",mktime(0,0,0,$month,1,$year)));
 }
 
@@ -468,10 +468,10 @@ function eme_filter_calendar_ajax() {
 		(isset($_GET['full']) && $_GET['full'] == 1) ? $full = 1 : $full = 0;
 		(isset($_GET['long_events']) && $_GET['long_events'] == 1) ? $long_events = 1 : $long_events = 0;
 		(isset($_GET['category'])) ? $category = intval($_GET['category']) : $category = 0;
-		(isset($_GET['calmonth'])) ? $month = dbem_sanitize_request($_GET['calmonth']) : $month = ''; 
-		(isset($_GET['calyear'])) ? $year = dbem_sanitize_request($_GET['calyear']) : $year = ''; 
-		// $calyear = dbem_sanitize_request($_GET['calyear']);
-		dbem_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year);
+		(isset($_GET['calmonth'])) ? $month = eme_sanitize_request($_GET['calmonth']) : $month = ''; 
+		(isset($_GET['calyear'])) ? $year = eme_sanitize_request($_GET['calyear']) : $year = ''; 
+		// $calyear = eme_sanitize_request($_GET['calyear']);
+		eme_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year);
 		die();
 	}
 }

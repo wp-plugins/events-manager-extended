@@ -119,7 +119,7 @@ $required_fields = array('event_name');
 $location_required_fields = array("location_name" => __('The location name', 'eme'), "location_address" => __('The location address', 'eme'), "location_town" => __('The location town', 'eme'));
 
 // To enable activation through the activate function
-register_activation_hook(__FILE__,'dbem_install');
+register_activation_hook(__FILE__,'eme_install');
 
 // filters for general events field (corresponding to those of  "the _title")
 add_filter('eme_general', 'wptexturize');
@@ -143,7 +143,7 @@ add_filter('eme_notes_map', 'convert_chars', 8);
 add_filter('eme_notes_map', 'js_escape');
  
 /* Creating the wp_events table to store event data*/
-function dbem_install() {
+function eme_install() {
 	// check the user is allowed to make changes
 	if ( !current_user_can( SETTING_CAPABILITY  ) ) {
 		return;
@@ -158,13 +158,13 @@ function dbem_install() {
 		if ( ! empty($wpdb->collate) )
 			$collate = "COLLATE $wpdb->collate";
 	}
-	dbem_create_events_table($charset,$collate);
-	dbem_create_recurrence_table($charset,$collate);
-	dbem_create_locations_table($charset,$collate);
-  	dbem_create_bookings_table($charset,$collate);
-  	dbem_create_people_table($charset,$collate);
-	dbem_create_categories_table($charset,$collate);
-	dbem_add_options();
+	eme_create_events_table($charset,$collate);
+	eme_create_recurrence_table($charset,$collate);
+	eme_create_locations_table($charset,$collate);
+  	eme_create_bookings_table($charset,$collate);
+  	eme_create_people_table($charset,$collate);
+	eme_create_categories_table($charset,$collate);
+	eme_add_options();
 	
  	$db_version = get_option('dbem_version')  ;
 	if ($db_version && $db_version<5) {
@@ -180,22 +180,22 @@ function dbem_install() {
 	 		$count++;
 		}
 		if ($count == 0)
-			dbem_create_events_page(); 
+			eme_create_events_page(); 
 	  } else {
-		  dbem_create_events_page(); 
+		  eme_create_events_page(); 
 	  }
 		// wp-content must be chmodded 777. Maybe just wp-content.
 	   if(!file_exists("../".IMAGE_UPLOAD_DIR))
 				mkdir("../".IMAGE_UPLOAD_DIR, 0777);
 }
 
-function dbem_convert_charset($table,$charset,$collate) {
+function eme_convert_charset($table,$charset,$collate) {
 	global $wpdb;
 	$sql = "ALTER TABLE $table CONVERT TO $charset $collate;";
 	$wpdb->query($sql);
 }
 
-function dbem_create_events_table($charset,$collate) {
+function eme_create_events_table($charset,$collate) {
 	global $wpdb;
 	$db_version = get_option('dbem_version');
 	
@@ -299,7 +299,7 @@ function dbem_create_events_table($charset,$collate) {
 	}
 }
 
-function dbem_create_recurrence_table($charset,$collate) {
+function eme_create_recurrence_table($charset,$collate) {
 	global $wpdb;
 	$db_version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.RECURRENCE_TBNAME;
@@ -328,7 +328,7 @@ function dbem_create_recurrence_table($charset,$collate) {
 	}
 }
 
-function dbem_create_locations_table($charset,$collate) {
+function eme_create_locations_table($charset,$collate) {
 	global $wpdb;
 	$db_version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.LOCATIONS_TBNAME;
@@ -359,7 +359,7 @@ function dbem_create_locations_table($charset,$collate) {
 	}
 }
 
-function dbem_create_bookings_table($charset,$collate) {
+function eme_create_bookings_table($charset,$collate) {
 	global $wpdb;
 	$db_version = get_option('dbem_version');
 	$table_name = $wpdb->prefix.BOOKINGS_TBNAME;
@@ -386,7 +386,7 @@ function dbem_create_bookings_table($charset,$collate) {
 	}
 }
 
-function dbem_create_people_table($charset,$collate) {
+function eme_create_people_table($charset,$collate) {
 	global $wpdb;
 	$table_name = $wpdb->prefix.PEOPLE_TBNAME;
 
@@ -405,7 +405,7 @@ function dbem_create_people_table($charset,$collate) {
 	}
 } 
 
-function dbem_create_categories_table($charset,$collate) {
+function eme_create_categories_table($charset,$collate) {
 	global $wpdb;
 	$table_name = $wpdb->prefix.CATEGORIES_TBNAME;
 
@@ -419,7 +419,7 @@ function dbem_create_categories_table($charset,$collate) {
 	}
 }
 
-function dbem_add_options($reset=0) {
+function eme_add_options($reset=0) {
 	$contact_person_email_body_localizable = __("#_RESPNAME (#_RESPEMAIL) will attend #_NAME on #m #d, #Y. He wants to reserve #_SPACES space(s).<br/>Now there are #_RESERVEDSPACES space(s) reserved, #_AVAILABLESPACES are still available.<br/><br/>Yours faithfully,<br/>Events Manager",'eme') ;
 	$respondent_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>you have successfully reserved #_SPACES space(s) for #_NAME.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
 	$registration_pending_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
@@ -471,19 +471,19 @@ function dbem_add_options($reset=0) {
 	
 	foreach($dbem_options as $key => $value){
 		#if(preg_match('/$dbem/', $key)){
-			dbem_add_option($key, $value, $reset);
+			eme_add_option($key, $value, $reset);
 		#}
 	}
 		
 }
-function dbem_add_option($key, $value, $reset) {
+function eme_add_option($key, $value, $reset) {
 	$option_val = get_option($key,"non_existing");
 	if ($option_val=="non_existing" || $reset) {
 		update_option($key, $value);
 	}
 }
 
-function dbem_create_events_page(){
+function eme_create_events_page(){
 	global $wpdb;
 	$postarr = array(
 		'post_status'=> 'publish',
@@ -521,7 +521,7 @@ function eme_create_events_submenu () {
   	}
 }
 
-function dbem_replace_placeholders($format, $event, $target="html") {
+function eme_replace_placeholders($format, $event, $target="html") {
 	// first we do the custom attributes, since these can contain other placeholders
 	preg_match_all("/#_ATT\{.+?\}(\{.+?\})?/", $format, $results);
 	foreach($results[0] as $resultKey => $result) {
@@ -594,18 +594,18 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		}		
 		
 		if (preg_match('/#_MAP/', $result)) {
-			$location = dbem_get_location($event['location_id']);
-			$map_div = dbem_single_location_map($location);
+			$location = eme_get_location($event['location_id']);
+			$map_div = eme_single_location_map($location);
 		  	$event_string = str_replace($result, $map_div , $event_string ); 
 		}
 		if (preg_match('/#_DIRECTIONS/', $result)) {
-			$location = dbem_get_location($event['location_id']);
-			$directions_form = dbem_add_directions_form($location);
+			$location = eme_get_location($event['location_id']);
+			$directions_form = eme_add_directions_form($location);
 		  	$event_string = str_replace($result, $directions_form , $event_string ); 
 		}
 		if (preg_match('/#_ADDBOOKINGFORM/', $result)) {
 			if ($rsvp_is_active && $event['event_rsvp']) {
-				$rsvp_add_module = dbem_add_booking_form($event['event_id']);
+				$rsvp_add_module = eme_add_booking_form($event['event_id']);
 			} else {
 				$rsvp_add_module = "";
 			}
@@ -613,7 +613,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		}
 		if (preg_match('/#_REMOVEBOOKINGFORM/', $result)) {
 			if ($rsvp_is_active && $event['event_rsvp']) {
-				$rsvp_delete_module = dbem_delete_booking_form();
+				$rsvp_delete_module = eme_delete_booking_form();
 			} else {
 				$rsvp_delete_module = "";
 			}
@@ -621,7 +621,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		}
 		if (preg_match('/#_AVAILABLESPACES|#_AVAILABLESEATS/', $result)) {
                         if ($rsvp_is_active && $event['event_rsvp']) {
-				$available_seats = dbem_get_available_seats($event['event_id']);
+				$available_seats = eme_get_available_seats($event['event_id']);
                         } else {
                                 $available_seats = "";
                         }
@@ -629,7 +629,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
                 }
 		if (preg_match('/#_(RESERVEDSPACES|BOOKEDSEATS)/', $result)) {
                         if ($rsvp_is_active && $event['event_rsvp']) {
-				$booked_seats = dbem_get_booked_seats($event['event_id']);
+				$booked_seats = eme_get_booked_seats($event['event_id']);
                         } else {
                                 $booked_seats = "";
                         }
@@ -637,16 +637,16 @@ function dbem_replace_placeholders($format, $event, $target="html") {
                 }
 
 		if (preg_match('/#_LINKEDNAME/', $result)) {
-			$events_page_link = dbem_get_events_page(true, false);
+			$events_page_link = eme_get_events_page(true, false);
 			if (stristr($events_page_link, "?"))
 				$joiner = "&";
 			else
 				$joiner = "?";
-			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".dbem_trans_sanitize_html($event['event_name'])."'>".dbem_trans_sanitize_html($event['event_name'])."</a>" , $event_string );
+			$event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".eme_trans_sanitize_html($event['event_name'])."'>".eme_trans_sanitize_html($event['event_name'])."</a>" , $event_string );
 		} 
 
 		if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
-			$events_page_link = dbem_get_events_page(true, false);
+			$events_page_link = eme_get_events_page(true, false);
 			if (stristr($events_page_link, "?"))
 				$joiner = "&";
 			else
@@ -670,7 +670,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 				//$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
 				// we call the sanitize_html function so the qtranslate
 				// does it's thing anyway
-				$field_value = dbem_trans_sanitize_html($field_value,0);
+				$field_value = eme_trans_sanitize_html($field_value,0);
 			} else {
 				if ($target == "map") {
 					$field_value = apply_filters('eme_notes_map', $field_value);
@@ -691,7 +691,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 	 	if (preg_match('/#_NAME/', $result)) {
 			$field = "event_name";
 		 	$field_value = $event[$field];
-			$field_value = dbem_trans_sanitize_html($field_value);
+			$field_value = eme_trans_sanitize_html($field_value);
 			if ($target == "html") {
 				$field_value = apply_filters('eme_general', $field_value); 
 		  	} else {
@@ -703,7 +703,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_(ADDRESS|TOWN)/', $result)) {
 			$field = "location_".ltrim(strtolower($result), "#_");
 		 	$field_value = $event[$field];
-			$field_value = dbem_trans_sanitize_html($field_value);
+			$field_value = eme_trans_sanitize_html($field_value);
 			if ($target == "html") {
 				$field_value = apply_filters('eme_general', $field_value); 
 			} else { 
@@ -715,7 +715,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		if (preg_match('/#_LOCATION$/', $result)) {
 			$field = "location_name";
 		 	$field_value = $event[$field];
-			$field_value = dbem_trans_sanitize_html($field_value);
+			$field_value = eme_trans_sanitize_html($field_value);
 			if ($target == "html") {
 				$field_value = apply_filters('eme_general', $field_value); 
 			} else {
@@ -727,7 +727,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 
 		if (preg_match('/#_ATTENDEES$/', $result)) {
                         if ($rsvp_is_active && $event['event_rsvp']) {
-				$field_value=dbem_get_bookings_list_for($event['event_id']);
+				$field_value=eme_get_bookings_list_for($event['event_id']);
 				if ($target == "html") {
 					$field_value = apply_filters('eme_general', $field_value); 
 				} else {
@@ -740,20 +740,20 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 
 	 	if (preg_match('/#_CONTACTNAME$/', $result)) {
       		$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
-			$name = dbem_get_user_name($user_id);
+			$name = eme_get_user_name($user_id);
 			$event_string = str_replace($result, $name, $event_string );
 		}
 		if (preg_match('/#_CONTACTEMAIL$/', $result)) {
 			$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
-      			$email = dbem_get_user_email($user_id);
+      			$email = eme_get_user_email($user_id);
 			// ascii encode for primitive harvesting protection ...
-			$event_string = str_replace($result, dbem_ascii_encode($email), $event_string );
+			$event_string = str_replace($result, eme_ascii_encode($email), $event_string );
 		}
 		if (preg_match('/#_CONTACTPHONE$/', $result)) {
 			$event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('dbem_default_contact_person');
-      			$phone = dbem_get_user_phone($user_id);
+      			$phone = eme_get_user_phone($user_id);
 			// ascii encode for primitive harvesting protection ...
-			$event_string = str_replace($result, dbem_ascii_encode($phone), $event_string );
+			$event_string = str_replace($result, eme_ascii_encode($phone), $event_string );
 		}	
 		if (preg_match('/#_(IMAGE)/', $result)) {
 			if($event['location_image_url'] != '')
@@ -764,7 +764,7 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 	 	}
 
 		if (preg_match('/#_(LOCATIONPAGEURL)/', $result)) { 
-			$events_page_link = dbem_get_events_page(true, false);
+			$events_page_link = eme_get_events_page(true, false);
 			if (stristr($events_page_link, "?"))
 			 	$joiner = "&";
 			else
@@ -800,8 +800,8 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 		
 		//Add a placeholder for categories
 		if (preg_match('/^#_CATEGORIES$/', $result)) {
-	      		$categories = dbem_get_event_categories($event['event_id']);
-			$field_value = dbem_trans_sanitize_html(join(",",$categories));
+	      		$categories = eme_get_event_categories($event['event_id']);
+			$field_value = eme_trans_sanitize_html(join(",",$categories));
 			if ($target == "html") {
 				$field_value = apply_filters('eme_general', $field_value); 
 		  	} else {
@@ -830,11 +830,11 @@ function dbem_replace_placeholders($format, $event, $target="html") {
 	return $event_string;	
 }
 
-function dbem_date_to_unix_time($date) {
+function eme_date_to_unix_time($date) {
 		$unix_time = mktime(0, 0, 0, substr($date,5,2), substr($date,8,2), substr($date,0,4));
 		return $unix_time;
 }
-function dbem_sanitize_request( $value ) {
+function eme_sanitize_request( $value ) {
 #	if( get_magic_quotes_gpc() ) 
 #		$value = stripslashes( $value );
 
@@ -856,16 +856,16 @@ function escapeMe(&$val) {
 	$val = mysql_real_escape_string($val);
 }
 
-function dbem_trans_sanitize_html( $value, $do_convert=1 ) {
+function eme_trans_sanitize_html( $value, $do_convert=1 ) {
 	if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
 	if ($do_convert) {
-		return dbem_sanitize_html($value);
+		return eme_sanitize_html($value);
 	} else {
 		return $value;
 	}
 }
 
-function dbem_sanitize_html( $value ) {
+function eme_sanitize_html( $value ) {
 	return htmlspecialchars($value,ENT_QUOTES);
 }
 
@@ -873,34 +873,34 @@ function admin_show_warnings() {
 	$db_version = get_option ('dbem_version');
 	if ($db_version && $db_version < DBEM_DB_VERSION) {
 	// first the important warning
-		dbem_explain_deactivation_needed();
+		eme_explain_deactivation_needed();
 	} else {
 	// now the normal warnings
 		$say_hello = get_option ( 'dbem_hello_to_user' );
 		if ($say_hello == 1)
-			dbem_hello_to_new_user ();
+			eme_hello_to_new_user ();
 
 		$conversion_needed = get_option ( 'dbem_conversion_needed' );
 		if ($conversion_needed == 1)
-			dbem_explain_conversion_needed ();
+			eme_explain_conversion_needed ();
 	}
 }
 
-function dbem_explain_deactivation_needed() {
+function eme_explain_deactivation_needed() {
 	$advice = sprintf(__("<p>It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen."));
 	?>
 <div id="message" class="updated"> <?php echo $advice; ?> </div>
 <?php
 }
 
-function dbem_explain_conversion_needed() {
+function eme_explain_conversion_needed() {
 	$advice = sprintf(__("<p>It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>."),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
 	?>
 <div id="message" class="updated"> <?php echo $advice; ?> </div>
 <?php
 }
 
-function dbem_hello_to_new_user() {
+function eme_hello_to_new_user() {
 	global $current_user;
 	get_currentuserinfo();
 	$advice = sprintf ( __ ( "<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> 

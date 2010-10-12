@@ -5,10 +5,10 @@ function eme_categories_subpanel() {
 	admin_show_warnings();
 	if (!current_user_can( SETTINGS_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
 		$message = __('You have no right to update categories!','eme');
-		dbem_categories_table_layout($message);
+		eme_categories_table_layout($message);
 	} elseif(isset($_GET['action']) && $_GET['action'] == "editcat") { 
 		// edit category  
-		dbem_categories_edit_layout();
+		eme_categories_edit_layout();
 	} else {
 		// Insert/Update/Delete Record
 		$categories_table = $wpdb->prefix.CATEGORIES_TBNAME;
@@ -45,19 +45,19 @@ function eme_categories_subpanel() {
 		//die(print_r($_POST));
 		if ( is_numeric($validation_result) ) {
 			$message = (isset($message)) ? $message : __("Successfully {$_POST['action']}ed category", "dbem");
-			dbem_categories_table_layout($message);
+			eme_categories_table_layout($message);
 		} elseif ( $validation_result === false ) {
 			$message = (isset($message)) ? $message : __("There was a problem {$_POST['action']}ing your category, please try again.");						   
-			dbem_categories_table_layout($message);
+			eme_categories_table_layout($message);
 		} else {
 			// no action, just a categories list
-			dbem_categories_table_layout();	
+			eme_categories_table_layout();	
 		}
 	}
 } 
 
-function dbem_categories_table_layout($message = "") {
-	$categories = dbem_get_categories();
+function eme_categories_table_layout($message = "") {
+	$categories = eme_get_categories();
 	$destination = admin_url("admin.php"); 
 	$table = "
 		<div class='wrap nosubsub'>\n
@@ -152,9 +152,9 @@ function dbem_categories_table_layout($message = "") {
 	echo $table;  
 }
 
-function dbem_categories_edit_layout($message = "") {
+function eme_categories_edit_layout($message = "") {
 	$category_id = intval($_GET['category_ID']);
-	$category = dbem_get_category($category_id);
+	$category = eme_get_category($category_id);
 	$layout = "
 	<div class='wrap'>
 		<div id='icon-edit' class='icon32'>
@@ -194,13 +194,13 @@ function dbem_categories_edit_layout($message = "") {
 	echo $layout;
 }
 
-function dbem_get_categories(){
+function eme_get_categories(){
 	global $wpdb;
 	$categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
 	return $wpdb->get_results("SELECT * FROM $categories_table", ARRAY_A);
 }
 
-function dbem_get_category($category_id) { 
+function eme_get_category($category_id) { 
 	global $wpdb;
 	$categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
 	$sql = "SELECT * FROM $categories_table WHERE category_id ='$category_id'";   
@@ -208,7 +208,7 @@ function dbem_get_category($category_id) {
 	return $category;
 }
 
-function dbem_get_event_categories($event_id) { 
+function eme_get_event_categories($event_id) { 
 	global $wpdb;
 	$event_table = $wpdb->prefix.EVENTS_TBNAME; 
 	$categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 

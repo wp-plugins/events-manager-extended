@@ -46,7 +46,7 @@ function eme_new_event_page() {
 		"location_longitude" => '',
 		"location_image_url" => ''
 	);
-	dbem_event_form ( $event, $title, '' );
+	eme_event_form ( $event, $title, '' );
 }
 
 function eme_events_subpanel() {
@@ -77,13 +77,13 @@ function eme_events_subpanel() {
 			$collate="";
 			if ( ! empty($wpdb->collate) )
 				$collate = "COLLATE $wpdb->collate";
-                        dbem_convert_charset(EVENTS_TBNAME,$charset,$collate);
-                        dbem_convert_charset(RECURRENCE_TBNAME,$charset,$collate);
-                        dbem_convert_charset(LOCATIONS_TBNAME,$charset,$collate);
-                        dbem_convert_charset(BOOKINGS_TBNAME,$charset,$collate);
-                        dbem_convert_charset(PEOPLE_TBNAME,$charset,$collate);
-                        dbem_convert_charset(BOOKING_PEOPLE_TBNAME,$charset,$collate);
-                        dbem_convert_charset(CATEGORIES_TBNAME,$charset,$collate);
+                        eme_convert_charset(EVENTS_TBNAME,$charset,$collate);
+                        eme_convert_charset(RECURRENCE_TBNAME,$charset,$collate);
+                        eme_convert_charset(LOCATIONS_TBNAME,$charset,$collate);
+                        eme_convert_charset(BOOKINGS_TBNAME,$charset,$collate);
+                        eme_convert_charset(PEOPLE_TBNAME,$charset,$collate);
+                        eme_convert_charset(BOOKING_PEOPLE_TBNAME,$charset,$collate);
+                        eme_convert_charset(CATEGORIES_TBNAME,$charset,$collate);
                 }
 		update_option ( 'dbem_conversion_needed', 0 );
 		print "<div id=\"message\" class=\"updated\">".__('Conversion done, please check your events and restore from backup if you see any sign of troubles.')."</div>";
@@ -100,19 +100,19 @@ function eme_events_subpanel() {
 	if ($action == 'deleteEvents') {
 		foreach ( $selectedEvents as $event_ID ) {
                         $tmp_event = array();
-                        $tmp_event = dbem_get_event ( $event_ID );
+                        $tmp_event = eme_get_event ( $event_ID );
 			if (current_user_can( EDIT_CAPABILITY) ||
 			    (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_creator_id']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
                         	if ($tmp_event['recurrence_id']>0) {
-					dbem_remove_recurrence ( $tmp_event['recurrence_id'] );
+					eme_remove_recurrence ( $tmp_event['recurrence_id'] );
 				} else {
-					dbem_delete_event ( $event_ID );
+					eme_delete_event ( $event_ID );
 				}
                         }
 		}
 		
-		$events = dbem_get_events ( 0, "future" );
-		dbem_events_table ( $events, 10, "Future events", "future", $offset );
+		$events = eme_get_events ( 0, "future" );
+		eme_events_table ( $events, 10, "Future events", "future", $offset );
 	}
 
 	// UPDATE or CREATE action
@@ -206,7 +206,7 @@ function eme_events_subpanel() {
 			$event ['event_category_ids']="";
 			
 		}
-		$validation_result = dbem_validate_event ( $event );
+		$validation_result = eme_validate_event ( $event );
 		
 		/* Marcus Begin Edit */
 		$event_attributes = array();
@@ -223,12 +223,12 @@ function eme_events_subpanel() {
 			if(isset($_POST['location-select-id']) && $_POST['location-select-id'] != "") {
 				$event ['location_id'] = $_POST['location-select-id'];
 			} else {
-				$related_location = dbem_get_identical_location ( $location );
+				$related_location = eme_get_identical_location ( $location );
 				// print_r($related_location); 
 				if ($related_location) {
 					$event ['location_id'] = $related_location ['location_id'];
 				} else {
-					$new_location = dbem_insert_location ( $location );
+					$new_location = eme_insert_location ( $location );
 					$event ['location_id'] = $new_location ['location_id'];
 				}
 			}
@@ -237,7 +237,7 @@ function eme_events_subpanel() {
 				// new event or new recurrence
 				if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
 					//insert new recurrence
-					dbem_insert_recurrent_event ( $event, $recurrence );
+					eme_insert_recurrent_event ( $event, $recurrence );
 					$feedback_message = __ ( 'New recurrent event inserted!', 'eme' );
 				} else {
 					// INSERT new event 
@@ -247,13 +247,13 @@ function eme_events_subpanel() {
 			} else {
 				// something exists
 				if ($recurrence_ID) {
-					$tmp_recurrence = dbem_get_recurrence ( $recurrence_ID );
+					$tmp_recurrence = eme_get_recurrence ( $recurrence_ID );
 					if (current_user_can( EDIT_CAPABILITY) ||
 					    (current_user_can( MIN_CAPABILITY) && ($tmp_recurrence['event_creator_id']==$current_userid || $tmp_recurrence['event_contactperson_id']==$current_userid))) {
 						// UPDATE old recurrence
 						$recurrence ['recurrence_id'] = $recurrence_ID;
 						//print_r($recurrence); 
-						if (dbem_update_recurrence ($event, $recurrence ))
+						if (eme_update_recurrence ($event, $recurrence ))
 							$feedback_message = __ ( 'Recurrence updated!', 'eme' );
 						else
 							$feedback_message = __ ( 'Something went wrong with the recurrence update...', 'eme' );
@@ -261,13 +261,13 @@ function eme_events_subpanel() {
 						$feedback_message = __('You have no right to update','eme'). " '" . $tmp_event ['event_name'] . "' !";
 					}
 				} else {
-					$tmp_event = dbem_get_event ( $event_ID );
+					$tmp_event = eme_get_event ( $event_ID );
 					if (current_user_can( EDIT_CAPABILITY) ||
 					    (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_creator_id']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {
 						if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
 							// we go from single event to recurrence: create the recurrence and delete the single event
-							dbem_insert_recurrent_event ( $event, $recurrence );
-                                			dbem_delete_event ( $event_ID );
+							eme_insert_recurrent_event ( $event, $recurrence );
+                                			eme_delete_event ( $event_ID );
 							$feedback_message = __ ( 'New recurrent event inserted!', 'eme' );
 						} else {
 							// UPDATE old event
@@ -284,33 +284,33 @@ function eme_events_subpanel() {
 			}
 			
 			//$wpdb->query($sql); 
-			echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
-			$events = dbem_get_events ( 0, "future" );
-			dbem_events_table ( $events, 20, "Future events", "future", $offset );
+			echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
+			$events = eme_get_events ( 0, "future" );
+			eme_events_table ( $events, 20, "Future events", "future", $offset );
 		} else {
 			// validation unsuccessful			
 			echo "<div id='message' class='error '>
 						<p>" . __ ( "Ach, there's a problem here:", "dbem" ) . " $validation_result</p>
 				  </div>";
-			dbem_event_form ( $event, "Edit event $event_ID", $event_ID );
+			eme_event_form ( $event, "Edit event $event_ID", $event_ID );
 		}
 	}
 	if ($action == 'edit_event') {
 		if (! $event_ID) {
 			$title = __ ( "Insert New Event", 'eme' );
-			dbem_event_form ( $event, $title, $event_ID );
+			eme_event_form ( $event, $title, $event_ID );
 		} else {
-			$event = dbem_get_event ( $event_ID );
+			$event = eme_get_event ( $event_ID );
 			if (current_user_can( EDIT_CAPABILITY) ||
 			    (current_user_can( MIN_CAPABILITY) && ($event['event_creator_id']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
 							// UPDATE old event
 				$title = __ ( "Edit Event", 'eme' ) . " '" . $event ['event_name'] . "'";
-				dbem_event_form ( $event, $title, $event_ID );
+				eme_event_form ( $event, $title, $event_ID );
 			} else {
 				$feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
-				echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
-				$events = dbem_get_events ( 0, "future" );
-				dbem_events_table ( $events, 10, "Future events", "future", $offset );
+				echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
+				$events = eme_get_events ( 0, "future" );
+				eme_events_table ( $events, 10, "Future events", "future", $offset );
 			}
 		}
 		
@@ -318,29 +318,29 @@ function eme_events_subpanel() {
 
 	//Add duplicate event if requested
 	if ($action == 'duplicate_event') {
-		$event = dbem_get_event ( $event_ID );
+		$event = eme_get_event ( $event_ID );
 		if (current_user_can( EDIT_CAPABILITY) ||
 		    (current_user_can( MIN_CAPABILITY) && ($event['event_creator_id']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
-			dbem_duplicate_event ( $event_ID );
+			eme_duplicate_event ( $event_ID );
 		} else {
 			$feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
-			echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
-			$events = dbem_get_events ( 0, "future" );
-			dbem_events_table ( $events, 20, "Future events", "future", $offset );
+			echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
+			$events = eme_get_events ( 0, "future" );
+			eme_events_table ( $events, 20, "Future events", "future", $offset );
 		}
 	}
 	if ($action == 'edit_recurrence') {
 		$event_ID = intval($_GET ['recurrence_id']);
-		$recurrence = dbem_get_recurrence ( $event_ID );
+		$recurrence = eme_get_recurrence ( $event_ID );
 		if (current_user_can( EDIT_CAPABILITY) ||
 		    (current_user_can( MIN_CAPABILITY) && ($recurrence['event_creator_id']==$current_userid || $recurrence['event_contactperson_id']==$current_userid))) {
 			$title = __ ( "Reschedule", 'eme' ) . " '" . $recurrence ['event_name'] . "'";
-			dbem_event_form ( $recurrence, $title, $event_ID );
+			eme_event_form ( $recurrence, $title, $event_ID );
 		} else {
 			$feedback_message = __('You have no right to update','eme'). " '" . $recurrence ['event_name'] . "' !";
-			echo "<div id='message' class='updated fade'><p>".dbem_trans_sanitize_html($feedback_message)."</p></div>";
-			$events = dbem_get_events ( 0, "future" );
-			dbem_events_table ( $events, 20, "Future events", "future", $offset );
+			echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
+			$events = eme_get_events ( 0, "future" );
+			eme_events_table ( $events, 20, "Future events", "future", $offset );
 		}
 	}
 	
@@ -358,13 +358,13 @@ function eme_events_subpanel() {
 				$scope = "future";
 		}
 		$limit = 20;
-		$events = dbem_get_events ( $limit, $scope, $order, $offset );
-		dbem_events_table ( $events, $limit, $title, $scope, $offset );
+		$events = eme_get_events ( $limit, $scope, $order, $offset );
+		eme_events_table ( $events, $limit, $title, $scope, $offset );
 	}
 }
 
 // array of all pages, bypasses the filter I set up :)
-function dbem_get_all_pages() {
+function eme_get_all_pages() {
 	global $wpdb;
 	$query = "SELECT id, post_title FROM " . $wpdb->prefix . "posts WHERE post_type = 'page' AND post_status='publish'";
 	$pages = $wpdb->get_results ( $query, ARRAY_A );
@@ -393,94 +393,94 @@ function eme_options_subpanel() {
 <h3><?php _e ( 'General options', 'eme' ); ?></h3>
 <table class="form-table">
  	<?php
-	dbem_options_radio_binary ( __ ( 'Use dropdown for locations?' ), 'dbem_use_select_for_locations', __ ( 'Select yes to select location from a drop-down menu; location selection will be faster, but you will lose the ability to insert locations with events.','eme' )."<br/>".__ ( 'When the qtranslate plugin is installed and activated, this setting will be ignored and always considered \'Yes\'.','eme' ) );
-	dbem_options_radio_binary ( __ ( 'Use recurrence?' ), 'dbem_recurrence_enabled', __ ( 'Select yes to enable the possiblity to create recurrent events.','eme' ) ); 
-	dbem_options_radio_binary ( __ ( 'Use RSVP?' ), 'dbem_rsvp_enabled', __ ( 'Select yes to enable the RSVP feature so people can register for an event and book places.','eme' ) );
-	dbem_options_radio_binary ( __ ( 'Use categories?' ), 'dbem_categories_enabled', __ ( 'Select yes to enable the category features.','eme' ) );
-	dbem_options_radio_binary ( __ ( 'Use attributes?' ), 'dbem_attributes_enabled', __ ( 'Select yes to enable the attributes feature.','eme' ) );
-	dbem_options_radio_binary ( __ ( 'Enable Google Maps integration?' ), 'dbem_gmap_is_active', __ ( 'Check this option to enable Goggle Map integration.','eme' ) );
+	eme_options_radio_binary ( __ ( 'Use dropdown for locations?' ), 'dbem_use_select_for_locations', __ ( 'Select yes to select location from a drop-down menu; location selection will be faster, but you will lose the ability to insert locations with events.','eme' )."<br/>".__ ( 'When the qtranslate plugin is installed and activated, this setting will be ignored and always considered \'Yes\'.','eme' ) );
+	eme_options_radio_binary ( __ ( 'Use recurrence?' ), 'dbem_recurrence_enabled', __ ( 'Select yes to enable the possiblity to create recurrent events.','eme' ) ); 
+	eme_options_radio_binary ( __ ( 'Use RSVP?' ), 'dbem_rsvp_enabled', __ ( 'Select yes to enable the RSVP feature so people can register for an event and book places.','eme' ) );
+	eme_options_radio_binary ( __ ( 'Use categories?' ), 'dbem_categories_enabled', __ ( 'Select yes to enable the category features.','eme' ) );
+	eme_options_radio_binary ( __ ( 'Use attributes?' ), 'dbem_attributes_enabled', __ ( 'Select yes to enable the attributes feature.','eme' ) );
+	eme_options_radio_binary ( __ ( 'Enable Google Maps integration?' ), 'dbem_gmap_is_active', __ ( 'Check this option to enable Goggle Map integration.','eme' ) );
 	?>
 </table>
 <h3><?php _e ( 'Events page', 'eme' ); ?></h3>
 <table class="form-table">
  	<?php
-	dbem_options_select ( __ ( 'Events page' ), 'dbem_events_page', dbem_get_all_pages (), __ ( 'This option allows you to select which page to use as an events page.', 'eme' )."<br/><strong>".__ ( 'The content of this pagea (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data.','eme' )."</strong>" );
-	dbem_options_radio_binary ( __ ( 'Show events page in lists?', 'eme' ), 'dbem_list_events_page', __ ( 'Check this option if you want the events page to appear together with other pages in pages lists.', 'eme' )."<br/><strong>".__ ( 'This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended.', 'eme' )."</strong>" ); 
-	dbem_options_radio_binary ( __ ( 'Display calendar in events page?', 'eme' ), 'dbem_display_calendar_in_events_page', __ ( 'This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page.','eme' ) );
+	eme_options_select ( __ ( 'Events page' ), 'dbem_events_page', eme_get_all_pages (), __ ( 'This option allows you to select which page to use as an events page.', 'eme' )."<br/><strong>".__ ( 'The content of this pagea (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data.','eme' )."</strong>" );
+	eme_options_radio_binary ( __ ( 'Show events page in lists?', 'eme' ), 'dbem_list_events_page', __ ( 'Check this option if you want the events page to appear together with other pages in pages lists.', 'eme' )."<br/><strong>".__ ( 'This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended.', 'eme' )."</strong>" ); 
+	eme_options_radio_binary ( __ ( 'Display calendar in events page?', 'eme' ), 'dbem_display_calendar_in_events_page', __ ( 'This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page.','eme' ) );
 	?>
 </table>
 <h3><?php _e ( 'Events format', 'eme' ); ?></h3>
 <table class="form-table">
  	<?php
-	dbem_options_textarea ( __ ( 'Default event list format header', 'eme' ), 'dbem_event_list_item_format_header', __( 'This content will appear just above your code for the default event list format. Default is blank', 'eme' ) );
- 	dbem_options_textarea ( __ ( 'Default event list format', 'eme' ), 'dbem_event_list_item_format', __ ( 'The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href="http://www.php.net/manual/en/function.date.php">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM starttime/endtime notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event.', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Default event list format footer', 'eme' ), 'dbem_event_list_item_format_footer', __ ( 'This content will appear just below your code for the default event list format. Default is blank', 'eme' ) );
+	eme_options_textarea ( __ ( 'Default event list format header', 'eme' ), 'dbem_event_list_item_format_header', __( 'This content will appear just above your code for the default event list format. Default is blank', 'eme' ) );
+ 	eme_options_textarea ( __ ( 'Default event list format', 'eme' ), 'dbem_event_list_item_format', __ ( 'The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href="http://www.php.net/manual/en/function.date.php">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM starttime/endtime notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event.', 'eme' ) );
+	eme_options_textarea ( __ ( 'Default event list format footer', 'eme' ), 'dbem_event_list_item_format_footer', __ ( 'This content will appear just below your code for the default event list format. Default is blank', 'eme' ) );
 
-	dbem_options_input_text ( __ ( 'Single event page title format', 'eme' ), 'dbem_event_page_title_format', __ ( 'The format of a single event page title. Follow the previous formatting instructions.', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Default single event format', 'eme' ), 'dbem_single_event_format', __ ( 'The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings.', 'eme' ).__('<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask directions to the event.','eme').__('<br/> Use <code>#_CATEGORIES</code> to insert a comma seperated list of categories an event is in.','eme').__('<br/> Use <code>#_ATTENDEES</code> to get a list of the names attending the event.','eme') );
-	dbem_options_input_text ( __ ( 'Events page title', 'eme' ), 'dbem_events_page_title', __ ( 'The title on the multiple events page.', 'eme' ) );
-	dbem_options_input_text ( __ ( 'No events message', 'eme' ), 'dbem_no_events_message', __ ( 'The message displayed when no events are available.', 'eme' ) );
+	eme_options_input_text ( __ ( 'Single event page title format', 'eme' ), 'dbem_event_page_title_format', __ ( 'The format of a single event page title. Follow the previous formatting instructions.', 'eme' ) );
+	eme_options_textarea ( __ ( 'Default single event format', 'eme' ), 'dbem_single_event_format', __ ( 'The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings.', 'eme' ).__('<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask directions to the event.','eme').__('<br/> Use <code>#_CATEGORIES</code> to insert a comma seperated list of categories an event is in.','eme').__('<br/> Use <code>#_ATTENDEES</code> to get a list of the names attending the event.','eme') );
+	eme_options_input_text ( __ ( 'Events page title', 'eme' ), 'dbem_events_page_title', __ ( 'The title on the multiple events page.', 'eme' ) );
+	eme_options_input_text ( __ ( 'No events message', 'eme' ), 'dbem_no_events_message', __ ( 'The message displayed when no events are available.', 'eme' ) );
 	?>
 </table>
 <h3><?php _e ( 'Calendar format', 'eme' ); ?></h3>
 <table class="form-table">
 	<?php
-	dbem_options_input_text ( __ ( 'Small calendar title', 'eme' ), 'dbem_small_calendar_event_title_format', __ ( 'The format of the title, corresponding to the text that appears when hovering on an eventful calendar day.', 'eme' ) );
-	dbem_options_input_text ( __ ( 'Small calendar title separator', 'eme' ), 'dbem_small_calendar_event_title_separator', __ ( 'The separator appearing on the above title when more than one events are taking place on the same day.', 'eme' ) );
-	dbem_options_input_text ( __ ( 'Full calendar events format', 'eme' ), 'dbem_full_calendar_event_format', __ ( 'The format of each event when displayed in the full calendar. Remember to include <code>li</code> tags before and after the event.', 'eme' ) );
+	eme_options_input_text ( __ ( 'Small calendar title', 'eme' ), 'dbem_small_calendar_event_title_format', __ ( 'The format of the title, corresponding to the text that appears when hovering on an eventful calendar day.', 'eme' ) );
+	eme_options_input_text ( __ ( 'Small calendar title separator', 'eme' ), 'dbem_small_calendar_event_title_separator', __ ( 'The separator appearing on the above title when more than one events are taking place on the same day.', 'eme' ) );
+	eme_options_input_text ( __ ( 'Full calendar events format', 'eme' ), 'dbem_full_calendar_event_format', __ ( 'The format of each event when displayed in the full calendar. Remember to include <code>li</code> tags before and after the event.', 'eme' ) );
 	?>
 </table>
 
 <h3><?php _e ( 'Locations format', 'eme' ); ?></h3>
 <table class="form-table">
 	<?php
-	dbem_options_input_text ( __ ( 'Single location page title format', 'eme' ), 'dbem_location_page_title_format', __ ( 'The format of a single location page title.<br/>Follow the previous formatting instructions.', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Default single location page format', 'eme' ), 'dbem_single_location_format', __ ( 'The format of a single location page.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>.<br/> Use <code>#_MAP</code> to display a map of the event location, and <code>#_IMAGE</code> to display an image of the location.<br/> Use <code>#_NEXTEVENTS</code> to insert a list of the upcoming events, <code>#_PASTEVENTS</code> for a list of past events, <code>#_ALLEVENTS</code> for a list of all events taking place in this location.', 'eme' ) );
-	dbem_options_input_text ( __ ( 'Default location balloon format', 'eme' ), 'dbem_location_baloon_format', __ ( 'The format of of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>.', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Default location event list format', 'eme' ), 'dbem_location_event_list_item_format', __ ( 'The format of the events the list inserted in the location page through the <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> element. <br/> Follow the events formatting instructions', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Default no events message', 'eme' ), 'dbem_location_no_events_message', __ ( 'The message to be displayed in the list generated by <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> when no events are available.', 'eme' ) );
+	eme_options_input_text ( __ ( 'Single location page title format', 'eme' ), 'dbem_location_page_title_format', __ ( 'The format of a single location page title.<br/>Follow the previous formatting instructions.', 'eme' ) );
+	eme_options_textarea ( __ ( 'Default single location page format', 'eme' ), 'dbem_single_location_format', __ ( 'The format of a single location page.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>.<br/> Use <code>#_MAP</code> to display a map of the event location, and <code>#_IMAGE</code> to display an image of the location.<br/> Use <code>#_NEXTEVENTS</code> to insert a list of the upcoming events, <code>#_PASTEVENTS</code> for a list of past events, <code>#_ALLEVENTS</code> for a list of all events taking place in this location.', 'eme' ) );
+	eme_options_input_text ( __ ( 'Default location balloon format', 'eme' ), 'dbem_location_baloon_format', __ ( 'The format of of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>.', 'eme' ) );
+	eme_options_textarea ( __ ( 'Default location event list format', 'eme' ), 'dbem_location_event_list_item_format', __ ( 'The format of the events the list inserted in the location page through the <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> element. <br/> Follow the events formatting instructions', 'eme' ) );
+	eme_options_textarea ( __ ( 'Default no events message', 'eme' ), 'dbem_location_no_events_message', __ ( 'The message to be displayed in the list generated by <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> when no events are available.', 'eme' ) );
 	?>
 </table>
 
 <h3><?php _e ( 'RSS feed format', 'eme' ); ?></h3>
 <table class="form-table">
 	<?php
-	dbem_options_input_text ( __ ( 'RSS main title', 'eme' ), 'dbem_rss_main_title', __ ( 'The main title of your RSS events feed.', 'eme' ) );
-	dbem_options_input_text ( __ ( 'RSS main description', 'eme' ), 'dbem_rss_main_description', __ ( 'The main description of your RSS events feed.', 'eme' ) );
-	dbem_options_input_text ( __ ( 'RSS title format', 'eme' ), 'dbem_rss_title_format', __ ( 'The format of the title of each item in the events RSS feed.', 'eme' ) );
-	dbem_options_input_text ( __ ( 'RSS description format', 'eme' ), 'dbem_rss_description_format', __ ( 'The format of the description of each item in the events RSS feed. Follow the previous formatting instructions.', 'eme' ) );
+	eme_options_input_text ( __ ( 'RSS main title', 'eme' ), 'dbem_rss_main_title', __ ( 'The main title of your RSS events feed.', 'eme' ) );
+	eme_options_input_text ( __ ( 'RSS main description', 'eme' ), 'dbem_rss_main_description', __ ( 'The main description of your RSS events feed.', 'eme' ) );
+	eme_options_input_text ( __ ( 'RSS title format', 'eme' ), 'dbem_rss_title_format', __ ( 'The format of the title of each item in the events RSS feed.', 'eme' ) );
+	eme_options_input_text ( __ ( 'RSS description format', 'eme' ), 'dbem_rss_description_format', __ ( 'The format of the description of each item in the events RSS feed. Follow the previous formatting instructions.', 'eme' ) );
 	?>
 </table>
 
 <h3><?php _e ( 'RSVP: registrations and bookings', 'eme' ); ?></h3>
 <table class='form-table'>
      <?php
-	dbem_options_select ( __ ( 'Default contact person', 'eme' ), 'dbem_default_contact_person', dbem_get_indexed_users (), __ ( 'Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event', 'eme' ) );
-	dbem_options_radio_binary ( __ ( 'Require WP membership to be able to register?', 'eme' ), 'dbem_rsvp_registered_users_only', __ ( 'Check this option if you want that only WP registered users can book for an event.', 'eme' ) );
-	dbem_options_radio_binary ( __ ( 'Use captcha for booking form?', 'eme' ), 'dbem_captcha_for_booking', __ ( 'Check this option if you want to use a captcha on the booking form, to thwart spammers a bit.', 'eme' ) );
-	dbem_options_radio_binary ( __ ( 'Enable the RSVP e-mail notifications?', 'eme' ), 'dbem_rsvp_mail_notify_is_active', __ ( 'Check this option if you want to receive an email when someone books places for your events.', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Contact person email format', 'eme' ), 'dbem_contactperson_email_body', __ ( 'The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats.', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Respondent email format', 'eme' ), 'dbem_respondent_email_body', __ ( 'The format of the email which will be sent to the respondent. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code> to display the name of the respondent.<br/>Use <code>#_CONTACTNAME</code> and <code>#_PLAIN_CONTACTEMAIL</code> to display respectively the name and e-mail of the contact person.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment.', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Registration pending email format', 'eme' ), 'dbem_registration_pending_email_body', __ ( 'The format of the email which will be sent to the respondent when the event requires registration approval.', 'eme' ) );
-	dbem_options_textarea ( __ ( 'Registration denied email format', 'eme' ), 'dbem_registration_denied_email_body', __ ( 'The format of the email which will be sent to the respondent when the admin denies the registration request if the event requires registration approval.', 'eme' ) );
-	dbem_options_input_text ( __ ( 'Notification sender name', 'eme' ), 'dbem_mail_sender_name', __ ( "Insert the display name of the notification sender.", 'eme' ) );
-	dbem_options_input_text ( __ ( 'Notification sender address', 'eme' ), 'dbem_mail_sender_address', __ ( "Insert the address of the notification sender. It must corresponds with your gmail account user", 'eme' ) );
-	dbem_options_input_text ( __ ( 'Default notification receiver address', 'eme' ), 'dbem_mail_receiver_address', __ ( "Insert the address of the receiver of your notifications", 'eme' ) );
-	dbem_options_select ( __ ( 'Mail sending method', 'eme' ), 'dbem_rsvp_mail_send_method', array ('smtp' => 'SMTP', 'mail' => __ ( 'PHP mail function', 'eme' ), 'sendmail' => 'Sendmail', 'qmail' => 'Qmail' ), __ ( 'Select the method to send email notification.', 'eme' ) );
-	dbem_options_input_text ( 'Mail sending port', 'dbem_rsvp_mail_port', __ ( "The port through which you e-mail notifications will be sent. Make sure the firewall doesn't block this port", 'eme' ) );
-	dbem_options_radio_binary ( __ ( 'Use SMTP authentication?', 'eme' ), 'dbem_rsvp_mail_SMTPAuth', __ ( 'SMTP authentication is often needed. If you use GMail, make sure to set this parameter to Yes', 'eme' ) );
-	dbem_options_input_text ( 'SMTP host', 'dbem_smtp_host', __ ( "The SMTP host. Usually it corresponds to 'localhost'. If you use GMail, set this value to 'ssl://smtp.gmail.com:465'.", 'eme' ) );
-	dbem_options_input_text ( __ ( 'SMTP username', 'eme' ), 'dbem_smtp_username', __ ( "Insert the username to be used to access your SMTP server.", 'eme' ) );
-	dbem_options_input_password ( __ ( 'SMTP password', 'eme' ), "dbem_smtp_password", __ ( "Insert the password to be used to access your SMTP server", 'eme' ) );
+	eme_options_select ( __ ( 'Default contact person', 'eme' ), 'dbem_default_contact_person', eme_get_indexed_users (), __ ( 'Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event', 'eme' ) );
+	eme_options_radio_binary ( __ ( 'Require WP membership to be able to register?', 'eme' ), 'dbem_rsvp_registered_users_only', __ ( 'Check this option if you want that only WP registered users can book for an event.', 'eme' ) );
+	eme_options_radio_binary ( __ ( 'Use captcha for booking form?', 'eme' ), 'dbem_captcha_for_booking', __ ( 'Check this option if you want to use a captcha on the booking form, to thwart spammers a bit.', 'eme' ) );
+	eme_options_radio_binary ( __ ( 'Enable the RSVP e-mail notifications?', 'eme' ), 'dbem_rsvp_mail_notify_is_active', __ ( 'Check this option if you want to receive an email when someone books places for your events.', 'eme' ) );
+	eme_options_textarea ( __ ( 'Contact person email format', 'eme' ), 'dbem_contactperson_email_body', __ ( 'The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats.', 'eme' ) );
+	eme_options_textarea ( __ ( 'Respondent email format', 'eme' ), 'dbem_respondent_email_body', __ ( 'The format of the email which will be sent to the respondent. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code> to display the name of the respondent.<br/>Use <code>#_CONTACTNAME</code> and <code>#_PLAIN_CONTACTEMAIL</code> to display respectively the name and e-mail of the contact person.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment.', 'eme' ) );
+	eme_options_textarea ( __ ( 'Registration pending email format', 'eme' ), 'dbem_registration_pending_email_body', __ ( 'The format of the email which will be sent to the respondent when the event requires registration approval.', 'eme' ) );
+	eme_options_textarea ( __ ( 'Registration denied email format', 'eme' ), 'dbem_registration_denied_email_body', __ ( 'The format of the email which will be sent to the respondent when the admin denies the registration request if the event requires registration approval.', 'eme' ) );
+	eme_options_input_text ( __ ( 'Notification sender name', 'eme' ), 'dbem_mail_sender_name', __ ( "Insert the display name of the notification sender.", 'eme' ) );
+	eme_options_input_text ( __ ( 'Notification sender address', 'eme' ), 'dbem_mail_sender_address', __ ( "Insert the address of the notification sender. It must corresponds with your gmail account user", 'eme' ) );
+	eme_options_input_text ( __ ( 'Default notification receiver address', 'eme' ), 'dbem_mail_receiver_address', __ ( "Insert the address of the receiver of your notifications", 'eme' ) );
+	eme_options_select ( __ ( 'Mail sending method', 'eme' ), 'dbem_rsvp_mail_send_method', array ('smtp' => 'SMTP', 'mail' => __ ( 'PHP mail function', 'eme' ), 'sendmail' => 'Sendmail', 'qmail' => 'Qmail' ), __ ( 'Select the method to send email notification.', 'eme' ) );
+	eme_options_input_text ( 'Mail sending port', 'dbem_rsvp_mail_port', __ ( "The port through which you e-mail notifications will be sent. Make sure the firewall doesn't block this port", 'eme' ) );
+	eme_options_radio_binary ( __ ( 'Use SMTP authentication?', 'eme' ), 'dbem_rsvp_mail_SMTPAuth', __ ( 'SMTP authentication is often needed. If you use GMail, make sure to set this parameter to Yes', 'eme' ) );
+	eme_options_input_text ( 'SMTP host', 'dbem_smtp_host', __ ( "The SMTP host. Usually it corresponds to 'localhost'. If you use GMail, set this value to 'ssl://smtp.gmail.com:465'.", 'eme' ) );
+	eme_options_input_text ( __ ( 'SMTP username', 'eme' ), 'dbem_smtp_username', __ ( "Insert the username to be used to access your SMTP server.", 'eme' ) );
+	eme_options_input_password ( __ ( 'SMTP password', 'eme' ), "dbem_smtp_password", __ ( "Insert the password to be used to access your SMTP server", 'eme' ) );
 	?>
 </table>
 
 <h3><?php _e ( 'Images size', 'eme' ); ?></h3>
 <table class='form-table'>
 	<?php
-	dbem_options_input_text ( __ ( 'Maximum width (px)', 'eme' ), 'dbem_image_max_width', __ ( 'The maximum allowed width for images uploaded', 'eme' ) );
-	dbem_options_input_text ( __ ( 'Maximum height (px)', 'eme' ), 'dbem_image_max_height', __ ( "The maximum allowed width for images uploaded, in pixels", 'eme' ) );
-	dbem_options_input_text ( __ ( 'Maximum size (bytes)', 'eme' ), 'dbem_image_max_size', __ ( "The maximum allowed size for images uploaded, in pixels", 'eme' ) );
+	eme_options_input_text ( __ ( 'Maximum width (px)', 'eme' ), 'dbem_image_max_width', __ ( 'The maximum allowed width for images uploaded', 'eme' ) );
+	eme_options_input_text ( __ ( 'Maximum height (px)', 'eme' ), 'dbem_image_max_height', __ ( "The maximum allowed width for images uploaded, in pixels", 'eme' ) );
+	eme_options_input_text ( __ ( 'Maximum size (bytes)', 'eme' ), 'dbem_image_max_size', __ ( "The maximum allowed size for images uploaded, in pixels", 'eme' ) );
 	?>
 </table>
 
@@ -495,63 +495,63 @@ function eme_options_subpanel() {
 }
 
 //This is the content of the event page
-function dbem_events_page_content() {
+function eme_events_page_content() {
 	global $wpdb;
 	if (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] |= '') {
-		$location = dbem_get_location ( intval($_REQUEST ['location_id']));
+		$location = eme_get_location ( intval($_REQUEST ['location_id']));
 		$single_location_format = get_option ( 'dbem_single_location_format' );
-		$page_body = dbem_replace_locations_placeholders ( $single_location_format, $location );
+		$page_body = eme_replace_locations_placeholders ( $single_location_format, $location );
 		return $page_body;
 	}
 	//if (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') {
-	if (dbem_is_single_event_page()) {
+	if (eme_is_single_event_page()) {
 		// single event page
 		$event_ID = intval($_REQUEST ['event_id']);
-		$event = dbem_get_event ( $event_ID );
+		$event = eme_get_event ( $event_ID );
 		$single_event_format = ( $event['event_single_event_format'] != '' ) ? $event['event_single_event_format'] : get_option ( 'dbem_single_event_format' );
-		//$page_body = dbem_replace_placeholders ( $single_event_format, $event, 'stop' );
-		$page_body = dbem_replace_placeholders ( $single_event_format, $event );
+		//$page_body = eme_replace_placeholders ( $single_event_format, $event, 'stop' );
+		$page_body = eme_replace_placeholders ( $single_event_format, $event );
 		return $page_body;
 	} elseif (isset ( $_REQUEST ['calendar_day'] ) && $_REQUEST ['calendar_day'] != '') {
-		$date = dbem_sanitize_request($_REQUEST ['calendar_day']);
-		$events_N = dbem_events_count_for ( $date );
-		// $_GET['scope'] ? $scope = dbem_sanitize_request($_GET['scope']): $scope =  "future";
+		$date = eme_sanitize_request($_REQUEST ['calendar_day']);
+		$events_N = eme_events_count_for ( $date );
+		// $_GET['scope'] ? $scope = eme_sanitize_request($_GET['scope']): $scope =  "future";
 		// $stored_format = get_option('dbem_event_list_item_format');
-		// $events_body  =  dbem_get_events_list(10, $scope, "ASC", $stored_format, $false);
+		// $events_body  =  eme_get_events_list(10, $scope, "ASC", $stored_format, $false);
 		if ($events_N > 1) {
-			$_GET ['calendar_day'] ? dbem_sanitize_request($scope = $_GET ['calendar_day']) : $scope = "future";
+			$_GET ['calendar_day'] ? eme_sanitize_request($scope = $_GET ['calendar_day']) : $scope = "future";
 			$stored_format = get_option ( 'dbem_event_list_item_format' );
 			//Add headers and footers to the events list
 			$single_event_format_header = get_option ( 'dbem_event_list_item_format_header' );
 			$single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='dbem_events_list'>";
 			$single_event_format_footer = get_option ( 'dbem_event_list_item_format_footer' );
 			$single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
-			return $single_event_format_header .  dbem_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
+			return $single_event_format_header .  eme_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
 		} else {
-			$events = dbem_get_events ( 0, dbem_sanitize_request($_REQUEST['calendar_day']) );
+			$events = eme_get_events ( 0, eme_sanitize_request($_REQUEST['calendar_day']) );
 			$event = $events [0];
 			$single_event_format = ( $event['event_single_event_format'] != '' ) ? $event['event_single_event_format'] : get_option ( 'dbem_single_event_format' );
-			$page_body = dbem_replace_placeholders ( $single_event_format, $event );
+			$page_body = eme_replace_placeholders ( $single_event_format, $event );
 			return $page_body;
 		}
 	} else {
 		// Multiple events page
-		$_GET ['scope'] ? $scope = dbem_sanitize_request($_GET ['scope']) : $scope = "future";
+		$_GET ['scope'] ? $scope = eme_sanitize_request($_GET ['scope']) : $scope = "future";
 		$stored_format = get_option ( 'dbem_event_list_item_format' );
 		if (get_option ( 'dbem_display_calendar_in_events_page' )){
-			$events_body = dbem_get_calendar ('full=1');
+			$events_body = eme_get_calendar ('full=1');
 		}else{
 			$single_event_format_header = get_option ( 'dbem_event_list_item_format_header' );
 			$single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='dbem_events_list'>";
 			$single_event_format_footer = get_option ( 'dbem_event_list_item_format_footer' );
 			$single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
-			$events_body = $single_event_format_header . dbem_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
+			$events_body = $single_event_format_header . eme_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
 		}
 		return $events_body;
 	}
 }
 
-function dbem_events_count_for($date) {
+function eme_events_count_for($date) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . EVENTS_TBNAME;
 	$conditions = array ();
@@ -575,8 +575,8 @@ function eme_filter_events_page($data) {
 	// we change the content of the page only if we're "in the loop",
 	// otherwise this filter also gets applied if eg. a widget calls
 	// the_content or the_excerpt to get the content of a page
-	if (in_the_loop() && dbem_is_events_page()) {
-		return dbem_events_page_content ();
+	if (in_the_loop() && eme_is_events_page()) {
+		return eme_events_page_content ();
 	} else {
 		return $data;
 	}
@@ -589,33 +589,33 @@ function eme_event_page_title($data) {
 	$events_page_title = $events_page->post_title;
 	
 	//if (($data == $events_page_title) && (is_page ( $events_page_id ))) {
-	if (($data == $events_page_title) && dbem_is_events_page()) {
+	if (($data == $events_page_title) && eme_is_events_page()) {
 		if (isset ( $_REQUEST['calendar_day'] ) && $_REQUEST['calendar_day'] != '') {
 			
-			$date = dbem_sanitize_request($_REQUEST['calendar_day']);
-			$events_N = dbem_events_count_for ( $date );
+			$date = eme_sanitize_request($_REQUEST['calendar_day']);
+			$events_N = eme_events_count_for ( $date );
 			
 			if ($events_N == 1) {
-				$events = dbem_get_events ( 0, dbem_sanitize_request($_REQUEST['calendar_day']));
+				$events = eme_get_events ( 0, eme_sanitize_request($_REQUEST['calendar_day']));
 				$event = $events [0];
 				$stored_page_title_format = ( $event['event_page_title_format'] != '' ) ? $event['event_page_title_format'] : get_option ( 'dbem_event_page_title_format' );
-				$page_title = dbem_replace_placeholders ( $stored_page_title_format, $event );
+				$page_title = eme_replace_placeholders ( $stored_page_title_format, $event );
 				return $page_title;
 			}
 		}
 		
 		if (isset ( $_REQUEST['location_id'] ) && $_REQUEST['location_id'] |= '') {
-			$location = dbem_get_location ( intval($_REQUEST['location_id']));
+			$location = eme_get_location ( intval($_REQUEST['location_id']));
 			$stored_page_title_format = get_option ( 'dbem_location_page_title_format' );
-			$page_title = dbem_replace_locations_placeholders ( $stored_page_title_format, $location );
+			$page_title = eme_replace_locations_placeholders ( $stored_page_title_format, $location );
 			return $page_title;
 		}
-		if (dbem_is_single_event_page()) {
+		if (eme_is_single_event_page()) {
 			// single event page
 			$event_ID = intval($_REQUEST['event_id']);
-			$event = dbem_get_event ( $event_ID );
+			$event = eme_get_event ( $event_ID );
 			$stored_page_title_format = ( $event['event_page_title_format'] != '' ) ? $event['event_page_title_format'] : get_option ( 'dbem_event_page_title_format' );
-			$page_title = dbem_replace_placeholders ( $stored_page_title_format, $event );
+			$page_title = eme_replace_placeholders ( $stored_page_title_format, $event );
 			return $page_title;
 		} else {
 			// Multiple events page
@@ -629,7 +629,7 @@ function eme_event_page_title($data) {
 add_filter ( 'single_post_title', 'eme_event_page_title' );
 
 function eme_filter_the_title($data) {
-	if (in_the_loop() && dbem_is_events_page()) {
+	if (in_the_loop() && eme_is_events_page()) {
 		return dbem_event_page_title($data);
 	} else {
 		return $data;
@@ -713,7 +713,7 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
 	//Added a category option to the get events list method and shortcode
-function dbem_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '') {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '') {
 	if (strpos ( $limit, "=" )) {
 		// allows the use of arguments without breaking the legacy code
 		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '');
@@ -734,7 +734,7 @@ function dbem_get_events_list($limit = 10, $scope = "future", $order = "ASC", $f
 	} else {
 		$orig_format = false;
 	}
-	$events = dbem_get_events ( $limit, $scope, $order, '', '', $category );
+	$events = eme_get_events ( $limit, $scope, $order, '', '', $category );
 	$output = "";
 	if (! empty ( $events )) {
 		$curmonth="";
@@ -748,7 +748,7 @@ function dbem_get_events_list($limit = 10, $scope = "future", $order = "ASC", $f
 				$output .= "<li class='dbem_period'>$theday</li>";
 			}
 			//  $localised_date = mysql2date("j M Y", $event->event_time);
-			$output .= dbem_replace_placeholders ( $format, $event );
+			$output .= eme_replace_placeholders ( $format, $event );
 			$curmonth=$themonth;
 			$curday=$theday;
 		}
@@ -769,23 +769,23 @@ function dbem_get_events_list($limit = 10, $scope = "future", $order = "ASC", $f
 		return $output;
 }
 
-function dbem_get_events_list_shortcode($atts) {
+function eme_get_events_list_shortcode($atts) {
 	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '' ), $atts ) );
-	$result = dbem_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod" );
+	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod" );
 	return $result;
 }
-add_shortcode ( 'events_list', 'dbem_get_events_list_shortcode' );
+add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
 
-function dbem_display_single_event_shortcode($atts){
+function eme_display_single_event_shortcode($atts){
 	extract ( shortcode_atts ( array ('id'=>''), $atts ) );
-	$event = dbem_get_event ( $id );
+	$event = eme_get_event ( $id );
 	$single_event_format = get_option ( 'dbem_single_event_format' );
-	$page_body = dbem_replace_placeholders ($single_event_format, $event);
+	$page_body = eme_replace_placeholders ($single_event_format, $event);
 	return $page_body;
 }
-add_shortcode('display_single_event', 'dbem_display_single_event_shortcode');
+add_shortcode('display_single_event', 'eme_display_single_event_shortcode');
 
-function dbem_get_events_page($justurl = 0, $echo = 1, $text = '') {
+function eme_get_events_page($justurl = 0, $echo = 1, $text = '') {
 	if (strpos ( $justurl, "=" )) {
 		// allows the use of arguments without breaking the legacy code
 		$defaults = array ('justurl' => 0, 'text' => '', 'echo' => 1 );
@@ -809,17 +809,17 @@ function dbem_get_events_page($justurl = 0, $echo = 1, $text = '') {
 		return $result;
 }
 
-function dbem_get_events_page_shortcode($atts) {
+function eme_get_events_page_shortcode($atts) {
 	extract ( shortcode_atts ( array ('justurl' => 0, 'text' => '' ), $atts ) );
-	$result = dbem_get_events_page ( "justurl=$justurl&text=$text&echo=0" );
+	$result = eme_get_events_page ( "justurl=$justurl&text=$text&echo=0" );
 	return $result;
 }
-add_shortcode ( 'events_page', 'dbem_get_events_page_shortcode' );
+add_shortcode ( 'events_page', 'eme_get_events_page_shortcode' );
 
-function dbem_are_events_available($scope = "future") {
+function eme_are_events_available($scope = "future") {
 	if ($scope == "")
 		$scope = "future";
-	$events = dbem_get_events ( 1, $scope );
+	$events = eme_get_events ( 1, $scope );
 	
 	if (empty ( $events ))
 		return FALSE;
@@ -828,21 +828,21 @@ function dbem_are_events_available($scope = "future") {
 }
 
 // Returns true if the page in question is the events page
-function dbem_is_events_page() {
+function eme_is_events_page() {
 	$events_page_id = get_option ( 'dbem_events_page' );
 	return is_page ( $events_page_id );
 }
 
-function dbem_is_single_event_page() {
-	return (dbem_is_events_page () && (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != ''));
+function eme_is_single_event_page() {
+	return (eme_is_events_page () && (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != ''));
 }
 
-function dbem_is_multiple_events_page() {
-	return (dbem_is_events_page () && ! (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != ''));
+function eme_is_multiple_events_page() {
+	return (eme_is_events_page () && ! (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != ''));
 }
 
 // main function querying the database event table
-function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '') {
+function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '') {
 	global $wpdb;
 
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
@@ -955,7 +955,7 @@ function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_of
 			}
 			
 			if ($this_event ['location_id'] ) {
-				$this_location = dbem_get_location ( $this_event ['location_id'] );
+				$this_location = eme_get_location ( $this_event ['location_id'] );
 				$this_event ['location_name'] = $this_location ['location_name'];
 				$this_event ['location_address'] = $this_location ['location_address'];
 				$this_event ['location_town'] = $this_location ['location_town'];
@@ -971,7 +971,7 @@ function dbem_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_of
 	}
 }
 
-function dbem_get_event($event_id) {
+function eme_get_event($event_id) {
 	global $wpdb;
 	$event_id = intval($event_id);
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
@@ -1012,7 +1012,7 @@ function dbem_get_event($event_id) {
 	//$wpdb->show_errors(true);
 	$event = $wpdb->get_row ( $sql, ARRAY_A );
 	//$wpdb->print_error();
-	$location = dbem_get_location ( $event ['location_id'] );
+	$location = eme_get_location ( $event ['location_id'] );
 	$event ['location_name'] = $location ['location_name'];
 	$event ['location_address'] = $location ['location_address'];
 	$event ['location_town'] = $location ['location_town'];
@@ -1025,7 +1025,7 @@ function dbem_get_event($event_id) {
 	return $event;
 }
 
-function dbem_duplicate_event($event_id) {
+function eme_duplicate_event($event_id) {
 	global $wpdb, $EZSQL_ERROR;
 	//First, duplicate.
 	$event_table_name = $wpdb->prefix . EVENTS_TBNAME;
@@ -1035,12 +1035,12 @@ function dbem_duplicate_event($event_id) {
 	if( $result !== false) {
 		//Get the ID of the new item
 		$event_ID = $wpdb->insert_id;
-		$event = dbem_get_event ( $event_ID );
+		$event = eme_get_event ( $event_ID );
 		$event['event_id'] = $event_ID;
 		//Now we edit the duplicated item
 		$title = __ ( "Edit Event", 'eme' ) . " '" . $event ['event_name'] . "'";
 		echo "<div id='message' class='updated below-h2'>You are now editing the duplicated event.</div>";
-		dbem_event_form ( $event, $title, $event_ID );
+		eme_event_form ( $event, $title, $event_ID );
 	} else {
 		echo "<div class='error'><p>There was an error duplicating the event. Try again maybe? Here are the errors:</p>";
 		foreach ($EZSQL_ERROR as $errorArray) {
@@ -1051,13 +1051,13 @@ function dbem_duplicate_event($event_id) {
 		$offset = intval($_GET ['offset']);
 		$order = $_GET ['order'];
 		$limit = 20;
-		$events = dbem_get_events ( $limit, $scope, $order, $offset );
-		dbem_events_table ( $events, $limit, $title, $scope, $offset );
+		$events = eme_get_events ( $limit, $scope, $order, $offset );
+		eme_events_table ( $events, $limit, $title, $scope, $offset );
 	}
 }
 
-function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) {
-	$events_count = count ( dbem_get_events ( 0, $scope ) );
+function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
+	$events_count = count ( eme_get_events ( 0, $scope ) );
 	$use_events_end = get_option ( 'dbem_use_event_end' );
 	?>
 
@@ -1145,7 +1145,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 			$style = "";
 			$today = date ( "Y-m-d" );
 			
-			$location_summary = "<b>" . dbem_trans_sanitize_html($event ['location_name']) . "</b><br/>" . dbem_trans_sanitize_html($event ['location_address']) . " - " . dbem_trans_sanitize_html($event ['location_town']);
+			$location_summary = "<b>" . eme_trans_sanitize_html($event ['location_name']) . "</b><br/>" . eme_trans_sanitize_html($event ['location_address']) . " - " . eme_trans_sanitize_html($event ['location_town']);
 			
 			if ($event ['event_start_date'] < $today)
 				$style = "style ='background-color: #FADDB7;'";
@@ -1153,14 +1153,14 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 	  <tr <?php echo "$class $style"; ?>>
 			<td><input type='checkbox' class='row-selector' value='<?php echo $event ['event_id']; ?>' name='events[]' /></td>
 			<td><strong>
-			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event ['event_id']); ?>"><?php echo dbem_trans_sanitize_html($event ['event_name']); ?></a>
+			<a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event ['event_id']); ?>"><?php echo eme_trans_sanitize_html($event ['event_name']); ?></a>
 			</strong>
 			<?php
 			$categories = explode(',', $event ['event_category_ids']);
 			foreach($categories as $cat){
-				$category = dbem_get_category($cat);
+				$category = eme_get_category($cat);
 				if($category)
-					echo "<br/><span title='".__ ( 'Category', 'eme' ).": ".dbem_trans_sanitize_html($category['category_name'])."'>".dbem_trans_sanitize_html($category['category_name'])."</span>";
+					echo "<br/><span title='".__ ( 'Category', 'eme' ).": ".eme_trans_sanitize_html($category['category_name'])."'>".eme_trans_sanitize_html($category['category_name'])."</span>";
 			}
 			?> 
 			</td>
@@ -1184,7 +1184,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 			<td>
 				 <?php
 				if ($event ['recurrence_id']) {
-					$recurrence_desc = dbem_get_recurrence_desc ( $event ['recurrence_id'] );
+					$recurrence_desc = eme_get_recurrence_desc ( $event ['recurrence_id'] );
 				?>
 					<b><?php echo $recurrence_desc; ?>
 				<br />
@@ -1226,7 +1226,7 @@ function dbem_events_table($events, $limit, $title, $scope="future", $offset=0) 
 <?php
 }
 
-function dbem_event_form($event, $title, $element) {
+function eme_event_form($event, $title, $element) {
 	
 	global $localised_date_formats;
 	admin_show_warnings();
@@ -1287,7 +1287,7 @@ function dbem_event_form($event, $title, $element) {
 		$localised_end_date = "";
 	}
 	//if($event[$pref.'rsvp'])
-	 //	echo (dbem_bookings_table($event[$pref.'id']));
+	 //	echo (eme_bookings_table($event[$pref.'id']));
 	
 
 	$freq_options = array ("daily" => __ ( 'Daily', 'eme' ), "weekly" => __ ( 'Weekly', 'eme' ), "monthly" => __ ( 'Monthly', 'eme' ) );
@@ -1301,7 +1301,7 @@ function dbem_event_form($event, $title, $element) {
 	<form id="eventForm" method="post" 	action="<?php echo $form_destination; ?>">
 		<div class="wrap">
 			<div id="icon-events" class="icon32"><br /></div>
-			<h2><?php echo dbem_trans_sanitize_html($title); ?></h2>
+			<h2><?php echo eme_trans_sanitize_html($title); ?></h2>
 			<?php
 			if ($event ['recurrence_id']) {
 				?>
@@ -1373,7 +1373,7 @@ function dbem_event_form($event, $title, $element) {
 								<div id="event_recurrence_pattern">
 									<p>Frequency:
 										<select id="recurrence-frequency" name="recurrence_freq">
-											<?php dbem_option_items ( $freq_options, $event [$pref . 'freq'] ); ?>
+											<?php eme_option_items ( $freq_options, $event [$pref . 'freq'] ); ?>
 										</select>
 									</p>
 									<p>
@@ -1394,17 +1394,17 @@ function dbem_event_form($event, $title, $element) {
 										<?php _e ( 'months', 'eme' )?>
 										</span> </p>
 									<p class="alternate-selector" id="weekly-selector">
-										<?php dbem_checkbox_items ( 'recurrence_bydays[]', $days_names, $saved_bydays ); ?>
+										<?php eme_checkbox_items ( 'recurrence_bydays[]', $days_names, $saved_bydays ); ?>
 										<br />
 										<?php _e ( 'If you leave this empty, the event start date will be used as a reference.', 'eme' )?>
 									</p>
 									<p class="alternate-selector" id="monthly-selector">
 										<?php _e ( 'Every', 'eme' )?>
 										<select id="monthly-modifier" name="recurrence_byweekno">
-											<?php dbem_option_items ( $weekno_options, $event ['recurrence_byweekno'] ); ?>
+											<?php eme_option_items ( $weekno_options, $event ['recurrence_byweekno'] ); ?>
 										</select>
 										<select id="recurrence-weekday" name="recurrence_byday">
-											<?php dbem_option_items ( $days_names, $event ['recurrence_byday'] ); ?>
+											<?php eme_option_items ( $days_names, $event ['recurrence_byday'] ); ?>
 										</select>
 										<?php _e ( 'Day of month', 'eme' )?>
 										<br />
@@ -1430,7 +1430,7 @@ function dbem_event_form($event, $title, $element) {
 								<p><?php _e('Creator of this event: ','eme'); ?>
 									<?php
 									$owner_user_info = get_userdata($event['event_creator_id']);
-									echo dbem_sanitize_html($owner_user_info->display_name);
+									echo eme_sanitize_html($owner_user_info->display_name);
 									?>
 								</p>
 							</div>
@@ -1469,7 +1469,7 @@ function dbem_event_form($event, $title, $element) {
 										<input id="seats-input" type="text" name="event_seats" size='5' value="<?php echo $event ['event_seats']?>" />
 									</p>
 									<?php	if ($event ['event_rsvp']) {
-											dbem_bookings_compact_table ( $event ['event_id'] );
+											eme_bookings_compact_table ( $event ['event_id'] );
 										}
 									?>
 								</div>
@@ -1488,7 +1488,7 @@ function dbem_event_form($event, $title, $element) {
 								</span></h3>
 							<div class="inside">
 							<?php
-							$categories = dbem_get_categories();
+							$categories = eme_get_categories();
 							foreach ( $categories as $category) {
                                                                 if ($event['event_category_ids'] && in_array($category['category_id'],explode(",",$event['event_category_ids']))) {
                                                                         $selected = "checked='checked'";
@@ -1574,7 +1574,7 @@ function dbem_event_form($event, $title, $element) {
 								</span>
 							</h3>
 							<div class="inside">
-								<textarea name="event_page_title_format" id="event_page_title_format" rows="6" cols="60"><?php echo dbem_sanitize_html($event['event_page_title_format']);?></textarea>
+								<textarea name="event_page_title_format" id="event_page_title_format" rows="6" cols="60"><?php echo eme_sanitize_html($event['event_page_title_format']);?></textarea>
 								<br />
 								<p><?php _e ( 'The format of the single event title.','eme');?>
 								<br />
@@ -1591,7 +1591,7 @@ function dbem_event_form($event, $title, $element) {
 								</span>
 							</h3>
 							<div class="inside">
-								<textarea name="event_single_event_format" id="event_single_event_format" rows="6" cols="60"><?php echo dbem_sanitize_html($event ['event_single_event_format']);?></textarea>
+								<textarea name="event_single_event_format" id="event_single_event_format" rows="6" cols="60"><?php echo eme_sanitize_html($event ['event_single_event_format']);?></textarea>
 								<br />
 								<p><?php _e ( 'The format of the single event page.','eme');?>
 								<br />
@@ -1608,7 +1608,7 @@ function dbem_event_form($event, $title, $element) {
 								</span>
 							</h3>
 							<div class="inside">
-								<textarea name="event_contactperson_email_body" id="event_contactperson_email_body" rows="6" cols="60"><?php echo dbem_sanitize_html($event['event_contactperson_email_body']);?></textarea>
+								<textarea name="event_contactperson_email_body" id="event_contactperson_email_body" rows="6" cols="60"><?php echo eme_sanitize_html($event['event_contactperson_email_body']);?></textarea>
 								<br />
 								<p><?php _e ( 'The format of the email which will be sent to the contact person.','eme');?>
 								<br />
@@ -1625,7 +1625,7 @@ function dbem_event_form($event, $title, $element) {
 								</span>
 							</h3>
 							<div class="inside">
-								<textarea name="event_respondent_email_body" id="event_respondent_email_body" rows="6" cols="60"><?php echo dbem_sanitize_html($event['event_respondent_email_body']);?></textarea>
+								<textarea name="event_respondent_email_body" id="event_respondent_email_body" rows="6" cols="60"><?php echo eme_sanitize_html($event['event_respondent_email_body']);?></textarea>
 								<br />
 								<p><?php _e ( 'The format of the email which will be sent to the respondent.','eme');?>
 								<br />
@@ -1641,7 +1641,7 @@ function dbem_event_form($event, $title, $element) {
 								<table id="dbem-location-data">
 									<tr>
 									<?php  if($use_select_for_locations) {
-										$locations = dbem_get_locations();
+										$locations = eme_get_locations();
 									?>
 										<th><?php _e('Location','eme') ?></th>
 										<td> 
@@ -1658,17 +1658,17 @@ function dbem_event_form($event, $title, $element) {
 													}
 												}
 											?>
-			<option value="<?php echo $location['location_id'] ?>" <?php echo $selected ?>><?php echo dbem_trans_sanitize_html($location['location_name']) ?></option>
+			<option value="<?php echo $location['location_id'] ?>" <?php echo $selected ?>><?php echo eme_trans_sanitize_html($location['location_name']) ?></option>
 											<?php endforeach; ?>
 											</select>
-											<input type='hidden' name='location-select-name' value='<?php echo dbem_trans_sanitize_html($selected_location['location_name'])?>'/>
-											<input type='hidden' name='location-select-town' value='<?php echo dbem_trans_sanitize_html($selected_location['location_town'])?>'/>
-											<input type='hidden' name='location-select-address' value='<?php echo dbem_trans_sanitize_html($selected_location['location_address'])?>'/>  		
+											<input type='hidden' name='location-select-name' value='<?php echo eme_trans_sanitize_html($selected_location['location_name'])?>'/>
+											<input type='hidden' name='location-select-town' value='<?php echo eme_trans_sanitize_html($selected_location['location_town'])?>'/>
+											<input type='hidden' name='location-select-address' value='<?php echo eme_trans_sanitize_html($selected_location['location_address'])?>'/>  		
 										</td>
 									<?php } else { ?>
 										<th><?php _e ( 'Name','eme' )?>
 											&nbsp;</th>
-										<td><input name="translated_location_name" type="hidden" value="<?php echo dbem_trans_sanitize_html($event ['location_name'])?>" /><input id="location_name" type="text" name="location_name" value="<?php echo dbem_trans_sanitize_html($event ['location_name'])?>" /></td>
+										<td><input name="translated_location_name" type="hidden" value="<?php echo eme_trans_sanitize_html($event ['location_name'])?>" /><input id="location_name" type="text" name="location_name" value="<?php echo eme_trans_sanitize_html($event ['location_name'])?>" /></td>
 									<?php } ?>
 									<?php
 										$gmap_is_active = get_option ( 'dbem_gmap_is_active' );
@@ -1741,7 +1741,7 @@ function dbem_event_form($event, $title, $element) {
 								<?php _e ( 'Attributes', 'eme' ); ?>
 							</h3>
 							<div class="inside">
-								<?php dbem_attributes_form($event) ?>
+								<?php eme_attributes_form($event) ?>
 							</div>
 						</div>
 						<?php endif; ?>
@@ -1756,7 +1756,7 @@ function dbem_event_form($event, $title, $element) {
 <?php
 }
 
-function dbem_validate_event($event) {
+function eme_validate_event($event) {
 	// Only for emergencies, when JS is disabled
 	// TODO make it fully functional without JS
 	global $required_fields;
@@ -2064,7 +2064,7 @@ function eme_admin_map_script() {
 				$event_ID = intval($_REQUEST ['event_id']);
 			else
 				$event_ID =0;
-			$event = dbem_get_event ( $event_ID );
+			$event = eme_get_event ( $event_ID );
 			
 			if ((isset($event ['location_town']) && $event ['location_town'] != '') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] = 'events-manager-locations')) {
 				if (isset($event ['location_address']) && $event ['location_address'] != "") {
@@ -2189,7 +2189,7 @@ if ($gmap_is_active) {
 
 }
 
-function dbem_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
+function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 	if (strpos ( $justurl, "=" )) {
 		// allows the use of arguments without breaking the legacy code
 		$defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'RSS' );
@@ -2214,19 +2214,19 @@ function dbem_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 		return $result;
 }
 
-function dbem_rss_link_shortcode($atts) {
+function eme_rss_link_shortcode($atts) {
 	extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'RSS' ), $atts ) );
-	$result = dbem_rss_link ( "justurl=$justurl&echo=0&text=$text" );
+	$result = eme_rss_link ( "justurl=$justurl&echo=0&text=$text" );
 	return $result;
 }
-add_shortcode ( 'events_rss_link', 'dbem_rss_link_shortcode' );
+add_shortcode ( 'events_rss_link', 'eme_rss_link_shortcode' );
 
 function eme_rss() {
 	if (isset ( $_REQUEST ['dbem_rss'] ) && $_REQUEST ['dbem_rss'] == 'main') {
 		header ( "Content-type: text/xml" );
 		echo "<?xml version='1.0'?>\n";
 		
-		$events_page_link = dbem_get_events_page(true, false);
+		$events_page_link = eme_get_events_page(true, false);
 		if (stristr ( $events_page_link, "?" ))
 			$joiner = "&";
 		else
@@ -2253,10 +2253,10 @@ Weblog Editor 2.0
 <?php
 		$title_format = get_option ( 'dbem_rss_title_format' );
 		$description_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", get_option ( 'dbem_rss_description_format' ) ) );
-		$events = dbem_get_events ( 5 );
+		$events = eme_get_events ( 5 );
 		foreach ( $events as $event ) {
-			$title = dbem_replace_placeholders ( $title_format, $event, "rss" );
-			$description = dbem_replace_placeholders ( $description_format, $event, "rss" );
+			$title = eme_replace_placeholders ( $title_format, $event, "rss" );
+			$description = eme_replace_placeholders ( $description_format, $event, "rss" );
 			echo "<item>";
 			echo "<title>$title</title>\n";
 			echo "<link>$events_page_link" . $joiner . "event_id=" . $event ['event_id'] . "</link>\n ";
@@ -2301,7 +2301,7 @@ add_action ( 'wp_head', 'eme_general_css' );
 add_action ( 'admin_head', 'eme_admin_general_css' );
 //add_filter('feed_link','substitute_rss')
 
-function dbem_delete_event($event_id) {
+function eme_delete_event($event_id) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . EVENTS_TBNAME;
 	$sql = "DELETE FROM $table_name WHERE event_id = '$event_id';";

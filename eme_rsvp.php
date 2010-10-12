@@ -1,7 +1,7 @@
 <?php
 $form_add_message = "";
 $form_delete_message = "";
-function dbem_add_booking_form($event_id) {
+function eme_add_booking_form($event_id) {
 	global $form_add_message, $current_user;
  
 	$bookerName="";
@@ -22,7 +22,7 @@ function dbem_add_booking_form($event_id) {
 	$destination = "?".$_SERVER['QUERY_STRING']."#dbem-rsvp-message";
 
 	// you can book the available number of seats, with a max of 10 per time
-	$max = dbem_get_available_seats($event_id);
+	$max = eme_get_available_seats($event_id);
 	if ($max > 10) {
 		$max = 10;
 	}
@@ -70,16 +70,16 @@ function dbem_add_booking_form($event_id) {
 		 <input type='hidden' name='event_id' value='$event_id'/></p>
 	</form>";
 	// $module .= "dati inviati: ";
-	//  	$module .= dbem_sanitize_request($_POST['bookerName']);
+	//  	$module .= eme_sanitize_request($_POST['bookerName']);
 	//print_r($_SERVER);
  
-	//$module .= dbem_delete_booking_form();
+	//$module .= eme_delete_booking_form();
 	 
 	return $module;
 	
 }
 
-function dbem_delete_booking_form() {
+function eme_delete_booking_form() {
 	global $form_delete_message;
 	
 	$dbem_rsvp_registered_users_only=get_option('dbem_rsvp_registered_users_only');
@@ -124,7 +124,7 @@ function eme_catch_rsvp() {
 	}
 
 	if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'add_booking') { 
-		$result = dbem_book_seats();
+		$result = eme_book_seats();
 		$form_add_message = $result;
   	} 
 
@@ -133,15 +133,15 @@ function eme_catch_rsvp() {
 			// we require a user to be WP registered to be able to book
 			get_currentuserinfo();
 			$booker_wp_id=$current_user->ID;
-			$booker = dbem_get_person_by_wp_id($booker_wp_id); 
+			$booker = eme_get_person_by_wp_id($booker_wp_id); 
 		} else {
 			$bookerName = $_POST['bookerName'];
 			$bookerEmail = $_POST['bookerEmail'];
-			$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
+			$booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
 		}
 	  	if ($booker) {
 			$person_id = $booker['person_id'];
-			$result = dbem_delete_booking_by_person_id($person_id);
+			$result = eme_delete_booking_by_person_id($person_id);
 		} else {
 			$result = __('There are no bookings associated to this name and e-mail', 'eme');
 		}
@@ -152,7 +152,7 @@ function eme_catch_rsvp() {
 }
 add_action('init','eme_catch_rsvp');
  
-function dbem_book_seats() {
+function eme_book_seats() {
 	global $current_user;
 	$bookerPhone = stripslashes($_POST['bookerPhone']); 
 	$bookedSeats = intval($_POST['bookedSeats']);
@@ -167,12 +167,12 @@ function dbem_book_seats() {
 		// we also need name and email for sending the mail
 		$bookerEmail = $current_user->user_email;
 		$bookerName = $current_user->display_name;
-		$booker = dbem_get_person_by_wp_id($booker_wp_id); 
+		$booker = eme_get_person_by_wp_id($booker_wp_id); 
 	} else {
 		$booker_wp_id=0;
 		$bookerEmail = stripslashes($_POST['bookerEmail']);
 		$bookerName = stripslashes($_POST['bookerName']);
-		$booker = dbem_get_person_by_name_and_email($bookerName, $bookerEmail); 
+		$booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
 	}
 	
 	$msg="";
@@ -189,16 +189,16 @@ function dbem_book_seats() {
 	// if any of name, email, phone or bookedseats are empty: return an error
 		$result = __('Please fill in all the required fields','eme');
 	} else {
-	   if ($bookedSeats && dbem_are_seats_available_for($event_id, $bookedSeats)) {
+	   if ($bookedSeats && eme_are_seats_available_for($event_id, $bookedSeats)) {
 	   	if (!$booker) {
-   			$booker = dbem_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id);
+   			$booker = eme_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id);
 	   	}
-		dbem_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
+		eme_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
 		
 		$result = __('Your booking has been recorded','eme');
 		$mailing_is_active = get_option('dbem_rsvp_mail_notify_is_active');
 		if($mailing_is_active) {
-			dbem_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,"");
+			eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,"");
 		} 
 	   } else {
 		$result = __('Booking cannot be made: not enough seats available!', 'eme');
@@ -207,7 +207,7 @@ function dbem_book_seats() {
 	return $result;
 }
 
-function dbem_get_booking($booking_id) {
+function eme_get_booking($booking_id) {
 	global $wpdb; 
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
 	$sql = "SELECT * FROM $bookings_table WHERE booking_id = '$booking_id';" ;
@@ -215,7 +215,7 @@ function dbem_get_booking($booking_id) {
 	return $result;
 }
 
-function dbem_get_bookings_by_person_id($person_id) {
+function eme_get_bookings_by_person_id($person_id) {
 	global $wpdb; 
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
 	$sql = "SELECT * FROM $bookings_table WHERE person_id = '$person_id';" ;
@@ -223,13 +223,13 @@ function dbem_get_bookings_by_person_id($person_id) {
 	return $result;
 }
 
-function dbem_record_booking($event_id, $person_id, $seats, $comment = "") {
+function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
 	global $wpdb;
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
 	$event_id = intval($event_id);
 	$person_id = intval($person_id);
 	$seats = intval($seats);
-	$comment = dbem_sanitize_request($comment);
+	$comment = eme_sanitize_request($comment);
 	// checking whether the booker has already booked places
 //	$sql = "SELECT * FROM $bookings_table WHERE event_id = '$event_id' and person_id = '$person_id'; ";
 //	//echo $sql;
@@ -245,28 +245,28 @@ function dbem_record_booking($event_id, $person_id, $seats, $comment = "") {
 		$wpdb->query($sql);
 //	}
 } 
-function dbem_delete_booking_by_person_id($person_id) {
+function eme_delete_booking_by_person_id($person_id) {
 	global $wpdb;
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
 	$sql = "DELETE FROM $bookings_table WHERE person_id = $person_id";
 	$wpdb->query($sql);
 	return __('Booking deleted', 'eme');
 }
-function dbem_delete_booking($booking_id) {
+function eme_delete_booking($booking_id) {
 	global $wpdb;
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
 	$sql = "DELETE FROM $bookings_table WHERE booking_id = $booking_id";
 	$wpdb->query($sql);
 	return __('Booking deleted', 'eme');
 }
-function dbem_approve_booking($booking_id) {
+function eme_approve_booking($booking_id) {
 	global $wpdb;
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
 	$sql = "UPDATE $bookings_table SET booking_approved='1' WHERE booking_id = $booking_id";
 	$wpdb->query($sql);
 	return __('Booking approved', 'eme');
 }
-function dbem_update_booking_seats($booking_id,$seats) {
+function eme_update_booking_seats($booking_id,$seats) {
 	global $wpdb;
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
 	$sql = "UPDATE $bookings_table SET booking_seats='$seats' WHERE booking_id = $booking_id";
@@ -274,17 +274,17 @@ function dbem_update_booking_seats($booking_id,$seats) {
 	return __('Booking approved', 'eme');
 }
 
-function dbem_get_available_seats($event_id) {
+function eme_get_available_seats($event_id) {
 	global $wpdb; 
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
 	$sql = "SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE event_id = $event_id"; 
 	$seats_row = $wpdb->get_row($sql, ARRAY_A);
 	$booked_seats = $seats_row['booked_seats'];
-	$event = dbem_get_event($event_id);
+	$event = eme_get_event($event_id);
 	$available_seats = $event['event_seats'] - $booked_seats;
 	return ($available_seats);
 }
-function dbem_get_booked_seats($event_id) {
+function eme_get_booked_seats($event_id) {
 	global $wpdb; 
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
 	$sql = "SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE event_id = $event_id"; 
@@ -292,15 +292,15 @@ function dbem_get_booked_seats($event_id) {
 	$booked_seats = $seats_row['booked_seats'];
 	return $booked_seats;
 }
-function dbem_are_seats_available_for($event_id, $seats) {
-	$event = dbem_get_event($event_id);
-	$available_seats = dbem_get_available_seats($event_id);
+function eme_are_seats_available_for($event_id, $seats) {
+	$event = eme_get_event($event_id);
+	$available_seats = eme_get_available_seats($event_id);
 	$remaning_seats = $available_seats - $seats;
 	return ($remaning_seats >= 0);
 } 
  
-function dbem_bookings_table($event_id) {
-	$bookings =  dbem_get_bookings_for($event_id);
+function eme_bookings_table($event_id) {
+	$bookings =  eme_get_bookings_for($event_id);
 	$destination = admin_url("edit.php"); 
 	$result = "<form id='bookings-filter' method='get' action='$destination'>
 						<input type='hidden' name='page' value='eme_registration_seats_page'/>
@@ -314,13 +314,13 @@ function dbem_bookings_table($event_id) {
 						</thead>" ;
 	foreach ($bookings as $booking) {
 		$result .= "<tr> <td><input type='checkbox' value='".$booking['booking_id']."' name='bookings[]'/></td>
-										<td>".dbem_sanitize_html($booking['person_name'])."</td>
-										<td>".dbem_sanitize_html($booking['person_email'])."</td>
-										<td>".dbem_sanitize_html($booking['person_phone'])."</td>
+										<td>".eme_sanitize_html($booking['person_name'])."</td>
+										<td>".eme_sanitize_html($booking['person_email'])."</td>
+										<td>".eme_sanitize_html($booking['person_phone'])."</td>
 										<td>".$booking['booking_seats']."</td></tr>";
 	}
-	$available_seats = dbem_get_available_seats($event_id);
-	$booked_seats = dbem_get_booked_seats($event_id);
+	$available_seats = eme_get_available_seats($event_id);
+	$booked_seats = eme_get_booked_seats($event_id);
 	$result .= "<tfoot><tr><th scope='row' colspan='4'>".__('Booked spaces','eme').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>
 						 <tr><th scope='row' colspan='4'>".__('Available spaces','eme').":</th><td class='booking-result' id='available-seats'>$available_seats</td></tr></tfoot>
 							</table></div>
@@ -335,11 +335,11 @@ function dbem_bookings_table($event_id) {
 	echo $result;
 }
 
-function dbem_bookings_compact_table($event_id) {
-	$bookings =  dbem_get_bookings_for($event_id);
+function eme_bookings_compact_table($event_id) {
+	$bookings =  eme_get_bookings_for($event_id);
 	$destination = admin_url("edit.php"); 
-	$available_seats = dbem_get_available_seats($event_id);
-	$booked_seats = dbem_get_booked_seats($event_id);
+	$available_seats = eme_get_available_seats($event_id);
+	$booked_seats = eme_get_booked_seats($event_id);
 	$printable_address = admin_url("/admin.php?page=events-manager-people&action=printable&event_id=$event_id");
 	$count_respondents=count($bookings);
 	if ($count_respondents>0) { 
@@ -364,13 +364,13 @@ function dbem_bookings_compact_table($event_id) {
 		foreach ($bookings as $booking) {
 			($booking['booking_comment']) ? $baloon = " <img src='".DBEM_PLUGIN_URL."images/baloon.png' title='".__('Comment:','eme')." ".$booking['booking_comment']."' alt='comment'/>" : $baloon = "";
 			$pending_string="";
-			if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
+			if (eme_event_needs_approval($event_id) && !$booking['booking_approved']) {
 				$pending_string=__('(pending)','eme');
 			}
 			$table .= 
 			"<tr id='booking-".$booking['booking_id']."'> 
 				<td><a id='booking-check-".$booking['booking_id']."' class='bookingdelbutton'>X</a></td>
-				<td><a title=\"".dbem_sanitize_html($booking['person_email'])." - ".dbem_sanitize_html($booking['person_phone'])."\">".dbem_sanitize_html($booking['person_name'])."</a>$baloon</td>
+				<td><a title=\"".eme_sanitize_html($booking['person_email'])." - ".eme_sanitize_html($booking['person_phone'])."\">".eme_sanitize_html($booking['person_name'])."</a>$baloon</td>
 				<td>".$booking['booking_seats']." $pending_string </td>
 			 </tr>";
 		}
@@ -392,7 +392,7 @@ function dbem_bookings_compact_table($event_id) {
 	echo $table;
 }
 
-function dbem_get_bookings_for($event_ids,$pending=0) {
+function eme_get_bookings_for($event_ids,$pending=0) {
 	global $wpdb; 
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
 	
@@ -413,7 +413,7 @@ function dbem_get_bookings_for($event_ids,$pending=0) {
 	$bookings = $wpdb->get_results($sql, ARRAY_A);
 	if ($bookings) {
 		foreach ($bookings as $booking) {
-			$person = dbem_get_person($booking['person_id']);
+			$person = eme_get_person($booking['person_id']);
 			$booking['person_name'] = $person['person_name']; 
 			$booking['person_email'] = $person['person_email'];
 			$booking['person_phone'] = $person['person_phone'];
@@ -423,7 +423,7 @@ function dbem_get_bookings_for($event_ids,$pending=0) {
  	return $booking_data;
 }
 
-function dbem_get_bookings_list_for($event_id) {
+function eme_get_bookings_list_for($event_id) {
 	global $wpdb; 
 	$bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
 	$sql = "SELECT DISTINCT person_id FROM $bookings_table WHERE event_id = $event_id";
@@ -431,7 +431,7 @@ function dbem_get_bookings_list_for($event_id) {
 	if ($persons) {
 		$res="<ul class='dbem_bookings_list_ul'>";
 		foreach ($persons as $person) {
-			$attendee=dbem_get_person($person['person_id']);
+			$attendee=eme_get_person($person['person_id']);
 			$res.="<li class='dbem_bookings_list_li'>".$attendee['person_name']."</li>";
 		}
 		$res.="</ul>";
@@ -441,25 +441,25 @@ function dbem_get_bookings_list_for($event_id) {
 	return $res;
 }
 
-function dbem_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,$action="") {
+function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,$action="") {
 
-	$event = dbem_get_event($event_id);
+	$event = eme_get_event($event_id);
 	if($event['event_contactperson_id'] && $event['event_contactperson_id']>0) 
 		$contact_id = $event['event_contactperson_id']; 
 	else
 		$contact_id = get_option('dbem_default_contact_person');
 
-	$contact_name = dbem_get_user_name($contact_id);
-	$contact_email = dbem_get_user_email($contact_id);
+	$contact_name = eme_get_user_name($contact_id);
+	$contact_email = eme_get_user_email($contact_id);
  	
 	$contact_body = ( $event['event_contactperson_email_body'] != '' ) ? $event['event_contactperson_email_body'] : get_option ( 'dbem_contactperson_email_body' );
-	$contact_body = dbem_replace_placeholders($contact_body, $event, "text");
+	$contact_body = eme_replace_placeholders($contact_body, $event, "text");
 	$booker_body = ( $event['event_respondent_email_body'] != '' ) ? $event['event_respondent_email_body'] : get_option ( 'dbem_respondent_email_body' );
-	$booker_body = dbem_replace_placeholders($booker_body, $event, "text");
+	$booker_body = eme_replace_placeholders($booker_body, $event, "text");
 	$pending_body = get_option ( 'dbem_registration_pending_email_body' );
-	$pending_body = dbem_replace_placeholders($pending_body, $event, "text");
+	$pending_body = eme_replace_placeholders($pending_body, $event, "text");
 	$denied_body = get_option ( 'dbem_registration_denied_email_body' );
-	$denied_body = dbem_replace_placeholders($denied_body, $event, "text");
+	$denied_body = eme_replace_placeholders($denied_body, $event, "text");
 	
 	// rsvp specific placeholders
 	$placeholders = array('#_CONTACTPERSON'=> $contact_name, '#_PLAIN_CONTACTEMAIL'=> $contact_email, '#_RESPNAME' => $bookerName, '#_RESPEMAIL' => $bookerEmail, '#_RESPPHONE' => $bookerPhone, '#_SPACES' => $bookedSeats,'#_COMMENT' => $bookerComment );
@@ -498,7 +498,7 @@ function eme_registration_seats_page() {
 			$bookings = $_GET['bookings'];
 			if (is_array($bookings)) {
 				foreach($bookings as $booking_id) {
-					dbem_delete_booking(intval($booking_id));
+					eme_delete_booking(intval($booking_id));
 				}
 			}
 		} else {
@@ -508,17 +508,17 @@ function eme_registration_seats_page() {
 			foreach ( $bookings as $key=>$booking_id ) {
 				// make sure the seats are integers
 				$bookings_seats[$key]=intval($bookings_seats[$key]);
-				$booking = dbem_get_booking ($booking_id);
-				$person  = dbem_get_person ($booking['person_id']);
+				$booking = eme_get_booking ($booking_id);
+				$person  = eme_get_person ($booking['person_id']);
 				// 0 seats is not possible, then you should remove the booking
 				if ($bookings_seats[$key]==0)
 					$bookings_seats[$key]=1;
 				if ($action == 'approveRegistration' && $booking['booking_seats']!= $bookings_seats[$key]) {
-					dbem_update_booking_seats($booking_id,$bookings_seats[$key]);
-					dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
+					eme_update_booking_seats($booking_id,$bookings_seats[$key]);
+					eme_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
 				} elseif ($action == 'denyRegistration') {
-					dbem_delete_booking($booking_id);
-					dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
+					eme_delete_booking($booking_id);
+					eme_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
 				}
 			}
 		}
@@ -526,10 +526,10 @@ function eme_registration_seats_page() {
 	
 	// now show the menu
 	$event_id = isset($_POST ['event_id']) ? intval($_POST ['event_id']) : 0;
-	dbem_registration_seats_form_table($event_id);
+	eme_registration_seats_form_table($event_id);
 }
 
-function dbem_registration_seats_form_table($event_id=0) {
+function eme_registration_seats_form_table($event_id=0) {
 ?>
 <div class="wrap">
 <div id="icon-events" class="icon32"><br />
@@ -550,10 +550,10 @@ function dbem_registration_seats_form_table($event_id=0) {
 	<select name="event_id">
 	<option value='0'><?php _e ( 'All events' ); ?></option>
 	<?php
-	$all_events=dbem_get_events(0,"future");
+	$all_events=eme_get_events(0,"future");
 	$events_with_pending_bookings=array();
 	foreach ( $all_events as $event ) {
-		if (dbem_get_bookings_for($event['event_id'])) {
+		if (eme_get_bookings_for($event['event_id'])) {
 			$events_with_bookings[]=$event['event_id'];
 			$selected = "";
 			if ($event_id && ($event['event_id'] == $event_id))
@@ -581,12 +581,12 @@ function dbem_registration_seats_form_table($event_id=0) {
   	  <?php
 		$i = 1;
 		if ($event_id) {
-			$bookings = dbem_get_bookings_for($event_id);
+			$bookings = eme_get_bookings_for($event_id);
 		} else {
-			$bookings = dbem_get_bookings_for($events_with_bookings);
+			$bookings = eme_get_bookings_for($events_with_bookings);
 		}
 		foreach ( $bookings as $event_booking ) {
-			$event=dbem_get_event($event_booking['event_id']);
+			$event=eme_get_event($event_booking['event_id']);
 			$class = ($i % 2) ? ' class="alternate"' : '';
 			// FIXME set to american
 			$localised_start_date = mysql2date ( __ ( 'D d M Y' ), $event['event_start_date'] );
@@ -641,29 +641,29 @@ function eme_registration_approval_page() {
 		$pending_bookings = isset($_POST ['pending_bookings']) ? $_POST ['pending_bookings'] : array();
 		$bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
 		foreach ( $pending_bookings as $key=>$booking_id ) {
-			$booking = dbem_get_booking ($booking_id);
-			$person  = dbem_get_person ($booking['person_id']);
+			$booking = eme_get_booking ($booking_id);
+			$person  = eme_get_person ($booking['person_id']);
 			// update the db
 			if ($action == 'approveRegistration') {
-				dbem_approve_booking($booking_id);
+				eme_approve_booking($booking_id);
 				// 0 seats is not possible, then you should remove the booking
 				if ($bookings_seats[$key]==0)
 					$bookings_seats[$key]=1;
 				if ($booking['booking_seats']!= intval($bookings_seats[$key]))
-					dbem_update_booking_seats($booking_id,intval($bookings_seats[$key]));
+					eme_update_booking_seats($booking_id,intval($bookings_seats[$key]));
 			} elseif ($action == 'denyRegistration') {
-				dbem_delete_booking($booking_id);
+				eme_delete_booking($booking_id);
 			}
 			// and then send the mail
-			dbem_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
+			eme_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
 		}
 	}
 	// now show the menu
 	$event_id = isset($_POST ['event_id']) ? intval($_POST ['event_id']) : 0;
-	dbem_registration_approval_form_table($event_id);
+	eme_registration_approval_form_table($event_id);
 }
 
-function dbem_registration_approval_form_table($event_id=0) {
+function eme_registration_approval_form_table($event_id=0) {
 ?>
 <div class="wrap">
 <div id="icon-events" class="icon32"><br />
@@ -684,10 +684,10 @@ function dbem_registration_approval_form_table($event_id=0) {
 	<select name="event_id">
 	<option value='0'><?php _e ( 'All events' ); ?></option>
 	<?php
-	$all_events=dbem_get_events(0,"future");
+	$all_events=eme_get_events(0,"future");
 	$events_with_pending_bookings=array();
 	foreach ( $all_events as $event ) {
-		if ($event['registration_requires_approval'] && dbem_get_bookings_for($event['event_id'],1)) {
+		if ($event['registration_requires_approval'] && eme_get_bookings_for($event['event_id'],1)) {
 			$events_with_pending_bookings[]=$event['event_id'];
 			$selected = "";
 			if ($event_id && ($event['event_id'] == $event_id))
@@ -715,12 +715,12 @@ function dbem_registration_approval_form_table($event_id=0) {
   	  <?php
 		$i = 1;
 		if ($event_id) {
-			$pending_bookings = dbem_get_bookings_for($event_id,1);
+			$pending_bookings = eme_get_bookings_for($event_id,1);
 		} else {
-			$pending_bookings = dbem_get_bookings_for($events_with_pending_bookings,1);
+			$pending_bookings = eme_get_bookings_for($events_with_pending_bookings,1);
 		}
 		foreach ( $pending_bookings as $event_booking ) {
-			$event=dbem_get_event($event_booking['event_id']);
+			$event=eme_get_event($event_booking['event_id']);
 			$class = ($i % 2) ? ' class="alternate"' : '';
 			// FIXME set to american
 			$localised_start_date = mysql2date ( __ ( 'D d M Y' ), $event['event_start_date'] );
@@ -767,28 +767,28 @@ function dbem_registration_approval_form_table($event_id=0) {
 <?php
 }
 
-function dbem_get_user_email($user_id) {
+function eme_get_user_email($user_id) {
 	global $wpdb;
 	$sql = "SELECT user_email FROM $wpdb->users WHERE ID = $user_id"; 
 	return $wpdb->get_var( $wpdb->prepare($sql) );
 }
-function dbem_get_user_name($user_id) {
+function eme_get_user_name($user_id) {
 	global $wpdb;
 	$sql = "SELECT display_name FROM $wpdb->users WHERE ID = $user_id"; 
  	return $wpdb->get_var( $wpdb->prepare($sql) );
 }
-function dbem_get_user_phone($user_id) {
+function eme_get_user_phone($user_id) {
 	return get_usermeta($user_id, 'dbem_phone');
 }
 
 // got from http://davidwalsh.name/php-email-encode-prevent-spam
-function dbem_ascii_encode($e) {
+function eme_ascii_encode($e) {
     $output = "";
     for ($i = 0; $i < strlen($e); $i++) { $output .= '&#'.ord($e[$i]).';'; }
     return $output;
 }
 
-function dbem_event_needs_approval($event_id) {
+function eme_event_needs_approval($event_id) {
 	global $wpdb;
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
 	$sql = "SELECT registration_requires_approval from $events_table where event_id=$event_id";

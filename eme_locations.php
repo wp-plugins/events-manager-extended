@@ -4,20 +4,20 @@ $feedback_message = "";
 function eme_locations_page() {
    	if (!current_user_can( EDIT_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
 		$message = __('You have no right to update locations!','eme');
-		$locations = dbem_get_locations();
-		dbem_locations_table_layout($locations, null, $message);
+		$locations = eme_get_locations();
+		eme_locations_table_layout($locations, null, $message);
 	} elseif (isset($_GET['action']) && $_GET['action'] == "edit") { 
 		// edit location
 		$location_id = $_GET['location_ID'];
-		$location = dbem_get_location($location_id);
-		dbem_locations_edit_layout($location);
+		$location = eme_get_location($location_id);
+		eme_locations_edit_layout($location);
 	} elseif (isset($_POST['action']) && $_POST['action'] == "delete") { 
 		$locations = $_POST['locations'];
 		foreach($locations as $location_ID) {
-		 	dbem_delete_location($location_ID);
+		 	eme_delete_location($location_ID);
 		}
-		$locations = dbem_get_locations();
-		dbem_locations_table_layout($locations, null, "");
+		$locations = eme_get_locations();
+		eme_locations_table_layout($locations, null, "");
 	} elseif (isset($_POST['action']) && $_POST['action'] == "editedlocation") { 
 		// location update required
 		$location = array();
@@ -34,17 +34,17 @@ function eme_locations_page() {
 			$location['location_longitude'] = 0;
 		}
 		
-		$validation_result = dbem_validate_location($location);
+		$validation_result = eme_validate_location($location);
 		if ($validation_result == "OK") {
-			dbem_update_location($location); 
+			eme_update_location($location); 
 			if ($_FILES['location_image']['size'] > 0 )
-				dbem_upload_location_picture($location);
+				eme_upload_location_picture($location);
 			$message = __('The location has been updated.', 'eme');
-			$locations = dbem_get_locations();
-			dbem_locations_table_layout($locations, $location, $message);
+			$locations = eme_get_locations();
+			eme_locations_table_layout($locations, $location, $message);
 		} else {
 			$message = $validation_result;
-			dbem_locations_edit_layout($location, $message);
+			eme_locations_edit_layout($location, $message);
 		}
 	} elseif(isset($_POST['action']) && $_POST['action'] == "addlocation") {
 		$location = array();
@@ -54,30 +54,30 @@ function eme_locations_page() {
 		$location['location_latitude'] = $_POST['location_latitude'];
 		$location['location_longitude'] = $_POST['location_longitude'];
 		$location['location_description'] = stripslashes($_POST['content']);
-		$validation_result = dbem_validate_location($location);
+		$validation_result = eme_validate_location($location);
 		if ($validation_result == "OK") {
-			$new_location = dbem_insert_location($location);
+			$new_location = eme_insert_location($location);
 			// uploading the image
 			if ($_FILES['location_image']['size'] > 0 ) {
-				dbem_upload_location_picture($new_location);
+				eme_upload_location_picture($new_location);
 			}
 					
 			//RESETME $message = __('The location has been added.', 'eme'); 
-			$locations = dbem_get_locations();
-			dbem_locations_table_layout($locations, null,$message);
+			$locations = eme_get_locations();
+			eme_locations_table_layout($locations, null,$message);
 		} else {
 			$message = $validation_result;
-			$locations = dbem_get_locations();
-			dbem_locations_table_layout($locations, $location, $message);
+			$locations = eme_get_locations();
+			eme_locations_table_layout($locations, $location, $message);
 		}
    	} else {
 		// no action, just a locations list
-		$locations = dbem_get_locations();
-		dbem_locations_table_layout($locations, null, "");
+		$locations = eme_get_locations();
+		eme_locations_table_layout($locations, null, "");
    	}
 }
 
-function dbem_locations_edit_layout($location, $message = "") {
+function eme_locations_edit_layout($location, $message = "") {
 	?>
 	<div class="wrap">
 		<div id="poststuff">
@@ -102,29 +102,29 @@ function dbem_locations_edit_layout($location, $message = "") {
 			<!-- we need titlediv and title for qtranslate as ID -->
 			<div id="titlediv" class="form-field form-required">
 			  <label for="location_name"><?php _e('Location name', 'eme') ?></label>
-			  <input name="location_name" id="title" type="text" value="<?php echo dbem_sanitize_html($location['location_name']); ?>" size="40" />
-			  <input type="hidden" name="translated_location_name" value="<?php echo dbem_trans_sanitize_html($location['location_name']); ?>" />
+			  <input name="location_name" id="title" type="text" value="<?php echo eme_sanitize_html($location['location_name']); ?>" size="40" />
+			  <input type="hidden" name="translated_location_name" value="<?php echo eme_trans_sanitize_html($location['location_name']); ?>" />
 			  <p><?php _e('The name of the location', 'eme') ?>.</p>
 			</div>
 			<div class="form-field">
 			   <label for="location_address"><?php _e('Location address', 'eme') ?></label>
-			   <input id="location_address" name="location_address" type="text" value="<?php echo dbem_sanitize_html($location['location_address']); ?>" size="40"  />
+			   <input id="location_address" name="location_address" type="text" value="<?php echo eme_sanitize_html($location['location_address']); ?>" size="40"  />
 			   <p><?php _e('The address of the location', 'eme') ?>.</p>
 			</div>
  
 			<div class="form-field ">
 			   <label for="location_town"><?php _e('Location town', 'eme') ?></label>
-			   <input name="location_town" id="location_town" type="text" value="<?php echo dbem_sanitize_html($location['location_town']); ?>" size="40"  />
+			   <input name="location_town" id="location_town" type="text" value="<?php echo eme_sanitize_html($location['location_town']); ?>" size="40"  />
 			   <p><?php _e('The town of the location', 'eme') ?>.</p>
 			</div>
 								
 			<div class="form-field" style="display:none;">
 			   <label for="location_latitude">LAT</label>
-			   <input id="location_latitude" name="location_latitude" type="text" value="<?php echo dbem_sanitize_html($location['location_latitude']); ?>" size="40"  />
+			   <input id="location_latitude" name="location_latitude" type="text" value="<?php echo eme_sanitize_html($location['location_latitude']); ?>" size="40"  />
 			</div>
 			<div class="form-field" style="display:none;">
 			   <label for="location_longitude">LONG</label>
-			   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo dbem_sanitize_html($location['location_longitude']); ?>" size="40"  />
+			   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo eme_sanitize_html($location['location_longitude']); ?>" size="40"  />
 			</div>
 			<div class="form-field">
 			   <label for="location_image"><?php _e('Location image', 'eme') ?></label>
@@ -162,7 +162,7 @@ function dbem_locations_edit_layout($location, $message = "") {
 	<?php
 }
 
-function dbem_locations_table_layout($locations, $new_location, $message = "") {
+function eme_locations_table_layout($locations, $new_location, $message = "") {
 	$destination = admin_url("admin.php");
 	if (!is_array($new_location)) {
 		$new_location = array();
@@ -215,9 +215,9 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								<?php foreach ($locations as $this_location) : ?>	
 								<tr>
 									<td><input type="checkbox" class ="row-selector" value="<?php echo $this_location['location_id'] ?>" name="locations[]"/></td>
-									<td><a href="<?php echo admin_url("admin.php?page=events-manager-locations&action=edit&location_ID=".$this_location['location_id']); ?>"><?php echo dbem_trans_sanitize_html($this_location['location_name']); ?></a></td>
-									<td><?php echo dbem_trans_sanitize_html($this_location['location_address']); ?></td>
-									<td><?php echo dbem_trans_sanitize_html($this_location['location_town']); ?></td>
+									<td><a href="<?php echo admin_url("admin.php?page=events-manager-locations&action=edit&location_ID=".$this_location['location_id']); ?>"><?php echo eme_trans_sanitize_html($this_location['location_name']); ?></a></td>
+									<td><?php echo eme_trans_sanitize_html($this_location['location_address']); ?></td>
+									<td><?php echo eme_trans_sanitize_html($this_location['location_town']); ?></td>
 								</tr>
 								<?php endforeach; ?>
 							</tbody>
@@ -250,30 +250,30 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 								<input type="hidden" name="action" value="addlocation" />
 								<div id="titlediv" class="form-field form-required">
 								  <label for="location_name"><?php _e('Location name', 'eme') ?></label>
-						 		  <input name="location_name" id="title" type="text" value="<?php echo dbem_sanitize_html($new_location['location_name']); ?>" size="40" />
-			  					  <input type="hidden" name="translated_location_name" value="<?php echo dbem_trans_sanitize_html($new_location['location_name']); ?>" />
+						 		  <input name="location_name" id="title" type="text" value="<?php echo eme_sanitize_html($new_location['location_name']); ?>" size="40" />
+			  					  <input type="hidden" name="translated_location_name" value="<?php echo eme_trans_sanitize_html($new_location['location_name']); ?>" />
 								  <p><?php _e('The name of the location', 'eme') ?>.</p>
 								</div>
 
 								<div class="form-field">
 								   <label for="location_address"><?php _e('Location address', 'eme') ?></label>
-								   <input id="location_address" name="location_address" type="text" value="<?php echo dbem_sanitize_html($new_location['location_address']); ?>" size="40"  />
+								   <input id="location_address" name="location_address" type="text" value="<?php echo eme_sanitize_html($new_location['location_address']); ?>" size="40"  />
 								   <p><?php _e('The address of the location', 'eme') ?>.</p>
 								</div>
  
 								<div class="form-field ">
 								   <label for="location_town"><?php _e('Location town', 'eme') ?></label>
-								   <input id="location_town" name="location_town" type="text" value="<?php echo dbem_sanitize_html($new_location['location_town']); ?>" size="40"  />
+								   <input id="location_town" name="location_town" type="text" value="<?php echo eme_sanitize_html($new_location['location_town']); ?>" size="40"  />
 								   <p><?php _e('The town of the location', 'eme') ?>.</p>
 								</div>
 								
 								<div class="form-field" style="display:none;">
 								   <label for="location_latitude">LAT</label>
-								   <input id="location_latitude" name="location_latitude" type="text" value="<?php echo dbem_sanitize_html($new_location['location_latitude']); ?>" size="40"  />
+								   <input id="location_latitude" name="location_latitude" type="text" value="<?php echo eme_sanitize_html($new_location['location_latitude']); ?>" size="40"  />
 								</div>
 								<div class="form-field" style="display:none;">
 								   <label for="location_longitude">LONG</label>
-								   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo dbem_sanitize_html($new_location['location_longitude']); ?>" size="40"  />
+								   <input id="location_longitude" name="location_longitude" type="text" value="<?php echo eme_sanitize_html($new_location['location_longitude']); ?>" size="40"  />
 								</div>
 								
 								<div class="form-field">
@@ -310,7 +310,7 @@ function dbem_locations_table_layout($locations, $new_location, $message = "") {
 	echo ob_get_clean();
 }
 
-function dbem_get_locations($eventful = false, $scope="all") { 
+function eme_get_locations($eventful = false, $scope="all") { 
 	global $wpdb;
 	$locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;
@@ -339,9 +339,9 @@ function dbem_get_locations($eventful = false, $scope="all") {
 	if ($scope == "past")
 		$condition = "AND $events_table.event_start_date < '$today'";
 
-	// for the query: we don't do "SELECT *" because the data returned from this function is also used in the function dbem_global_map_json()
+	// for the query: we don't do "SELECT *" because the data returned from this function is also used in the function eme_global_map_json()
 	// and some fields from the events table contain carriage returns, which can't be passed along
-	// The function dbem_global_map_json tries to remove these, but the data is not needed and better be safe than sorry
+	// The function eme_global_map_json tries to remove these, but the data is not needed and better be safe than sorry
 	if ($eventful == 'true') {
 		$sql = "SELECT $locations_table.* from $locations_table JOIN $events_table ON $locations_table.location_id = $events_table.location_id WHERE $events_table.event_status in (1,2) AND $locations_table.location_name != '' $condition";
 	} else {
@@ -351,7 +351,7 @@ function dbem_get_locations($eventful = false, $scope="all") {
 	return $locations;
 }
 
-function dbem_get_location($location_id=0) { 
+function eme_get_location($location_id=0) { 
 	global $wpdb;
 
 	$location=array();
@@ -367,12 +367,12 @@ function dbem_get_location($location_id=0) {
 		$locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
 		$sql = "SELECT * FROM $locations_table WHERE location_id ='$location_id'";
 		$location = $wpdb->get_row($sql, ARRAY_A);
-		$location['location_image_url'] = dbem_image_url_for_location_id($location['location_id']);
+		$location['location_image_url'] = eme_image_url_for_location_id($location['location_id']);
 	}
 	return $location;
 }
 
-function dbem_image_url_for_location_id($location_id) {
+function eme_image_url_for_location_id($location_id) {
 	$file_name= ABSPATH.IMAGE_UPLOAD_DIR."/location-".$location_id;
 	$mime_types = array('gif','jpg','png');foreach($mime_types as $type) { 
 		$file_path = "$file_name.$type";
@@ -384,7 +384,7 @@ function dbem_image_url_for_location_id($location_id) {
 	return '';
 }
 
-function dbem_get_identical_location($location) { 
+function eme_get_identical_location($location) { 
 	global $wpdb;
 	$locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
 	//$sql = "SELECT * FROM $locations_table WHERE location_name ='".$location['location_name']."' AND location_address ='".$location['location_address']."' AND location_town ='".$location['location_town']."';";
@@ -394,7 +394,7 @@ function dbem_get_identical_location($location) {
 	return $cached_location;
 }
 
-function dbem_validate_location($location) {
+function eme_validate_location($location) {
 	global $location_required_fields;
 	$troubles = "";
 	foreach ($location_required_fields as $field => $description) {
@@ -426,10 +426,10 @@ function dbem_validate_location($location) {
 	}
 }
 
-function dbem_update_location($location) {
+function eme_update_location($location) {
 	global $wpdb;
 	$locations_table = $wpdb->prefix.LOCATIONS_TBNAME;
-	$location=dbem_sanitize_request($location);
+	$location=eme_sanitize_request($location);
 	$sql="UPDATE ".$locations_table. 
 	" SET location_name='".$location['location_name']."', ".
 		"location_address='".$location['location_address']."',".
@@ -441,10 +441,10 @@ function dbem_update_location($location) {
 	$wpdb->query($sql);
 }
 
-function dbem_insert_location($location) {
+function eme_insert_location($location) {
 	global $wpdb;	
 	$table_name = $wpdb->prefix.LOCATIONS_TBNAME; 
-	$location=dbem_sanitize_request($location);
+	$location=eme_sanitize_request($location);
 	// if GMap is off the hidden fields are empty, so I add a custom value to make the query work
 	if (empty($location['location_longitude'])) 
 		$location['location_longitude'] = 0;
@@ -453,19 +453,19 @@ function dbem_insert_location($location) {
 	$sql = "INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude, location_description)
 		VALUES ('".$location['location_name']."','".$location['location_address']."','".$location['location_town']."',".$location['location_latitude'].",".$location['location_longitude'].",'".$location['location_description']."')"; 
 	$wpdb->query($sql);
-	$new_location = dbem_get_location(mysql_insert_id());
+	$new_location = eme_get_location(mysql_insert_id());
 	return $new_location;
 }
 
-function dbem_delete_location($location) {
+function eme_delete_location($location) {
 	global $wpdb;	
 	$table_name = $wpdb->prefix.LOCATIONS_TBNAME;
 	$sql = "DELETE FROM $table_name WHERE location_id = '$location';";
 	$wpdb->query($sql);
-	dbem_delete_image_files_for_location_id($location);
+	eme_delete_image_files_for_location_id($location);
 }
 
-function dbem_location_has_events($location_id) {
+function eme_location_has_events($location_id) {
 	global $wpdb;	
 	$events_table = $wpdb->prefix.EVENTS_TBNAME;
 	$sql = "SELECT event_id FROM $events_table WHERE event_status in (1,2) AND location_id = $location_id";
@@ -473,10 +473,10 @@ function dbem_location_has_events($location_id) {
 	return (count($affected_events) > 0);
 }
 
-function dbem_upload_location_picture($location) {
+function eme_upload_location_picture($location) {
   	if(!file_exists("../".IMAGE_UPLOAD_DIR))
 				mkdir("../".IMAGE_UPLOAD_DIR, 0777);
-	dbem_delete_image_files_for_location_id($location['location_id']);
+	eme_delete_image_files_for_location_id($location['location_id']);
 	$mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
 	list($width, $height, $type, $attr) = getimagesize($_FILES['location_image']['tmp_name']);
 	$image_path = "../".IMAGE_UPLOAD_DIR."/location-".$location['location_id'].".".$mime_types[$type];
@@ -484,7 +484,7 @@ function dbem_upload_location_picture($location) {
 		$msg = "<p>".__('The image could not be loaded','eme')."</p>";
 }
 
-function dbem_delete_image_files_for_location_id($location_id) {
+function eme_delete_image_files_for_location_id($location_id) {
 	$file_name= "../".IMAGE_UPLOAD_DIR."/location-".$location_id;
 	$mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
 	foreach($mime_types as $type) { 
@@ -493,7 +493,7 @@ function dbem_delete_image_files_for_location_id($location_id) {
 	}
 }
 
-function dbem_global_map($atts) {
+function eme_global_map($atts) {
 	if (get_option('dbem_gmap_is_active') == '1') {
 	extract(shortcode_atts(array(
 			'eventful' => "false",
@@ -501,14 +501,14 @@ function dbem_global_map($atts) {
 			'width' => 450,
 			'height' => 300
 		), $atts));
-	$events_page_link = dbem_get_events_page(true, false);
+	$events_page_link = eme_get_events_page(true, false);
 	if (stristr($events_page_link, "?"))
 		$joiner = "&";
 	else
 		$joiner = "?";
 
 	$result = "";
-	$result .= "<div id='dbem_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
+	$result .= "<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
 	$result .= "<script type='text/javascript'>
 	<!--// 
 	  eventful = $eventful;
@@ -517,7 +517,7 @@ function dbem_global_map($atts) {
 	  joiner = '$joiner'
 	//-->
 	</script>";
-	//$result .= "<script src='".DBEM_PLUGIN_URL."dbem_global_map.js' type='text/javascript'></script>";
+	//$result .= "<script src='".DBEM_PLUGIN_URL."eme_global_map.js' type='text/javascript'></script>";
 	$result .= "<ol id='dbem_locations_list'></ol>"; 
 	
 	} else {
@@ -525,16 +525,16 @@ function dbem_global_map($atts) {
 	}
 	return $result;
 }
-add_shortcode('locations_map', 'dbem_global_map'); 
+add_shortcode('locations_map', 'eme_global_map'); 
 
-function dbem_replace_locations_placeholders($format, $location, $target="html") {
+function eme_replace_locations_placeholders($format, $location, $target="html") {
 	$location_string = $format;
 	preg_match_all("/#@?_?[A-Za-z]+/", $format, $placeholders);
 	foreach($placeholders[0] as $result) {
 		// echo "RESULT: $result <br>";
 		// matches alla fields placeholder
 		if (preg_match('/#_MAP/', $result)) {
-		 	$map_div = dbem_single_location_map($location);
+		 	$map_div = eme_single_location_map($location);
 		 	$location_string = str_replace($result, $map_div , $location_string ); 
 		}
 //		if (preg_match('/#_GOOGLEDIRECTIONS/', $result)) {
@@ -542,15 +542,15 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 //			$location_string = str_replace($result, $google_directions , $location_string );
 //		}
 		if (preg_match('/#_PASTEVENTS/', $result)) {
-		 	$list = dbem_events_in_location_list($location, "past");
+		 	$list = eme_events_in_location_list($location, "past");
 		 	$location_string = str_replace($result, $list , $location_string ); 
 		}
 		if (preg_match('/#_NEXTEVENTS/', $result)) {
-		 	$list = dbem_events_in_location_list($location);
+		 	$list = eme_events_in_location_list($location);
 		 	$location_string = str_replace($result, $list , $location_string ); 
 		}
 		if (preg_match('/#_ALLEVENTS/', $result)) {
-		 	$list = dbem_events_in_location_list($location, "all");
+		 	$list = eme_events_in_location_list($location, "all");
 		 	$location_string = str_replace($result, $list , $location_string ); 
 		}
 
@@ -561,7 +561,7 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 			if ($field == "location_description") {
 				// no real sanitizing needed, but possible translation
 				// this is the same as for an event in fact
-				$field_value = dbem_trans_sanitize_html($field_value,0);
+				$field_value = eme_trans_sanitize_html($field_value,0);
 				if ($target == "html")
 					$field_value = apply_filters('eme_notes', $field_value);
 				else
@@ -570,7 +570,7 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 				  else
 				 	$field_value = apply_filters('eme_notes_rss', $field_value);
 		  	} else {
-				$field_value = dbem_trans_sanitize_html($field_value);
+				$field_value = eme_trans_sanitize_html($field_value);
 				if ($target == "html")
 					$field_value = apply_filters('eme_general', $field_value); 
 				else 
@@ -581,13 +581,13 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 
 		if (preg_match('/#_(IMAGE)/', $result)) {
         		if($location['location_image_url'] != '')
-				$location_image = "<img src='".$location['location_image_url']."' alt='".dbem_trans_sanitize_html($location['location_name'])."'/>";
+				$location_image = "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
 			else
 				$location_image = "";
 			$location_string = str_replace($result, $location_image , $location_string ); 
 		}
 		if (preg_match('/#_(LOCATIONPAGEURL)/', $result)) {
-			$events_page_link = dbem_get_events_page(true, false);
+			$events_page_link = eme_get_events_page(true, false);
 			if (stristr($events_page_link, "?"))
 				$joiner = "&";
 			else
@@ -599,7 +599,7 @@ function dbem_replace_locations_placeholders($format, $location, $target="html")
 	return $location_string;	
 }
 
-function dbem_add_directions_form($location) {
+function eme_add_directions_form($location) {
 	$res = '
 <form action="http://maps.google.com/maps" method="get" target="_blank" style="text-align:left;">
 <label for="saddr">'.__('Your Street Address','eme').'</label>
@@ -611,9 +611,9 @@ function dbem_add_directions_form($location) {
 	return $res;
 }
 
-function dbem_single_location_map($location) {
+function eme_single_location_map($location) {
 	$gmap_is_active = get_option('dbem_gmap_is_active'); 
-	$map_text = addslashes(dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
+	$map_text = addslashes(eme_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location));
 	$map_text = preg_replace("/\r\n|\n\r|\n/","<br />",$map_text);
 	// if gmap is not active: we don't show the map
 	// if the location name is empty: we don't show the map
@@ -637,19 +637,19 @@ function dbem_single_location_map($location) {
   		$map_text_string = '$map_text';
 		//-->
 		</script>";
-		// $map_div .= "<script src='".DBEM_PLUGIN_URL."dbem_single_location_map.js' type='text/javascript'></script>";
+		// $map_div .= "<script src='".DBEM_PLUGIN_URL."eme_single_location_map.js' type='text/javascript'></script>";
 	} else {
 		$map_div = "";
 	}
 	return $map_div;
 }
 
-function dbem_events_in_location_list($location, $scope = "") {
-	$events = dbem_get_events(0,$scope,"","",$location['location_id']);
+function eme_events_in_location_list($location, $scope = "") {
+	$events = eme_get_events(0,$scope,"","",$location['location_id']);
 	$list = "";
 	if (count($events) > 0) {
 		foreach($events as $event)
-			$list .= dbem_replace_placeholders(get_option('dbem_location_event_list_item_format'), $event);
+			$list .= eme_replace_placeholders(get_option('dbem_location_event_list_item_format'), $event);
 	} else {
 		$list = get_option('dbem_location_no_events_message');
 	}

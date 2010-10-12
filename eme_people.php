@@ -3,14 +3,14 @@ function eme_people_page() {
 	// Managing AJAX booking removal
  	if(isset($_GET['action']) && $_GET['action'] == 'remove_booking') {
 		if(isset($_POST['booking_id']))
-			dbem_delete_booking($_POST['booking_id']);
+			eme_delete_booking($_POST['booking_id']);
 	}
 	?>
 	
 	<div class='wrap'> 
 	<div id="icon-users" class="icon32"><br/></div>
 	<h2>People</h2>
-	<?php admin_show_warnings(); dbem_people_table(); ?>
+	<?php admin_show_warnings(); eme_people_table(); ?>
 	</div> 
 
 	<?php
@@ -20,35 +20,35 @@ add_action('init','eme_ajax_actions');
 function eme_ajax_actions() {
  	if(isset($_GET['dbem_ajax_action']) && $_GET['dbem_ajax_action'] == 'booking_data') {
 		if(isset($_GET['id']))
-			echo "[ {bookedSeats:".dbem_get_booked_seats($_GET['id']).", availableSeats:".dbem_get_available_seats($_GET['id'])."}]"; 
+			echo "[ {bookedSeats:".eme_get_booked_seats($_GET['id']).", availableSeats:".eme_get_available_seats($_GET['id'])."}]"; 
 		die();
 	}
 	if(isset($_GET['action']) && $_GET['action'] == 'printable'){
 		if(isset($_GET['event_id']))
-			dbem_printable_booking_report(intval($_GET['event_id']));
+			eme_printable_booking_report(intval($_GET['event_id']));
 	}
 	
 	if(isset($_GET['query']) && $_GET['query'] == 'GlobalMapData') { 
-		dbem_global_map_json($_GET['eventful'],$_GET['scope']);		
+		eme_global_map_json($_GET['eventful'],$_GET['scope']);		
 	 	die();
  	}
 }
 
-function dbem_global_map_json($eventful = false, $scope = "all") {
+function eme_global_map_json($eventful = false, $scope = "all") {
 	$json = '{"locations":[';
-	$locations = dbem_get_locations($eventful,$scope);
+	$locations = eme_get_locations($eventful,$scope);
 	$json_locations = array();
 	foreach($locations as $location) {
 		$json_location = array();
 		foreach($location as $key => $value) {
 			# no newlines allowed, otherwise no map is shown
-			$value=preg_replace("/\r\n|\n\r|\n/","<br />",dbem_trans_sanitize_html($value));
+			$value=preg_replace("/\r\n|\n\r|\n/","<br />",eme_trans_sanitize_html($value));
 		 	$json_location[] = '"'.$key.'":"'.$value.'"';
 		}
-		$tmp_loc=dbem_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location);
+		$tmp_loc=eme_replace_locations_placeholders(get_option('dbem_location_baloon_format'), $location);
 		# no newlines allowed, otherwise no map is shown
 		$tmp_loc=preg_replace("/\r\n|\n\r|\n/","<br />",$tmp_loc);
-		$json_location[] = '"location_balloon":"'.dbem_trans_sanitize_html($tmp_loc).'"';
+		$json_location[] = '"location_balloon":"'.eme_trans_sanitize_html($tmp_loc).'"';
 		$json_locations[] = "{".implode(",",$json_location)."}";
 	}
 	$json .= implode(",", $json_locations); 
@@ -56,11 +56,11 @@ function dbem_global_map_json($eventful = false, $scope = "all") {
 	echo $json;
 }
 
-function dbem_printable_booking_report($event_id) {
-	$event = dbem_get_event($event_id);
-	$bookings =  dbem_get_bookings_for($event_id);
-	$available_seats = dbem_get_available_seats($event_id);
-	$booked_seats = dbem_get_booked_seats($event_id);
+function eme_printable_booking_report($event_id) {
+	$event = eme_get_event($event_id);
+	$bookings =  eme_get_bookings_for($event_id);
+	$available_seats = eme_get_available_seats($event_id);
+	$booked_seats = eme_get_booked_seats($event_id);
 	$stylesheet = DBEM_PLUGIN_URL."events_manager.css";
 	?>
 		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -75,8 +75,8 @@ function dbem_printable_booking_report($event_id) {
 		<body id="printable">
 			<div id="container">
 			<h1>Bookings for <?php echo $event['event_name'];?></h1> 
-			<p><?php echo dbem_replace_placeholders("#d #M #Y", $event)?></p>
-			<p><?php echo dbem_replace_placeholders("#_LOCATION, #_ADDRESS, #_TOWN", $event)?></p>
+			<p><?php echo eme_replace_placeholders("#d #M #Y", $event)?></p>
+			<p><?php echo eme_replace_placeholders("#_LOCATION, #_ADDRESS, #_TOWN", $event)?></p>
 			<h2><?php _e('Bookings data', 'eme');?></h2>
 			<table id="bookings-table">
 				<tr>
@@ -88,7 +88,7 @@ function dbem_printable_booking_report($event_id) {
 				<?php
 				foreach($bookings as $booking) {
 					$pending_string="";
-					if (dbem_event_needs_approval($event_id) && !$booking['booking_approved']) {
+					if (eme_event_needs_approval($event_id) && !$booking['booking_approved']) {
 						$pending_string=__('(pending)','eme');
 					}
 			       ?>
@@ -119,8 +119,8 @@ function dbem_printable_booking_report($event_id) {
  		
 } 
 
-function dbem_people_table() {
-	$people = dbem_get_people();
+function eme_people_table() {
+	$people = eme_get_people();
 	if (count($people) < 1 ) {
 		_e("No people have responded to your events yet!", 'eme');
 	} else { 
@@ -155,26 +155,26 @@ function dbem_people_table() {
 	}
 } 
 
-function dbem_get_person_by_name_and_email($name, $email) {
+function eme_get_person_by_name_and_email($name, $email) {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
-	$name = dbem_sanitize_request($name);
-	$email = dbem_sanitize_request($email);
+	$name = eme_sanitize_request($name);
+	$email = eme_sanitize_request($email);
 	$sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE person_name = '$name' AND person_email = '$email' ;" ;
 	$result = $wpdb->get_row($sql, ARRAY_A);
 	return $result;
 }
 
-function dbem_get_person_by_wp_id($wp_id) {
+function eme_get_person_by_wp_id($wp_id) {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
-	$wp_id = dbem_sanitize_request($wp_id);
+	$wp_id = eme_sanitize_request($wp_id);
 	$sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE wp_id = '$wp_id';" ;
 	$result = $wpdb->get_row($sql, ARRAY_A);
 	return $result;
 }
 
-function dbem_get_person($person_id) {
+function eme_get_person($person_id) {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
 	$sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE person_id = '$person_id';" ;
@@ -182,7 +182,7 @@ function dbem_get_person($person_id) {
 	return $result;
 }
 
-function dbem_get_people() {
+function eme_get_people() {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
 	$sql = "SELECT *  FROM $people_table";
@@ -190,19 +190,19 @@ function dbem_get_people() {
 	return $result;
 }
 
-function dbem_add_person($name, $email, $phone, $wp_id) {
+function eme_add_person($name, $email, $phone, $wp_id) {
 	global $wpdb; 
 	$people_table = $wpdb->prefix.PEOPLE_TBNAME;
-	$name = dbem_sanitize_request($name);
-	$email = dbem_sanitize_request($email);
-	$phone = dbem_sanitize_request($phone);
-	$wp_id = dbem_sanitize_request($wp_id);
+	$name = eme_sanitize_request($name);
+	$email = eme_sanitize_request($email);
+	$phone = eme_sanitize_request($phone);
+	$wp_id = eme_sanitize_request($wp_id);
 	$sql = "INSERT INTO $people_table (person_name, person_email, person_phone, wp_id) VALUES ('$name', '$email', '$phone', '$wp_id');";
 	$wpdb->query($sql);
 	if ($dbem_rsvp_registered_users_only) {
-		$new_person = dbem_get_person_by_wp_id($wp_id);
+		$new_person = eme_get_person_by_wp_id($wp_id);
 	} else {
-		$new_person = dbem_get_person_by_name_and_email($name, $email);
+		$new_person = eme_get_person_by_name_and_email($name, $email);
 	}
 	return ($new_person);
 }
@@ -229,7 +229,7 @@ function eme_update_phone($user_ID) {
 	
 }
 
-function dbem_get_indexed_users() {
+function eme_get_indexed_users() {
 	global $wpdb;
 	$sql = "SELECT display_name, ID FROM $wpdb->users";
 	$users = $wpdb->get_results($sql, ARRAY_A);

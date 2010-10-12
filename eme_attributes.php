@@ -1,5 +1,5 @@
 <?php
-function dbem_attributes_form($event) {
+function eme_attributes_form($event) {
 	$dbem_data = $event['event_attributes'];
 	//We also get a list of attribute names and create a ddm list (since placeholders are fixed)
 	$formats = 

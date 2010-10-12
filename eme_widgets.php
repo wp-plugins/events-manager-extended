@@ -17,7 +17,7 @@ class WP_Widget_dbem_list extends WP_Widget {
 		echo $before_widget;
 		if ( $title)
 			echo $before_title . $title . $after_title;
-		$events_list = dbem_get_events_list($limit,$scope,$order,$format,false,$category);
+		$events_list = eme_get_events_list($limit,$scope,$order,$format,false,$category);
 		if ($events_list == __('No events', 'eme'))
 			$events_list = "<li>$events_list</li>";
 		echo "<ul>$events_list</ul>";
@@ -49,7 +49,7 @@ class WP_Widget_dbem_list extends WP_Widget {
 		$scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
 		$order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
 		$category = empty( $instance['category'] ) ? '' : $instance['category'];
-   		$categories = dbem_get_categories();
+   		$categories = eme_get_categories();
 		$format = empty( $instance['format'] ) ? DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT : $instance['format'];
 ?>
   <p>
@@ -96,7 +96,7 @@ class WP_Widget_dbem_list extends WP_Widget {
 ?>
   <p>
     <label for="<?php echo $this->get_field_id('format'); ?>"><?php _e('List item format','eme'); ?>:</label>
-    <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo dbem_sanitize_html($format);?></textarea>
+    <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo eme_sanitize_html($format);?></textarea>
   </p> 
 <?php
     }
@@ -122,7 +122,7 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 		$options['long_events'] = $long_events;
 		$options['category'] = $category;
 		$options['month'] = date("m");
-		dbem_get_calendar($options);
+		eme_get_calendar($options);
 		echo $after_widget;
 	}
 	
@@ -140,7 +140,7 @@ class WP_Widget_dbem_calendar extends WP_Widget {
 		$title = isset($instance['title']) ? esc_attr($instance['title']) : '';
 		$category = empty( $instance['category'] ) ? '' : $instance['category'];
 		$long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;
-   		$categories = dbem_get_categories();
+   		$categories = eme_get_categories();
 ?>
   <p>
 	<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
