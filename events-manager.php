@@ -887,14 +887,16 @@ function admin_show_warnings() {
 		eme_explain_deactivation_needed();
 	} elseif (!$db_version && $old_db_version) {
 		// transfer from dbem to eme warning
+		$advice = sprintf(__("You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace the string 'dbem' by 'eme' in your custom templates and/or CSS. After that, please deacticate/reactivate the plugin to adjust for the new version."));
 		?>
-		<div id="message" class="updated">You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace "dbem" by "eme" in your custom templates or CSS. After that, please deacticate/reactivate the plugin to adjust for the new version.</div>
+		<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
 		<?php
 	} else {
 		if ($old_db_version && $db_version==8) {
 			// transfer from dbem to eme warning
+			$advice = sprintf(__("You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace the string 'dbem' by 'eme' in your custom templates and/or CSS."));
 			?>
-			<div id="message" class="updated">You have installed the new version of Events Manager Extended. This version has among other things switched from "dbem" to "eme" for API calls (used in templates) and for CSS. So if you use these, please replace "dbem" by "eme" in your custom templates or CSS.</div>
+			<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
 			<?php
 		}
 
@@ -910,16 +912,16 @@ function admin_show_warnings() {
 }
 
 function eme_explain_deactivation_needed() {
-	$advice = sprintf(__("<p>It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen."));
+	$advice = sprintf(__("It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen."));
 	?>
-<div id="message" class="updated"> <?php echo $advice; ?> </div>
+<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
 <?php
 }
 
 function eme_explain_conversion_needed() {
-	$advice = sprintf(__("<p>It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>."),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
+	$advice = sprintf(__("It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>."),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
 	?>
-<div id="message" class="updated"> <?php echo $advice; ?> </div>
+<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
 <?php
 }
 
