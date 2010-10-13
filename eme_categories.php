@@ -3,7 +3,7 @@ function eme_categories_subpanel() {
 	global $wpdb;
 	
 	admin_show_warnings();
-	if (!current_user_can( SETTINGS_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
+	if (!current_user_can( SETTING_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
 		$message = __('You have no right to update categories!','eme');
 		eme_categories_table_layout($message);
 	} elseif(isset($_GET['action']) && $_GET['action'] == "editcat") { 

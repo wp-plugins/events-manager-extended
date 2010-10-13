@@ -95,7 +95,7 @@ function eme_locations_edit_layout($location, $message = "") {
 			<?php endif; ?>
 			<div id="ajax-response"></div>
 	
-			<form enctype="multipart/form-data" name="editcat" id="editcat" method="post" action="admin.php?page=events-manager-locations" class="validate">
+			<form enctype="multipart/form-data" name="editcat" id="editcat" method="post" action="" class="validate">
 			<input type="hidden" name="action" value="editedlocation" />
 			<input type="hidden" name="location_ID" value="<?php echo $location['location_id'] ?>"/>
 			
@@ -190,9 +190,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
 			<div id="col-container">
 				<div id="col-right">
 			 	 <div class="col-wrap">
-				 	 <form id="locations-filter" method="post" action="<?php echo $destination ?>">
-						<input type="hidden" name="page" value="events-manager-locations"/>
-						
+				 	 <form id="locations-filter" method="post" action="">
 						<?php if (count($locations)>0) : ?>
 						<table class="widefat">
 							<thead>
@@ -245,8 +243,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
 							<div id="ajax-response"/>
 					  	<h3><?php _e('Add location', 'eme') ?></h3>
 						    <?php admin_show_warnings(); ?>
-							 <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="<?php echo $destination ?>" class="add:the-list: validate">
-								<input type="hidden" name="page" value="events-manager-locations"/>
+							 <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="" class="add:the-list: validate">
 								<input type="hidden" name="action" value="addlocation" />
 								<div id="titlediv" class="form-field form-required">
 								  <label for="location_name"><?php _e('Location name', 'eme') ?></label>
