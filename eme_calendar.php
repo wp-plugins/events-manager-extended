@@ -234,12 +234,12 @@ function eme_get_calendar($args="") {
 	if ($category && get_option('eme_categories_enabled')) {
 		//show a specific category
 		if ($category != '' && is_numeric($category)){
-			$cat_condition = "AND FIND_IN_SET($category,event_category_ids)";
+			$conditions[] = "FIND_IN_SET($category,event_category_ids)";
 		}elseif( preg_match('/^([0-9],?)+$/', $category) ){
 			$category = explode(',', $category);
 			$category_conditions = array();
 			foreach($category as $cat){
-				$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
+				$category_conditions[] = "FIND_IN_SET($cat,event_category_ids)";
 			}
 			$conditions[] = "(".implode(' OR', $category_conditions).")";
 		}
