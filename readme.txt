@@ -244,3 +244,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.1 =
 * Bugfix: typo fix for capabilities for categories, the categories menu didn't show up in the admin menu
+
+= 3.2.2 =
+* Bugfix: add/delete location now works again
+* Bugfix: when duplicating an event, the creator of the new event is now set correctly
