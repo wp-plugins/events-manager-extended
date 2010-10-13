@@ -241,7 +241,7 @@ function eme_get_calendar($args="") {
 			foreach($category as $cat){
 				$category_conditions[] = "FIND_IN_SET($cat,event_category_ids)";
 			}
-			$conditions[] = "(".implode(' OR', $category_conditions).")";
+			$conditions[] = "(".implode(' OR ', $category_conditions).")";
 		}
 	}
 
