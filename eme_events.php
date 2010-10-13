@@ -1474,10 +1474,7 @@ function eme_event_form($event, $title, $element) {
 								</div>
 							</div>
 						</div>
-						<?php
-	/* Marcus Begin Edit */
-	//adding the category selection box
-	?>  				<?php endif; ?>
+	 					<?php endif; ?>
 						<?php if(get_option('eme_categories_enabled')) :?>
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />

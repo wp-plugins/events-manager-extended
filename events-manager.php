@@ -518,7 +518,7 @@ function eme_create_events_submenu () {
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
 		$plugin_page = add_submenu_page('events-manager', __('Locations', 'eme'), __('Locations', 'eme'), EDIT_CAPABILITY, 'events-manager-locations', "eme_locations_page");
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
-		$plugin_page = add_submenu_page('events-manager', __('Event Categories','eme'),__('Categories','eme'), SETTINGS_CAPABILITY, "events-manager-categories", 'eme_categories_subpanel');
+		$plugin_page = add_submenu_page('events-manager', __('Event Categories','eme'),__('Categories','eme'), SETTING_CAPABILITY, "events-manager-categories", 'eme_categories_subpanel');
                 add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
 		$plugin_page = add_submenu_page('events-manager', __('People', 'eme'), __('People', 'eme'), MIN_CAPABILITY, 'events-manager-people', "eme_people_page");
 		add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
