@@ -1028,7 +1028,11 @@ function eme_duplicate_event($event_id) {
 	//First, duplicate.
 	$event_table_name = $wpdb->prefix . EVENTS_TBNAME;
 	$eventArray = $wpdb->get_row("SELECT * FROM {$event_table_name} WHERE event_id={$event_id}", ARRAY_A );
+	// unset the old event id
 	unset($eventArray['event_id']);
+	// set the new creator
+	$current_userid=get_current_user_id();
+	$eventArray['event_creator_id']=$current_userid;
 	$result = $wpdb->insert($event_table_name, $eventArray);
 	if( $result !== false) {
 		//Get the ID of the new item
