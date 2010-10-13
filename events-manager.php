@@ -177,6 +177,7 @@ function eme_install() {
  	$events_page_id = get_option('eme_events_page');
  	if (!$events_page_id && get_option('dbem_events_page')) {
  		$events_page_id = get_option('dbem_events_page')  ;
+  		update_option('eme_events_page', $events_page_id); 
 	}
 
 	if ($events_page_id != "" ) {
