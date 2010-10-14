@@ -163,7 +163,6 @@ function eme_locations_edit_layout($location, $message = "") {
 }
 
 function eme_locations_table_layout($locations, $new_location, $message = "") {
-	$destination = admin_url("admin.php");
 	if (!is_array($new_location)) {
 		$new_location = array();
 		$new_location['location_name'] = '';
@@ -243,7 +242,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
 							<div id="ajax-response"/>
 					  	<h3><?php _e('Add location', 'eme') ?></h3>
 						    <?php admin_show_warnings(); ?>
-							 <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="" class="add:the-list: validate">
+							 <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="<?php echo admin_url("admin.php?page=events-manager-locations"); ?>" class="add:the-list: validate">
 								<input type="hidden" name="action" value="addlocation" />
 								<div id="titlediv" class="form-field form-required">
 								  <label for="location_name"><?php _e('Location name', 'eme') ?></label>
