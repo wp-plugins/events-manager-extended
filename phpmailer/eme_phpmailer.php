@@ -22,7 +22,7 @@ function eme_send_mail($subject="no title",$body="No message specified", $receiv
 		$mail->Mailer = get_option('eme_rsvp_mail_send_method');                     
 	$mail->Host = get_option('eme_smtp_host');
 	$mail->port = get_option('eme_rsvp_mail_port');  
- 	if(get_option('dbem_rsvp_mail_SMTPAuth') == '1')
+ 	if(get_option('eme_rsvp_mail_SMTPAuth') == '1')
 		$mail->SMTPAuth = TRUE;
 	$mail->Username = get_option('eme_smtp_username');  
 	$mail->Password = get_option('eme_smtp_password');  
