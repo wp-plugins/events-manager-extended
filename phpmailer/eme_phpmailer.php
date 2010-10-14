@@ -17,19 +17,19 @@ function eme_send_mail($subject="no title",$body="No message specified", $receiv
         $mail->SetLanguage('en', dirname(__FILE__).'/');
 
 	$mail->PluginDir = dirname(__FILE__).'/';
-	get_option('dbem_rsvp_mail_send_method') == 'qmail' ?       
+	get_option('eme_rsvp_mail_send_method') == 'qmail' ?       
 		$mail->IsQmail() :
-		$mail->Mailer = get_option('dbem_rsvp_mail_send_method');                     
-	$mail->Host = get_option('dbem_smtp_host');
-	$mail->port = get_option('dbem_rsvp_mail_port');  
+		$mail->Mailer = get_option('eme_rsvp_mail_send_method');                     
+	$mail->Host = get_option('eme_smtp_host');
+	$mail->port = get_option('eme_rsvp_mail_port');  
  	if(get_option('dbem_rsvp_mail_SMTPAuth') == '1')
 		$mail->SMTPAuth = TRUE;
-	$mail->Username = get_option('dbem_smtp_username');  
-	$mail->Password = get_option('dbem_smtp_password');  
-	$mail->From = get_option('dbem_mail_sender_address');
+	$mail->Username = get_option('eme_smtp_username');  
+	$mail->Password = get_option('eme_smtp_password');  
+	$mail->From = get_option('eme_mail_sender_address');
 	//$mail->SMTPDebug = true;        
 
-	$mail->FromName = get_option('dbem_mail_sender_name'); // This is the from name in the email, you can put anything you like here
+	$mail->FromName = get_option('eme_mail_sender_name'); // This is the from name in the email, you can put anything you like here
 	$mail->Body = $body;
 	$mail->Subject = $subject;  
 	$mail->AddAddress($receiver);  
