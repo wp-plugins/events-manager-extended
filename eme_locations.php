@@ -95,7 +95,7 @@ function eme_locations_edit_layout($location, $message = "") {
 			<?php endif; ?>
 			<div id="ajax-response"></div>
 	
-			<form enctype="multipart/form-data" name="editcat" id="editcat" method="post" action="" class="validate">
+			<form enctype="multipart/form-data" name="editcat" id="editcat" method="post" action="<?php echo admin_url("admin.php?page=events-manager-locations"); ?>" class="validate">
 			<input type="hidden" name="action" value="editedlocation" />
 			<input type="hidden" name="location_ID" value="<?php echo $location['location_id'] ?>"/>
 			
@@ -190,7 +190,8 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
 			<div id="col-container">
 				<div id="col-right">
 			 	 <div class="col-wrap">
-				 	 <form id="locations-filter" method="post" action="">
+				 	 <form id="locations-filter" method="post" action="<?php echo admin_url("admin.php?page=events-manager-locations"); ?>">
+						<input type="hidden" name="action" value="delete"/>
 						<?php if (count($locations)>0) : ?>
 						<table class="widefat">
 							<thead>
@@ -224,7 +225,6 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
 
 						<div class="tablenav">
 							<div class="alignleft actions">
-							<input type="hidden" name="action" value="delete"/>
 						 	<input class="button-secondary action" type="submit" name="doaction" value="Delete"/>
 							<br class="clear"/> 
 							</div>
