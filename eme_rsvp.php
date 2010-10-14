@@ -387,7 +387,7 @@ function eme_bookings_compact_table($event_id) {
 			<br class='clear'/>
 		 	</div> ";
 	} else {
-		$table = "<p><em>".__('No responses yet!')."</em></p>";
+		$table = "<p><em>".__('No responses yet!','eme')."</em></p>";
 	} 
 	echo $table;
 }
@@ -436,7 +436,7 @@ function eme_get_bookings_list_for($event_id) {
 		}
 		$res.="</ul>";
 	} else {
-		$res="<p class='eme_no_bookings'>".__('No responses yet!')."</p>";
+		$res="<p class='eme_no_bookings'>".__('No responses yet!','eme')."</p>";
 	}
 	return $res;
 }
