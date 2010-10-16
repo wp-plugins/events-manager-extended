@@ -711,7 +711,7 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
 	//Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '') {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $creator = '') {
 	if (strpos ( $limit, "=" )) {
 		// allows the use of arguments without breaking the legacy code
 		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '');
@@ -721,6 +721,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 		$echo = (bool) $r ['echo'];
 		// for AND categories: the user enters "+" and this gets translated to " " by wp_parse_args
 		$category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
+		$creator = ( preg_match('/^([0-9][, ]?)+$/', $r ['creator'] ) ) ? $r ['creator'] : '' ;
 	}
 	if ($scope == "")
 		$scope = "future";
@@ -732,7 +733,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 	} else {
 		$orig_format = false;
 	}
-	$events = eme_get_events ( $limit, $scope, $order, '', '', $category );
+	$events = eme_get_events ( $limit, $scope, $order, '', '', $category, $creator );
 	$output = "";
 	if (! empty ( $events )) {
 		$curmonth="";
@@ -768,8 +769,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '' ), $atts ) );
-	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod" );
+	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'creator' => '' ), $atts ) );
+	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&creator=$creator" );
 	return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -840,7 +841,7 @@ function eme_is_multiple_events_page() {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '') {
+function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '', $creator = '') {
 	global $wpdb;
 
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
@@ -898,7 +899,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
 	   }elseif( preg_match('/^([0-9],?)+$/', $category) ){
 		$category = explode(',', $category);
 		$category_conditions = array();
-		foreach($category as $cat){
+		foreach($category as $cat) {
 			if (is_numeric($cat))
 				$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
 		}
@@ -906,12 +907,33 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
 	   }elseif( preg_match('/^([0-9] ?)+$/', $category) ){
 		$category = explode(' ', $category);
 		$category_conditions = array();
-		foreach($category as $cat){
+		foreach($category as $cat) {
 			if (is_numeric($cat))
 				$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
 		}
-		$conditions [] = "(".implode(' AND', $category_conditions).")";
+		$conditions [] = "(".implode(' AND ', $category_conditions).")";
 	   }
+	}
+
+	// now filter the creator ID
+	if ($creator != '' && is_numeric($creator)){
+		$conditions [] = " event_creator_id = $creator";
+	}elseif( preg_match('/^([0-9],?)+$/', $creator) ){
+		$creator = explode(',', $creator);
+		$creator_conditions = array();
+		foreach($creator as $authID) {
+			if (is_numeric($authID))
+				$creator_conditions[] = " event_creator_id = $authID";
+		}
+		$conditions [] = "(".implode(' OR ', $creator_conditions).")";
+	}elseif( preg_match('/^([0-9] ?)+$/', $creator) ){
+		$creator = explode(' ', $creator);
+		$creator_conditions = array();
+		foreach($category as $authID) {
+			if (is_numeric($authID))
+				$creator_conditions[] = " event_creator_id = $authID";
+		}
+		$conditions [] = "(".implode(' AND ', $creator_conditions).")";
 	}
 	
 	$where = implode ( " AND ", $conditions );
