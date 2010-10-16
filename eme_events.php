@@ -711,7 +711,7 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
 	//Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $creator = '') {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $authorID = '') {
 	if (strpos ( $limit, "=" )) {
 		// allows the use of arguments without breaking the legacy code
 		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '');
@@ -721,7 +721,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 		$echo = (bool) $r ['echo'];
 		// for AND categories: the user enters "+" and this gets translated to " " by wp_parse_args
 		$category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
-		$creator = ( preg_match('/^([0-9][, ]?)+$/', $r ['creator'] ) ) ? $r ['creator'] : '' ;
+		// authorID filter: you can use "1,3", but not "1+3" since an event can have only one author
+		$authorID = ( preg_match('/^([0-9],?)+$/', $r ['authorID'] ) ) ? $r ['authorID'] : '' ;
 	}
 	if ($scope == "")
 		$scope = "future";
@@ -733,7 +734,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 	} else {
 		$orig_format = false;
 	}
-	$events = eme_get_events ( $limit, $scope, $order, '', '', $category, $creator );
+	$events = eme_get_events ( $limit, $scope, $order, '', '', $category, $authorID );
 	$output = "";
 	if (! empty ( $events )) {
 		$curmonth="";
@@ -769,8 +770,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'creator' => '' ), $atts ) );
-	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&creator=$creator" );
+	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'authorID' => '' ), $atts ) );
+	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&authorID=$authorID" );
 	return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -841,7 +842,7 @@ function eme_is_multiple_events_page() {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '', $creator = '') {
+function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '', $authorID = '') {
 	global $wpdb;
 
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
@@ -915,25 +916,17 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
 	   }
 	}
 
-	// now filter the creator ID
-	if ($creator != '' && is_numeric($creator)){
-		$conditions [] = " event_creator_id = $creator";
-	}elseif( preg_match('/^([0-9],?)+$/', $creator) ){
-		$creator = explode(',', $creator);
-		$creator_conditions = array();
-		foreach($creator as $authID) {
+	// now filter the author ID
+	if ($authorID != '' && is_numeric($authorID)){
+		$conditions [] = " event_creator_id = $authorID";
+	}elseif( preg_match('/^([0-9],?)+$/', $authorID) ){
+		$authorID = explode(',', $authorID);
+		$authorID_conditions = array();
+		foreach($authorID as $authID) {
 			if (is_numeric($authID))
-				$creator_conditions[] = " event_creator_id = $authID";
+				$authorID_conditions[] = " event_creator_id = $authID";
 		}
-		$conditions [] = "(".implode(' OR ', $creator_conditions).")";
-	}elseif( preg_match('/^([0-9] ?)+$/', $creator) ){
-		$creator = explode(' ', $creator);
-		$creator_conditions = array();
-		foreach($category as $authID) {
-			if (is_numeric($authID))
-				$creator_conditions[] = " event_creator_id = $authID";
-		}
-		$conditions [] = "(".implode(' AND ', $creator_conditions).")";
+		$conditions [] = "(".implode(' OR ', $authorID_conditions).")";
 	}
 	
 	$where = implode ( " AND ", $conditions );
@@ -1052,7 +1045,7 @@ function eme_duplicate_event($event_id) {
 	$eventArray = $wpdb->get_row("SELECT * FROM {$event_table_name} WHERE event_id={$event_id}", ARRAY_A );
 	// unset the old event id
 	unset($eventArray['event_id']);
-	// set the new creator
+	// set the new authorID
 	$current_userid=get_current_user_id();
 	$eventArray['event_creator_id']=$current_userid;
 	$result = $wpdb->insert($event_table_name, $eventArray);

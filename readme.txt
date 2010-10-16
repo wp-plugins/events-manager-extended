@@ -253,3 +253,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.3 =
 * Bugfix: sending mails works again
+* Feature: new parameter for shortcode [events_list]: authorID, so you can show only events created by a specific person. Eg: [events_list authorID=1] to show events from author with ID 1, [events_list authorID=1,3] for authors 1 OR 3
