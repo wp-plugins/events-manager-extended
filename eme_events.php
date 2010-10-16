@@ -1328,7 +1328,7 @@ function eme_event_form($event, $title, $element) {
 				<!-- SIDEBAR -->
 				<div id="side-info-column" class='inner-sidebar'>
 					<div id='side-sortables' class="meta-box-sortables">
-						<?php if(current_user_can( EDIT_CAPABILITY)) { ?>
+						<?php if(current_user_can( AUTHOR_CAPABILITY)) { ?>
 						<!-- status postbox -->
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
