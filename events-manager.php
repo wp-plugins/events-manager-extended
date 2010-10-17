@@ -798,8 +798,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 		// matches all PHP time placeholders for starttime
 		if (preg_match('/^#[aABgGhHisueIOPTZcrU]$/', $result)) {
 			// mysql2date expects a date-part in the string as well, since the value $event['event_start_time'] does not have this,
-			// we add a default date to it (2010-10-10)
-			$event_string = str_replace($result, mysql2date(ltrim($result, "#"), "2010-10-10 ".$event['event_start_time']),$event_string ); 
+			// we add the start date to it
+			$event_string = str_replace($result, mysql2date(ltrim($result, "#"), $event['event_start_date']." ".$event['event_start_time']),$event_string ); 
 			//echo $event['event_start_time'];
 			//echo mysql2date('h:i A', '2010-10-10 23:35:00')."<br/>"; 
 			// echo $event_string;
@@ -807,7 +807,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
 		
 		// matches all PHP time placeholders for endtime
 		if (preg_match('/^#@[aABgGhHisueIOPTZcrU]$/', $result)) {
-			$event_string = str_replace($result, mysql2date(ltrim($result, "#@"), "2010-10-10 ".$event['event_end_time']),$event_string );
+			// mysql2date expects a date-part in the string as well, since the value $event['event_end_time'] does not have this,
+			// we add the end date to it
+			$event_string = str_replace($result, mysql2date(ltrim($result, "#@"), $event['event_end_date']." ".$event['event_end_time']),$event_string );
 		}
 		
 		//Add a placeholder for categories
