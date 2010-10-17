@@ -1,7 +1,7 @@
 <?php
 function eme_ical() {
         if (isset ( $_REQUEST ['eme_ical'] ) && $_REQUEST ['eme_ical'] == 'public') {
-                header ( "Content-type: text/calendar; charset=utf-8" );
+                header("Content-type: text/calendar; charset=utf-8");
 		header("Content-Disposition: inline; filename=eme_public.ics");
 
                 $events_page_link = eme_get_events_page(true, false);
