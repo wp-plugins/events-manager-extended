@@ -253,5 +253,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.3 =
 * Bugfix: sending mails works again
-* Feature: new parameter for shortcode [events_list]: authorID, so you can show only events created by a specific person. Eg: [events_list authorID=1] to show events from author with ID 1, [events_list authorID=1,3] for authors 1 OR 3
+* Feature: new parameter for shortcode [events_list]: author, so you can show only events created by a specific person. Eg: [events_list author=admin] to show events from author with loginname "admin", [events_list author=admin,admin2] for authors admin OR admin2
 * Feature: ical subscription is now possible for public events. Just use "?eme_ical=public" after your WP url, and you'll get the ical feed. Eg.: http://www.e-dynamics.be/wordpress/?eme_ical=public

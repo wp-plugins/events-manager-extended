@@ -711,10 +711,10 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
 	//Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $authorID = '') {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '') {
 	if (strpos ( $limit, "=" )) {
 		// allows the use of arguments without breaking the legacy code
-		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '');
+		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '');
 		
 		$r = wp_parse_args ( $limit, $defaults );
 		extract ( $r );
@@ -722,7 +722,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 		// for AND categories: the user enters "+" and this gets translated to " " by wp_parse_args
 		$category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
 		// authorID filter: you can use "1,3", but not "1+3" since an event can have only one author
-		$authorID = ( preg_match('/^([0-9],?)+$/', $r ['authorID'] ) ) ? $r ['authorID'] : '' ;
+		//$authorID = ( preg_match('/^([0-9],?)+$/', $r ['authorID'] ) ) ? $r ['authorID'] : '' ;
+		$author = $r ['author'] ? $r ['author'] : '' ;
 	}
 	if ($scope == "")
 		$scope = "future";
@@ -734,7 +735,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 	} else {
 		$orig_format = false;
 	}
-	$events = eme_get_events ( $limit, $scope, $order, '', '', $category, $authorID );
+	$events = eme_get_events ( $limit, $scope, $order, '', '', $category, $author );
 	$output = "";
 	if (! empty ( $events )) {
 		$curmonth="";
@@ -770,8 +771,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'authorID' => '' ), $atts ) );
-	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&authorID=$authorID" );
+	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '' ), $atts ) );
+	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author" );
 	return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -842,7 +843,7 @@ function eme_is_multiple_events_page() {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '', $authorID = '') {
+function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '', $author = '') {
 	global $wpdb;
 
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
@@ -917,16 +918,17 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
 	}
 
 	// now filter the author ID
-	if ($authorID != '' && is_numeric($authorID)){
-		$conditions [] = " event_creator_id = $authorID";
-	}elseif( preg_match('/^([0-9],?)+$/', $authorID) ){
-		$authorID = explode(',', $authorID);
-		$authorID_conditions = array();
-		foreach($authorID as $authID) {
-			if (is_numeric($authID))
-				$authorID_conditions[] = " event_creator_id = $authID";
+	if ($author != '' && !preg_match('/,/', $author)){
+		$authinfo=get_userdatabylogin($author);
+		$conditions [] = " event_creator_id = ".$authinfo->ID;
+	}elseif( preg_match('/,/', $author) ){
+		$author = explode(',', $author);
+		$author_conditions = array();
+		foreach($author as $authname) {
+				$authinfo=get_userdatabylogin($author);
+				$author_conditions[] = " event_creator_id = ".$authinfo->ID;
 		}
-		$conditions [] = "(".implode(' OR ', $authorID_conditions).")";
+		$conditions [] = "(".implode(' OR ', $author_conditions).")";
 	}
 	
 	$where = implode ( " AND ", $conditions );
