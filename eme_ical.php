@@ -19,6 +19,8 @@ function eme_ical() {
                 foreach ( $events as $event ) {
                         $title = eme_replace_placeholders ( $title_format, $event, "rss" );
 			$description = eme_replace_placeholders ( $description_format, $event, "rss" );
+			// ical format doesn't support html code, but we can convert br to escaped newlines to maintain readable description output
+			$description = strip_tags(preg_replace('/<br(\s+)?\/?>/i', "\\n", $description));
 			$event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
 			$startstring=$event['event_start_date']." ".$event['event_start_time'];
 			$dtstartdate=mysql2date("Ymd",$startstring);
@@ -38,6 +40,7 @@ function eme_ical() {
 			echo "DTEND:$dtend\r\n";
 			echo "UID:$dtstart-$dtend-".$event['event_id']."@".$_SERVER['SERVER_NAME']."\r\n";
                         echo "SUMMARY:$title\r\n";
+                        echo "DESCRIPTION:$description\r\n";
                         echo "URL:$event_link\r\n";
                         echo "ATTACH:$event_link\r\n";
 			echo "LOCATION:".$event['location_name'].", ".$event['location_address'].", ".$event['location_town']."\r\n";

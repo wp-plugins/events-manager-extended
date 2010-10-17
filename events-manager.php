@@ -134,7 +134,7 @@ add_filter('eme_notes', 'prepend_attachment');
 // RSS general filters
 add_filter('eme_general_rss', 'strip_tags');
 add_filter('eme_general_rss', 'ent2ncr', 8);
-add_filter('eme_general_rss', 'esc_html');
+//add_filter('eme_general_rss', 'esc_html');
 // RSS content filter
 add_filter('eme_notes_rss', 'convert_chars', 8);
 add_filter('eme_notes_rss', 'ent2ncr', 8);
@@ -868,6 +868,9 @@ function eme_sanitize_request( $value ) {
 }
 function escapeMe(&$val) {
 	$val = mysql_real_escape_string($val);
+}
+function br2nl($input) {
+ return preg_replace('/<br(\s+)?\/?>/i', "\n", $input);
 }
 
 function eme_trans_sanitize_html( $value, $do_convert=1 ) {
