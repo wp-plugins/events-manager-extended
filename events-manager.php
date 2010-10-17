@@ -100,6 +100,7 @@ include("eme_recurrence.php");
 include("eme_UI_helpers.php");
 include("eme_categories.php");
 include("eme_attributes.php");
+include("eme_ical.php");
 
 require_once("phpmailer/eme_phpmailer.php") ;
 //require_once("phpmailer/language/phpmailer.lang-en.php") ;
