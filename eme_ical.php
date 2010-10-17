@@ -32,7 +32,7 @@ function eme_ical() {
 			$dtend=$dtenddate."T".$dtendhour."Z";
 			echo "BEGIN:VEVENT\r\n";
                         echo "DTSTAMP:" . gmdate('Ymd').'T'. gmdate('His') . "Z\r\n";
-			echo "DTSTART:$dtstar\r\n";
+			echo "DTSTART:$dtstart\r\n";
 			echo "DTEND:$dtend\r\n";
 			echo "UID:$dtstart-$dtend-".$event['event_id']."@".$_SERVER['SERVER_NAME']."\r\n";
                         echo "SUMMARY:$title\r\n";
