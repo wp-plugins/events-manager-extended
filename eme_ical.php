@@ -18,6 +18,8 @@ function eme_ical() {
                 $events = eme_get_events ( 0 );
                 foreach ( $events as $event ) {
                         $title = eme_replace_placeholders ( $title_format, $event, "rss" );
+			$description = eme_replace_placeholders ( $description_format, $event, "rss" );
+			$event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
 			$startstring=$event['event_start_date']." ".$event['event_start_time'];
 			$dtstartdate=mysql2date("Ymd",$startstring);
 			$dtstarthour=mysql2date("His",$startstring);
@@ -36,6 +38,9 @@ function eme_ical() {
 			echo "DTEND:$dtend\r\n";
 			echo "UID:$dtstart-$dtend-".$event['event_id']."@".$_SERVER['SERVER_NAME']."\r\n";
                         echo "SUMMARY:$title\r\n";
+                        echo "URL:$event_link\r\n";
+                        echo "ATTACH:$event_link\r\n";
+			echo "LOCATION:".$event['location_name'].", ".$event['location_address'].", ".$event['location_town']."\r\n";
                         echo "END:VEVENT\r\n";
                 }
 		echo "END:VCALENDAR\r\n";
