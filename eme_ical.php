@@ -21,6 +21,7 @@ function eme_ical() {
 			$startstring=$event['event_start_date']." ".$event['event_start_time'];
 			$dtstartdate=mysql2date("Ymd",$startstring);
 			$dtstarthour=mysql2date("His",$startstring);
+			$dtstart=$dtstartdate."T".$dtstarthour."Z";
 			if ($event['event_end_date'] == "")
 				$event['event_end_date'] = $event['event_start_date'];
 			if ($event['event_end_time'] == "")
@@ -28,16 +29,16 @@ function eme_ical() {
 			$endstring=$event['event_end_date']." ".$event['event_end_time'];
 			$dtenddate=mysql2date("Ymd",$endstring);
 			$dtendhour=mysql2date("His",$endstring);
+			$dtend=$dtenddate."T".$dtendhour."Z";
 			echo "BEGIN:VEVENT\r\n";
                         echo "DTSTAMP:" . gmdate('Ymd').'T'. gmdate('His') . "Z\r\n";
-			echo "DTSTART:".$dtstartdate."T".$dtstarthour."Z\r\n";
-			echo "DTEND:".$dtenddate."T".$dtendhour."Z\r\n";
+			echo "DTSTART:$dtstar\r\n";
+			echo "DTEND:$dtend\r\n";
+			echo "UID:$dtstart-$dtend-".$event['event_id']."@".$_SERVER['SERVER_NAME']."\r\n";
                         echo "SUMMARY:$title\r\n";
                         echo "END:VEVENT\r\n";
                 }
-                ?>
-END:VCALENDAR
-<?php
+		echo "END:VCALENDAR\r\n";
                 die ();
         }
 }
