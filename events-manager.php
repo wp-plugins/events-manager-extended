@@ -660,6 +660,11 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".eme_trans_sanitize_html($event['event_name'])."'>".eme_trans_sanitize_html($event['event_name'])."</a>" , $event_string );
       } 
 
+      if (preg_match('/#_ICALLINK/', $result)) {
+         $url = site_url ("/?eme_ical=public_single&event_id=".$event['event_id']);
+         $link = "<a href='$url'>ICAL</a>";
+      } 
+
       if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
@@ -784,8 +789,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $joiner = "&";
          else
             $joiner = "?";
-         $venue_page_link = $events_page_link.$joiner."location_id=".$event['location_id'];
-         $event_string = str_replace($result, $venue_page_link , $event_string ); 
+         $location_page_link = $events_page_link.$joiner."location_id=".$event['location_id'];
+         $event_string = str_replace($result, $location_page_link , $event_string ); 
       }
 
       // matches all PHP date placeholders for startdate
