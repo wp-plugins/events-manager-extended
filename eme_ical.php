@@ -1,6 +1,6 @@
 <?php
 
-function eme_rss_link($justurl = 0, $echo = 1, $text = "ICAL") {
+function eme_ical_link($justurl = 0, $echo = 1, $text = "ICAL") {
 	if (strpos ( $justurl, "=" )) {
 		// allows the use of arguments without breaking the legacy code
 		$defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'ICAL' );
@@ -10,7 +10,7 @@ function eme_rss_link($justurl = 0, $echo = 1, $text = "ICAL") {
 		$echo = (bool) $r ['echo'];
 	}
 	if ($text == '')
-		$text = "RSS";
+		$text = "ICAL";
 	$url = site_url ("/?eme_ical=public");
 	$link = "<a href='$url'>$text</a>";
 
