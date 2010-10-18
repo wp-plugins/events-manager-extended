@@ -711,16 +711,19 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
 	//Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '') {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '') {
 	if (strpos ( $limit, "=" )) {
 		// allows the use of arguments without breaking the legacy code
-		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '');
+		$defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '');
 		
 		$r = wp_parse_args ( $limit, $defaults );
 		extract ( $r );
 		$echo = (bool) $r ['echo'];
 		// for AND categories: the user enters "+" and this gets translated to " " by wp_parse_args
 		$category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
+		// authorID filter: you can use "1,3", but not "1+3" since an event can have only one author
+		//$authorID = ( preg_match('/^([0-9],?)+$/', $r ['authorID'] ) ) ? $r ['authorID'] : '' ;
+		$author = $r ['author'] ? $r ['author'] : '' ;
 	}
 	if ($scope == "")
 		$scope = "future";
@@ -732,7 +735,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 	} else {
 		$orig_format = false;
 	}
-	$events = eme_get_events ( $limit, $scope, $order, '', '', $category );
+	$events = eme_get_events ( $limit, $scope, $order, '', '', $category, $author );
 	$output = "";
 	if (! empty ( $events )) {
 		$curmonth="";
@@ -768,8 +771,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '' ), $atts ) );
-	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod" );
+	extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '' ), $atts ) );
+	$result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author" );
 	return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -840,7 +843,7 @@ function eme_is_multiple_events_page() {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '') {
+function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '', $author = '') {
 	global $wpdb;
 
 	$events_table = $wpdb->prefix . EVENTS_TBNAME;
@@ -898,7 +901,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
 	   }elseif( preg_match('/^([0-9],?)+$/', $category) ){
 		$category = explode(',', $category);
 		$category_conditions = array();
-		foreach($category as $cat){
+		foreach($category as $cat) {
 			if (is_numeric($cat))
 				$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
 		}
@@ -906,12 +909,26 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
 	   }elseif( preg_match('/^([0-9] ?)+$/', $category) ){
 		$category = explode(' ', $category);
 		$category_conditions = array();
-		foreach($category as $cat){
+		foreach($category as $cat) {
 			if (is_numeric($cat))
 				$category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
 		}
-		$conditions [] = "(".implode(' AND', $category_conditions).")";
+		$conditions [] = "(".implode(' AND ', $category_conditions).")";
 	   }
+	}
+
+	// now filter the author ID
+	if ($author != '' && !preg_match('/,/', $author)){
+		$authinfo=get_userdatabylogin($author);
+		$conditions [] = " event_creator_id = ".$authinfo->ID;
+	}elseif( preg_match('/,/', $author) ){
+		$author = explode(',', $author);
+		$author_conditions = array();
+		foreach($author as $authname) {
+				$authinfo=get_userdatabylogin($author);
+				$author_conditions[] = " event_creator_id = ".$authinfo->ID;
+		}
+		$conditions [] = "(".implode(' OR ', $author_conditions).")";
 	}
 	
 	$where = implode ( " AND ", $conditions );
@@ -1030,7 +1047,7 @@ function eme_duplicate_event($event_id) {
 	$eventArray = $wpdb->get_row("SELECT * FROM {$event_table_name} WHERE event_id={$event_id}", ARRAY_A );
 	// unset the old event id
 	unset($eventArray['event_id']);
-	// set the new creator
+	// set the new authorID
 	$current_userid=get_current_user_id();
 	$eventArray['event_creator_id']=$current_userid;
 	$result = $wpdb->insert($event_table_name, $eventArray);
@@ -1328,7 +1345,7 @@ function eme_event_form($event, $title, $element) {
 				<!-- SIDEBAR -->
 				<div id="side-info-column" class='inner-sidebar'>
 					<div id='side-sortables' class="meta-box-sortables">
-						<?php if(current_user_can( EDIT_CAPABILITY)) { ?>
+						<?php if(current_user_can( AUTHOR_CAPABILITY)) { ?>
 						<!-- status postbox -->
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
@@ -2200,7 +2217,6 @@ function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 	}
 	if ($text == '')
 		$text = "RSS";
-	$rss_title = get_option('eme_events_page_title' );
 	$url = site_url ("/?eme_rss=main");
 	$link = "<a href='$url'>$text</a>";
 	
@@ -2222,7 +2238,7 @@ function eme_rss_link_shortcode($atts) {
 add_shortcode ( 'events_rss_link', 'eme_rss_link_shortcode' );
 
 function eme_rss() {
-	if (isset ( $_REQUEST ['eme_rss'] ) && $_REQUEST ['eme_rss'] == 'main') {
+	if (isset ( $_GET ['eme_rss'] ) && $_GET ['eme_rss'] == 'main') {
 		header ( "Content-type: text/xml" );
 		echo "<?xml version='1.0'?>\n";
 		

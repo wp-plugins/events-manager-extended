@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.2.2
+Version: 3.2.3
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
@@ -100,6 +100,7 @@ include("eme_recurrence.php");
 include("eme_UI_helpers.php");
 include("eme_categories.php");
 include("eme_attributes.php");
+include("eme_ical.php");
 
 require_once("phpmailer/eme_phpmailer.php") ;
 //require_once("phpmailer/language/phpmailer.lang-en.php") ;
@@ -120,11 +121,11 @@ $location_required_fields = array("location_name" => __('The location name', 'em
 // To enable activation through the activate function
 register_activation_hook(__FILE__,'eme_install');
 
-// filters for general events field (corresponding to those of  "the _title")
+// filters for general events field (corresponding to those of  "the_title")
 add_filter('eme_general', 'wptexturize');
 add_filter('eme_general', 'convert_chars');
 add_filter('eme_general', 'trim');
-// filters for the notes field  (corresponding to those of  "the _content")
+// filters for the notes field  (corresponding to those of  "the_content")
 add_filter('eme_notes', 'wptexturize');
 add_filter('eme_notes', 'convert_smilies');
 add_filter('eme_notes', 'convert_chars');
@@ -133,7 +134,7 @@ add_filter('eme_notes', 'prepend_attachment');
 // RSS general filters
 add_filter('eme_general_rss', 'strip_tags');
 add_filter('eme_general_rss', 'ent2ncr', 8);
-add_filter('eme_general_rss', 'esc_html');
+//add_filter('eme_general_rss', 'esc_html');
 // RSS content filter
 add_filter('eme_notes_rss', 'convert_chars', 8);
 add_filter('eme_notes_rss', 'ent2ncr', 8);
@@ -157,6 +158,13 @@ function eme_install() {
 		if ( ! empty($wpdb->collate) )
 			$collate = "COLLATE $wpdb->collate";
 	}
+ 	$db_version = get_option('eme_version');
+	if (!$db_version && get_option('dbem_version')) {
+		$db_version = get_option('dbem_version');
+	}
+	#if (!$db_version) {
+	#	eme_drop_tables();
+	#}
 	eme_create_events_table($charset,$collate);
 	eme_create_recurrence_table($charset,$collate);
 	eme_create_locations_table($charset,$collate);
@@ -165,10 +173,6 @@ function eme_install() {
 	eme_create_categories_table($charset,$collate);
 	eme_add_options();
 	
- 	$db_version = get_option('eme_version');
-	if (!$db_version && get_option('dbem_version')) {
-		$db_version = get_option('dbem_version');
-	}
 	if ($db_version && $db_version<7) {
   		update_option('eme_conversion_needed', 1); 
 	}
@@ -797,8 +801,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 		// matches all PHP time placeholders for starttime
 		if (preg_match('/^#[aABgGhHisueIOPTZcrU]$/', $result)) {
 			// mysql2date expects a date-part in the string as well, since the value $event['event_start_time'] does not have this,
-			// we add a default date to it (2010-10-10)
-			$event_string = str_replace($result, mysql2date(ltrim($result, "#"), "2010-10-10 ".$event['event_start_time']),$event_string ); 
+			// we add the start date to it
+			$event_string = str_replace($result, mysql2date(ltrim($result, "#"), $event['event_start_date']." ".$event['event_start_time']),$event_string ); 
 			//echo $event['event_start_time'];
 			//echo mysql2date('h:i A', '2010-10-10 23:35:00')."<br/>"; 
 			// echo $event_string;
@@ -806,7 +810,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
 		
 		// matches all PHP time placeholders for endtime
 		if (preg_match('/^#@[aABgGhHisueIOPTZcrU]$/', $result)) {
-			$event_string = str_replace($result, mysql2date(ltrim($result, "#@"), "2010-10-10 ".$event['event_end_time']),$event_string );
+			// mysql2date expects a date-part in the string as well, since the value $event['event_end_time'] does not have this,
+			// we add the end date to it
+			$event_string = str_replace($result, mysql2date(ltrim($result, "#@"), $event['event_end_date']." ".$event['event_end_time']),$event_string );
 		}
 		
 		//Add a placeholder for categories
@@ -865,6 +871,9 @@ function eme_sanitize_request( $value ) {
 }
 function escapeMe(&$val) {
 	$val = mysql_real_escape_string($val);
+}
+function br2nl($input) {
+ return preg_replace('/<br(\s+)?\/?>/i', "\n", $input);
 }
 
 function eme_trans_sanitize_html( $value, $do_convert=1 ) {
