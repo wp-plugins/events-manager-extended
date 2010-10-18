@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.2.2
+Version: 3.2.3
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
@@ -121,11 +121,11 @@ $location_required_fields = array("location_name" => __('The location name', 'em
 // To enable activation through the activate function
 register_activation_hook(__FILE__,'eme_install');
 
-// filters for general events field (corresponding to those of  "the _title")
+// filters for general events field (corresponding to those of  "the_title")
 add_filter('eme_general', 'wptexturize');
 add_filter('eme_general', 'convert_chars');
 add_filter('eme_general', 'trim');
-// filters for the notes field  (corresponding to those of  "the _content")
+// filters for the notes field  (corresponding to those of  "the_content")
 add_filter('eme_notes', 'wptexturize');
 add_filter('eme_notes', 'convert_smilies');
 add_filter('eme_notes', 'convert_chars');
@@ -158,6 +158,13 @@ function eme_install() {
 		if ( ! empty($wpdb->collate) )
 			$collate = "COLLATE $wpdb->collate";
 	}
+ 	$db_version = get_option('eme_version');
+	if (!$db_version && get_option('dbem_version')) {
+		$db_version = get_option('dbem_version');
+	}
+	#if (!$db_version) {
+	#	eme_drop_tables();
+	#}
 	eme_create_events_table($charset,$collate);
 	eme_create_recurrence_table($charset,$collate);
 	eme_create_locations_table($charset,$collate);
@@ -166,10 +173,6 @@ function eme_install() {
 	eme_create_categories_table($charset,$collate);
 	eme_add_options();
 	
- 	$db_version = get_option('eme_version');
-	if (!$db_version && get_option('dbem_version')) {
-		$db_version = get_option('dbem_version');
-	}
 	if ($db_version && $db_version<7) {
   		update_option('eme_conversion_needed', 1); 
 	}
