@@ -1444,10 +1444,10 @@ function eme_event_form($event, $title, $element) {
 							<div class="handlediv" title="Click to toggle."><br />
 							</div>
 							<h3 class='hndle'><span>
-								<?php _e ( 'Owner', 'eme' ); ?>
+								<?php _e ( 'Author', 'eme' ); ?>
 								</span></h3>
 							<div class="inside">
-								<p><?php _e('Creator of this event: ','eme'); ?>
+								<p><?php _e('Author of this event: ','eme'); ?>
 									<?php
 									$owner_user_info = get_userdata($event['event_creator_id']);
 									echo eme_sanitize_html($owner_user_info->display_name);
@@ -1456,7 +1456,6 @@ function eme_event_form($event, $title, $element) {
 							</div>
 						</div>
 						<?php endif; ?>
-						<?php if(get_option('eme_rsvp_enabled')) : ?>
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
 							</div>
@@ -1471,6 +1470,7 @@ function eme_event_form($event, $title, $element) {
 								</p>
 							</div>
 						</div>
+						<?php if(get_option('eme_rsvp_enabled')) : ?>
 						<div class="postbox ">
 							<div class="handlediv" title="Click to toggle."><br />
 							</div>
