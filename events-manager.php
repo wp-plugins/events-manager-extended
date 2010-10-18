@@ -635,21 +635,21 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $event_string = str_replace($result, $rsvp_delete_module , $event_string );
       }
       if (preg_match('/#_AVAILABLESPACES|#_AVAILABLESEATS/', $result)) {
-                        if ($rsvp_is_active && $event['event_rsvp']) {
+         if ($rsvp_is_active && $event['event_rsvp']) {
             $available_seats = eme_get_available_seats($event['event_id']);
-                        } else {
-                                $available_seats = "";
-                        }
-                        $event_string = str_replace($result, $available_seats , $event_string );
-                }
+         } else {
+            $available_seats = "";
+         }
+         $event_string = str_replace($result, $available_seats , $event_string );
+      }
       if (preg_match('/#_(RESERVEDSPACES|BOOKEDSEATS)/', $result)) {
-                        if ($rsvp_is_active && $event['event_rsvp']) {
+         if ($rsvp_is_active && $event['event_rsvp']) {
             $booked_seats = eme_get_booked_seats($event['event_id']);
-                        } else {
-                                $booked_seats = "";
-                        }
-                        $event_string = str_replace($result, $booked_seats , $event_string );
-                }
+         } else {
+            $booked_seats = "";
+         }
+         $event_string = str_replace($result, $booked_seats , $event_string );
+      }
 
       if (preg_match('/#_LINKEDNAME/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
@@ -662,7 +662,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       if (preg_match('/#_ICALLINK/', $result)) {
          $url = site_url ("/?eme_ical=public_single&event_id=".$event['event_id']);
-         $link = "<a href='$url'>ICAL</a>";
+         $icallink = "<a href='$url'>ICAL</a>";
+         $event_string = str_replace($result, $icallink , $event_string );
       } 
 
       if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {

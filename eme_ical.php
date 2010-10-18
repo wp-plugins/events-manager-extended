@@ -45,6 +45,7 @@ function eme_ical_single_event($event, $events_page_link, $title_format, $descri
    $res .= "ATTACH:$event_link\r\n";
    $res .= "LOCATION:$location\r\n";
    $res .= "END:VEVENT\r\n";
+   return $res;
 }
 
 function eme_ical_link($justurl = 0, $echo = 1, $text = "ICAL") {
@@ -79,8 +80,15 @@ function eme_ical_link_shortcode($atts) {
 add_shortcode ( 'events_ical_link', 'eme_ical_link_shortcode' );
 
 function eme_ical() {
-   header("Content-type: text/calendar; charset=utf-8");
-   header("Content-Disposition: inline; filename=eme_public.ics");
+   if (isset ( $_GET ['eme_ical'] ) && $_GET ['eme_ical'] == 'public_single' && isset ( $_GET ['event_id'] )) {
+      header("Content-type: text/calendar; charset=utf-8");
+      header("Content-Disposition: inline; filename=eme_single.ics");
+   } elseif (isset ( $_GET ['eme_ical'] ) && $_GET ['eme_ical'] == 'public') {
+      header("Content-type: text/calendar; charset=utf-8");
+      header("Content-Disposition: inline; filename=eme_public.ics");
+   } else {
+      return;
+   }
 
    $events_page_link = eme_get_events_page(true, false);
 
