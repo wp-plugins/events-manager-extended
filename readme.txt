@@ -26,10 +26,9 @@ For more information visit the [Documentation Page](http://www.e-dynamics.be/wor
 == Installation ==
 
 Always take a backup of your db before doing the upgrade, just in case ...  
-1. Upload the `events-manager-extended` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Add events list or calendars following the instructions in the Usage section.
-
+1. Upload the `events-manager-extended` folder to the `/wp-content/plugins/` directory  
+2. Activate the plugin through the 'Plugins' menu in WordPress  
+3. Add events list or calendars following the instructions in the Usage section.  
 == Upgrade from the older Events Manager plugin ==
 
 Events Manager Extended is completely backwards compatible with the old data from Events Manager 2.2.2. Just deactivate the old plugin, remove the files if you want, and proceed with the Events Manager Extended installation as usual. Events Manager Extended takes care of your events database migration automatically. 
@@ -110,8 +109,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 1. A default event page with a map automatically pulled from Google Maps through the #_MAP placeholder.
 2. The events management page.
-3. The Events Manager Extended Options page.
-4. The Events Manager Extended Menu.
+3. The Events Manager Extended Menu.
 
 == Changelog ==
 
