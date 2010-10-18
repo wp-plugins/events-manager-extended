@@ -2217,7 +2217,6 @@ function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 	}
 	if ($text == '')
 		$text = "RSS";
-	$rss_title = get_option('eme_events_page_title' );
 	$url = site_url ("/?eme_rss=main");
 	$link = "<a href='$url'>$text</a>";
 	
@@ -2239,7 +2238,7 @@ function eme_rss_link_shortcode($atts) {
 add_shortcode ( 'events_rss_link', 'eme_rss_link_shortcode' );
 
 function eme_rss() {
-	if (isset ( $_REQUEST ['eme_rss'] ) && $_REQUEST ['eme_rss'] == 'main') {
+	if (isset ( $_GET ['eme_rss'] ) && $_GET ['eme_rss'] == 'main') {
 		header ( "Content-type: text/xml" );
 		echo "<?xml version='1.0'?>\n";
 		

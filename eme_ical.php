@@ -1,6 +1,38 @@
 <?php
+
+function eme_rss_link($justurl = 0, $echo = 1, $text = "ICAL") {
+	if (strpos ( $justurl, "=" )) {
+		// allows the use of arguments without breaking the legacy code
+		$defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'ICAL' );
+
+		$r = wp_parse_args ( $justurl, $defaults );
+		extract ( $r );
+		$echo = (bool) $r ['echo'];
+	}
+	if ($text == '')
+		$text = "RSS";
+	$url = site_url ("/?eme_ical=public");
+	$link = "<a href='$url'>$text</a>";
+
+	if ($justurl)
+		$result = $url;
+	else
+		$result = $link;
+	if ($echo)
+		echo $result;
+	else
+		return $result;
+}
+
+function eme_ical_link_shortcode($atts) {
+	extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'ICAL' ), $atts ) );
+	$result = eme_ical_link ( "justurl=$justurl&echo=0&text=$text" );
+	return $result;
+}
+add_shortcode ( 'events_ical_link', 'eme_ical_link_shortcode' );
+
 function eme_ical() {
-        if (isset ( $_REQUEST ['eme_ical'] ) && $_REQUEST ['eme_ical'] == 'public') {
+        if (isset ( $_GET ['eme_ical'] ) && $_GET ['eme_ical'] == 'public') {
                 header("Content-type: text/calendar; charset=utf-8");
 		header("Content-Disposition: inline; filename=eme_public.ics");
 
