@@ -776,7 +776,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
          // ascii encode for primitive harvesting protection ...
          $event_string = str_replace($result, eme_ascii_encode($phone), $event_string );
       }  
-      if (preg_match('/#_(IMAGE)/', $result)) {
+      if (preg_match('/#_IMAGE$/', $result)) {
          if($event['location_image_url'] != '')
               $location_image = "<img src='".$event['location_image_url']."' alt='".$event['location_name']."'/>";
             else
@@ -784,7 +784,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $event_string = str_replace($result, $location_image , $event_string ); 
       }
 
-      if (preg_match('/#_(LOCATIONPAGEURL)/', $result)) { 
+      if (preg_match('/#_LOCATIONPAGEURL$/', $result)) { 
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
             $joiner = "&";
