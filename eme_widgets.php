@@ -12,12 +12,19 @@ class WP_Widget_eme_list extends WP_Widget {
       $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
+      if ($instance['authorid']==-1 ) {
+         $author='';
+      } else {
+         $authinfo=get_userdata($instance['authorid']);
+         $author=$authinfo->user_login;
+      }
       $category = empty( $instance['category'] ) ? '' : $instance['category'];
       $format = empty( $instance['format'] ) ? DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT : $instance['format'];
       echo $before_widget;
       if ( $title)
          echo $before_title . $title . $after_title;
-      $events_list = eme_get_events_list($limit,$scope,$order,$format,false,$category);
+
+      $events_list = eme_get_events_list($limit,$scope,$order,$format,false,$category,'',$author);
       if ($events_list == __('No events', 'eme'))
          $events_list = "<li>$events_list</li>";
       echo "<ul>$events_list</ul>";
@@ -39,16 +46,18 @@ class WP_Widget_eme_list extends WP_Widget {
       }
       $instance['category'] = $new_instance['category'];
       $instance['format'] = $new_instance['format'];
+      $instance['authorid'] = $new_instance['authorid'];
       return $instance;
    }
    function form( $instance ) {
       //Defaults
-      $instance = wp_parse_args( (array) $instance, array( 'limit' => 5, 'scope' => 'future', 'order' => 'ASC', 'format' => DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT ) );
+      $instance = wp_parse_args( (array) $instance, array( 'limit' => 5, 'scope' => 'future', 'order' => 'ASC', 'format' => DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT, 'authorid' => '' ) );
       $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
       $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
       $category = empty( $instance['category'] ) ? '' : $instance['category'];
+      $authorid = empty( $instance['authorid'] ) ? '' : $instance['authorid'];
          $categories = eme_get_categories();
       $format = empty( $instance['format'] ) ? DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT : $instance['format'];
 ?>
@@ -95,6 +104,12 @@ class WP_Widget_eme_list extends WP_Widget {
       }
 ?>
   <p>
+    <label for="<?php echo $this->get_field_id('authorid'); ?>"><?php _e('Author','eme'); ?>:</label><br/>
+<?php
+wp_dropdown_users ( array ('id' => $this->get_field_id('authorid'), 'name' => $this->get_field_name('authorid'), 'show_option_none' => __ ( "Select...", 'eme' ), 'selected' => $authorid ) );
+?>
+  </p>
+  <p>
     <label for="<?php echo $this->get_field_id('format'); ?>"><?php _e('List item format','eme'); ?>:</label>
     <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo eme_sanitize_html($format);?></textarea>
   </p> 
@@ -113,6 +128,12 @@ class WP_Widget_eme_calendar extends WP_Widget {
       $title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Calendar','eme' ) : $instance['title'], $instance, $this->id_base);
       $long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;
       $category = empty( $instance['category'] ) ? '' : $instance['category'];
+      if ($instance['authorid']==-1 ) {
+         $author='';
+      } else {
+         $authinfo=get_userdata($instance['authorid']);
+         $author=$authinfo->user_login;
+      }
       echo $before_widget;
       if ( $title)
          echo $before_title . $title . $after_title;
@@ -122,6 +143,7 @@ class WP_Widget_eme_calendar extends WP_Widget {
       $options['long_events'] = $long_events;
       $options['category'] = $category;
       $options['month'] = date("m");
+      $options['author'] = $author;
       eme_get_calendar($options);
       echo $after_widget;
    }
@@ -131,6 +153,7 @@ class WP_Widget_eme_calendar extends WP_Widget {
       $instance['title'] = strip_tags($new_instance['title']);
       $instance['category'] = $new_instance['category'];
       $instance['long_events'] = $new_instance['long_events'];
+      $instance['authorid'] = $new_instance['authorid'];
       return $instance;
    }
 
@@ -140,7 +163,8 @@ class WP_Widget_eme_calendar extends WP_Widget {
       $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
       $category = empty( $instance['category'] ) ? '' : $instance['category'];
       $long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;
-         $categories = eme_get_categories();
+      $authorid = isset( $instance['authorid'] ) ? $instance['authorid'] : '';
+      $categories = eme_get_categories();
 ?>
   <p>
    <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label>
@@ -150,25 +174,33 @@ class WP_Widget_eme_calendar extends WP_Widget {
     <label for="<?php echo $this->get_field_id('long_events'); ?>"><?php _e('Show Long Events?', 'eme'); ?>:</label>
     <input type="checkbox" id="<?php echo $this->get_field_id('long_events'); ?>" name="<?php echo $this->get_field_name('long_events'); ?>" value="1" <?php echo ($long_events) ? 'checked="checked"':'' ;?> />
   </p>
-<?php
-        if(get_option('eme_categories_enabled')) {
-?>
+  <?php
+      if(get_option('eme_categories_enabled')) {
+  ?>
   <p>
     <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br/>
    <select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
       <option value=""><?php _e ( 'Select...', 'eme' ); ?>   </option>
-                <?php
-                    foreach ( $categories as $my_category ){
-      ?>
-         <option value="<?php echo $my_category['category_id']; ?>" <?php selected( $category,$my_category['category_id']); ?>><?php echo $my_category['category_name']; ?></option>
       <?php
-          }
+      foreach ( $categories as $my_category ){
+      ?>
+      <option value="<?php echo $my_category['category_id']; ?>" <?php selected( $category,$my_category['category_id']); ?>><?php echo $my_category['category_name']; ?></option>
+      <?php
+      }
       ?>
    </select>
   </p>
 <?php
       }
-   }
+?>
+  <p>
+    <label for="<?php echo $this->get_field_id('authorid'); ?>"><?php _e('Author','eme'); ?>:</label><br/>
+<?php
+wp_dropdown_users ( array ('id' => $this->get_field_id('authorid'), 'name' => $this->get_field_name('authorid'), 'show_option_none' => __ ( "Select...", 'eme' ), 'selected' => $authorid ) );
+?>
+  </p>
+<?php
+   } 
 }
 
 function eme_load_widgets() {

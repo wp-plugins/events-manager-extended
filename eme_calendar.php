@@ -6,9 +6,10 @@ function eme_get_calendar_shortcode($atts) {
          'month' => '',
          'year' => '',
          'echo' => 0,
-         'long_events' => 0
+         'long_events' => 0,
+         'author' => ''
       ), $atts)); 
-   $result = eme_get_calendar("full={$full}&month={$month}&year={$year}&echo={$echo}&long_events={$long_events}&category={$category}");
+   $result = eme_get_calendar("full={$full}&month={$month}&year={$year}&echo={$echo}&long_events={$long_events}&category={$category}&author={$author}");
    return $result;
 }
 add_shortcode('events_calendar', 'eme_get_calendar_shortcode');
@@ -22,7 +23,8 @@ function eme_get_calendar($args="") {
       'month' => '',
       'year' => '',
       'echo' => 1,
-      'long_events' => 0
+      'long_events' => 0,
+      'author' => ''
    );
    $r = wp_parse_args( $args, $defaults );
    extract( $r );
@@ -143,7 +145,7 @@ function eme_get_calendar($args="") {
 
    $random = (rand(100,200));
    $full ? $class = 'eme-calendar-full' : $class='eme-calendar';
-   $calendar="<div class='$class' id='eme-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div><div class='cat_chosen' style='display:none' >$category</div>";
+   $calendar="<div class='$class' id='eme-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div><div class='cat_chosen' style='display:none' >$category</div><div class='author_chosen' style='display:none' >$author</div>";
    
    $weekdays = array(__('Sunday'),__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'));
    $n = 0 ;
@@ -164,7 +166,7 @@ function eme_get_calendar($args="") {
    $full ? $fullclass = 'fullcalendar' : $fullclass='';
    // Build the heading portion of the calendar table 
    $calendar .=  "<table class='eme-calendar-table $fullclass'>\n". 
-         "<thead>\n<tr>\n".
+      "<thead>\n<tr>\n".
       "<td>$previous_link</td><td class='month_name' colspan='5'>$month_name $year</td><td>$next_link</td>\n". 
       "</tr>\n</thead>\n". 
       "<tr class='days-names'>\n". 
@@ -176,13 +178,14 @@ function eme_get_calendar($args="") {
    // week with the days of that week in the table data 
 
    $i = 0; 
-   foreach($weeks as $week){ 
+   foreach ($weeks as $week) { 
       $calendar .= "<tr>\n"; 
-      foreach($week as $d){ 
-            if ($i < $offset_count) { //if it is PREVIOUS month
-                  $calendar .= "<td class='eventless-pre'>$d</td>\n"; 
-               }
-         if(($i >= $offset_count) && ($i < ($num_weeks * 7) - $outset)){ // if it is THIS month
+      foreach ($week as $d) { 
+         if ($i < $offset_count) { //if it is PREVIOUS month
+            $calendar .= "<td class='eventless-pre'>$d</td>\n"; 
+         }
+         if (($i >= $offset_count) && ($i < ($num_weeks * 7) - $outset)) {
+            // if it is THIS month
             $fullday=$d;
             $d=date('j', $d);
             $day_link = "$d";
@@ -192,22 +195,34 @@ function eme_get_calendar($args="") {
             // if(($date == mktime(0,0,0,$month,$d,$year)) && (date('F') == $month_name)) {
             // my solution:
             if($d == date('j') && $month == date('m') && $year == date('Y')) {
-                  $calendar .= "<td class='eventless-today'>$d</td>\n"; 
-               } else { 
-                     $calendar .= "<td class='eventless'>$day_link</td>\n"; 
-               } 
-            } elseif(($outset > 0)) { //if it is NEXT month
-                  if(($i >= ($num_weeks * 7) - $outset)){ 
-                        $calendar .= "<td class='eventless-post'>$d</td>\n"; 
+               $calendar .= "<td class='eventless-today'>$d</td>\n"; 
+            } else { 
+               $calendar .= "<td class='eventless'>$day_link</td>\n"; 
             } 
+         } elseif(($outset > 0)) {
+            //if it is NEXT month
+            if(($i >= ($num_weeks * 7) - $outset)) { 
+               $calendar .= "<td class='eventless-post'>$d</td>\n"; 
             } 
-            $i++; 
          } 
-         $calendar .= "</tr>\n";
+         $i++; 
+      } 
+      $calendar .= "</tr>\n";
    } 
    
    $calendar .= " </table>\n</div>";
    
+   // let's start filling up the conditions
+   $conditions = array ();
+   // only show appropriate events
+   if (!is_admin()) {
+      if (is_user_logged_in()) {
+         $conditions [] = "event_status IN (1,2)";
+      } else {
+         $conditions [] = "event_status=1";
+      }
+   }
+
    // query the database for events in this time span
    if ($month == 1) {
       $month_pre=12;
@@ -228,14 +243,14 @@ function eme_get_calendar($args="") {
    $limit_pre=date("Y-m-d", mktime(0,0,0,$month_pre, 1 , $year_pre));
    $number_of_days_post=eme_days_in_month($month_post, $year_post);
    $limit_post=date("Y-m-d", mktime(0,0,0,$month_post, $number_of_days_post , $year_post));
+   $conditions [] = "((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post'))";
 
-   $events_table = $wpdb->prefix.EVENTS_TBNAME; 
-        $conditions = array ();
+   // the category conditions
    if ($category && get_option('eme_categories_enabled')) {
       //show a specific category
       if ($category != '' && is_numeric($category)){
          $conditions[] = "FIND_IN_SET($category,event_category_ids)";
-      }elseif( preg_match('/^([0-9],?)+$/', $category) ){
+      } elseif ( preg_match('/^([0-9],?)+$/', $category)) {
          $category = explode(',', $category);
          $category_conditions = array();
          foreach($category as $cat){
@@ -245,18 +260,25 @@ function eme_get_calendar($args="") {
       }
    }
 
-        if (!is_admin()) {
-                if (is_user_logged_in()) {
-                        $conditions [] = "event_status IN (1,2)";
-                } else {
-                        $conditions [] = "event_status=1";
-                }
-        }
-        $conditions [] = "((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post'))";
-        $where = implode ( " AND ", $conditions );
-        if ($where != "")
-                $where = " WHERE " . $where;
+   // now filter the author ID
+   if ($author != '' && !preg_match('/,/', $author)){
+      $authinfo=get_userdatabylogin($author);
+      $conditions [] = " event_creator_id = ".$authinfo->ID;
+   }elseif( preg_match('/,/', $author) ){
+      $author = explode(',', $author);
+      $author_conditions = array();
+      foreach($author as $authname) {
+            $authinfo=get_userdatabylogin($author);
+            $author_conditions[] = " event_creator_id = ".$authinfo->ID;
+      }
+      $conditions [] = "(".implode(' OR ', $author_conditions).")";
+   }
 
+   $where = implode ( " AND ", $conditions );
+   if ($where != "")
+      $where = " WHERE " . $where;
+
+   $events_table = $wpdb->prefix.EVENTS_TBNAME; 
    $sql = "SELECT event_id,
       event_status,
       event_name,
@@ -298,7 +320,7 @@ function eme_get_calendar($args="") {
             $event ['location_town'] = $this_location ['location_town'];
          }
 
-         if( $long_events ){
+         if( $long_events ) {
             //If $long_events is set then show a date as eventful if there is an multi-day event which runs during that day
             $event_start_date = strtotime($event['event_start_date']);
             $event_end_date = strtotime($event['event_end_date']);
@@ -314,9 +336,9 @@ function eme_get_calendar($args="") {
                }  
                $event_start_date += (60*60*24);          
             }
-         }else{
+         } else {
             //Only show events on the day that they start
-            if( isset($eventful_days[$event['event_start_date']]) && is_array($eventful_days[$event['event_start_date']]) ) {
+            if ( isset($eventful_days[$event['event_start_date']]) && is_array($eventful_days[$event['event_start_date']]) ) {
                $eventful_days[$event['event_start_date']][] = $event; 
             } else {
                $eventful_days[$event['event_start_date']] = array($event);
@@ -420,10 +442,11 @@ function eme_ajaxize_calendar() {
          month_n = tableDiv.children('div.month_n').html();
          year_n = tableDiv.children('div.year_n').html();
          cat_chosen = tableDiv.children('div.cat_chosen').html();
+         author_chosen = tableDiv.children('div.author_chosen').html();
          parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
             if (parseInt(month_n,10) == 1)
             year_n = parseInt(year_n,10) -1;
-         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
+         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen}, function(data){
             tableDiv.replaceWith(data);
             initCalendar();
          });
@@ -438,10 +461,11 @@ function eme_ajaxize_calendar() {
          month_n = tableDiv.children('div.month_n').html();
          year_n = tableDiv.children('div.year_n').html();
          cat_chosen = tableDiv.children('div.cat_chosen').html();
+         author_chosen = tableDiv.children('div.author_chosen').html();
          parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
             if (parseInt(month_n,10) == 12)
             year_n = parseInt(year_n,10) + 1;
-         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen}, function(data){
+         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen}, function(data){
             tableDiv.replaceWith(data);
             initCalendar();
          });
@@ -470,8 +494,9 @@ function eme_filter_calendar_ajax() {
       (isset($_GET['category'])) ? $category = intval($_GET['category']) : $category = 0;
       (isset($_GET['calmonth'])) ? $month = eme_sanitize_request($_GET['calmonth']) : $month = ''; 
       (isset($_GET['calyear'])) ? $year = eme_sanitize_request($_GET['calyear']) : $year = ''; 
+      (isset($_GET['author'])) ? $author = eme_sanitize_request($_GET['author']) : $author = ''; 
       // $calyear = eme_sanitize_request($_GET['calyear']);
-      eme_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year);
+      eme_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year.'&author='.$author);
       die();
    }
 }
