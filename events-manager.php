@@ -72,6 +72,7 @@ define('DEFAULT_RECURRENCE_ENABLED', true);
 define('DEFAULT_RSVP_ENABLED', true);
 define('DEFAULT_CATEGORIES_ENABLED', true);
 define('DEFAULT_GMAP_ENABLED', true);
+define('DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT', "F,Y");
 define('STATUS_PUBLIC', 1);
 define('STATUS_PRIVATE', 2);
 define('STATUS_DRAFT', 5);
@@ -440,6 +441,7 @@ function eme_add_options($reset=0) {
    'eme_display_calendar_in_events_page' => 0,
    'eme_single_event_format' => DEFAULT_SINGLE_EVENT_FORMAT,
    'eme_event_page_title_format' => DEFAULT_EVENT_PAGE_TITLE_FORMAT,
+   'eme_show_period_monthly_dateformat' => DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT,
    'eme_list_events_page' => 0,
    'eme_events_page_title' => DEFAULT_EVENTS_PAGE_TITLE,
    'eme_no_events_message' => __('No events','eme'),

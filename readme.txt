@@ -258,3 +258,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: CSS fixes
 * Feature: new placeholder #_ICALLINK for a single event, so you get a link to an ical event just for that link. The shortcode [events_ical_link] can of course still be used.
 * Feature: calendar and widgets now also support author as a filter
+* Feature: you can now customize the date format for the monthy period, when you give the option "showperiod=monthly" to the shortcode [events_list]
