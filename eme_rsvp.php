@@ -74,9 +74,9 @@ function eme_add_booking_form($event_id) {
       $module .= "
       </table>
       <p>".__('(* marks a required field)', 'eme')."</p>
-      <p><input type='submit' value='".__('Send your booking', 'eme')."'/>
-       <input type='hidden' name='eme_eventAction' value='add_booking'/></p>
-       <input type='hidden' name='event_id' value='$event_id'/></p>
+      <input type='hidden' name='eme_eventAction' value='add_booking'/>
+      <input type='hidden' name='event_id' value='$event_id'/>
+      <input type='submit' value='".get_option('eme_rsvp_addbooking_submit_string')."'/>
    </form>";
    // $module .= "dati inviati: ";
    //    $module .= eme_sanitize_request($_POST['bookerName']);
@@ -107,7 +107,7 @@ function eme_delete_booking_form() {
          <tr><th scope='row'>".__('E-Mail', 'eme').":</th><td><input type='text' name='bookerEmail' value=''/></td></tr>
          <input type='hidden' name='eme_eventAction' value='delete_booking'/>
       </table>
-      <input type='submit' value='".__('Cancel your booking', 'eme')."'/>
+      <input type='submit' value='".get_option('eme_rsvp_delbooking_submit_string')."'/>
    </form>";
    // $module .= "dati inviati: ";
    //    $module .= $_POST['bookerName'];

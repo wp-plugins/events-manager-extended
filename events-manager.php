@@ -70,6 +70,8 @@ define('DEFAULT_USE_SELECT_FOR_LOCATIONS', false);
 define('DEFAULT_ATTRIBUTES_ENABLED', true);
 define('DEFAULT_RECURRENCE_ENABLED', true);
 define('DEFAULT_RSVP_ENABLED', true);
+define('DEFAULT_RSVP_ADDBOOKINGFORM_SUBMIT_STRING', __('Send your booking', 'eme'));
+define('DEFAULT_RSVP_DELBOOKINGFORM_SUBMIT_STRING', __('Cancel your booking', 'eme'));
 define('DEFAULT_CATEGORIES_ENABLED', true);
 define('DEFAULT_GMAP_ENABLED', true);
 define('DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT', "F,Y");
@@ -483,6 +485,8 @@ function eme_add_options($reset=0) {
    'eme_attributes_enabled' => DEFAULT_ATTRIBUTES_ENABLED,
    'eme_recurrence_enabled' => DEFAULT_RECURRENCE_ENABLED,
    'eme_rsvp_enabled' => DEFAULT_RSVP_ENABLED,
+   'eme_rsvp_addbooking_submit_string' => DEFAULT_RSVP_ADDBOOKINGFORM_SUBMIT_STRING,
+   'eme_rsvp_delbooking_submit_string' => DEFAULT_RSVP_DELBOOKINGFORM_SUBMIT_STRING,
    'eme_categories_enabled' => DEFAULT_CATEGORIES_ENABLED);
    
    foreach($eme_options as $key => $value){

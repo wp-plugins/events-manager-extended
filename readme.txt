@@ -258,5 +258,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: CSS fixes
 * Feature: new placeholder #_ICALLINK for a single event, so you get a link to an ical event just for that link. The shortcode [events_ical_link] can of course still be used.
 * Feature: calendar and widgets now also support author as a filter
-* Feature: you can now customize the date format for the monthly period, when you give the option "showperiod=monthly" to the shortcode [events_list]
+* Feature: you can now customize the date format for the monthly period in the EME Settings page, used when you give the option "showperiod=monthly" to the shortcode [events_list]
 * Feature: specifying a closing day for RSVP is now possible
+* Feature: you can now change the text on the submit buttons for RSVP forms in the EME Settings page.
