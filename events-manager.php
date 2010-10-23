@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('EME_DB_VERSION', 8);
+define('EME_DB_VERSION', 9);
 define('EME_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -149,6 +149,7 @@ function eme_install() {
    if ( !current_user_can( SETTING_CAPABILITY  ) ) {
       return;
    }
+
    // Creates the events table if necessary
    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
    $charset="";
@@ -233,6 +234,7 @@ function eme_create_events_table($charset,$collate) {
          event_end_date date NULL, 
          event_notes longtext DEFAULT NULL,
          event_rsvp bool DEFAULT 0,
+         rsvp_number_days tinyint unsigned DEFAULT 0,
          event_seats mediumint(9) DEFAULT 0,
          event_creator_id mediumint(9) DEFAULT 0,
          event_contactperson_id mediumint(9) DEFAULT 0,
@@ -281,6 +283,7 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'event_start_time', "alter table $table_name add event_start_time time NOT NULL;"); 
       maybe_add_column($table_name, 'event_end_time', "alter table $table_name add event_end_time time NOT NULL;"); 
       maybe_add_column($table_name, 'event_rsvp', "alter table $table_name add event_rsvp bool DEFAULT 0;");
+      maybe_add_column($table_name, 'rsvp_number_days', "alter table $table_name add rsvp_number_days tinyint unsigned DEFAULT 0;");
       maybe_add_column($table_name, 'event_seats', "alter table $table_name add event_seats mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'recurrence_id', "alter table $table_name add recurrence_id mediumint(9) DEFAULT 0;"); 

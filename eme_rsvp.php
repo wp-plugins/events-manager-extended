@@ -21,6 +21,15 @@ function eme_add_booking_form($event_id) {
    }
    $destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
 
+   $event = eme_get_event($event_id);
+   $event_start_date = strtotime($event['event_start_date']);
+   if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_date ) {
+      $ret_string = "";
+      if(!empty($form_add_message))
+         $ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
+       return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div>";
+   }
+
    // you can book the available number of seats, with a max of 10 per time
    $max = eme_get_available_seats($event_id);
    if ($max > 10) {
@@ -34,7 +43,7 @@ function eme_add_booking_form($event_id) {
        return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div>";
    }
 
-   $module = "<h3>".__('Book now!','eme')."</h3><br/>";
+   $module = "";
    if(!empty($form_add_message))
       $module .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
    $booked_places_options = array();
@@ -293,7 +302,7 @@ function eme_get_booked_seats($event_id) {
    return $booked_seats;
 }
 function eme_are_seats_available_for($event_id, $seats) {
-   $event = eme_get_event($event_id);
+   #$event = eme_get_event($event_id);
    $available_seats = eme_get_available_seats($event_id);
    $remaning_seats = $available_seats - $seats;
    return ($remaning_seats >= 0);

@@ -23,6 +23,7 @@ function eme_new_event_page() {
       "event_end_12h_time" => '',
       "event_notes" => '',
       "event_rsvp" => 0,
+      "rsvp_number_days" => 0,
       "registration_requires_approval" => 0,
       "event_seats" => 0,
       "event_freq" => '',
@@ -163,6 +164,7 @@ function eme_events_subpanel() {
       $recurrence ['recurrence_byweekno'] = isset($_POST['recurrence_byweekno']) ? $_POST ['recurrence_byweekno'] : '';
       
       $event ['event_rsvp'] = (isset ($_POST ['event_rsvp']) && is_numeric($_POST ['event_rsvp'])) ? $_POST ['event_rsvp']:0;
+      $event ['rsvp_number_days'] = (isset ($_POST ['rsvp_number_days']) && is_numeric($_POST ['rsvp_number_days'])) ? $_POST ['rsvp_number_days']:0;
       $event ['registration_requires_approval'] = (isset ($_POST ['registration_requires_approval']) && is_numeric($_POST ['registration_requires_approval'])) ? $_POST ['registration_requires_approval']:0;
       $event ['event_seats'] = (isset ($_POST ['event_seats']) && is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
       
@@ -1488,6 +1490,10 @@ function eme_event_form($event, $title, $element) {
                            <br />
                               <?php _e ( 'Spaces','eme' ); ?> :
                               <input id="seats-input" type="text" name="event_seats" size='5' value="<?php echo $event ['event_seats']?>" />
+                           <br />
+                              <?php _e ( 'Allow RSVP until ','eme' ); ?>
+                              <input id="rsvp_number_days" type="text" name="rsvp_number_days" maxlength='2' size='2' value="<?php echo $event ['rsvp_number_days']?>" />
+                              <?php _e ( ' days before the event starts.','eme' ); ?>
                            </p>
                            <?php if ($event ['event_rsvp']) {
                                  eme_bookings_compact_table ( $event ['event_id'] );
