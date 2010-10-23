@@ -120,7 +120,7 @@ table.eme-calendar-table td {
 	padding: 2px 4px;
 	text-align: center;
 }
-table.eme-calendar.table tr.days-names {
+table.eme-calendar-table tr.days-names {
 	font-weight: bold;
 }
 table.eme-calendar-table td.eventless-pre, table.eme-calendar-table td.eventless-post {
@@ -145,6 +145,14 @@ table.fullcalendar td {
 	width: 50px;  
 	height: 50px;             
 	border: 1px solid #888;
+	vertical-align: text-top;
+}
+table.fullcalendar tr.days-names td {
+	font-weight: bold;
+	vertical-align: middle;
+}
+table.fullcalendar td.month_name {
+	text-align: center;
 }
 .eme-calendar-full ul {
 	font-size: 80%;     

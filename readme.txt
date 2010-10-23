@@ -4,21 +4,20 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.2.2
+Stable tag: 3.2.4
 
-Manage events and display them in your blog. Includes private, public, draft and recurring events; location management; calendar; Google map integration; RSVP + RSVP management. 
+Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. 
              
 == Description ==
+Events Manager Extended (EME) is a fork (NOT an extension) of the older Events Manager (EM) version 2.2.2 (April 2010). After months, the original plugin came back to life with a new codebase, but I added so much features already that it is very hard to go back to being one plugin. Read here for the differences since 2.2.2: http://www.e-dynamics.be/wordpress/?page_id=2
 
-Events Manager Extended is based on the older Events Manager plugin, improving and extending it.
-
-Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports recurring events, venues data, RSVP and maps. With Events Manager Extended you can plan and publish your tour, or let people reserve spaces for your weekly meetings. You can then add events list, calendars and description to your blog using a sidebar widget or shortcodes; if you are a web designer you can simply employ the template tags provided by Events Manager Extended. 
+Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports public, private, draft and recurring events, locations management, RSVP (+ approval if wanted) and maps. With Events Manager Extended you can plan and publish your event, or let people reserve spaces for your weekly meetings. You can add events list, calendars and description to your blog using multiple sidebar widgets or shortcodes; if you are a web designer you can simply employ the template tags provided by Events Manager Extended. 
 
 Events Manager Extended integrates with Google Maps; thanks the geocoding, Events Manager Extended can find the location of your events, and accordingly display a map.
 
-Events Manager Extended provides also a RSS feed, to keep your subscribers updated about the events you're organising.
+Events Manager Extended provides also a RSS and ICAL feed, to keep your subscribers updated about the events you're organising.
 
-Events Manager Extended is fully customisable; you can customise the amount of data displayed and their format in events lists, pages and in the RSS feed. You can choose to show or hide the events page, and change its title.   
+Events Manager Extended is fully customisable; you can customise the amount of data displayed and their format in events lists, pages and in the RSS/ICAL feed. You can choose to show or hide the events page, and change its title.   
 
 Events Manager Extended is fully localisable and already partially localised in Italian, Spanish, German, Swedish, French and Dutch.
 
@@ -27,13 +26,13 @@ For more information visit the [Documentation Page](http://www.e-dynamics.be/wor
 == Installation ==
 
 Always take a backup of your db before doing the upgrade, just in case ...  
-1. Upload the `events-manager-extended` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Add events list or calendars following the instructions in the Usage section.
+1. Upload the `events-manager-extended` folder to the `/wp-content/plugins/` directory  
+2. Activate the plugin through the 'Plugins' menu in WordPress  
+3. Add events list or calendars following the instructions in the Usage section.  
+== Upgrade from the older Events Manager plugin ==
 
-== Upgrade from the old Events Manager plugin ==
-
-Events Manager Extended is completely backwards compatible with the old data from Events Manager 2.2.2. Just deactivate the old plugin, remove the files if you want, and proceed with the Events Manager Extended installation as usual. Events Manager Extended takes care of your events database migration automatically.
+Events Manager Extended is completely backwards compatible with the old data from Events Manager 2.2.2. Just deactivate the old plugin, remove the files if you want, and proceed with the Events Manager Extended installation as usual. Events Manager Extended takes care of your events database migration automatically. 
+Again my note of warning: Events Manager Extended (EME) is a fork (NOT an extension) of the older Events Manager (EM) version 2.2.2 (April 2010). After months, the original plugin came back to life with a new codebase, but I added so much features already that it is very hard to go back to being one plugin. Read here for the differences since 2.2.2: http://www.e-dynamics.be/wordpress/?page_id=2
 
 == Usage == 
 
@@ -110,8 +109,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 1. A default event page with a map automatically pulled from Google Maps through the #_MAP placeholder.
 2. The events management page.
-3. The Events Manager Extended Options page.
-4. The Events Manager Extended Menu.
+3. The Events Manager Extended Menu.
 
 == Changelog ==
 
@@ -250,3 +248,16 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: when duplicating an event, the creator of the new event is now set correctly
 * Bugfix: categories working again
 * Bugfix: languages working again
+
+= 3.2.3 =
+* Bugfix: sending mails works again
+* Feature: new parameter for shortcode [events_list]: author, so you can show only events created by a specific person. Eg: [events_list author=admin] to show events from author with loginname "admin", [events_list author=admin,admin2] for authors admin OR admin2
+* Feature: ical subscription is now possible for public events. Just use "?eme_ical=public" after your WP url, and you'll get the ical feed. Eg.: http://www.e-dynamics.be/wordpress/?eme_ical=public. Shortcode [events_ical_link] has been created for your convenience.
+
+= 3.2.4 =
+* Improvement: CSS fixes
+* Feature: new placeholder #_ICALLINK for a single event, so you get a link to an ical event just for that link. The shortcode [events_ical_link] can of course still be used.
+* Feature: calendar and event list widgets now also support author as a filter
+* Feature: you can now customize the date format for the monthly period in the EME Settings page, used when you give the option "showperiod=monthly" to the shortcode [events_list]
+* Feature: specifying a closing day for RSVP is now possible
+* Feature: you can now change the text on the submit buttons for RSVP forms in the EME Settings page.
