@@ -661,7 +661,7 @@ function eme_locations_autocomplete() {
       $use_select_for_locations=1;
    }
 
-   if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-new_event')) {
+   if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
       ?>
       <link rel="stylesheet" href="<?php echo EME_PLUGIN_URL; ?>js/jquery-autocomplete/jquery.autocomplete.css" type="text/css"/>
 

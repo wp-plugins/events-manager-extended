@@ -2082,7 +2082,7 @@ $j_eme_event(document).ready( function() {
 }
 
 function eme_admin_map_script() {
-   if ((isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] == 'events-manager-locations') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
+   if ((isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
       if (! (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'eme_delete')) {
          // single event page
 
@@ -2092,7 +2092,7 @@ function eme_admin_map_script() {
             $event_ID =0;
          $event = eme_get_event ( $event_ID );
          
-         if ((isset($event ['location_town']) && $event ['location_town'] != '') || (isset ( $_REQUEST ['page'] ) && $_REQUEST ['page'] = 'events-manager-locations')) {
+         if ((isset($event ['location_town']) && $event ['location_town'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations')) {
             if (isset($event ['location_address']) && $event ['location_address'] != "") {
                $search_key = $event ['location_address'] . ", " . $event ['location_town'];
             } else {
@@ -2158,12 +2158,12 @@ function eme_admin_map_script() {
          $j_eme_admin(document).ready(function() {
             <?php 
             // if we're creating a new event, or editing an event *AND*
-            // the use_select_for_locations options is on or qtranslare is installed
+            // the use_select_for_locations options is on or qtranslate is installed
             // then we do the select thing
             // We check on the new/edit event because this javascript is also executed for editing locations, and then we don't care
             // about the use_select_for_locations parameter
             if (
-               ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-new_event')) && 
+               ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) && 
                      (get_option('eme_use_select_for_locations') || function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage'))) { ?>
             eventLocation = $j_eme_admin("input[name='location-select-name']").val(); 
             eventTown = $j_eme_admin("input[name='location-select-town']").val();
