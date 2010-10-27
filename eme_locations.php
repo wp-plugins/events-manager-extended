@@ -591,20 +591,23 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
          $location_page_link = $events_page_link.$joiner."location_id=".$location['location_id'];
          $location_string = str_replace($result, $location_page_link , $location_string ); 
       }
+      if (preg_match('/#_DIRECTIONS/', $result)) {
+         $directions_form = eme_add_directions_form($location);
+         $location_string = str_replace($result, $directions_form , $location_string );
+      }
+
    }
    return $location_string;   
 }
 
 function eme_add_directions_form($location) {
-   $locale_code = substr ( get_locale (), 0, 2 );
-   $res = '
-<form action="http://maps.google.com/maps" method="get" target="_blank" style="text-align:left;">
-<label for="saddr">'.__('Your Street Address','eme').'</label>
-<input type="text" name="saddr" id="saddr" value="" />
-<input type="submit" value="'.__('Get Directions','eme').'" />
-<input type="hidden" name="daddr" value="'.$location['location_address'].', '.$location['location_town'].'" />
-<input type="hidden" name="hl" value="'.$locale_code.'" />
-</form>';
+   $res = '<form action="http://maps.google.com/maps" method="get" target="_blank" style="text-align:left;">';
+   $res .= '<label for="saddr">'.__('Your Street Address','eme').'</label><br />';
+   $res .= '<input type="text" name="saddr" id="saddr" value="" />';
+   $res .= '<input type="hidden" name="daddr" value="'.$location['location_address'].', '.$location['location_town'].'" />';
+   $res .= '<input type="hidden" name="hl" value="'.$locale_code.'" />';
+   $res .= '<input type="submit" value="'.__('Get Directions','eme').'" />';
+   $res .= '</form>';
    return $res;
 }
 
