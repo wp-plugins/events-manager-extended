@@ -865,15 +865,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    if (!empty($tzstring) ) {
       @date_default_timezone_set ($tzstring);
    }
-   $timestamp = time ();
-   $date_time_array = getdate ( $timestamp );
-   $hours = $date_time_array ['hours'];
-   $minutes = $date_time_array ['minutes'];
-   $seconds = $date_time_array ['seconds'];
-   $month = $date_time_array ['mon'];
-   $day = $date_time_array ['mday'];
-   $year = $date_time_array ['year'];
-   $today = strftime ( '%Y-%m-%d', mktime ( $hours, $minutes, $seconds, $month, $day, $year ) );
+   $today = date("Y-m-d");
    
    $conditions = array ();
    // if we're not in the admin itf, we don't want draft events
@@ -883,8 +875,22 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    if (preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope )) {
       //$conditions [] = " event_start_date like '$scope'";
       $conditions [] = " (event_start_date  like '$scope') OR (event_start_date <= '$scope' AND event_end_date >= '$scope')";
+   } elseif (preg_match ( "/^0000-([0-9]{2})$/", $scope, $matches )) {
+      $year=date('Y');
+      $month=$matches[1];
+      $number_of_days_month=eme_days_in_month($month,$year);
+      $limit_start = "$year-$month-00";
+      $limit_end   = "$year-$month-$number_of_days_month";
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif ($scope == "this_month")
+      $year=date('Y');
+      $month=date('m');
+      $number_of_days_month=eme_days_in_month($month,$year);
+      $limit_start = "$year-$month-00";
+      $limit_end   = "$year-$month-$number_of_days_month";
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
-      $conditions [] = " (event_start_date BETWEEN '$matches[1]' AND '$matches[2]')";
+      $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$matches[2]') OR (event_end_date BETWEEN '$matches[1]' AND '$matches[2]'))";
    } else {
       if (($scope != "past") && ($scope != "all") && ($scope != "today"))
          $scope = "future";
