@@ -7,7 +7,6 @@ function eme_add_booking_form($event_id) {
    $bookerName="";
    $bookerEmail="";
    $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
-   $readonly="";
    if ($eme_rsvp_registered_users_only) {
       $readonly="disabled=\"disabled\"";
       // we require a user to be WP registered to be able to book
@@ -18,6 +17,10 @@ function eme_add_booking_form($event_id) {
          $bookerName=$current_user->display_name;
          $bookerEmail=$current_user->user_email;
       }
+      $bookerPhone_required="";
+   } else {
+      $readonly="";
+      $bookerPhone_required="*";
    }
    $destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
 
@@ -54,7 +57,7 @@ function eme_add_booking_form($event_id) {
          <table class='eme-rsvp-form'>
             <tr><th scope='row'>".__('Name', 'eme')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
             <tr><th scope='row'>".__('E-Mail', 'eme')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
-            <tr><th scope='row'>".__('Phone number', 'eme')."*:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
+            <tr><th scope='row'>".__('Phone number', 'eme')."$bookerPhone_required:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
             <tr><th scope='row'>".__('Seats', 'eme')."*:</th><td><select name='bookedSeats' >";
       foreach($booked_places_options as $option) {
          $module .= $option."\n";
@@ -195,7 +198,10 @@ function eme_book_seats() {
       // a hidden field
       $result = __('You are a bad boy','eme');
    } elseif (!$bookerName || !$bookerEmail || !$bookerPhone || !$bookedSeats) {
-   // if any of name, email, phone or bookedseats are empty: return an error
+      // if any of name, email or bookedseats are empty: return an error
+      $result = __('Please fill in all the required fields','eme');
+   } elseif (!$eme_rsvp_registered_users_only && !$bookerPhone) {
+      // no member of wordpress: we need a phonenumber then
       $result = __('Please fill in all the required fields','eme');
    } else {
       if ($bookedSeats && eme_are_seats_available_for($event_id, $bookedSeats)) {

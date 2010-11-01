@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('EME_DB_VERSION', 9);
+define('EME_DB_VERSION', 10);
 define('EME_PLUGIN_URL', WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -412,13 +412,16 @@ function eme_create_people_table($charset,$collate) {
          person_id mediumint(9) NOT NULL AUTO_INCREMENT,
          person_name tinytext NOT NULL, 
          person_email tinytext NOT NULL,
-         person_phone tinytext NOT NULL,
+         person_phone tinytext DEFAULT 0,
          wp_id bigint(20) unsigned DEFAULT NULL,
          UNIQUE KEY (person_id)
          ) $charset $collate;";
       dbDelta($sql);
    } else {
       maybe_add_column($table_name, 'wp_id', "ALTER TABLE $table_name add wp_id bigint(20) unsigned DEFAULT NULL;"); 
+      if ($db_version<10) {
+         $wpdb->query("ALTER TABLE $table_name MODIFY person_phone tinytext DEFAULT 0;");
+      }
    }
 } 
 
