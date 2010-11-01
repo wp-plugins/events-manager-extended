@@ -882,7 +882,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $limit_start = "$year-$month-00";
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
-   } elseif ($scope == "this_month")
+   } elseif ($scope == "this_month") {
       $year=date('Y');
       $month=date('m');
       $number_of_days_month=eme_days_in_month($month,$year);
