@@ -74,34 +74,34 @@ class WP_Widget_eme_list extends WP_Widget {
    <select id="<?php echo $this->get_field_id('scope'); ?>" name="<?php echo $this->get_field_name('scope'); ?>">
          <option value="future" <?php selected( $scope, 'future' ); ?>><?php _e('Future events','eme'); ?></option>
          <option value="all" <?php selected( $scope, 'all' ); ?>><?php _e('All events','eme'); ?></option>
-         <option value="past" <?php selected( $scope, 'past' ); ?>><?php _e('Past events','eme'); ?>:</option>
+         <option value="past" <?php selected( $scope, 'past' ); ?>><?php _e('Past events','eme'); ?></option>
     </select>
   </p>
   <p>
     <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order of the events','eme'); ?>:</label><br/>
-   <select id="<?php echo $this->get_field_id('order'); ?>" name="<?php echo $this->get_field_name('order'); ?>">
+    <select id="<?php echo $this->get_field_id('order'); ?>" name="<?php echo $this->get_field_name('order'); ?>">
          <option value="ASC" <?php selected( $order, 'ASC' ); ?>><?php _e('Ascendant','eme'); ?></option>
-         <option value="DESC" <?php selected( $order, 'DESC' ); ?>><?php _e('Descendant','eme'); ?>:</option>
- </select>
+         <option value="DESC" <?php selected( $order, 'DESC' ); ?>><?php _e('Descendant','eme'); ?></option>
+    </select>
   </p>
 <?php
-      if(get_option('eme_categories_enabled')) {
+  if(get_option('eme_categories_enabled')) {
 ?>
   <p>
     <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br/>
-   <select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
-      <option value=""><?php _e ( 'Select...', 'eme' ); ?>   </option>
-                <?php
-                    foreach ( $categories as $my_category ){
+    <select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
+      <option value=""><?php _e ( 'Select...', 'eme' ); ?></option>
+      <?php
+      foreach ( $categories as $my_category ){
       ?>
          <option value="<?php echo $my_category['category_id']; ?>" <?php selected( $category,$my_category['category_id']); ?>><?php echo $my_category['category_name']; ?></option>
       <?php
-          }
+      }
       ?>
-   </select>
+    </select>
   </p>
 <?php
-      }
+  }
 ?>
   <p>
     <label for="<?php echo $this->get_field_id('authorid'); ?>"><?php _e('Author','eme'); ?>:</label><br/>
