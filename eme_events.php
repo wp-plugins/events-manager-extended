@@ -2098,7 +2098,7 @@ function eme_admin_map_script() {
             $event_ID =0;
          $event = eme_get_event ( $event_ID );
          
-         if ((isset($event ['location_town']) && $event ['location_town'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations')) {
+         if ((isset($event ['location_town']) && $event ['location_town'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
             if (isset($event ['location_address']) && $event ['location_address'] != "") {
                $search_key = $event ['location_address'] . ", " . $event ['location_town'];
             } else {
