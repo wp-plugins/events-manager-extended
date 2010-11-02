@@ -269,3 +269,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: if you use "scope=this_month" as a parameter to the [events_list] shortcode, it will now show all events in the current month
 * Feature: if you use "scope=0000-04" as a parameter to the [events_list] shortcode, it will now show all events in month 04 of the current year
 * Feature: for bookings where you need to be a WP member, the phone number is no longer required.
+* Feature: the format of the attendees list can now be customized

@@ -72,6 +72,7 @@ define('DEFAULT_RECURRENCE_ENABLED', true);
 define('DEFAULT_RSVP_ENABLED', true);
 define('DEFAULT_RSVP_ADDBOOKINGFORM_SUBMIT_STRING', __('Send your booking', 'eme'));
 define('DEFAULT_RSVP_DELBOOKINGFORM_SUBMIT_STRING', __('Cancel your booking', 'eme'));
+define('DEFAULT_ATTENDEES_LIST_FORMAT','<li>#_NAME</li>');
 define('DEFAULT_CATEGORIES_ENABLED', true);
 define('DEFAULT_GMAP_ENABLED', true);
 define('DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT', "F,Y");
@@ -476,6 +477,7 @@ function eme_add_options($reset=0) {
    'eme_rsvp_mail_send_method' => 'smtp',
    'eme_rsvp_mail_SMTPAuth' => 0,
    'eme_rsvp_registered_users_only' => 0,
+   'eme_attendees_list_format' => DEFAULT_ATTENDEES_LIST_FORMAT,
    'eme_image_max_width' => DEFAULT_IMAGE_MAX_WIDTH,
    'eme_image_max_height' => DEFAULT_IMAGE_MAX_HEIGHT,
    'eme_image_max_size' => DEFAULT_IMAGE_MAX_SIZE,
@@ -754,12 +756,11 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } else {
             $field_value = apply_filters('eme_general_rss', $field_value); 
          }
-         
          $event_string = str_replace($result, $field_value , $event_string ); 
       }
 
       if (preg_match('/#_ATTENDEES$/', $result)) {
-                        if ($rsvp_is_active && $event['event_rsvp']) {
+         if ($rsvp_is_active && $event['event_rsvp']) {
             $field_value=eme_get_bookings_list_for($event['event_id']);
             if ($target == "html") {
                $field_value = apply_filters('eme_general', $field_value); 
@@ -767,7 +768,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
                $field_value = apply_filters('eme_general_rss', $field_value); 
             }
          }
-         
          $event_string = str_replace($result, $field_value , $event_string ); 
       }
 

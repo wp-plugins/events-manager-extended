@@ -447,13 +447,32 @@ function eme_get_bookings_list_for($event_id) {
       $res="<ul class='eme_bookings_list_ul'>";
       foreach ($persons as $person) {
          $attendee=eme_get_person($person['person_id']);
-         $res.="<li class='eme_bookings_list_li'>".$attendee['person_name']."</li>";
+         $res.=eme_replace_attendees_placeholders(get_option('eme_attendees_list_format'),$attendee);
       }
       $res.="</ul>";
    } else {
       $res="<p class='eme_no_bookings'>".__('No responses yet!','eme')."</p>";
    }
    return $res;
+}
+
+function eme_replace_attendees_placeholders($format, $attendee, $target="html") {
+   $attendee_string = $format;
+   preg_match_all("/#@?_?[A-Za-z]+/", $format, $placeholders);
+   foreach($placeholders[0] as $result) {
+      if (preg_match('/#_(NAME|PHONE|ID|EMAIL)$/', $result)) {
+         $field = "person_".ltrim(strtolower($result), "#_");
+         $field_value = $attendee[$field];
+      
+         $field_value = eme_sanitize_html($field_value);
+         if ($target == "html")
+            $field_value = apply_filters('eme_general', $field_value); 
+         else 
+            $field_value = apply_filters('eme_general_rss', $field_value); 
+         $attendee_string = str_replace($result, $field_value , $attendee_string ); 
+      }
+   }
+   return $attendee_string;   
 }
 
 function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,$action="") {
