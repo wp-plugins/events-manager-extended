@@ -271,3 +271,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: for bookings where you need to be a WP member, the phone number is no longer required.
 * Feature: the format of the attendees list can now be customized
 * Feature: show RSVP info in the events list in the admin backend as well
+* Feature: you can use #_DETAILS as an alternative to #_NOTES as placeholder for the event description

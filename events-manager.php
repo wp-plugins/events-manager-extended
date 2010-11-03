@@ -689,13 +689,16 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $event_string = str_replace($result, $events_page_link.$joiner."event_id=".$event['event_id'] , $event_string );
       }
 
-      if (preg_match('/#_(NOTES|EXCERPT)/', $result)) {
+      if (preg_match('/#_(DETAILS|NOTES|EXCERPT)/', $result)) {
          $field = "event_".ltrim(strtolower($result), "#_");
+         // DETAILS is an alternative for NOTES
+         if ($field == "event_details")
+            $field = "event_notes";
          $field_value = $event[$field];
          
          if ($target == "html") {
             //If excerpt, we use more link text
-            if($field == "event_excerpt") {
+            if ($field == "event_excerpt") {
                $matches = explode('<!--more-->', $event['event_notes']);
                $field_value = $matches[0];
                $field_value = apply_filters('eme_notes_excerpt', $field_value);
@@ -710,11 +713,11 @@ function eme_replace_placeholders($format, $event, $target="html") {
             if ($target == "map") {
                $field_value = apply_filters('eme_notes_map', $field_value);
             } else {
-               if($field == "event_excerpt"){
+               if ($field == "event_excerpt"){
                   $matches = explode('<!--more-->', $event['event_notes']);
                   $field_value = htmlentities($matches[0]);
                   $field_value = apply_filters('eme_notes_rss', $field_value);
-               }else{
+               } else {
                   $field_value = apply_filters('eme_notes_rss', $field_value);
                }
                $field_value = apply_filters('the_content_rss', $field_value);
