@@ -386,13 +386,13 @@ function eme_get_calendar($args="") {
    if($events){
       foreach($cells as $cell) {
          if ($cell['month'] == $month_pre) {
-            $calendar=str_replace("<td class='eventless-pre'>".$cell['day']."</td>","<td class='eventful-pre day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
+            $calendar=str_replace("<td class='eventless-pre'>".$cell['day']."</td>","<td class='eventful-pre event-day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
          } elseif($cell['month'] == $month_post) {
-            $calendar=str_replace("<td class='eventless-post'>".$cell['day']."</td>","<td class='eventful-post day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
+            $calendar=str_replace("<td class='eventless-post'>".$cell['day']."</td>","<td class='eventful-post event-day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
          } elseif($cell['day'] == $day && $cell['month'] == $month) {
-            $calendar=str_replace("<td class='eventless-today'>".$cell['day']."</td>","<td class='eventful-today day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
+            $calendar=str_replace("<td class='eventless-today'>".$cell['day']."</td>","<td class='eventful-today event-day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
          } elseif( $cell['month'] == $month ) {
-            $calendar=str_replace("<td class='eventless'>".$cell['day']."</td>","<td class='eventful day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
+            $calendar=str_replace("<td class='eventless'>".$cell['day']."</td>","<td class='eventful event-day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
             }
       }
    }
