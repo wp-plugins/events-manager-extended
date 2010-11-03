@@ -197,7 +197,7 @@ function eme_book_seats() {
       // a bot fills this in, but a human never will, since it's
       // a hidden field
       $result = __('You are a bad boy','eme');
-   } elseif (!$bookerName || !$bookerEmail || !$bookerPhone || !$bookedSeats) {
+   } elseif (!$bookerName || !$bookerEmail || !$bookedSeats) {
       // if any of name, email or bookedseats are empty: return an error
       $result = __('Please fill in all the required fields','eme');
    } elseif (!$eme_rsvp_registered_users_only && !$bookerPhone) {
@@ -463,7 +463,6 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
       if (preg_match('/#_(NAME|PHONE|ID|EMAIL)$/', $result)) {
          $field = "person_".ltrim(strtolower($result), "#_");
          $field_value = $attendee[$field];
-      
          $field_value = eme_sanitize_html($field_value);
          if ($target == "html")
             $field_value = apply_filters('eme_general', $field_value); 
@@ -476,7 +475,6 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
 }
 
 function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,$action="") {
-
    $event = eme_get_event($event_id);
    if($event['event_contactperson_id'] && $event['event_contactperson_id']>0) 
       $contact_id = $event['event_contactperson_id']; 
