@@ -1191,7 +1191,12 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
          foreach($categories as $cat){
             $category = eme_get_category($cat);
             if($category)
-               echo "<br/><span title='".__ ( 'Category', 'eme' ).": ".eme_trans_sanitize_html($category['category_name'])."'>".eme_trans_sanitize_html($category['category_name'])."</span>";
+               echo "<br/><span title='".__('Category','eme').": ".eme_trans_sanitize_html($category['category_name'])."'>".eme_trans_sanitize_html($category['category_name'])."</span>";
+         }
+         if ($event ['event_rsvp']) {
+            $available_seats = eme_get_available_seats($event['event_id']);
+            $total_seats = $event ['event_seats'];
+            echo "<br/>".__('RSVP Info: ','eme').__('Free: ','eme' ).$available_seats.", ".__('Max: ','eme').$total_seats;
          }
          ?> 
          </td>
