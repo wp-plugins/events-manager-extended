@@ -265,7 +265,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.2.5 = 
 * Bugfix: make location autocomplete work again when editing an event
 * Bugfix: when creating an event, the location map was not updated automatically anymore
-* Feature: #_DIRECTIONS now also possible for the location infowindow (balloon).
+* Feature: #_DIRECTIONS now also possible for the location infowindow (balloon). I don't recommend it though, since you need to increase the size of the balloon way too much using extra html break-tags.
 * Feature: if you use "scope=this_month" as a parameter to the [events_list] shortcode, it will now show all events in the current month
 * Feature: if you use "scope=0000-04" as a parameter to the [events_list] shortcode, it will now show all events in month 04 of the current year
 * Feature: for bookings where you need to be a WP member, the phone number is no longer required.
