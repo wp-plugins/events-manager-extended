@@ -273,3 +273,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: show RSVP info in the events list in the admin backend as well
 * Feature: you can use #_DETAILS as an alternative to #_NOTES as placeholder for the event description
 * Feature/bugfix: when deleting a booking using the provided form, now only the booking for that event gets deleted, no longer all bookings for that person
+* Feature: the RSVP closing date now also stops showing the delete booking form
+* Feature: for RSVP that require WP membership, the user info (mail/name) is always gotten again from WP info when showing the RSVP members and such. So when a user changes his name/email it immediately shows on the list
