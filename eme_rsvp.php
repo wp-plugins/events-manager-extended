@@ -91,12 +91,24 @@ function eme_add_booking_form($event_id) {
    
 }
 
-function eme_delete_booking_form() {
+function eme_delete_booking_form($event_id) {
    global $form_delete_message;
    
    $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
-   if ($eme_rsvp_registered_users_only && !is_user_logged_in()) {
-      return;
+   if ($eme_rsvp_registered_users_only) {
+      $readonly="disabled=\"disabled\"";
+      // we require a user to be WP registered to be able to book
+      if (!is_user_logged_in()) {
+         return;
+      } else {
+         get_currentuserinfo();
+         $bookerName=$current_user->display_name;
+         $bookerEmail=$current_user->user_email;
+      }
+   } else {
+      $readonly="";
+      $bookerName="";
+      $bookerEmail="";
    }
    $destination = "?".$_SERVER['QUERY_STRING'];
    $module = "<h3>".__('Cancel your booking', 'eme')."</h3><br/>";
@@ -106,10 +118,11 @@ function eme_delete_booking_form() {
 
    $module  .= "<form name='booking-delete-form' method='post' action='$destination'>
          <table class='eme-rsvp-form'>
-            <tr><th scope='row'>".__('Name', 'eme').":</th><td><input type='text' name='bookerName' value=''/></td></tr>
-         <tr><th scope='row'>".__('E-Mail', 'eme').":</th><td><input type='text' name='bookerEmail' value=''/></td></tr>
-         <input type='hidden' name='eme_eventAction' value='delete_booking'/>
+            <tr><th scope='row'>".__('Name', 'eme').":</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
+         <tr><th scope='row'>".__('E-Mail', 'eme').":</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
       </table>
+      <input type='hidden' name='eme_eventAction' value='delete_booking'/>
+      <input type='hidden' name='event_id' value='$event_id'/>
       <input type='submit' value='".get_option('eme_rsvp_delbooking_submit_string')."'/>
    </form>";
    // $module .= "dati inviati: ";
@@ -151,9 +164,10 @@ function eme_catch_rsvp() {
          $bookerEmail = $_POST['bookerEmail'];
          $booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
       }
+      $event_id = intval($_POST['event_id']);
       if ($booker) {
          $person_id = $booker['person_id'];
-         $result = eme_delete_booking_by_person_id($person_id);
+         $result = eme_delete_booking_by_person_id($person_id,$event_id);
       } else {
          $result = __('There are no bookings associated to this name and e-mail', 'eme');
       }
@@ -260,10 +274,10 @@ function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
       $wpdb->query($sql);
 // }
 } 
-function eme_delete_booking_by_person_id($person_id) {
+function eme_delete_booking_by_person_id($person_id,$event_id) {
    global $wpdb;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
-   $sql = "DELETE FROM $bookings_table WHERE person_id = $person_id";
+   $sql = "DELETE FROM $bookings_table WHERE person_id = $person_id AND event_id= $event_id";
    $wpdb->query($sql);
    return __('Booking deleted', 'eme');
 }

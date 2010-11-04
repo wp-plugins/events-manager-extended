@@ -642,7 +642,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
       }
       if (preg_match('/#_REMOVEBOOKINGFORM/', $result)) {
          if ($rsvp_is_active && $event['event_rsvp']) {
-            $rsvp_delete_module = eme_delete_booking_form();
+            $rsvp_delete_module = eme_delete_booking_form($event['event_id']);
          } else {
             $rsvp_delete_module = "";
          }
