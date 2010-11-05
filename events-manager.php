@@ -406,6 +406,7 @@ function eme_create_bookings_table($charset,$collate) {
 
 function eme_create_people_table($charset,$collate) {
    global $wpdb;
+   $db_version = get_option('eme_version');
    $table_name = $wpdb->prefix.PEOPLE_TBNAME;
 
    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -428,6 +429,7 @@ function eme_create_people_table($charset,$collate) {
 
 function eme_create_categories_table($charset,$collate) {
    global $wpdb;
+   $db_version = get_option('eme_version');
    $table_name = $wpdb->prefix.CATEGORIES_TBNAME;
 
    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
