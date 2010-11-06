@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.2.5
+Stable tag: 3.2.6
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. 
              
@@ -275,3 +275,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: when deleting a booking using the provided form, now only the booking for that event gets deleted, no longer all bookings for that person
 * Improvement: the RSVP closing date now also stops showing the delete booking form
 * Improvement: for RSVP that require WP membership, the user info (mail/name) is always gotten again from WP info when showing the RSVP members and such. So when a user changes his name/email it immediately shows on the list
+
+= 3.2.6 =
+* Bugfix: location table gets created again
