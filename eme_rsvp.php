@@ -25,8 +25,8 @@ function eme_add_booking_form($event_id) {
    $destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
 
    $event = eme_get_event($event_id);
-   $event_start_date = strtotime($event['event_start_date']);
-   if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_date ) {
+   $event_start_datetime = strtotime($event['event_start_date']." ".$event['event_start_time']);
+   if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_datetime ) {
       $ret_string = "";
       if(!empty($form_add_message))
          $ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
@@ -114,8 +114,8 @@ function eme_delete_booking_form($event_id) {
    $module = "<h3>".__('Cancel your booking', 'eme')."</h3><br/>";
    
    $event = eme_get_event($event_id);
-   $event_start_date = strtotime($event['event_start_date']);
-   if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_date ) {
+   $event_start_datetime = strtotime($event['event_start_date']." ".$event['event_start_time']);
+   if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_datetime ) {
       $ret_string = "";
       if(!empty($form_delete_message))
          $ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_delete_message</div>";

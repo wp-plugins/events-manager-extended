@@ -278,3 +278,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.6 =
 * Bugfix: location table gets created again
+* Bugfix: rsvp is by default allowed until the hour the event starts, not just the day
