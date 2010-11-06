@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.2.4
+Version: 3.2.6
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
@@ -406,6 +406,7 @@ function eme_create_bookings_table($charset,$collate) {
 
 function eme_create_people_table($charset,$collate) {
    global $wpdb;
+   $db_version = get_option('eme_version');
    $table_name = $wpdb->prefix.PEOPLE_TBNAME;
 
    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
@@ -413,7 +414,7 @@ function eme_create_people_table($charset,$collate) {
          person_id mediumint(9) NOT NULL AUTO_INCREMENT,
          person_name tinytext NOT NULL, 
          person_email tinytext NOT NULL,
-         person_phone tinytext DEFAULT 0,
+         person_phone tinytext DEFAULT NULL,
          wp_id bigint(20) unsigned DEFAULT NULL,
          UNIQUE KEY (person_id)
          ) $charset $collate;";
@@ -428,6 +429,7 @@ function eme_create_people_table($charset,$collate) {
 
 function eme_create_categories_table($charset,$collate) {
    global $wpdb;
+   $db_version = get_option('eme_version');
    $table_name = $wpdb->prefix.CATEGORIES_TBNAME;
 
    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {

@@ -160,7 +160,7 @@ function eme_get_person_by_name_and_email($name, $email) {
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;
    $name = eme_sanitize_request($name);
    $email = eme_sanitize_request($email);
-   $sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE person_name = '$name' AND person_email = '$email' ;" ;
+   $sql = "SELECT * FROM $people_table WHERE person_name = '$name' AND person_email = '$email' ;" ;
    $result = $wpdb->get_row($sql, ARRAY_A);
    return $result;
 }
@@ -169,16 +169,26 @@ function eme_get_person_by_wp_id($wp_id) {
    global $wpdb; 
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;
    $wp_id = eme_sanitize_request($wp_id);
-   $sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE wp_id = '$wp_id';" ;
+   $sql = "SELECT * FROM $people_table WHERE wp_id = '$wp_id';" ;
    $result = $wpdb->get_row($sql, ARRAY_A);
+   if (!is_null($result['wp_id'])) {
+      $user_info = get_userdata($result['wp_id']);
+      $result['person_name']=$user_info->display_name;
+      $result['person_email']=$user_info->user_email;
+   }
    return $result;
 }
 
 function eme_get_person($person_id) {
    global $wpdb; 
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;
-   $sql = "SELECT person_id, person_name, person_email, person_phone FROM $people_table WHERE person_id = '$person_id';" ;
+   $sql = "SELECT * FROM $people_table WHERE person_id = '$person_id';" ;
    $result = $wpdb->get_row($sql, ARRAY_A);
+   if (!is_null($result['wp_id'])) {
+      $user_info = get_userdata($result['wp_id']);
+      $result['person_name']=$user_info->display_name;
+      $result['person_email']=$user_info->user_email;
+   }
    return $result;
 }
 
@@ -186,7 +196,16 @@ function eme_get_people() {
    global $wpdb; 
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;
    $sql = "SELECT *  FROM $people_table";
-   $result = $wpdb->get_results($sql, ARRAY_A);
+   $lines = $wpdb->get_results($sql, ARRAY_A);
+   $result = array();
+   foreach ($lines as $line) {
+      if (!is_null($line['wp_id'])) {
+         $user_info = get_userdata($line['wp_id']);
+         $line['person_name']=$user_info->display_name;
+         $line['person_email']=$user_info->user_email;
+      }
+      $result[]=$line;
+   }
    return $result;
 }
 

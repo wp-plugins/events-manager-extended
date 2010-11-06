@@ -30,7 +30,7 @@ function eme_add_booking_form($event_id) {
       $ret_string = "";
       if(!empty($form_add_message))
          $ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
-       return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div>";
+      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div>";
    }
 
    // you can book the available number of seats, with a max of 10 per time
@@ -110,9 +110,18 @@ function eme_delete_booking_form($event_id) {
       $bookerName="";
       $bookerEmail="";
    }
-   $destination = "?".$_SERVER['QUERY_STRING'];
+   $destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
    $module = "<h3>".__('Cancel your booking', 'eme')."</h3><br/>";
    
+   $event = eme_get_event($event_id);
+   $event_start_date = strtotime($event['event_start_date']);
+   if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_date ) {
+      $ret_string = "";
+      if(!empty($form_delete_message))
+         $ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_delete_message</div>";
+      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div>";
+   }
+
    if(!empty($form_delete_message))
       $module .= "<div class='eme-rsvp-message'>$form_delete_message</div>";
 
