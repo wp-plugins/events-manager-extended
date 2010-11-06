@@ -1471,7 +1471,7 @@ class PHPMailer
         if(isset($this->language[$key]))
             return $this->language[$key];
         else
-            return "Language string failed to load: " . $key;
+            return $key;
     }
     
     /**
