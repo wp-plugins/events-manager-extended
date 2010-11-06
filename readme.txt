@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.2.6
+Stable tag: 3.2.7
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. 
              
@@ -278,4 +278,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.6 =
 * Bugfix: location table gets created again
+
+= 3.2.7 =
 * Bugfix: rsvp is by default allowed until the hour the event starts, not just the day
+* Bugfix: booking name/email once again shows correctly (was bugged and fixed in 3.2.5, but the fix didn't make it in 3.2.6)
