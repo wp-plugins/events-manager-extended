@@ -58,7 +58,7 @@ function eme_categories_subpanel() {
 
 function eme_categories_table_layout($message = "") {
    $categories = eme_get_categories();
-   $destination = admin_url("admin.php"); 
+   $destination = admin_url("admin.php?page=events-manager-categories"); 
    $table = "
       <div class='wrap nosubsub'>\n
          <div id='icon-edit' class='icon32'>
@@ -80,7 +80,6 @@ function eme_categories_table_layout($message = "") {
             <div id='col-right'>
              <div class='col-wrap'>
                 <form id='bookings-filter' method='post' action='".$destination."'>
-                  <input type='hidden' name='page' value='events-manager-categories'/>
                   <input type='hidden' name='action' value='delete'/>";
                   if (count($categories)>0) {
                      $table .= "<table class='widefat'>
@@ -134,7 +133,7 @@ function eme_categories_table_layout($message = "") {
                   <div class='form-wrap'>
                      <div id='ajax-response'/>
                   <h3>".__('Add category', 'eme')."</h3>
-                      <form name='add' id='add' method='post' action='admin.php?page=events-manager-categories' class='add:the-list: validate'>
+                      <form name='add' id='add' method='post' action='".$destination."' class='add:the-list: validate'>
                         <input type='hidden' name='action' value='add' />
                          <div class='form-field form-required'>
                            <label for='category_name'>".__('Category name', 'eme')."</label>
@@ -172,7 +171,7 @@ function eme_categories_edit_layout($message = "") {
       $layout .= "
       <div id='ajax-response'></div>
 
-      <form name='editcat' id='editcat' method='post' action='admin.php?page=events-manager-categories' class='validate'>
+      <form name='editcat' id='editcat' method='post' action='".admin_url("admin.php?page=events-manager-categories")."' class='validate'>
       <input type='hidden' name='action' value='edit' />
       <input type='hidden' name='category_ID' value='".$category['category_id']."'/>";
       

@@ -282,3 +282,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.2.7 =
 * Bugfix: rsvp is by default allowed until the hour the event starts, not just the day
 * Bugfix: booking name/email once again shows correctly (was bugged and fixed in 3.2.5, but the fix didn't make it in 3.2.6)
+
+= 3.2.8 =
+* Bugfix: deleting a category now works again
