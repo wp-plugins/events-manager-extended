@@ -261,6 +261,14 @@ function eme_get_bookings_by_person_id($person_id) {
    return $result;
 }
 
+function eme_get_event_ids_by_booker_id($person_id) {
+   global $wpdb; 
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
+   $sql = "SELECT DISTINCT event_id FROM $bookings_table WHERE person_id = '$person_id';" ;
+   $result = $wpdb->get_results($sql);
+   return $result;
+}
+
 function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
    global $wpdb;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
