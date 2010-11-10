@@ -257,7 +257,7 @@ function eme_get_bookings_by_person_id($person_id) {
    global $wpdb; 
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
    $sql = "SELECT * FROM $bookings_table WHERE person_id = '$person_id';" ;
-   $result = $wpdb->get_row($sql, ARRAY_A);
+   $result = $wpdb->get_results($sql, ARRAY_A);
    return $result;
 }
 
