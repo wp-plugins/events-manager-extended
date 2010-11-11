@@ -231,14 +231,15 @@ add_action('edit_user_profile', 'eme_phone_field') ;
 // when editing your own profile
 add_action('show_user_profile', 'eme_phone_field') ;
 
-function eme_phone_field() {
+function eme_phone_field($user_ID) {
+   $eme_phone=get_user_meta($user_ID,'eme_phone',true);
    ?>
    <h3><?php _e('Phone number', 'eme')?></h3>
    <table class='form-table'>
       <tr>
-         <th><?php _e('Phone number','eme');?></th>
-         <td><input id="eme_phone" class="regular-text" type="text" value="" name="eme_phone"/> <br/>
-         <?php _e('The phone number used by Events Manager when the user is indicated as the contact person for an event.','eme');?></td>
+         <th><label for="eme_phone"><?php _e('Phone number','eme');?></label></th>
+         <td><input type="text" name="eme_phone" id="eme_phone" value="<?php echo $eme_phone; ?>" class="regular-text" /> <br/>
+         <?php _e('The phone number used by Events Manager Extended when the user is indicated as the contact person for an event.','eme');?></td>
       </tr>
    </table>
    <?php
@@ -251,7 +252,7 @@ add_action('personal_options_update','eme_update_phone');
 
 function eme_update_phone($user_ID) {
    if(isset($_POST['eme_phone']) && $_POST['eme_phone'] != '') {
-      update_usermeta($user_ID,'eme_phone', $_POST['eme_phone']);
+      update_user_meta($user_ID,'eme_phone', $_POST['eme_phone']);
    }
    
 }
