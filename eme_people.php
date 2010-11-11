@@ -226,7 +226,11 @@ function eme_add_person($name, $email, $phone, $wp_id) {
    return ($new_person);
 }
 
+// when editing other profiles then your own
 add_action('edit_user_profile', 'eme_phone_field') ;
+// when editing your own profile
+add_action('show_user_profile', 'eme_phone_field') ;
+
 function eme_phone_field() {
    ?>
    <h3><?php _e('Phone number', 'eme')?></h3>
@@ -240,7 +244,11 @@ function eme_phone_field() {
    <?php
 }
 
-add_action('profile_update','eme_update_phone');
+// when editing other profiles then your own
+add_action('edit_user_profile_update','eme_update_phone');
+// when editing your own profile
+add_action('personal_options_update','eme_update_phone');
+
 function eme_update_phone($user_ID) {
    if(isset($_POST['eme_phone']) && $_POST['eme_phone'] != '') {
       update_usermeta($user_ID,'eme_phone', $_POST['eme_phone']);

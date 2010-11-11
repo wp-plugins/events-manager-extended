@@ -285,3 +285,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.8 =
 * Bugfix: deleting a category now works again
+* Bugfix: one could only add phonenumbers to profiles other than his own, has been fixed
