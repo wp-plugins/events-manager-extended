@@ -230,6 +230,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.0 = 
 * Bugfix: tablenav issue caused events list to dissapear in the admin interface using IE7
+* Bugfix: when duplicating an event, we now edit the duplicate event afterwards, not the original mixed in
 * Bugfix: ajax fix for calendar (thanks to wsherliker)
 * Feature: status field for events: Public, Private, Draft. Private events are only visible for logged in users, draft events are not visible from the front end.
 * Feature: permissions now being checked for creation/editing of events:
