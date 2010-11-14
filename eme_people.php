@@ -58,6 +58,13 @@ function eme_global_map_json($eventful = false, $scope = "all") {
 
 function eme_printable_booking_report($event_id) {
    $event = eme_get_event($event_id);
+   $current_userid=get_current_user_id();
+   if (!(current_user_can( EDIT_CAPABILITY) ||
+        (current_user_can( MIN_CAPABILITY) && ($event['event_creator_id']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
+        echo "No access";
+        die;
+   }
+
    $bookings =  eme_get_bookings_for($event_id);
    $available_seats = eme_get_available_seats($event_id);
    $booked_seats = eme_get_booked_seats($event_id);

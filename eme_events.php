@@ -1194,9 +1194,11 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
                echo "<br/><span title='".__('Category','eme').": ".eme_trans_sanitize_html($category['category_name'])."'>".eme_trans_sanitize_html($category['category_name'])."</span>";
          }
          if ($event ['event_rsvp']) {
+            $printable_address = admin_url("/admin.php?page=events-manager-people&action=printable&event_id=".$event['event_id']);
             $available_seats = eme_get_available_seats($event['event_id']);
             $total_seats = $event ['event_seats'];
             echo "<br/>".__('RSVP Info: ','eme').__('Free: ','eme' ).$available_seats.", ".__('Max: ','eme').$total_seats;
+            echo " (<a id='printable'  target='' href='$printable_address'>".__('Printable view','eme')."</a>)";
          }
          ?> 
          </td>
@@ -1510,7 +1512,7 @@ function eme_event_form($event, $title, $element) {
                               <?php _e ( ' days before the event starts.','eme' ); ?>
                            </p>
                            <?php if ($event ['event_rsvp']) {
-                                 eme_bookings_compact_table ( $event ['event_id'] );
+                                 eme_bookings_compact_table ( $event['event_id'] );
                               }
                            ?>
                         </div>
