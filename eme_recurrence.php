@@ -201,23 +201,23 @@ function eme_get_recurrence($recurrence_id) {
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
    $recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
    $sql = "SELECT * FROM $recurrence_table WHERE recurrence_id = $recurrence_id;";
-        $recurrence = $wpdb->get_row($sql, ARRAY_A);
+   $recurrence = $wpdb->get_row($sql, ARRAY_A);
 
-        // now add the info that has no column in the recurrence table
-        $sql = "SELECT event_id FROM $events_table WHERE recurrence_id = '$recurrence_id' LIMIT 1;";
+   // now add the info that has no column in the recurrence table
+   $sql = "SELECT event_id FROM $events_table WHERE recurrence_id = '$recurrence_id' LIMIT 1;";
    $event_id = $wpdb->get_var($sql);
    $event = eme_get_event($event_id);
    foreach ($event as $key=>$val) {
       $recurrence[$key]=$val;
    }
 
-        // now add the location info
-        $location = eme_get_location($recurrence['location_id']);
-        $recurrence['location_name'] = $location['location_name'];
-        $recurrence['location_address'] = $location['location_address'];
-        $recurrence['location_town'] = $location['location_town'];
-        $recurrence['recurrence_description'] = eme_get_recurrence_desc($recurrence_id);
-        return $recurrence;
+   // now add the location info
+   $location = eme_get_location($recurrence['location_id']);
+   $recurrence['location_name'] = $location['location_name'];
+   $recurrence['location_address'] = $location['location_address'];
+   $recurrence['location_town'] = $location['location_town'];
+   $recurrence['recurrence_description'] = eme_get_recurrence_desc($recurrence_id);
+   return $recurrence;
 }
 
 function eme_get_recurrence_desc($recurrence_id) {

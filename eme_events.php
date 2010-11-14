@@ -47,7 +47,7 @@ function eme_new_event_page() {
       "location_longitude" => '',
       "location_image_url" => ''
    );
-   eme_event_form ( $event, $title, '' );
+   eme_event_form ($event, $title);
 }
 
 function eme_events_subpanel() {
@@ -104,12 +104,12 @@ function eme_events_subpanel() {
                         $tmp_event = eme_get_event ( $event_ID );
          if (current_user_can( EDIT_CAPABILITY) ||
              (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_creator_id']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
-                           if ($tmp_event['recurrence_id']>0) {
+            if ($tmp_event['recurrence_id']>0) {
                eme_remove_recurrence ( $tmp_event['recurrence_id'] );
             } else {
                eme_delete_event ( $event_ID );
             }
-                        }
+         }
       }
       
       $events = eme_get_events ( 0, "future" );
@@ -269,7 +269,7 @@ function eme_events_subpanel() {
                   if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
                      // we go from single event to recurrence: create the recurrence and delete the single event
                      eme_insert_recurrent_event ( $event, $recurrence );
-                                       eme_delete_event ( $event_ID );
+                     eme_delete_event ( $event_ID );
                      $feedback_message = __ ( 'New recurrent event inserted!', 'eme' );
                   } else {
                      // UPDATE old event
@@ -458,6 +458,8 @@ function eme_options_subpanel() {
      <?php
    eme_options_select ( __ ( 'Default contact person', 'eme' ), 'eme_default_contact_person', eme_get_indexed_users (), __ ( 'Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Require WP membership to be able to register?', 'eme' ), 'eme_rsvp_registered_users_only', __ ( 'Check this option if you want that only WP registered users can book for an event.', 'eme' ) );
+   eme_options_radio_binary ( __ ( 'By default enable registrations for new events?', 'eme' ), 'eme_rsvp_reg_for_new_events', __ ( 'Check this option if you want to enable registrations by default for new events.', 'eme' ) );
+   eme_options_input_text ( __ ( 'Default number of spaces', 'eme' ), 'eme_rsvp_default_number_spaces', __ ( 'The default number of spaces an event has.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Use captcha for booking form?', 'eme' ), 'eme_captcha_for_booking', __ ( 'Check this option if you want to use a captcha on the booking form, to thwart spammers a bit.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Enable the RSVP e-mail notifications?', 'eme' ), 'eme_rsvp_mail_notify_is_active', __ ( 'Check this option if you want to receive an email when someone books places for your events.', 'eme' ) );
    eme_options_textarea ( __ ( 'Contact person email format', 'eme' ), 'eme_contactperson_email_body', __ ( 'The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats.', 'eme' ) );
@@ -1277,6 +1279,13 @@ function eme_event_form($event, $title, $element) {
    $event_status_array = status_array ();
    $saved_bydays = array();
 
+   // let's determine if it is a new event, handy
+   if (! $element) {
+      $is_new_event=1;
+   } else {
+      $is_new_event=0;
+   }
+
    $show_recurrent_form = 0;
    // change prefix according to event/recurrence
    if (isset($_GET ['action']) && $_GET ['action'] == "edit_recurrence") {
@@ -1332,7 +1341,15 @@ function eme_event_form($event, $title, $element) {
    $days_names = array (1 => __ ( 'Mon' ), 2 => __ ( 'Tue' ), 3 => __ ( 'Wed' ), 4 => __ ( 'Thu' ), 5 => __ ( 'Fri' ), 6 => __ ( 'Sat' ), 7 => __ ( 'Sun' ) );
    $weekno_options = array ("1" => __ ( 'first', 'eme' ), '2' => __ ( 'second', 'eme' ), '3' => __ ( 'third', 'eme' ), '4' => __ ( 'fourth', 'eme' ), '-1' => __ ( 'last', 'eme' ), "none" => __('Start day') );
    
-   $event ['event_rsvp'] ? $event_RSVP_checked = "checked='checked'" : $event_RSVP_checked = '';
+   // for new events, check the setting wether or not to enable RSVP
+   if ($is_new_event) {
+      if (get_option('eme_rsvp_reg_for_new_events'))
+         $event_RSVP_checked = "checked='checked'";
+      $event_number_spaces=get_option('eme_rsvp_default_number_spaces');
+   } else {
+      $event ['event_rsvp'] ? $event_RSVP_checked = "checked='checked'" : $event_RSVP_checked = '';
+      $event_number_spaces=$event ['event_seats'];
+   }
    $event ['registration_requires_approval'] ? $registration_requires_approval = "checked='checked'" : $registration_requires_approval = '';
    
    ?>
@@ -1496,19 +1513,19 @@ function eme_event_form($event, $title, $element) {
                      <h3 class='hndle'><span><?php _e('RSVP','eme'); ?></span></h3>
                      <div class="inside">
                         <p>
-                           <input id="rsvp-checkbox" name='event_rsvp' value='1' type='checkbox' <?php echo $event_RSVP_checked?> />
+                           <input id="rsvp-checkbox" name='event_rsvp' value='1' type='checkbox' <?php echo $event_RSVP_checked; ?> />
                            <?php _e ( 'Enable registration for this event', 'eme' )?>
                         </p>
                         <div id='rsvp-data'>
                            <p>
-                              <input id="approval_required-checkbox" name='registration_requires_approval' value='1' type='checkbox' <?php echo $registration_requires_approval?> />
+                              <input id="approval_required-checkbox" name='registration_requires_approval' value='1' type='checkbox' <?php echo $registration_requires_approval; ?> />
                               <?php _e ( 'Require approval for registration','eme' ); ?>
                            <br />
                               <?php _e ( 'Spaces','eme' ); ?> :
-                              <input id="seats-input" type="text" name="event_seats" size='5' value="<?php echo $event ['event_seats']?>" />
+                              <input id="seats-input" type="text" name="event_seats" size='5' value="<?php echo $event_number_spaces; ?>" />
                            <br />
                               <?php _e ( 'Allow RSVP until ','eme' ); ?>
-                              <input id="rsvp_number_days" type="text" name="rsvp_number_days" maxlength='2' size='2' value="<?php echo $event ['rsvp_number_days']?>" />
+                              <input id="rsvp_number_days" type="text" name="rsvp_number_days" maxlength='2' size='2' value="<?php echo $event ['rsvp_number_days']; ?>" />
                               <?php _e ( ' days before the event starts.','eme' ); ?>
                            </p>
                            <?php if ($event ['event_rsvp']) {
@@ -1530,12 +1547,12 @@ function eme_event_form($event, $title, $element) {
                      <?php
                      $categories = eme_get_categories();
                      foreach ( $categories as $category) {
-                                                                if ($event['event_category_ids'] && in_array($category['category_id'],explode(",",$event['event_category_ids']))) {
-                                                                        $selected = "checked='checked'";
-                                                                } else {
+                        if ($event['event_category_ids'] && in_array($category['category_id'],explode(",",$event['event_category_ids']))) {
+                           $selected = "checked='checked'";
+                        } else {
                            $selected = "";
                         }
-                        ?>
+                     ?>
 <input type="checkbox" name="event_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?> /><?php echo $category['category_name']; ?><br />
                      <?php
                      }
@@ -2359,7 +2376,7 @@ function eme_favorite_menu($actions) {
 // WP options registration
 ////////////////////////////////////
 function eme_options_register() {
-   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_use_event_end', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_mail_receiver_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_attendees_list_format');
+   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_use_event_end', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_mail_receiver_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_attendees_list_format');
    foreach ( $options as $opt ) {
       register_setting ( 'eme-options', $opt, '' );
    }
