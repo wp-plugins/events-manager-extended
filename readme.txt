@@ -287,3 +287,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: deleting a category now works again
 * Bugfix: use plugins_url() the get the url, this is https safe (apparently WP_PLUGIN_URL is not)
 * Bugfix: one could only add phonenumbers to profiles other than his own, has been fixed
+* Bugfix: shortcode #_ATTENDEES should be an empty string if the event is not RSVP-able

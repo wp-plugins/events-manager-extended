@@ -772,6 +772,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
             } else {
                $field_value = apply_filters('eme_general_rss', $field_value); 
             }
+         } else {
+            $field_value="";
          }
          $event_string = str_replace($result, $field_value , $event_string ); 
       }
