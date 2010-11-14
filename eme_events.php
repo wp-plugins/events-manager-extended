@@ -1345,7 +1345,7 @@ function eme_event_form($event, $title, $element) {
    if ($is_new_event) {
       if (get_option('eme_rsvp_reg_for_new_events'))
          $event_RSVP_checked = "checked='checked'";
-      $event_number_spaces=get_option('eme_rsvp_default_number_spaces');
+      $event_number_spaces=intval(get_option('eme_rsvp_default_number_spaces'));
    } else {
       $event ['event_rsvp'] ? $event_RSVP_checked = "checked='checked'" : $event_RSVP_checked = '';
       $event_number_spaces=$event ['event_seats'];
