@@ -292,3 +292,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: direct link to the printable list of reservations shown from the page with the list of events
 * Feature: you can now enable registrations by default for new events
 * Feature: you can now specify a default number of spaces for RSVP-able events
+* Feature: added an admin option to delete all EME tables/option when uninstalling, usefull as well when EM was in the picture

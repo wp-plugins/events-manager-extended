@@ -439,10 +439,10 @@ function eme_ajaxize_calendar() {
          if (showlong_events === undefined) {
              showlong_events = 0;
          }
-         month_n = tableDiv.children('div.month_n').html();
-         year_n = tableDiv.children('div.year_n').html();
-         cat_chosen = tableDiv.children('div.cat_chosen').html();
-         author_chosen = tableDiv.children('div.author_chosen').html();
+         month_n = tableDiv.children('div.month_n').text();
+         year_n = tableDiv.children('div.year_n').text();
+         cat_chosen = tableDiv.children('div.cat_chosen').text();
+         author_chosen = tableDiv.children('div.author_chosen').text();
          parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
             if (parseInt(month_n,10) == 1)
             year_n = parseInt(year_n,10) -1;
@@ -458,10 +458,10 @@ function eme_ajaxize_calendar() {
          if (showlong_events === undefined) {
              showlong_events = 0;
          }
-         month_n = tableDiv.children('div.month_n').html();
-         year_n = tableDiv.children('div.year_n').html();
-         cat_chosen = tableDiv.children('div.cat_chosen').html();
-         author_chosen = tableDiv.children('div.author_chosen').html();
+         month_n = tableDiv.children('div.month_n').text();
+         year_n = tableDiv.children('div.year_n').text();
+         cat_chosen = tableDiv.children('div.cat_chosen').text();
+         author_chosen = tableDiv.children('div.author_chosen').text();
          parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
             if (parseInt(month_n,10) == 12)
             year_n = parseInt(year_n,10) + 1;
