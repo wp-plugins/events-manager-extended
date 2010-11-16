@@ -220,6 +220,7 @@ function eme_uninstall() {
       eme_drop_table(PEOPLE_TBNAME);
       eme_drop_table(BOOKING_PEOPLE_TBNAME);
       eme_drop_table(CATEGORIES_TBNAME);
+      eme_delete_events_page();
       eme_options_delete();
    }
 }
@@ -571,6 +572,12 @@ function eme_create_events_page() {
    if($int_post_id = wp_insert_post($postarr)){
       update_option('eme_events_page', $int_post_id);
    }
+}
+
+function eme_delete_events_page() {
+   $events_page_id = get_option('eme_events_page' );
+   if ($events_page_id)
+      wp_delete_post($events_page_id);
 }
 
 // Create the Manage Events and the Options submenus 
