@@ -1573,7 +1573,7 @@ function eme_event_form($event, $title, $element) {
                      </h3>
                      <div class="inside">
                         <!-- we need title for qtranslate as ID -->
-                        <input type="text" id="title" name="event_name" value="<?php echo $event ['event_name']?>" />
+                        <input type="text" id="title" name="event_name" value="<?php echo eme_sanitize_html($event ['event_name']); ?>" />
                         <br />
                         <?php _e ( 'The event name. Example: Birthday party', 'eme' )?>
                      </div>

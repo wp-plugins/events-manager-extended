@@ -290,6 +290,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: shortcode #_ATTENDEES should be an empty string if the event is not RSVP-able
 * Bugfix: use .text() for jquery in eme_calendar.php, works in Chrome also
 * Bugfix: take server timezone into account for ical and calendar
+* Bugfix: the title of an event wasn't escaped properly when editing
 * Feature: 5th occurence of a weekday in a monthly recurrence can now be chosen
 * Feature: direct link to the printable list of reservations shown from the page with the list of events
 * Feature: you can now enable registrations by default for new events
