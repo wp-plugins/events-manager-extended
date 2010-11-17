@@ -228,7 +228,7 @@ function eme_get_recurrence_desc($recurrence_id) {
    $recurrence = $wpdb->get_row($sql, ARRAY_A);
 
    $weekdays_name = array(__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'),__('Sunday'));
-   $monthweek_name = array('1' => __('the first %s of the month', 'eme'),'2' => __('the second %s of the month', 'eme'), '3' => __('the third %s of the month', 'eme'), '4' => __('the fourth %s of the month', 'eme'), '-1' => __('the last %s of the month', 'eme'));
+   $monthweek_name = array('1' => __('the first %s of the month', 'eme'),'2' => __('the second %s of the month', 'eme'), '3' => __('the third %s of the month', 'eme'), '4' => __('the fourth %s of the month', 'eme'), '5' => __('the fifth %s of the month', 'eme'), '-1' => __('the last %s of the month', 'eme'));
    $output = sprintf (__('From %1$s to %2$s', 'eme'),  $recurrence['recurrence_start_date'], $recurrence['recurrence_end_date']).", ";
    if ($recurrence['recurrence_freq'] == 'daily')  {
       $freq_desc =__('everyday', 'eme');

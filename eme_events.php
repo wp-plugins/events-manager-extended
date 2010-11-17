@@ -47,7 +47,7 @@ function eme_new_event_page() {
       "location_longitude" => '',
       "location_image_url" => ''
    );
-   eme_event_form ($event, $title);
+   eme_event_form ($event, $title, '');
 }
 
 function eme_events_subpanel() {
@@ -1340,7 +1340,7 @@ function eme_event_form($event, $title, $element) {
 
    $freq_options = array ("daily" => __ ( 'Daily', 'eme' ), "weekly" => __ ( 'Weekly', 'eme' ), "monthly" => __ ( 'Monthly', 'eme' ) );
    $days_names = array (1 => __ ( 'Mon' ), 2 => __ ( 'Tue' ), 3 => __ ( 'Wed' ), 4 => __ ( 'Thu' ), 5 => __ ( 'Fri' ), 6 => __ ( 'Sat' ), 7 => __ ( 'Sun' ) );
-   $weekno_options = array ("1" => __ ( 'first', 'eme' ), '2' => __ ( 'second', 'eme' ), '3' => __ ( 'third', 'eme' ), '4' => __ ( 'fourth', 'eme' ), '-1' => __ ( 'last', 'eme' ), "none" => __('Start day') );
+   $weekno_options = array ("1" => __ ( 'first', 'eme' ), '2' => __ ( 'second', 'eme' ), '3' => __ ( 'third', 'eme' ), '4' => __ ( 'fourth', 'eme' ), '5' => __ ( 'fifth', 'eme' ), '-1' => __ ( 'last', 'eme' ), "none" => __('Start day') );
    
    // for new events, check the setting wether or not to enable RSVP
    if ($is_new_event) {
