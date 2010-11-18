@@ -183,6 +183,9 @@ function eme_get_calendar($args="") {
    // week with the days of that week in the table data 
 
    $i = 0; 
+   $curr_day=date('j');
+   $curr_month=date('m');
+   $curr_year=date('Y');
    foreach ($weeks as $week) { 
       $calendar .= "<tr>\n"; 
       foreach ($week as $d) { 
@@ -191,18 +194,11 @@ function eme_get_calendar($args="") {
          }
          if (($i >= $offset_count) && ($i < ($num_weeks * 7) - $outset)) {
             // if it is THIS month
-            $fullday=$d;
-            $d=date('j', $d);
-            $day_link = "$d";
-            // original :
-            //if($date == mktime(0,0,0,$month,$d,$year)){
-            // proposed patch (http://davidebenini.it/events-manager-forum/topic.php?id=73 )
-            // if(($date == mktime(0,0,0,$month,$d,$year)) && (date('F') == $month_name)) {
-            // my solution:
-            if($d == date('j') && $month == date('m') && $year == date('Y')) {
-               $calendar .= "<td class='eventless-today'>$d</td>\n"; 
+            $day_shown=date('j',$d);
+            if($d == $curr_day && $month == $curr_month && $year == $curr_year) {
+               $calendar .= "<td class='eventless-today'>$day_shown</td>\n"; 
             } else { 
-               $calendar .= "<td class='eventless'>$day_link</td>\n"; 
+               $calendar .= "<td class='eventless'>$day_shown</td>\n"; 
             } 
          } elseif(($outset > 0)) {
             //if it is NEXT month
@@ -245,9 +241,11 @@ function eme_get_calendar($args="") {
       $year_pre=$year;
       $year_post=$year;
    }
-   $limit_pre=date("Y-m-d", mktime(0,0,0,$month_pre, 1 , $year_pre));
-   $number_of_days_post=eme_days_in_month($month_post, $year_post);
-   $limit_post=date("Y-m-d", mktime(0,0,0,$month_post, $number_of_days_post , $year_post));
+
+   // we'll look for events in the requested month and 7 days before and after
+   $number_of_days_pre=eme_days_in_month($month_pre, $year_pre);
+   $limit_pre=date("Y-m-d", mktime(0,0,0,$month_pre, $number_of_days_pre-7 , $year_pre));
+   $limit_post=date("Y-m-d", mktime(0,0,0,$month_post, 7 , $year_post));
    $conditions [] = "((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post'))";
 
    // the category conditions
@@ -386,17 +384,15 @@ function eme_get_calendar($args="") {
          }
    }
 
-// print_r($cells);
-
    if($events){
       foreach($cells as $cell) {
          if ($cell['month'] == $month_pre) {
             $calendar=str_replace("<td class='eventless-pre'>".$cell['day']."</td>","<td class='eventful-pre event-day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
-         } elseif($cell['month'] == $month_post) {
+         } elseif ($cell['month'] == $month_post) {
             $calendar=str_replace("<td class='eventless-post'>".$cell['day']."</td>","<td class='eventful-post event-day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
-         } elseif($cell['day'] == $day && $cell['month'] == $month) {
+         } elseif ($cell['day'] == $day && $cell['month'] == $month && $day == $curr_day && $month == $curr_month) {
             $calendar=str_replace("<td class='eventless-today'>".$cell['day']."</td>","<td class='eventful-today event-day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
-         } elseif( $cell['month'] == $month ) {
+         } elseif ($cell['month'] == $month) {
             $calendar=str_replace("<td class='eventless'>".$cell['day']."</td>","<td class='eventful event-day-".$cell['day']."'>".$cell['cell']."</td>",$calendar);
             }
       }
