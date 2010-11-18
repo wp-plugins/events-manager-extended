@@ -113,7 +113,7 @@ function eme_events_subpanel() {
       }
       
       $events = eme_get_events ( 0, "future" );
-      eme_events_table ( $events, 10, "Future events", "future", $offset );
+      eme_events_table ( $events, 20, "Future events", "future", $offset );
    }
 
    // UPDATE or CREATE action
@@ -312,7 +312,7 @@ function eme_events_subpanel() {
             $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
             echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
             $events = eme_get_events ( 0, "future" );
-            eme_events_table ( $events, 10, "Future events", "future", $offset );
+            eme_events_table ( $events, 20, "Future events", "future", $offset );
          }
       }
       
@@ -359,9 +359,8 @@ function eme_events_subpanel() {
             $title = __ ( 'Future Events', 'eme' );
             $scope = "future";
       }
-      $limit = 20;
-      $events = eme_get_events ( $limit, $scope, $order, $offset );
-      eme_events_table ( $events, $limit, $title, $scope, $offset );
+      $events = eme_get_events ( 0, $scope, $order, $offset );
+      eme_events_table ( $events, 20, $title, $scope, $offset );
    }
 }
 
@@ -1084,9 +1083,8 @@ function eme_duplicate_event($event_id) {
       $scope = $_GET ['scope'];
       $offset = intval($_GET ['offset']);
       $order = $_GET ['order'];
-      $limit = 20;
-      $events = eme_get_events ( $limit, $scope, $order, $offset );
-      eme_events_table ( $events, $limit, $title, $scope, $offset );
+      $events = eme_get_events ( 0, $scope, $order, $offset );
+      eme_events_table ( $events, 20, $title, $scope, $offset );
    }
 }
 
