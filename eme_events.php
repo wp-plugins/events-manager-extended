@@ -855,12 +855,20 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    global $wpdb;
 
    $events_table = $wpdb->prefix . EVENTS_TBNAME;
-   $limit="";
-   if ($o_limit > 0)
+   if ($o_limit > 0) {
       $limit = "LIMIT ".intval($o_limit);
-   $offset="";
-   if ($o_offset >0)
+   } else {
+      $limit="";
+   }
+   if ($o_offset >0) {
+      if ($o_limit == 0) {
+          $limit = "LIMIT ".intval($o_limit);
+      }
       $offset = "OFFSET ".intval($o_offset);
+   } else {
+      $offset="";
+   }
+
    if ($order != "DESC")
       $order = "ASC";
    
