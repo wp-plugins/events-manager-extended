@@ -862,7 +862,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    }
    if ($o_offset >0) {
       if ($o_limit == 0) {
-          $limit = "LIMIT ".intval($o_limit);
+          $limit = "LIMIT ".intval($o_offset);
       }
       $offset = "OFFSET ".intval($o_offset);
    } else {
