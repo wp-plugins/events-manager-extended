@@ -1094,7 +1094,6 @@ function eme_duplicate_event($event_id) {
 
 function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
    $events_count = count ( eme_get_events ( 0, $scope ) );
-   $use_events_end = get_option('eme_use_event_end' );
    ?>
 
 <div class="wrap">
