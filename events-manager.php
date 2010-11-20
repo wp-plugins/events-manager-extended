@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.2.7
+Version: 3.2.8
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('EME_DB_VERSION', 10);
+define('EME_DB_VERSION', 11);
 define('EME_PLUGIN_URL', plugins_url('',plugin_basename(__FILE__)).'/'); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -266,7 +266,6 @@ function eme_create_events_table($charset,$collate) {
          event_rsvp bool DEFAULT 0,
          rsvp_number_days tinyint unsigned DEFAULT 0,
          event_seats mediumint(9) DEFAULT 0,
-         event_creator_id mediumint(9) DEFAULT 0,
          event_contactperson_id mediumint(9) DEFAULT 0,
          location_id mediumint(9) DEFAULT 0,
          recurrence_id mediumint(9) DEFAULT 0,
@@ -317,7 +316,6 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'event_seats', "alter table $table_name add event_seats mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'recurrence_id', "alter table $table_name add recurrence_id mediumint(9) DEFAULT 0;"); 
-      maybe_add_column($table_name, 'event_creator_id', "alter table $table_name add event_creator_id mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'event_contactperson_id', "alter table $table_name add event_contactperson_id mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'event_attributes', "alter table $table_name add event_attributes text NULL;"); 
       maybe_add_column($table_name, 'event_page_title_format', "alter table $table_name add event_page_title_format text NULL;"); 
@@ -340,6 +338,10 @@ function eme_create_events_table($charset,$collate) {
       }
       if ($db_version<5) {
          $wpdb->query("ALTER TABLE $table_name MODIFY event_rsvp bool DEFAULT 0;");
+      }
+      if ($db_version<11) {
+         $wpdb->query("ALTER TABLE $table_name DROP COLUMN event_author;");
+         $wpdb->query("ALTER TABLE $table_name CHANGE event_creator_id event_author mediumint(9) DEFAULT 0;");
       }
    }
 }

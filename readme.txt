@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.2.7
+Stable tag: 3.2.8
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. 
              
@@ -50,8 +50,8 @@ After the installation, Events Manager Extended add a top level "Events" menu to
 *  The *Settings* page allows a fine-grained control over the plugin. Here you can set the [format](#formatting-events) of events in the Events page.
 *  Access control is in place for managing events and such: 
         - a user with role "Editor" can do anything 
-        - with role "Author" you can only add events or edit existing events for which you are the creator or the contact person 
-        - with role "Contributor" you can only add events *in draft* or edit existing events for which you are the creator or the contact person 
+        - with role "Author" you can only add events or edit existing events for which you are the author or the contact person 
+        - with role "Contributor" you can only add events *in draft* or edit existing events for which you are the author or the contact person 
 
 Events list and calendars can be added to your blogs through widgets, shortcodes and template tags. See the full documentation at the [Events Manager Extended Support Page](http://www.e-dynamics.be/wordpress/).
  
@@ -234,8 +234,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: status field for events: Public, Private, Draft. Private events are only visible for logged in users, draft events are not visible from the front end.
 * Feature: permissions now being checked for creation/editing of events:
 	- a user with role "Editor" can do anything
-	- with role "Author" you can only add events or edit existing events for which you are the creator or the contact person
-	- with role "Contributor" you can only add events *in draft* or edit existing events for which you are the creator or the contact person
+	- with role "Author" you can only add events or edit existing events for which you are the author or the contact person
+	- with role "Contributor" you can only add events *in draft* or edit existing events for which you are the author or the contact person
 * Renamed all dbem_* functions to eme_ functions, just not the DB tables yet (later). As a result there are some actions required:
 	- people using the API in their templates will need to change these to match the new naming convention (just rename "dbem_" to "eme_")
 	- people using their own CSS will need to change these as well ((just rename "dbem_" to "eme_")
@@ -245,7 +245,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.2 =
 * Bugfix: add/delete location now works again
-* Bugfix: when duplicating an event, the creator of the new event is now set correctly
+* Bugfix: when duplicating an event, the author of the new event is now set correctly
 * Bugfix: categories working again
 * Bugfix: languages working again
 
@@ -292,6 +292,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: take server timezone into account for ical and calendar
 * Bugfix: the title of an event wasn't escaped properly when editing
 * Bugfix: the calendar wouldn't show events on months later/before the current day
+* Bugfix: correct pagination
+* Bugfix: show all events of a day if that day is requested (calendar_day scope) and not just 10
 * Feature: 5th occurence of a weekday in a monthly recurrence can now be chosen
 * Feature: direct link to the printable list of reservations shown from the page with the list of events
 * Feature: you can now enable registrations by default for new events

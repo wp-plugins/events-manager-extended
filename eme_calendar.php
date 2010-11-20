@@ -266,13 +266,13 @@ function eme_get_calendar($args="") {
    // now filter the author ID
    if ($author != '' && !preg_match('/,/', $author)){
       $authinfo=get_userdatabylogin($author);
-      $conditions [] = " event_creator_id = ".$authinfo->ID;
+      $conditions [] = " event_author = ".$authinfo->ID;
    }elseif( preg_match('/,/', $author) ){
       $author = explode(',', $author);
       $author_conditions = array();
       foreach($author as $authname) {
             $authinfo=get_userdatabylogin($author);
-            $author_conditions[] = " event_creator_id = ".$authinfo->ID;
+            $author_conditions[] = " event_author = ".$authinfo->ID;
       }
       $conditions [] = "(".implode(' OR ', $author_conditions).")";
    }

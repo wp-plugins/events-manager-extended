@@ -28,7 +28,7 @@ function eme_new_event_page() {
       "event_seats" => 0,
       "event_freq" => '',
       "location_id" => 0,
-      "event_creator_id" => 0,
+      "event_author" => 0,
       "event_contactperson_id" => 0,
       "event_category_ids" => '',
       "event_attributes" => '',
@@ -103,7 +103,7 @@ function eme_events_subpanel() {
                         $tmp_event = array();
                         $tmp_event = eme_get_event ( $event_ID );
          if (current_user_can( EDIT_CAPABILITY) ||
-             (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_creator_id']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
+             (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
             if ($tmp_event['recurrence_id']>0) {
                eme_remove_recurrence ( $tmp_event['recurrence_id'] );
             } else {
@@ -112,7 +112,7 @@ function eme_events_subpanel() {
          }
       }
       
-      $events = eme_get_events ( 0, "future" );
+      $events = eme_get_events ( 20, "future", $order, $offset );
       eme_events_table ( $events, 20, "Future events", "future", $offset );
    }
 
@@ -235,7 +235,7 @@ function eme_events_subpanel() {
             }
          }
          if (! $event_ID && ! $recurrence_ID) {
-            $event['event_creator_id']=$current_userid;
+            $event['event_author']=$current_userid;
             // new event or new recurrence
             if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
                //insert new recurrence
@@ -251,7 +251,7 @@ function eme_events_subpanel() {
             if ($recurrence_ID) {
                $tmp_recurrence = eme_get_recurrence ( $recurrence_ID );
                if (current_user_can( EDIT_CAPABILITY) ||
-                   (current_user_can( MIN_CAPABILITY) && ($tmp_recurrence['event_creator_id']==$current_userid || $tmp_recurrence['event_contactperson_id']==$current_userid))) {
+                   (current_user_can( MIN_CAPABILITY) && ($tmp_recurrence['event_author']==$current_userid || $tmp_recurrence['event_contactperson_id']==$current_userid))) {
                   // UPDATE old recurrence
                   $recurrence ['recurrence_id'] = $recurrence_ID;
                   //print_r($recurrence); 
@@ -265,7 +265,7 @@ function eme_events_subpanel() {
             } else {
                $tmp_event = eme_get_event ( $event_ID );
                if (current_user_can( EDIT_CAPABILITY) ||
-                   (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_creator_id']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {
+                   (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {
                   if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
                      // we go from single event to recurrence: create the recurrence and delete the single event
                      eme_insert_recurrent_event ( $event, $recurrence );
@@ -287,7 +287,7 @@ function eme_events_subpanel() {
          
          //$wpdb->query($sql); 
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 0, "future" );
+         $events = eme_get_events ( 20, "future" );
          eme_events_table ( $events, 20, "Future events", "future", $offset );
       } else {
          // validation unsuccessful       
@@ -304,14 +304,14 @@ function eme_events_subpanel() {
       } else {
          $event = eme_get_event ( $event_ID );
          if (current_user_can( EDIT_CAPABILITY) ||
-             (current_user_can( MIN_CAPABILITY) && ($event['event_creator_id']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
+             (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
                      // UPDATE old event
             $title = __ ( "Edit Event", 'eme' ) . " '" . $event ['event_name'] . "'";
             eme_event_form ( $event, $title, $event_ID );
          } else {
             $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
             echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-            $events = eme_get_events ( 0, "future" );
+            $events = eme_get_events ( 20, "future" );
             eme_events_table ( $events, 20, "Future events", "future", $offset );
          }
       }
@@ -322,12 +322,12 @@ function eme_events_subpanel() {
    if ($action == 'duplicate_event') {
       $event = eme_get_event ( $event_ID );
       if (current_user_can( EDIT_CAPABILITY) ||
-          (current_user_can( MIN_CAPABILITY) && ($event['event_creator_id']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
+          (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
          eme_duplicate_event ( $event_ID );
       } else {
          $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 0, "future" );
+         $events = eme_get_events ( 20, "future" );
          eme_events_table ( $events, 20, "Future events", "future", $offset );
       }
    }
@@ -335,13 +335,13 @@ function eme_events_subpanel() {
       $event_ID = intval($_GET ['recurrence_id']);
       $recurrence = eme_get_recurrence ( $event_ID );
       if (current_user_can( EDIT_CAPABILITY) ||
-          (current_user_can( MIN_CAPABILITY) && ($recurrence['event_creator_id']==$current_userid || $recurrence['event_contactperson_id']==$current_userid))) {
+          (current_user_can( MIN_CAPABILITY) && ($recurrence['event_author']==$current_userid || $recurrence['event_contactperson_id']==$current_userid))) {
          $title = __ ( "Reschedule", 'eme' ) . " '" . $recurrence ['event_name'] . "'";
          eme_event_form ( $recurrence, $title, $event_ID );
       } else {
          $feedback_message = __('You have no right to update','eme'). " '" . $recurrence ['event_name'] . "' !";
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 0, "future" );
+         $events = eme_get_events ( 20, "future" );
          eme_events_table ( $events, 20, "Future events", "future", $offset );
       }
    }
@@ -359,7 +359,7 @@ function eme_events_subpanel() {
             $title = __ ( 'Future Events', 'eme' );
             $scope = "future";
       }
-      $events = eme_get_events ( 0, $scope, $order, $offset );
+      $events = eme_get_events ( 20, $scope, $order, $offset );
       eme_events_table ( $events, 20, $title, $scope, $offset );
    }
 }
@@ -519,22 +519,18 @@ function eme_events_page_content() {
       $page_body = eme_replace_placeholders ( $single_event_format, $event );
       return $page_body;
    } elseif (isset ( $_REQUEST ['calendar_day'] ) && $_REQUEST ['calendar_day'] != '') {
-      $date = eme_sanitize_request($_REQUEST ['calendar_day']);
-      $events_N = eme_events_count_for ( $date );
-      // $_GET['scope'] ? $scope = eme_sanitize_request($_GET['scope']): $scope =  "future";
-      // $stored_format = get_option('eme_event_list_item_format');
-      // $events_body  =  eme_get_events_list(10, $scope, "ASC", $stored_format, $false);
+      $scope = eme_sanitize_request($_REQUEST ['calendar_day']);
+      $events_N = eme_events_count_for ( $scope );
       if ($events_N > 1) {
-         $_GET ['calendar_day'] ? eme_sanitize_request($scope = $_GET ['calendar_day']) : $scope = "future";
          $stored_format = get_option('eme_event_list_item_format' );
          //Add headers and footers to the events list
          $single_event_format_header = get_option('eme_event_list_item_format_header' );
          $single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
          $single_event_format_footer = get_option('eme_event_list_item_format_footer' );
          $single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
-         return $single_event_format_header .  eme_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
+         return $single_event_format_header .  eme_get_events_list ( 0, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
       } else {
-         $events = eme_get_events ( 0, eme_sanitize_request($_REQUEST['calendar_day']) );
+         $events = eme_get_events ( 0, $scope);
          $event = $events [0];
          $single_event_format = ( $event['event_single_event_format'] != '' ) ? $event['event_single_event_format'] : get_option('eme_single_event_format' );
          $page_body = eme_replace_placeholders ( $single_event_format, $event );
@@ -743,7 +739,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    } else {
       $orig_format = false;
    }
-   $events = eme_get_events ( $limit, $scope, $order, '', '', $category, $author );
+   $events = eme_get_events ( $limit, $scope, $order, '', 0, $category, $author );
    $output = "";
    if (! empty ( $events )) {
       $curmonth="";
@@ -851,7 +847,7 @@ function eme_is_multiple_events_page() {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = "", $location_id = "", $category = '', $author = '') {
+function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = '', $author = '') {
    global $wpdb;
 
    $events_table = $wpdb->prefix . EVENTS_TBNAME;
@@ -942,13 +938,13 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    // now filter the author ID
    if ($author != '' && !preg_match('/,/', $author)){
       $authinfo=get_userdatabylogin($author);
-      $conditions [] = " event_creator_id = ".$authinfo->ID;
+      $conditions [] = " event_author = ".$authinfo->ID;
    }elseif( preg_match('/,/', $author) ){
       $author = explode(',', $author);
       $author_conditions = array();
       foreach($author as $authname) {
             $authinfo=get_userdatabylogin($author);
-            $author_conditions[] = " event_creator_id = ".$authinfo->ID;
+            $author_conditions[] = " event_author = ".$authinfo->ID;
       }
       $conditions [] = "(".implode(' OR ', $author_conditions).")";
    }
@@ -987,7 +983,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
          }
          // if we're in the admin itf, return only the events for which you have the right to change anything
          if (is_admin() && !(current_user_can( EDIT_CAPABILITY) ||
-             (current_user_can( MIN_CAPABILITY) && ($this_event['event_creator_id']==$current_userid || $this_event['event_contactperson_id']==$current_userid)))) {  
+             (current_user_can( MIN_CAPABILITY) && ($this_event['event_author']==$current_userid || $this_event['event_contactperson_id']==$current_userid)))) {  
             continue;
          }
          
@@ -1071,7 +1067,7 @@ function eme_duplicate_event($event_id) {
    unset($eventArray['event_id']);
    // set the new authorID
    $current_userid=get_current_user_id();
-   $eventArray['event_creator_id']=$current_userid;
+   $eventArray['event_author']=$current_userid;
    $result = $wpdb->insert($event_table_name, $eventArray);
    if( $result !== false) {
       //Get the ID of the new item
@@ -1178,6 +1174,8 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
      <?php
       $i = 1;
       foreach ( $events as $event ) {
+         if ($i>$limit)
+            break;
          $class = ($i % 2) ? ' class="alternate"' : '';
          // FIXME set to american
          $localised_start_date = mysql2date ( __ ( 'D d M Y' ), $event ['event_start_date'] );
@@ -1481,7 +1479,7 @@ function eme_event_form($event, $title, $element) {
                   </div>
                   <?php endif; ?>
 
-                  <?php if($event['event_creator_id']) : ?>
+                  <?php if($event['event_author']) : ?>
                   <!-- owner postbox -->
                   <div class="postbox ">
                      <div class="handlediv" title="Click to toggle."><br />
@@ -1492,7 +1490,7 @@ function eme_event_form($event, $title, $element) {
                      <div class="inside">
                         <p><?php _e('Author of this event: ','eme'); ?>
                            <?php
-                           $owner_user_info = get_userdata($event['event_creator_id']);
+                           $owner_user_info = get_userdata($event['event_author']);
                            echo eme_sanitize_html($owner_user_info->display_name);
                            ?>
                         </p>
