@@ -302,5 +302,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.9 =
 * Bugfix: small bugfix in javascript for other languages when generating the unique map ID
+* Bugfix: RSS and ICAL feeds don't need the booking forms
 * Feature: "scope=next_month" now possible as a parameter to the [events_list] shortcode
-

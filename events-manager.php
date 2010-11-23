@@ -690,7 +690,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $event_string = str_replace($result, $directions_form , $event_string ); 
       }
       if (preg_match('/#_ADDBOOKINGFORM/', $result)) {
-         if ($rsvp_is_active && $event['event_rsvp']) {
+         if ($target == "rss") {
+            $rsvp_add_module = "";
+         elseif ($rsvp_is_active && $event['event_rsvp']) {
             $rsvp_add_module = eme_add_booking_form($event['event_id']);
          } else {
             $rsvp_add_module = "";
@@ -698,7 +700,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $event_string = str_replace($result, $rsvp_add_module , $event_string );
       }
       if (preg_match('/#_REMOVEBOOKINGFORM/', $result)) {
-         if ($rsvp_is_active && $event['event_rsvp']) {
+         if ($target == "rss") {
+            $rsvp_add_module = "";
+         elseif ($rsvp_is_active && $event['event_rsvp']) {
             $rsvp_delete_module = eme_delete_booking_form($event['event_id']);
          } else {
             $rsvp_delete_module = "";
