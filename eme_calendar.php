@@ -89,7 +89,7 @@ function eme_get_calendar($args="") {
    // Build an array for the current days 
    // in the month 
    for($i = 1; $i <= $num_days_current; $i++){ 
-      $num_days_array[] = mktime(0,0,0,$month, $i, $year); 
+      $num_days_array[] = $i; 
    }
    // Build an array for the number of days 
    // in last month 
@@ -194,11 +194,10 @@ function eme_get_calendar($args="") {
          }
          if (($i >= $offset_count) && ($i < ($num_weeks * 7) - $outset)) {
             // if it is THIS month
-            $day_shown=date('j',$d);
             if($d == $curr_day && $month == $curr_month && $year == $curr_year) {
-               $calendar .= "<td class='eventless-today'>$day_shown</td>\n"; 
+               $calendar .= "<td class='eventless-today'>$d</td>\n"; 
             } else { 
-               $calendar .= "<td class='eventless'>$day_shown</td>\n"; 
+               $calendar .= "<td class='eventless'>$d</td>\n"; 
             } 
          } elseif(($outset > 0)) {
             //if it is NEXT month
