@@ -621,7 +621,8 @@ function eme_single_location_map($location) {
       //$id_base = $location['location_id'];
       // we can't create a unique <div>-id based on location id, because you can have multiple maps on the sampe page for
       // different events but they can go to the same location...
-      $id_base = preg_replace("/\./","_",microtime(1));
+      // So we use the microtime for this, and replace all non digits by underscore (otherwise the generated javascript will error)
+      $id_base = preg_replace("/\D/","_",microtime(1));
       $id="eme-location-map_".$id_base;
       $latitude_string="latitude_".$id_base;
       $longitude_string="longitude_".$id_base;
