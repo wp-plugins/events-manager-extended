@@ -957,6 +957,12 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       }
       $conditions [] = "(".implode(' OR ', $author_conditions).")";
    }
+
+   // extra conditions for authors: if we're in the admin itf, return only the events for which you have the right to change anything
+   $current_userid=get_current_user_id();
+   if (is_admin() && !current_user_can( EDIT_CAPABILITY) && current_user_can( MIN_CAPABILITY)) {
+      $conditions [] = "(event_author = $current_userid OR event_contactperson_id= $current_userid)";
+   }
    
    $where = implode ( " AND ", $conditions );
    if ($where != "")
@@ -978,7 +984,6 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
          $offset";
    $wpdb->show_errors = true;
    $events = $wpdb->get_results ( $sql, ARRAY_A );
-   $current_userid=get_current_user_id();
    if (! empty ( $events )) {
       //$wpdb->print_error(); 
       $inflated_events = array ();
@@ -988,11 +993,6 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
          }
          // if we're not in the admin itf, we don't want draft events
          if (!is_admin() && $this_event ['event_status'] == STATUS_DRAFT) {
-            continue;
-         }
-         // if we're in the admin itf, return only the events for which you have the right to change anything
-         if (is_admin() && !(current_user_can( EDIT_CAPABILITY) ||
-             (current_user_can( MIN_CAPABILITY) && ($this_event['event_author']==$current_userid || $this_event['event_contactperson_id']==$current_userid)))) {  
             continue;
          }
          
