@@ -305,4 +305,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: RSS and ICAL feeds don't need the booking forms, it messes up the layout
 * Bugfix: show events on current day (bug created in 3.2.8)
 * Bugfix: in the admin itf, not all editable events were shown when logged in as an author
+* Bugfix in datepicker jquery for Finnish language
 * Feature: "scope=next_month" now possible as a parameter to the [events_list] shortcode
