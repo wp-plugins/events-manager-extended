@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.1
-Stable tag: 3.2.8
+Stable tag: 3.2.9
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. 
              
@@ -307,3 +307,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: in the admin itf, not all editable events were shown when logged in as an author
 * Bugfix in datepicker jquery for Finnish language
 * Feature: "scope=next_month" now possible as a parameter to the [events_list] shortcode
+* Feature: when using the dropdown for locations, you can now select an empty location as well
