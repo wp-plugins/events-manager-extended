@@ -307,3 +307,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: in the admin itf, not all editable events were shown when logged in as an author
 * Bugfix in datepicker jquery for Finnish language
 * Feature: "scope=next_month" now possible as a parameter to the [events_list] shortcode
+* Feature: when using the dropdown for locations, you can now select an empty location as well

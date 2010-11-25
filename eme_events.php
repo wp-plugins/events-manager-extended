@@ -1711,13 +1711,16 @@ function eme_event_form($event, $title, $element) {
                         <table id="eme-location-data">
                            <tr>
                            <?php  if($use_select_for_locations) {
+			      $location_0['location_id']=0;
+			      $location_0['location_name']= '';
                               $locations = eme_get_locations();
                            ?>
                               <th><?php _e('Location','eme') ?></th>
                               <td> 
                                  <select name="location-select-id" id='location-select-id' size="1">
+         <option value="<?php echo $location_0['location_id'] ?>" ><?php echo eme_trans_sanitize_html($location_0['location_name']) ?></option>
                                  <?php 
-                                 $selected_location=$locations[0];
+                                 $selected_location=$location_0;
                                  foreach($locations as $location) :
                                     $selected = "";
                                     if(isset($event['location_id']))  { 
@@ -1838,7 +1841,7 @@ function eme_validate_event($event) {
    }
    $error_message = "";
    if (count ( $errors ) > 0)
-      $error_message = __ ( 'Missing fields: ' ) . implode ( ", ", $errors ) . ". ";
+      $error_message = __ ( 'Missing fields: ','eme' ) . implode ( ", ", $errors ) . ". ";
    if (isset($_POST ['repeated_event']) && $_POST ['repeated_event'] == "1" && (!isset($_POST ['event_end_date']) || $_POST ['event_end_date'] == ""))
       $error_message .= __ ( 'Since the event is repeated, you must specify an event date.', 'eme' );
    if ($error_message != "")
@@ -2136,7 +2139,7 @@ function eme_admin_map_script() {
             $event_ID =0;
          $event = eme_get_event ( $event_ID );
          
-         if ((isset($event ['location_town']) && $event ['location_town'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
+         if (isset($event ['location_town']) || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
             if (isset($event ['location_address']) && $event ['location_address'] != "") {
                $search_key = $event ['location_address'] . ", " . $event ['location_town'];
             } else {
