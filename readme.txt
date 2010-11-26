@@ -308,3 +308,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix in datepicker jquery for Finnish language
 * Feature: "scope=next_month" now possible as a parameter to the [events_list] shortcode
 * Feature: when using the dropdown for locations, you can now select an empty location as well
+
+= 3.2.10 =
+* Bugfix: let the includes happen later on, so all init code happens first
