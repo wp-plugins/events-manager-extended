@@ -312,3 +312,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.2.10 =
 * Bugfix: let the includes happen later on, so all init code happens first
 * Bugfix: better placeholder matching/replacing
+* Bugfix: don't use mysql2date, it doesn't respect the "G" for the date function, we now use date_i18n+strtotime

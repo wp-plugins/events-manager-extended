@@ -875,31 +875,14 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $event_string = preg_replace("/$result\b/", $location_page_link , $event_string ); 
       }
 
-      // matches all PHP date placeholders for startdate
-      if (preg_match('/^#[dDjlNSwzWFmMntLoYy]$/', $result)) {
-         $event_string = preg_replace("/$result\b/", mysql2date(ltrim($result, "#"), $event['event_start_date']),$event_string );
+      // matches all PHP date placeholders for startdate-time
+      if (preg_match('/^#[A-Za-z]$/', $result)) {
+         $event_string = preg_replace("/$result\b/", date_i18n( ltrim($result,"#"), strtotime( $event['event_start_date']." ".$event['event_start_time'])),$event_string );
       }
       
-      // matches all PHP time placeholders for enddate
-      if (preg_match('/^#@[dDjlNSwzWFmMntLoYy]$/', $result)) {
-         $event_string = preg_replace("/$result\b/", mysql2date(ltrim($result, "#@"), $event['event_end_date']), $event_string ); 
-      }
-      
-      // matches all PHP time placeholders for starttime
-      if (preg_match('/^#[aABgGhHisueIOPTZcrU]$/', $result)) {
-         // mysql2date expects a date-part in the string as well, since the value $event['event_start_time'] does not have this,
-         // we add the start date to it
-         $event_string = preg_replace("/$result\b/", mysql2date(ltrim($result, "#"), $event['event_start_date']." ".$event['event_start_time']),$event_string ); 
-         //echo $event['event_start_time'];
-         //echo mysql2date('h:i A', '2010-10-10 23:35:00')."<br/>"; 
-         // echo $event_string;
-      }
-      
-      // matches all PHP time placeholders for endtime
-      if (preg_match('/^#@[aABgGhHisueIOPTZcrU]$/', $result)) {
-         // mysql2date expects a date-part in the string as well, since the value $event['event_end_time'] does not have this,
-         // we add the end date to it
-         $event_string = preg_replace("/$result\b/", mysql2date(ltrim($result, "#@"), $event['event_end_date']." ".$event['event_end_time']),$event_string );
+      // matches all PHP time placeholders for enddate-time
+      if (preg_match('/^#@[A-Za-z]$/', $result)) {
+         $event_string = preg_replace("/$result\b/", date_i18n( ltrim($result,"#@"), strtotime( $event['event_end_date']." ".$event['event_end_time'])),$event_string );
       }
       
       //Add a placeholder for categories
@@ -918,26 +901,22 @@ function eme_replace_placeholders($format, $event, $target="html") {
    // for extra date formatting, eg. #_{d/m/Y}
    preg_match_all("/#@?_\{[A-Za-z0-9 -\/,\.\\\]+\}/", $format, $results);
    foreach($results[0] as $result) {
-      if(substr($result, 0, 3 ) == "#@_"){
-         $date = 'event_end_date';
+      if(substr($result, 0, 3 ) == "#@_") {
+         $date = "event_start_date";
          $offset = 4;
-      }else{
-         $date = 'event_start_date';
+      } else {
+         $date = "event_end_date";
          $offset = 3;
       }
-      if( $date == 'event_end_date' && $event[$date] == $event['event_start_date'] ){
+      if( $date == "event_end_date" && $event[$date] == $event['event_start_date'] ) {
          $event_string = preg_replace("/$result/", '', $event_string);
-      }else{
-         $event_string = preg_replace("/$result/", mysql2date(substr($result, $offset, (strlen($result)-($offset+1)) ), $event[$date]),$event_string );
+      } else {
+         $event_string = preg_replace("/$result/", date_i18n(substr($result, $offset, (strlen($result)-($offset+1)) ), strtotime($event[$date])),$event_string );
       }
    }
    return $event_string;   
 }
 
-function eme_date_to_unix_time($date) {
-      $unix_time = mktime(0, 0, 0, substr($date,5,2), substr($date,8,2), substr($date,0,4));
-      return $unix_time;
-}
 function eme_sanitize_request( $value ) {
 #  if( get_magic_quotes_gpc() ) 
 #     $value = stripslashes( $value );
@@ -956,9 +935,11 @@ function eme_sanitize_request( $value ) {
    }
    return $value;
 }
+
 function escapeMe(&$val) {
    $val = mysql_real_escape_string($val);
 }
+
 function br2nl($input) {
  return preg_replace('/<br(\s+)?\/?>/i', "\n", $input);
 }

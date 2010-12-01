@@ -745,14 +745,14 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $curmonth="";
       $curday="";
       foreach ( $events as $event ) {
-         $themonth = mysql2date (get_option('eme_show_period_monthly_dateformat'), $event['event_start_date']);
-         $theday = mysql2date (get_option('date_format'), $event['event_start_date']);
+         $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($event['event_start_date']));
+         $theday = date_i18n (get_option('date_format'), strtotime($event['event_start_date']));
          if ($showperiod == "monthly" && $themonth != $curmonth) {
             $output .= "<li class='eme_period'>$themonth</li>";
          } elseif ($showperiod == "daily" && $theday != $curday) {
             $output .= "<li class='eme_period'>$theday</li>";
          }
-         //  $localised_date = mysql2date("j M Y", $event->event_time);
+         //  $localised_date = date_i18n("j M Y", strtotime($event->event_time));
          $output .= eme_replace_placeholders ( $format, $event );
          $curmonth=$themonth;
          $curday=$theday;
@@ -1186,8 +1186,8 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
             break;
          $class = ($i % 2) ? ' class="alternate"' : '';
          // FIXME set to american
-         $localised_start_date = mysql2date ( __ ( 'D d M Y' ), $event ['event_start_date'] );
-         $localised_end_date = mysql2date ( __ ( 'D d M Y' ), $event ['event_end_date'] );
+         $localised_start_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_start_date']));
+         $localised_end_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_end_date']));
          $style = "";
          $today = date ( "Y-m-d" );
          
