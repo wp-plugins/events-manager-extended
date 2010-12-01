@@ -59,7 +59,7 @@ function eme_get_calendar($args="") {
    $month_start = mktime(0,0,0,$month, 1, $year);
    // Get friendly month name
    
-   $month_name = date_i18n('M', str2time("$year-$month-$day"));
+   $month_name = date_i18n('M', strtotime("$year-$month-$day"));
    // Figure out which day of the week 
    // the month starts on. 
    $month_start_day = date('D', $month_start);
