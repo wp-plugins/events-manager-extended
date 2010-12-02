@@ -462,6 +462,7 @@ function eme_options_subpanel() {
    eme_options_radio_binary ( __ ( 'By default enable registrations for new events?', 'eme' ), 'eme_rsvp_reg_for_new_events', __ ( 'Check this option if you want to enable registrations by default for new events.', 'eme' ) );
    eme_options_input_text ( __ ( 'Default number of spaces', 'eme' ), 'eme_rsvp_default_number_spaces', __ ( 'The default number of spaces an event has.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Use captcha for booking form?', 'eme' ), 'eme_captcha_for_booking', __ ( 'Check this option if you want to use a captcha on the booking form, to thwart spammers a bit.', 'eme' ) );
+   eme_options_radio_binary ( __ ( 'Hide fully booked events?', 'eme' ), 'eme_rsvp_hide_full_events', __ ( 'Check this option if you want to hide events that are fully booked from the calendar and events listing in the front.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Enable the RSVP e-mail notifications?', 'eme' ), 'eme_rsvp_mail_notify_is_active', __ ( 'Check this option if you want to receive an email when someone books places for your events.', 'eme' ) );
    eme_options_textarea ( __ ( 'Contact person email format', 'eme' ), 'eme_contactperson_email_body', __ ( 'The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats.', 'eme' ) );
    eme_options_textarea ( __ ( 'Respondent email format', 'eme' ), 'eme_respondent_email_body', __ ( 'The format of the email which will be sent to the respondent. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code> to display the name of the respondent.<br/>Use <code>#_CONTACTNAME</code> and <code>#_PLAIN_CONTACTEMAIL</code> to display respectively the name and e-mail of the contact person.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment.', 'eme' ) );
@@ -716,10 +717,10 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '') {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '', $offset=0) {
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '');
+      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $offset=0);
       
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
@@ -740,7 +741,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    } else {
       $orig_format = false;
    }
-   $events = eme_get_events ( $limit, $scope, $order, '', 0, $category, $author );
+   $events = eme_get_events ( $limit, $scope, $order, $offset, 0, $category, $author );
    $output = "";
    if (! empty ( $events )) {
       $curmonth="";
@@ -760,11 +761,11 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       }
       //Add headers and footers to output
       if( $orig_format ){
-         $single_event_format_header = get_option('eme_event_list_item_format_header' );
-         $single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
-         $single_event_format_footer = get_option('eme_event_list_item_format_footer' );
-         $single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
-         $output =  $single_event_format_header .  $output . $single_event_format_footer;
+         $eme_event_list_item_format_header = get_option('eme_event_list_item_format_header' );
+         $eme_event_list_item_format_header = ( $eme_event_list_item_format_header != '' ) ? $eme_event_list_item_format_header : "<ul class='eme_events_list'>";
+         $eme_event_list_item_format_footer = get_option('eme_event_list_item_format_footer' );
+         $eme_event_list_item_format_footer = ( $eme_event_list_item_format_footer != '' ) ? $eme_event_list_item_format_footer : "</ul>";
+         $output =  $eme_event_list_item_format_header .  $output . $eme_event_list_item_format_footer;
       }
    } else {
       $output = "<ul class='eme-no-events'><li>" . get_option('eme_no_events_message' ) . "</li></ul>";
@@ -776,8 +777,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '' ), $atts ) );
-   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author" );
+   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'offset' => 0 ), $atts ) );
+   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&offsset=$offset" );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -851,7 +852,8 @@ function eme_is_multiple_events_page() {
 function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = '', $author = '') {
    global $wpdb;
 
-   $events_table = $wpdb->prefix . EVENTS_TBNAME;
+   $events_table = $wpdb->prefix.EVENTS_TBNAME;
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
    if ($o_limit > 0) {
       $limit = "LIMIT ".intval($o_limit);
    } else {
@@ -878,7 +880,14 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    $conditions = array ();
    // if we're not in the admin itf, we don't want draft events
    if (!is_admin()) {
-      $conditions [] = " event_status in (1,2)";
+      if (is_user_logged_in()) {
+         $conditions [] = "event_status IN (1,2)";
+      } else {
+         $conditions [] = "event_status=1";
+      }
+      if (get_option('eme_rsvp_hide_full_events')) {
+         $conditions [] = "(event_rsvp=0 OR (event_rsvp=1 AND event_seats > (SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE $bookings_table.event_id = $events_table.event_id)))";
+      }
    }
    if (preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope )) {
       //$conditions [] = " event_start_date like '$scope'";

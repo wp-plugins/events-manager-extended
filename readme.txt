@@ -314,3 +314,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: better placeholder matching/replacing
 * Bugfix: don't use mysql2date, it doesn't respect the "G" for the date function, we now use date_i18n+strtotime
 * Feature: added an option to remove leading zeros from minutes: 09 becomes 9, 00 becomes empty
+* Feature: you can now hide RSVP-able events that have no more spaces available

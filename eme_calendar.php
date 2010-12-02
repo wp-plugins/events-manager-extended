@@ -213,6 +213,8 @@ function eme_get_calendar($args="") {
    $calendar .= " </table>\n</div>";
    
    // let's start filling up the conditions
+   $events_table = $wpdb->prefix.EVENTS_TBNAME; 
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
    $conditions = array ();
    // only show appropriate events
    if (!is_admin()) {
@@ -220,6 +222,9 @@ function eme_get_calendar($args="") {
          $conditions [] = "event_status IN (1,2)";
       } else {
          $conditions [] = "event_status=1";
+      }
+      if (get_option('eme_rsvp_hide_full_events')) {
+         $conditions [] = "(event_rsvp=0 OR (event_rsvp=1 AND event_seats > (SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE $bookings_table.event_id = $events_table.event_id)))";
       }
    }
 
@@ -280,7 +285,6 @@ function eme_get_calendar($args="") {
    if ($where != "")
       $where = " WHERE " . $where;
 
-   $events_table = $wpdb->prefix.EVENTS_TBNAME; 
    $sql = "SELECT event_id,
       event_status,
       event_name,
