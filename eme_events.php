@@ -1162,9 +1162,8 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
    }
    ?>
    </select>
-   <?php _e ( 'Category', 'eme' ); ?>
    <select name="category">
-   <option value='0'><?php _e('All','eme'); ?></option>
+   <option value='0'><?php _e('All categories','eme'); ?></option>
    <?php
    $categories = eme_get_categories();
    foreach ( $categories as $category) {
@@ -1283,19 +1282,19 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
 
 <?php
    if ($events_count > $limit) {
-      $backward = $offset + $limit;
-      $forward = $offset - $limit;
+      $forward = $offset + $limit;
+      $backward = $offset - $limit;
       echo "<div id='events-pagination'> ";
-      echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$backward")."'>&lt;&lt;</a>";
-      if ($forward >= 0)
-         echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$forward")."'>&gt;&gt;</a>";
+      echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$forward")."'>&gt;&gt;</a>";
+      if ($backward >= 0)
+         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$bacward")."'>&lt;&lt;</a>";
       echo "</div>";
    }
    if ($events_count <= $limit && $offset>0) {
-      $forward = $offset - $limit;
+      $backward = $offset - $limit;
       echo "<div id='events-pagination'> ";
-      if ($forward >= 0)
-         echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$forward")."'>&gt;&gt;</a>";
+      if ($backward >= 0)
+         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$backward")."'>&lt;&lt;</a>";
       echo "</div>";
    }
    ?>
