@@ -745,7 +745,10 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    }
    if ($paging==1 && isset($_GET['eme_offset'])) {
       $offset=intval($_GET['eme_offset']);
+   } else {
+      $offset=0;
    }
+   // We request $limit+1 events, so we know if we need to show the pagination link or not.
    $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author );
    $output = "";
    if (! empty ( $events )) {
@@ -753,6 +756,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $curday="";
       $i=1;
       foreach ( $events as $event ) {
+         // we requested $limit+1 events, so we need to break at the $limit, if reached
          if ($i>$limit)
             break;
          $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($event['event_start_date']));
@@ -780,27 +784,29 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $output = "<ul class='eme-no-events'><li>" . get_option('eme_no_events_message' ) . "</li></ul>";
    }
    $events_count=count($events);
-   
-   $this_page_url=get_permalink($post->ID);
-   if (stristr($this_page_url, "?"))
-      $joiner = "&";
-   else
-      $joiner = "?";
-   if ($paging==1 && $events_count > $limit) {
-      $forward = $offset + $limit;
-      $backward = $offset - $limit;
-      echo "<div id='events-pagination'> ";
-      echo "<a style='float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
-      if ($backward >= 0)
-         echo "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
-      echo "</div>";
-   }
-   if ($paging==1 && $events_count <= $limit && $offset>0) {
-      $backward = $offset - $limit;
-      echo "<div id='events-pagination'> ";
-      if ($backward >= 0)
-         echo "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
-      echo "</div>";
+  
+   if ($paging==1) {
+      $this_page_url=get_permalink($post->ID);
+      if (stristr($this_page_url, "?"))
+         $joiner = "&";
+      else
+         $joiner = "?";
+      if ($events_count > $limit) {
+         $forward = $offset + $limit;
+         $backward = $offset - $limit;
+         $output.= "<div id='events-pagination'> ";
+         $output.= "<a style='float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
+         if ($backward >= 0)
+            $output.= "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+         $output.= "</div>";
+      }
+      if ($events_count <= $limit && $offset>0) {
+         $backward = $offset - $limit;
+         $output.= "<div id='events-pagination'> ";
+         if ($backward >= 0)
+            $output.= "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+         $output.= "</div>";
+      }
    }
    if ($echo)
       echo $output;
