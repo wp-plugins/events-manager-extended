@@ -316,3 +316,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added an option to remove leading zeros from minutes: 09 becomes 9, 00 becomes empty
 * Feature: you can now hide RSVP-able events that have no more spaces available
 * Feature: filter event list by category in admin interface is now possible
+* Feature: pagination in the events is now possible in the frontend using a new parameter for shortcode [events_list]: paging=1 (default=0)

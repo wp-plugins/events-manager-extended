@@ -718,10 +718,11 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '', $offset=0) {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '', $paging=0) {
+   global $post;
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $offset=0);
+      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $paging=0);
       
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
@@ -742,12 +743,18 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    } else {
       $orig_format = false;
    }
-   $events = eme_get_events ( $limit, $scope, $order, $offset, 0, $category, $author );
+   if ($paging==1 && isset($_GET['eme_offset'])) {
+      $offset=intval($_GET['eme_offset']);
+   }
+   $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author );
    $output = "";
    if (! empty ( $events )) {
       $curmonth="";
       $curday="";
+      $i=1;
       foreach ( $events as $event ) {
+         if ($i>$limit)
+            break;
          $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($event['event_start_date']));
          $theday = date_i18n (get_option('date_format'), strtotime($event['event_start_date']));
          if ($showperiod == "monthly" && $themonth != $curmonth) {
@@ -759,6 +766,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $output .= eme_replace_placeholders ( $format, $event );
          $curmonth=$themonth;
          $curday=$theday;
+         $i++;
       }
       //Add headers and footers to output
       if( $orig_format ){
@@ -771,6 +779,29 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    } else {
       $output = "<ul class='eme-no-events'><li>" . get_option('eme_no_events_message' ) . "</li></ul>";
    }
+   $events_count=count($events);
+   
+   $this_page_url=get_permalink($post->ID);
+   if (stristr($this_page_url, "?"))
+      $joiner = "&";
+   else
+      $joiner = "?";
+   if ($paging==1 && $events_count > $limit) {
+      $forward = $offset + $limit;
+      $backward = $offset - $limit;
+      echo "<div id='events-pagination'> ";
+      echo "<a style='float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
+      if ($backward >= 0)
+         echo "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+      echo "</div>";
+   }
+   if ($paging==1 && $events_count <= $limit && $offset>0) {
+      $backward = $offset - $limit;
+      echo "<div id='events-pagination'> ";
+      if ($backward >= 0)
+         echo "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+      echo "</div>";
+   }
    if ($echo)
       echo $output;
    else
@@ -778,8 +809,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'offset' => 0 ), $atts ) );
-   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&offsset=$offset" );
+   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'paging' => 0 ), $atts ) );
+   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&paging=$paging" );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -1287,7 +1318,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
       echo "<div id='events-pagination'> ";
       echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$forward")."'>&gt;&gt;</a>";
       if ($backward >= 0)
-         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$bacward")."'>&lt;&lt;</a>";
+         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$backward")."'>&lt;&lt;</a>";
       echo "</div>";
    }
    if ($events_count <= $limit && $offset>0) {
