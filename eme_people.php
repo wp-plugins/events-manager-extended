@@ -16,13 +16,13 @@ function eme_people_page() {
                   if (isset($_REQUEST['delete_assoc_bookings'])) {
                      $res=eme_delete_all_bookings_for_person_id($person_id);
                      if ($res) {
-                        $message.=__('All bookings deleted for '.$person['person_name'], 'eme');
+                        $message.=__("Deleted all bookings made by '".$person['person_name']."'", 'eme');
                         $message.="<br>";
                      }
                   }
                   $res.=eme_delete_person($person_id);
                   if ($res) {
-                     $message.=__('Deleted '.$person['person_name'], 'eme');
+                     $message.=__("Deleted '".$person['person_name']."'", 'eme');
                      $message.="<br>";
                   }
                }
