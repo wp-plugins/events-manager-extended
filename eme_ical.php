@@ -19,9 +19,9 @@ function eme_ical_single_event($event, $events_page_link, $title_format, $descri
    $description = strip_tags(preg_replace('/<br(\s+)?\/?>/i', "\\n", $description));
    $location = eme_replace_placeholders ( "#_LOCATION, #_ADDRESS, #_TOWN", $event, "rss" );
    $event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
-   $startstring=$event['event_start_date']." ".$event['event_start_time'];
-   $dtstartdate=mysql2date("Ymd",$startstring);
-   $dtstarthour=mysql2date("His",$startstring);
+   $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
+   $dtstartdate=date_i18n("Ymd",$startstring);
+   $dtstarthour=date_i18n("His",$startstring);
    //$dtstart=$dtstartdate."T".$dtstarthour."Z";
    // we'll use localtime, so no "Z"
    $dtstart=$dtstartdate."T".$dtstarthour;
@@ -29,9 +29,9 @@ function eme_ical_single_event($event, $events_page_link, $title_format, $descri
       $event['event_end_date'] = $event['event_start_date'];
    if ($event['event_end_time'] == "")
       $event['event_end_time'] = $event['event_start_time'];
-   $endstring=$event['event_end_date']." ".$event['event_end_time'];
-   $dtenddate=mysql2date("Ymd",$endstring);
-   $dtendhour=mysql2date("His",$endstring);
+   $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
+   $dtenddate=date_i18n("Ymd",$endstring);
+   $dtendhour=date_i18n("His",$endstring);
    //$dtend=$dtenddate."T".$dtendhour."Z";
    // we'll use localtime, so no "Z"
    $dtend=$dtenddate."T".$dtendhour;

@@ -58,6 +58,7 @@ function eme_events_subpanel() {
    $recurrence_ID = isset($_GET ['recurrence_id']) ? intval($_GET ['recurrence_id']) : '';
    $scope = isset($_GET ['scope']) ? $_GET ['scope'] : '';
    $offset = isset($_GET ['offset']) ? intval($_GET ['offset']) : '';
+   $category = isset($_GET ['category']) ? intval($_GET ['category']) : 0;
    $order = isset($_GET ['order']) ? $_GET ['order'] : '';
    $selectedEvents = isset($_GET ['events']) ? $_GET ['events'] : '';
    
@@ -112,7 +113,7 @@ function eme_events_subpanel() {
          }
       }
       
-      $events = eme_get_events ( 20, "future", $order, $offset );
+      $events = eme_get_events ( 21, "future", $order, $offset );
       eme_events_table ( $events, 20, "Future events", "future", $offset );
    }
 
@@ -287,7 +288,7 @@ function eme_events_subpanel() {
          
          //$wpdb->query($sql); 
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 20, "future" );
+         $events = eme_get_events ( 21, "future" );
          eme_events_table ( $events, 20, "Future events", "future", $offset );
       } else {
          // validation unsuccessful       
@@ -311,7 +312,7 @@ function eme_events_subpanel() {
          } else {
             $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
             echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-            $events = eme_get_events ( 20, "future" );
+            $events = eme_get_events ( 21, "future" );
             eme_events_table ( $events, 20, "Future events", "future", $offset );
          }
       }
@@ -327,7 +328,7 @@ function eme_events_subpanel() {
       } else {
          $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 20, "future" );
+         $events = eme_get_events ( 21, "future" );
          eme_events_table ( $events, 20, "Future events", "future", $offset );
       }
    }
@@ -341,7 +342,7 @@ function eme_events_subpanel() {
       } else {
          $feedback_message = __('You have no right to update','eme'). " '" . $recurrence ['event_name'] . "' !";
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 20, "future" );
+         $events = eme_get_events ( 21, "future" );
          eme_events_table ( $events, 20, "Future events", "future", $offset );
       }
    }
@@ -359,8 +360,8 @@ function eme_events_subpanel() {
             $title = __ ( 'Future Events', 'eme' );
             $scope = "future";
       }
-      $events = eme_get_events ( 20, $scope, $order, $offset );
-      eme_events_table ( $events, 20, $title, $scope, $offset );
+      $events = eme_get_events ( 21, $scope, $order, $offset, "", $category );
+      eme_events_table ( $events, 20, $title, $scope, $offset, $category );
    }
 }
 
@@ -412,6 +413,7 @@ function eme_options_subpanel() {
 <h3><?php _e ( 'Events format', 'eme' ); ?></h3>
 <table class="form-table">
    <?php
+   eme_options_radio_binary ( __ ( 'Remove leading zeros from minutes?', 'eme' ), 'eme_time_remove_leading_zeros', __ ( 'PHP date/time functions have no notation to show minutes without leading zeros. Checking this option will return eg. 9 for 09 and empty for 00.', 'eme' ) ); 
    eme_options_textarea ( __ ( 'Default event list format header', 'eme' ), 'eme_event_list_item_format_header', __( 'This content will appear just above your code for the default event list format. Default is blank', 'eme' ) );
    eme_options_textarea ( __ ( 'Default event list format', 'eme' ), 'eme_event_list_item_format', __ ( 'The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href="http://www.php.net/manual/en/function.date.php">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM starttime/endtime notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event.', 'eme' ) );
    eme_options_textarea ( __ ( 'Default event list format footer', 'eme' ), 'eme_event_list_item_format_footer', __ ( 'This content will appear just below your code for the default event list format. Default is blank', 'eme' ) );
@@ -461,6 +463,7 @@ function eme_options_subpanel() {
    eme_options_radio_binary ( __ ( 'By default enable registrations for new events?', 'eme' ), 'eme_rsvp_reg_for_new_events', __ ( 'Check this option if you want to enable registrations by default for new events.', 'eme' ) );
    eme_options_input_text ( __ ( 'Default number of spaces', 'eme' ), 'eme_rsvp_default_number_spaces', __ ( 'The default number of spaces an event has.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Use captcha for booking form?', 'eme' ), 'eme_captcha_for_booking', __ ( 'Check this option if you want to use a captcha on the booking form, to thwart spammers a bit.', 'eme' ) );
+   eme_options_radio_binary ( __ ( 'Hide fully booked events?', 'eme' ), 'eme_rsvp_hide_full_events', __ ( 'Check this option if you want to hide events that are fully booked from the calendar and events listing in the front.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Enable the RSVP e-mail notifications?', 'eme' ), 'eme_rsvp_mail_notify_is_active', __ ( 'Check this option if you want to receive an email when someone books places for your events.', 'eme' ) );
    eme_options_textarea ( __ ( 'Contact person email format', 'eme' ), 'eme_contactperson_email_body', __ ( 'The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats.', 'eme' ) );
    eme_options_textarea ( __ ( 'Respondent email format', 'eme' ), 'eme_respondent_email_body', __ ( 'The format of the email which will be sent to the respondent. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code> to display the name of the respondent.<br/>Use <code>#_CONTACTNAME</code> and <code>#_PLAIN_CONTACTEMAIL</code> to display respectively the name and e-mail of the contact person.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment.', 'eme' ) );
@@ -715,10 +718,11 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '') {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '', $paging=0) {
+   global $post;
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '');
+      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $paging=0);
       
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
@@ -739,34 +743,70 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    } else {
       $orig_format = false;
    }
-   $events = eme_get_events ( $limit, $scope, $order, '', 0, $category, $author );
+   if ($paging==1 && isset($_GET['eme_offset'])) {
+      $offset=intval($_GET['eme_offset']);
+   } else {
+      $offset=0;
+   }
+   // We request $limit+1 events, so we know if we need to show the pagination link or not.
+   $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author );
    $output = "";
    if (! empty ( $events )) {
       $curmonth="";
       $curday="";
+      $i=1;
       foreach ( $events as $event ) {
-         $themonth = mysql2date (get_option('eme_show_period_monthly_dateformat'), $event['event_start_date']);
-         $theday = mysql2date (get_option('date_format'), $event['event_start_date']);
+         // we requested $limit+1 events, so we need to break at the $limit, if reached
+         if ($i>$limit)
+            break;
+         $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($event['event_start_date']));
+         $theday = date_i18n (get_option('date_format'), strtotime($event['event_start_date']));
          if ($showperiod == "monthly" && $themonth != $curmonth) {
             $output .= "<li class='eme_period'>$themonth</li>";
          } elseif ($showperiod == "daily" && $theday != $curday) {
             $output .= "<li class='eme_period'>$theday</li>";
          }
-         //  $localised_date = mysql2date("j M Y", $event->event_time);
+         //  $localised_date = date_i18n("j M Y", strtotime($event->event_time));
          $output .= eme_replace_placeholders ( $format, $event );
          $curmonth=$themonth;
          $curday=$theday;
+         $i++;
       }
       //Add headers and footers to output
       if( $orig_format ){
-         $single_event_format_header = get_option('eme_event_list_item_format_header' );
-         $single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
-         $single_event_format_footer = get_option('eme_event_list_item_format_footer' );
-         $single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
-         $output =  $single_event_format_header .  $output . $single_event_format_footer;
+         $eme_event_list_item_format_header = get_option('eme_event_list_item_format_header' );
+         $eme_event_list_item_format_header = ( $eme_event_list_item_format_header != '' ) ? $eme_event_list_item_format_header : "<ul class='eme_events_list'>";
+         $eme_event_list_item_format_footer = get_option('eme_event_list_item_format_footer' );
+         $eme_event_list_item_format_footer = ( $eme_event_list_item_format_footer != '' ) ? $eme_event_list_item_format_footer : "</ul>";
+         $output =  $eme_event_list_item_format_header .  $output . $eme_event_list_item_format_footer;
       }
    } else {
       $output = "<ul class='eme-no-events'><li>" . get_option('eme_no_events_message' ) . "</li></ul>";
+   }
+   $events_count=count($events);
+  
+   if ($paging==1) {
+      $this_page_url=get_permalink($post->ID);
+      if (stristr($this_page_url, "?"))
+         $joiner = "&";
+      else
+         $joiner = "?";
+      if ($events_count > $limit) {
+         $forward = $offset + $limit;
+         $backward = $offset - $limit;
+         $output.= "<div id='events-pagination'> ";
+         $output.= "<a style='float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
+         if ($backward >= 0)
+            $output.= "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+         $output.= "</div>";
+      }
+      if ($events_count <= $limit && $offset>0) {
+         $backward = $offset - $limit;
+         $output.= "<div id='events-pagination'> ";
+         if ($backward >= 0)
+            $output.= "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+         $output.= "</div>";
+      }
    }
    if ($echo)
       echo $output;
@@ -775,8 +815,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '' ), $atts ) );
-   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author" );
+   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'paging' => 0 ), $atts ) );
+   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&paging=$paging" );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -850,7 +890,8 @@ function eme_is_multiple_events_page() {
 function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = '', $author = '') {
    global $wpdb;
 
-   $events_table = $wpdb->prefix . EVENTS_TBNAME;
+   $events_table = $wpdb->prefix.EVENTS_TBNAME;
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
    if ($o_limit > 0) {
       $limit = "LIMIT ".intval($o_limit);
    } else {
@@ -877,7 +918,14 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    $conditions = array ();
    // if we're not in the admin itf, we don't want draft events
    if (!is_admin()) {
-      $conditions [] = " event_status in (1,2)";
+      if (is_user_logged_in()) {
+         $conditions [] = "event_status IN (1,2)";
+      } else {
+         $conditions [] = "event_status=1";
+      }
+      if (get_option('eme_rsvp_hide_full_events')) {
+         $conditions [] = "(event_rsvp=0 OR (event_rsvp=1 AND event_seats > (SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE $bookings_table.event_id = $events_table.event_id)))";
+      }
    }
    if (preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope )) {
       //$conditions [] = " event_start_date like '$scope'";
@@ -922,25 +970,26 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    if ($location_id != "")
       $conditions [] = " location_id = ".intval($location_id);
       
-   if(get_option('eme_categories_enabled')) {
-      if ($category != '' && is_numeric($category)){
-      $conditions [] = " FIND_IN_SET($category,event_category_ids)";
-      }elseif( preg_match('/^([0-9],?)+$/', $category) ){
-      $category = explode(',', $category);
-      $category_conditions = array();
-      foreach($category as $cat) {
-         if (is_numeric($cat))
-            $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
-      }
-      $conditions [] = "(".implode(' OR', $category_conditions).")";
-      }elseif( preg_match('/^([0-9] ?)+$/', $category) ){
-      $category = explode(' ', $category);
-      $category_conditions = array();
-      foreach($category as $cat) {
-         if (is_numeric($cat))
-            $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
-      }
-      $conditions [] = "(".implode(' AND ', $category_conditions).")";
+   if (get_option('eme_categories_enabled')) {
+      if (is_numeric($category)) {
+         if ($category>0)
+            $conditions [] = " FIND_IN_SET($category,event_category_ids)";
+      } elseif ( preg_match('/^([0-9],?)+$/', $category) ) {
+         $category = explode(',', $category);
+         $category_conditions = array();
+         foreach ($category as $cat) {
+            if (is_numeric($cat) && $cat>0)
+               $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
+         }
+         $conditions [] = "(".implode(' OR', $category_conditions).")";
+      } elseif ( preg_match('/^([0-9] ?)+$/', $category) ) {
+         $category = explode(' ', $category);
+         $category_conditions = array();
+         foreach ($category as $cat) {
+            if (is_numeric($cat) && $cat>0)
+               $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
+         }
+         $conditions [] = "(".implode(' AND ', $category_conditions).")";
       }
    }
 
@@ -1096,13 +1145,13 @@ function eme_duplicate_event($event_id) {
       $scope = $_GET ['scope'];
       $offset = intval($_GET ['offset']);
       $order = $_GET ['order'];
-      $events = eme_get_events ( 0, $scope, $order, $offset );
+      $events = eme_get_events ( 21, $scope, $order, $offset );
       eme_events_table ( $events, 20, $title, $scope, $offset );
    }
 }
 
-function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
-   $events_count = count ( eme_get_events ( 0, $scope ) );
+function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $o_category=0) {
+   $events_count = count ( $events );
    ?>
 
 <div class="wrap">
@@ -1118,11 +1167,6 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
    ?></a></div>-->
       <?php
    
-   $link = array ();
-   $link ['past'] = "<a href='" . admin_url("admin.php?page=events-manager&scope=past&order=desc").">" . __ ( 'Past events', 'eme' ) . "</a>";
-   $link ['all'] = "<a href='" . admin_url("admin.php?page=events-manager&scope=all&order=desc").">" . __ ( 'All events', 'eme' ) . "</a>";
-   $link ['future'] = "<a href='" . admin_url("admin.php?page=events-manager&scope=future").">" . __ ( 'Future events', 'eme' ) . "</a>";
-   
    $scope_names = array ();
    $scope_names ['past'] = __ ( 'Past events', 'eme' );
    $scope_names ['all'] = __ ( 'All events', 'eme' );
@@ -1134,7 +1178,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
    <form id="posts-filter" action="" method="get">
    <input type='hidden' name='page' value='events-manager' />
    <ul class="subsubsub">
-      <li><?php _e ( 'Total', 'eme' ); ?> <span class="count">(<?php echo (count($events)). " ". __('Events','eme'); ?>)</span></li>
+      <li><?php _e ( 'Total', 'eme' ); ?> <span class="count">(<?php if ($events_count>$limit) echo $limit; else echo count($events); echo " ". __('Events','eme'); ?>)</span></li>
    </ul>
 
    <div class="tablenav">
@@ -1155,6 +1199,19 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
    }
    ?>
    </select>
+   <select name="category">
+   <option value='0'><?php _e('All categories','eme'); ?></option>
+   <?php
+   $categories = eme_get_categories();
+   foreach ( $categories as $category) {
+      $selected = "";
+      if ($o_category == $category['category_id'])
+         $selected = "selected='selected'";
+      echo "<option value='".$category['category_id']."' $selected>".$category['category_name']."</option>";
+   }
+   ?>
+   </select>
+
    <input id="post-query-submit" class="button-secondary" type="submit" value="<?php _e ( 'Filter' )?>" />
    </div>
    <div class="clear"></div>
@@ -1186,8 +1243,8 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
             break;
          $class = ($i % 2) ? ' class="alternate"' : '';
          // FIXME set to american
-         $localised_start_date = mysql2date ( __ ( 'D d M Y' ), $event ['event_start_date'] );
-         $localised_end_date = mysql2date ( __ ( 'D d M Y' ), $event ['event_end_date'] );
+         $localised_start_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_start_date']));
+         $localised_end_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_end_date']));
          $style = "";
          $today = date ( "Y-m-d" );
          
@@ -1262,15 +1319,19 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0) {
 
 <?php
    if ($events_count > $limit) {
-      $backward = $offset + $limit;
-      $forward = $offset - $limit;
-      if (DEBUG)
-         echo "COUNT = $count BACKWARD = $backward  FORWARD = $forward<br> -- OFFSET = $offset";
+      $forward = $offset + $limit;
+      $backward = $offset - $limit;
       echo "<div id='events-pagination'> ";
-      if ($backward < $events_count)
-         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&offset=$backward")."'>&lt;&lt;</a>";
-      if ($forward >= 0)
-         echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&scope=$scope&offset=$forward")."'>&gt;&gt;</a>";
+      echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$forward")."'>&gt;&gt;</a>";
+      if ($backward >= 0)
+         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$backward")."'>&lt;&lt;</a>";
+      echo "</div>";
+   }
+   if ($events_count <= $limit && $offset>0) {
+      $backward = $offset - $limit;
+      echo "<div id='events-pagination'> ";
+      if ($backward >= 0)
+         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$backward")."'>&lt;&lt;</a>";
       echo "</div>";
    }
    ?>
