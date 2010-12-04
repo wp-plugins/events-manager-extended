@@ -1,16 +1,43 @@
 <?php
 function eme_people_page() {
    // Managing AJAX booking removal
-   if(isset($_GET['action']) && $_GET['action'] == 'remove_booking') {
-      if(isset($_POST['booking_id']))
-         eme_delete_booking($_POST['booking_id']);
+   if (!current_user_can( SETTING_CAPABILITY) && isset($_REQUEST['action'])) {
+      $message = __('You have no right to update people!','eme');
+   } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'remove_booking') {
+      if(isset($_REQUEST['booking_id']))
+         eme_delete_booking(intval($_REQUEST['booking_id']));
+   } elseif (isset ($_REQUEST['persons']) && isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete_people') {
+         $persons = $_REQUEST['persons'];
+         if(is_array($persons)){
+            //Make sure the array is only numbers
+            foreach ($persons as $person_id) {
+               if (is_numeric($person_id)) {
+                  $person=eme_get_person($person_id);
+                  if (isset($_REQUEST['delete_assoc_bookings'])) {
+                     $res=eme_delete_all_bookings_for_person_id($person_id);
+                     if ($res) {
+                        $message.=__('All bookings deleted for '.$person['person_name'], 'eme');
+                        $message.="<br>";
+                     }
+                  }
+                  $res.=eme_delete_person($person_id);
+                  if ($res) {
+                     $message.=__('Deleted '.$person['person_name'], 'eme');
+                     $message.="<br>";
+                  }
+               }
+            }
+         } else {
+               $validation_result = false;
+               $message = __("Couldn't delete the people. Please try again.","eme");
+         }
    }
    ?>
    
    <div class='wrap'> 
    <div id="icon-users" class="icon32"><br/></div>
    <h2>People</h2>
-   <?php admin_show_warnings(); eme_people_table(); ?>
+   <?php admin_show_warnings(); eme_people_table($message); ?>
    </div> 
 
    <?php
@@ -126,13 +153,23 @@ function eme_printable_booking_report($event_id) {
       
 } 
 
-function eme_people_table() {
+function eme_people_table($message="") {
    $people = eme_get_people();
+   $destination = admin_url("admin.php?page=events-manager-people");
    if (count($people) < 1 ) {
       _e("No people have responded to your events yet!", 'eme');
    } else { 
-      $table = "<p>".__('This table collects the data about the people who responded to your events', 'eme')."</p>"; 
-      $table .=" <table id='eme-people-table' class='widefat post fixed'>
+      $result = "<p>".__('This table shows the data about the people who responded to your events', 'eme')."</p>"; 
+      if($message != "") {
+            $result .= "
+            <div id='message' class='updated fade below-h2' style='background-color: rgb(255, 251, 204);'>
+               <p>$message</p>
+            </div>";
+      }
+
+      $result .= "<form id='people-filter' method='post' action='".$destination."'>
+                  <input type='hidden' name='action' value='delete_people'/>";
+      $result .=" <table id='eme-people-table' class='widefat post fixed'>
             <thead>
             <tr>
             <th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
@@ -151,14 +188,23 @@ function eme_people_table() {
             </tfoot>
          " ;
       foreach ($people as $person) {
-            $table .= "<tr> <td>&nbsp;</td>
+            $result .= "<tr><td><input type='checkbox' class ='row-selector' value='".$person['person_id']."' name='persons[]'/></td>
                   <td>".$person['person_name']."</td>
                   <td>".$person['person_email']."</td>
                   <td>".$person['person_phone']."</td></tr>";
       }
 
-      $table .= "</table>";
-      echo $table;
+      $result .= "</table>
+                     <div class='tablenav'>
+                        <div class='alignleft actions'>
+                        <input type='checkbox' name='delete_assoc_bookings' value='1'>".__('Also delete associated bookings','eme')."
+                        <input class='button-secondary action' type='submit' name='doaction' value='Delete'/>
+                        <br class='clear'/>
+                        </div>
+                        <br class='clear'/>
+                     </div>";
+
+      echo $result;
    }
 } 
 
@@ -184,6 +230,14 @@ function eme_get_person_by_wp_id($wp_id) {
       $result['person_email']=$user_info->user_email;
    }
    return $result;
+}
+
+function eme_delete_person($person_id) {
+   global $wpdb; 
+   $people_table = $wpdb->prefix.PEOPLE_TBNAME;
+   $sql = "DELETE FROM $people_table WHERE person_id = '$person_id';" ;
+   $wpdb->query($sql);
+   return 1;
 }
 
 function eme_get_person($person_id) {

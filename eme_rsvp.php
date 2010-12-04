@@ -291,6 +291,14 @@ function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
       $wpdb->query($sql);
 // }
 } 
+function eme_delete_all_bookings_for_person_id($person_id) {
+   global $wpdb;
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
+   $sql = "DELETE FROM $bookings_table WHERE person_id = $person_id";
+   $wpdb->query($sql);
+   $person = eme_get_person($person_id);
+   return 1;
+}
 function eme_delete_booking_by_person_id($person_id,$event_id) {
    global $wpdb;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
@@ -618,7 +626,7 @@ function eme_registration_seats_form_table($event_id=0) {
    <option value='0'><?php _e ( 'All events' ); ?></option>
    <?php
    $all_events=eme_get_events(0,"future");
-   $events_with_pending_bookings=array();
+   $events_with_bookings=array();
    foreach ( $all_events as $event ) {
       if (eme_get_bookings_for($event['event_id'])) {
          $events_with_bookings[]=$event['event_id'];
