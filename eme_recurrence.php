@@ -241,7 +241,7 @@ function eme_get_recurrence_desc($recurrence_id) {
          # no weekdays given for the recurrence, so we use the
          # so we use the day of the week of the startdate as
          # reference
-         $recurrence['recurrence_byday']=mysql2date('w',$recurrence['recurrence_start_date']);
+         $recurrence['recurrence_byday']=date_i18n('w',strtotime($recurrence['recurrence_start_date']));
          # Sunday is 7, not 0
          if ($recurrence['recurrence_byday']==0)
             $recurrence['recurrence_byday']=7; 
@@ -260,7 +260,7 @@ function eme_get_recurrence_desc($recurrence_id) {
          # no monthday given for the recurrence, so we use the
          # so we use the day of the month of the startdate as
          # reference
-         $recurrence['recurrence_byday']=mysql2date('e',$recurrence['recurrence_start_date']);
+         $recurrence['recurrence_byday']=date_i18n('e',strtotime($recurrence['recurrence_start_date']));
       }
       $weekday_array = explode(",", $recurrence['recurrence_byday']);
       $natural_days = array();

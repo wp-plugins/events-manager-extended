@@ -6,44 +6,44 @@ function eme_categories_subpanel() {
    if (!current_user_can( SETTING_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
       $message = __('You have no right to update categories!','eme');
       eme_categories_table_layout($message);
-   } elseif(isset($_GET['action']) && $_GET['action'] == "editcat") { 
+   } elseif (isset($_GET['action']) && $_GET['action'] == "editcat") { 
       // edit category  
       eme_categories_edit_layout();
    } else {
       // Insert/Update/Delete Record
       $categories_table = $wpdb->prefix.CATEGORIES_TBNAME;
       $validation_result = '';
-      if( isset($_POST['action']) && $_POST['action'] == "edit" ) {
+      if (isset($_POST['action']) && $_POST['action'] == "edit" ) {
          // category update required  
          $category = array();
          $category['category_name'] = $_POST['category_name'];
          $validation_result = $wpdb->update( $categories_table, $category, array('category_id' => $_POST['category_ID']) );
-      } elseif( isset($_POST['action']) && $_POST['action'] == "add" ) {
+      } elseif ( isset($_POST['action']) && $_POST['action'] == "add" ) {
          // Add a new category
          $category = array();
          $category['category_name'] = $_POST['category_name'];
          $validation_result = $wpdb->insert($categories_table, $category);
-      } elseif( isset($_POST['action']) && $_POST['action'] == "delete" ) {
+      } elseif ( isset($_POST['action']) && $_POST['action'] == "delete" ) {
          // Delete category or multiple
          $categories = $_POST['categories'];
-         if(is_array($categories)){
+         if (is_array($categories)) {
             //Make sure the array is only numbers
-            foreach ($categories as $cat_id){
-               if(is_numeric($cat_id)){
+            foreach ($categories as $cat_id) {
+               if (is_numeric($cat_id)) {
                   $cats[] = "category_id = $cat_id";
                }
             }
             //Run the query if we have an array of category ids
-            if(count($cats > 0)){
+            if (count($cats > 0)) {
                $validation_result = $wpdb->query( "DELETE FROM $categories_table WHERE ". implode(" OR ", $cats) );
-            }else{
+            } else {
                $validation_result = false;
-               $message = "Couldn't delete the categories. Incorrect category IDs supplied. Please try agian.";
+               $message = __("Couldn't delete the categories. Incorrect category IDs supplied. Please try again.","eme");
             }
          }
       }
       //die(print_r($_POST));
-      if ( is_numeric($validation_result) ) {
+      if (is_numeric($validation_result) ) {
          $message = (isset($message)) ? $message : __("Successfully {$_POST['action']}ed category", "eme");
          eme_categories_table_layout($message);
       } elseif ( $validation_result === false ) {
