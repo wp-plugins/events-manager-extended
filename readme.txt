@@ -318,3 +318,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: filter event list by category in admin interface is now possible
 * Feature: pagination in the events is now possible in the frontend using a new parameter for shortcode [events_list]: paging=1 (default=0)
 * Feature: you can now remove people and their associated bookings via the people page in the admin backend
+
+= 3.2.11 =
+* Bugfix: make limit=0 work again
