@@ -749,7 +749,11 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $offset=0;
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
-   $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author );
+   if ($limit==0) {
+      $events = eme_get_events ( 0, $scope, $order, $offset, 0, $category, $author );
+   } else {
+      $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author );
+   }
    $output = "";
    if (! empty ( $events )) {
       $curmonth="";
@@ -757,7 +761,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $i=1;
       foreach ( $events as $event ) {
          // we requested $limit+1 events, so we need to break at the $limit, if reached
-         if ($i>$limit)
+         if ($limit>0 && $i>$limit)
             break;
          $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($event['event_start_date']));
          $theday = date_i18n (get_option('date_format'), strtotime($event['event_start_date']));
@@ -785,7 +789,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    }
    $events_count=count($events);
   
-   if ($paging==1) {
+   if ($paging==1 && $limit>0) {
       $this_page_url=get_permalink($post->ID);
       if (stristr($this_page_url, "?"))
          $joiner = "&";
