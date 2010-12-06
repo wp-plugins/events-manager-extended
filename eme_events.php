@@ -452,6 +452,7 @@ function eme_options_subpanel() {
    eme_options_input_text ( __ ( 'RSS main description', 'eme' ), 'eme_rss_main_description', __ ( 'The main description of your RSS events feed.', 'eme' ) );
    eme_options_input_text ( __ ( 'RSS title format', 'eme' ), 'eme_rss_title_format', __ ( 'The format of the title of each item in the events RSS feed.', 'eme' ) );
    eme_options_input_text ( __ ( 'RSS description format', 'eme' ), 'eme_rss_description_format', __ ( 'The format of the description of each item in the events RSS feed. Follow the previous formatting instructions.', 'eme' ) );
+   eme_options_input_text ( __ ( 'Number of events in feed', 'eme' ), 'eme_rss_number_events_shown', __ ( 'The number of events included in the RSS feed.', 'eme' ) );
    ?>
 </table>
 
@@ -2390,14 +2391,22 @@ Weblog Editor 2.0
 <?php
       $title_format = get_option('eme_rss_title_format' );
       $description_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", get_option('eme_rss_description_format' ) ) );
-      $events = eme_get_events ( 5 );
+      if (get_option('eme_rss_number_events_shown')) {
+         $events = eme_get_events ( get_option('eme_rss_number_events_shown') );
+      } else {
+         $events = eme_get_events ( 5 );
+      }
       foreach ( $events as $event ) {
          $title = eme_replace_placeholders ( $title_format, $event, "rss" );
          $description = eme_replace_placeholders ( $description_format, $event, "rss" );
          echo "<item>";
          echo "<title>$title</title>\n";
          echo "<link>$events_page_link" . $joiner . "event_id=" . $event ['event_id'] . "</link>\n ";
-         echo "<description>$description </description>\n";
+         echo "<description>$description</description>\n";
+         if (get_option('eme_categories_enabled')) {
+            $categories = eme_replace_placeholders ( "#_CATEGORIES", $event, "rss" );
+            echo "<categories>$categories</categories>\n";
+         }
          echo "</item>";
       }
       ?>
