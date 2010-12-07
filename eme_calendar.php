@@ -413,6 +413,11 @@ function eme_days_in_month($month, $year) {
 }
 
 function eme_ajaxize_calendar() {
+   if (isset($_GET['lang'])) {
+      $jquery_override_lang=", lang: '".$_GET['lang']."'";
+   } else {
+      $jquery_override_lang="";
+   }
 ?>
    <script type='text/javascript'>
       $j_eme_calendar=jQuery.noConflict();
@@ -450,7 +455,7 @@ function eme_ajaxize_calendar() {
          parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
             if (parseInt(month_n,10) == 1)
             year_n = parseInt(year_n,10) -1;
-         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen}, function(data){
+         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen <?php echo $jquery_override_lang; ?>}, function(data){
             tableDiv.replaceWith(data);
             initCalendar();
          });
@@ -469,7 +474,7 @@ function eme_ajaxize_calendar() {
          parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
             if (parseInt(month_n,10) == 12)
             year_n = parseInt(year_n,10) + 1;
-         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen}, function(data){
+         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen <?php echo $jquery_override_lang; ?>}, function(data){
             tableDiv.replaceWith(data);
             initCalendar();
          });
