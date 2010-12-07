@@ -326,3 +326,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.2.12 =
 * Feature: you can now specify the number of events to be shown in the RSS feed
 * Improvement: the categories of an event are now shown if any in the RSS feed
+* Improvement: add locales nn and nb to localised_date_format info

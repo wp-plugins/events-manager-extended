@@ -1384,8 +1384,12 @@ function eme_event_form($event, $title, $element) {
    }
    
    $locale_code = substr ( get_locale (), 0, 2 );
-   $localised_date_format = $localised_date_formats [$locale_code];
-   
+   if (isset($localised_date_formats [$locale_code])) {
+      $localised_date_format = $localised_date_formats [$locale_code];
+   } else {
+      $localised_date_format = $localised_date_formats ["en"];
+   }
+
    $hours_locale = "24";
    // Setting 12 hours format for those countries using it
    if (preg_match ( "/en|sk|zh|us|uk/", $locale_code ))
