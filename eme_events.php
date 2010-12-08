@@ -452,7 +452,6 @@ function eme_options_subpanel() {
    eme_options_input_text ( __ ( 'RSS main description', 'eme' ), 'eme_rss_main_description', __ ( 'The main description of your RSS events feed.', 'eme' ) );
    eme_options_input_text ( __ ( 'RSS title format', 'eme' ), 'eme_rss_title_format', __ ( 'The format of the title of each item in the events RSS feed.', 'eme' ) );
    eme_options_input_text ( __ ( 'RSS description format', 'eme' ), 'eme_rss_description_format', __ ( 'The format of the description of each item in the events RSS feed. Follow the previous formatting instructions.', 'eme' ) );
-   eme_options_input_text ( __ ( 'Number of events in feed', 'eme' ), 'eme_rss_number_events_shown', __ ( 'The number of events included in the RSS feed.', 'eme' ) );
    ?>
 </table>
 
@@ -2332,10 +2331,10 @@ if ($gmap_is_active) {
 
 }
 
-function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
+function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS", $scope="future", $order = "ASC",$category='',$author='',$limit=5) {
    if (strpos ( $justurl, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'RSS' );
+      $defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'RSS', 'scope' => 'future', 'order' => 'ASC', 'category' => '', 'author' => '', 'limit' => 5 );
       
       $r = wp_parse_args ( $justurl, $defaults );
       extract ( $r );
@@ -2343,7 +2342,7 @@ function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
    }
    if ($text == '')
       $text = "RSS";
-   $url = site_url ("/?eme_rss=main");
+   $url = site_url ("/?eme_rss=main&scope=$scope&order=$order&category=$category&author=$author&limit=$limit");
    $link = "<a href='$url'>$text</a>";
    
    if ($justurl)
@@ -2357,14 +2356,39 @@ function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS") {
 }
 
 function eme_rss_link_shortcode($atts) {
-   extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'RSS' ), $atts ) );
-   $result = eme_rss_link ( "justurl=$justurl&echo=0&text=$text" );
+   extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'RSS', 'scope' => 'future', 'order' => 'ASC', 'category' => '', 'author' => '', 'limit' => 5 ), $atts ) );
+   $result = eme_rss_link ( "justurl=$justurl&echo=0&text=$text&limit=$limit&scope=$scope&order=$order&category=$category&showperiod=$showperiod&author=$author" );
    return $result;
 }
 add_shortcode ( 'events_rss_link', 'eme_rss_link_shortcode' );
 
 function eme_rss() {
    if (isset ( $_GET ['eme_rss'] ) && $_GET ['eme_rss'] == 'main') {
+      if (isset($_GET['limit'])) {
+         $limit=intval($_GET['limit']);
+      } else {
+         $limit=5;
+      }
+      if (isset($_GET['author'])) {
+         $author=intval($_GET['author']);
+      } else {
+         $author="author";
+      }
+      if (isset($_GET['order'])) {
+         $order=$_GET['order'];
+      } else {
+         $order="order";
+      }
+      if (isset($_GET['category'])) {
+         $category=$_GET['category'];
+      } else {
+         $category="category";
+      }
+      if (isset($_GET['scope'])) {
+         $scope=$_GET['scope'];
+      } else {
+         $scope="future";
+      }
       header ( "Content-type: text/xml" );
       echo "<?xml version='1.0'?>\n";
       
@@ -2395,11 +2419,7 @@ Weblog Editor 2.0
 <?php
       $title_format = get_option('eme_rss_title_format' );
       $description_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", get_option('eme_rss_description_format' ) ) );
-      if (get_option('eme_rss_number_events_shown')) {
-         $events = eme_get_events ( get_option('eme_rss_number_events_shown') );
-      } else {
-         $events = eme_get_events ( 5 );
-      }
+      $events = eme_get_events ( $limit, $scope, $order, 0, "", $category, $author );
       foreach ( $events as $event ) {
          $title = eme_replace_placeholders ( $title_format, $event, "rss" );
          $description = eme_replace_placeholders ( $description_format, $event, "rss" );
