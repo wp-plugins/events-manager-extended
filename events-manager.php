@@ -326,6 +326,7 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
       maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
       maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
+      maybe_add_column($table_name, 'event_author', "alter table $table_name add event_author mediumint(9) DEFAULT 0;"); 
       if ($db_version<3) {
          $wpdb->query("ALTER TABLE $table_name MODIFY event_name text;");
          $wpdb->query("ALTER TABLE $table_name MODIFY event_notes longtext;");
