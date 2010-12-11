@@ -464,9 +464,17 @@ function eme_delete_location($location) {
 function eme_location_has_events($location_id) {
    global $wpdb;  
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
-   $sql = "SELECT event_id FROM $events_table WHERE event_status in (1,2) AND location_id = $location_id";
+   if (!is_admin()) {
+      if (is_user_logged_in()) {
+         $condition = "AND event_status IN (1,2)";
+      } else {
+         $condition = "AND event_status=1";
+      }
+   }
+
+   $sql = "SELECT COUNT(event_id) FROM $events_table WHERE location_id = $location_id $condition";
    $affected_events = $wpdb->get_results($sql);
-   return (count($affected_events) > 0);
+   return ($affected_events > 0);
 }
 
 function eme_upload_location_picture($location) {
