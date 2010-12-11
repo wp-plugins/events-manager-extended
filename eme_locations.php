@@ -130,16 +130,21 @@ function eme_locations_edit_layout($location, $message = "") {
             <label for="location_image"><?php _e('Location image', 'eme') ?></label>
             <input id="location_image" name="location_image" type="file" size="35" />
             <p><?php _e('Select an image to upload', 'eme') ?>.</p>
+            <?php if (isset($location['location_image_url']) && !empty($location['location_image_url'])) {
+                     _e('Current image:', 'eme');
+                     echo "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
+                  }
+            ?>
          </div>
          <?php 
             $gmap_is_active = get_option('eme_gmap_is_active');
-                        if ($gmap_is_active) :
+            if ($gmap_is_active) :
           ?>   
          <div><?php 
-            if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
-               _e("Because qtranslate is active, the title of the location will not update automatically in the balloon, so don't panic there.");
-            }
-            ?>
+               if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) {
+                  _e("Because qtranslate is active, the title of the location will not update automatically in the balloon, so don't panic there.");
+               }
+              ?>
          </div>
          <div id="map-not-found" style="width: 450px; font-size: 140%; text-align: center; margin-top: 20px; display: hide"><p><?php _e('Map not found','eme') ?></p></div>
          <div id="event-map" style="width: 450px; height: 300px; background: green; display: hide; margin-right:8px"></div>
