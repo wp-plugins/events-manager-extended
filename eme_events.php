@@ -756,26 +756,60 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    }
    $output = "";
    if (! empty ( $events )) {
-      $curmonth="";
-      $curday="";
-      $i=1;
-      foreach ( $events as $event ) {
-         // we requested $limit+1 events, so we need to break at the $limit, if reached
-         if ($limit>0 && $i>$limit)
-            break;
-         $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($event['event_start_date']));
-         $theday = date_i18n (get_option('date_format'), strtotime($event['event_start_date']));
-         if ($showperiod == "monthly" && $themonth != $curmonth) {
-            $output .= "<li class='eme_period'>$themonth</li>";
-         } elseif ($showperiod == "daily" && $theday != $curday) {
-            $output .= "<li class='eme_period'>$theday</li>";
+      # if we want to show events per period, we first need to determine on which days events occur
+      # this code is identical to that in eme_calendar.php for "long events"
+      if (! empty ( $showperiod )) {
+         $eventful_days= array();
+         $i=1;
+         foreach ( $events as $event ) {
+            // we requested $limit+1 events, so we need to break at the $limit, if reached
+            if ($limit>0 && $i>$limit)
+               break;
+            $event_start_date = strtotime($event['event_start_date']);
+            $event_end_date = strtotime($event['event_end_date']);
+            if ($event_end_date < $event_start_date)
+               $event_end_date=$event_start_date;
+            while( $event_start_date <= $event_end_date ) {
+               $event_eventful_date = date('Y-m-d', $event_start_date);
+               //Only show events on the day that they start
+               if(isset($eventful_days[$event_eventful_date]) &&  is_array($eventful_days[$event_eventful_date]) ) {
+                  $eventful_days[$event_eventful_date][] = $event;
+               } else {
+                  $eventful_days[$event_eventful_date] = array($event);
+               }
+               $event_start_date += (60*60*24);
+            }
+            $i++;
          }
-         //  $localised_date = date_i18n("j M Y", strtotime($event->event_time));
-         $output .= eme_replace_placeholders ( $format, $event );
-         $curmonth=$themonth;
-         $curday=$theday;
-         $i++;
-      }
+
+         # now that we now the days on which event occur, loop through them
+         $curmonth="";
+         $curday="";
+         foreach($eventful_days as $day_key => $events) {
+            foreach($events as $event) {
+               $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($day_key));
+               $theday = date_i18n (get_option('date_format'), strtotime($day_key));
+               if ($showperiod == "monthly" && $themonth != $curmonth) {
+                  $output .= "<li class='eme_period'>$themonth</li>";
+               } elseif ($showperiod == "daily" && $theday != $curday) {
+                  $output .= "<li class='eme_period'>$theday</li>";
+               }
+               $output .= eme_replace_placeholders ( $format, $event );
+            }
+            $curmonth=$themonth;
+            $curday=$theday;
+         }
+      } else {
+         $i=1;
+         foreach ( $events as $event ) {
+            // we requested $limit+1 events, so we need to break at the $limit, if reached
+            if ($limit>0 && $i>$limit)
+               break;
+            $output .= eme_replace_placeholders ( $format, $event );
+            $i++;
+         }
+      } // end if (! empty ( $showperiod )) {
+
       //Add headers and footers to output
       if( $orig_format ){
          $eme_event_list_item_format_header = get_option('eme_event_list_item_format_header' );
