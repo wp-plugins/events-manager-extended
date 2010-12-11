@@ -2404,9 +2404,9 @@ function eme_rss() {
          $limit=5;
       }
       if (isset($_GET['author'])) {
-         $author=intval($_GET['author']);
+         $author=$_GET['author'];
       } else {
-         $author="author";
+         $author="";
       }
       if (isset($_GET['order'])) {
          $order=$_GET['order'];
