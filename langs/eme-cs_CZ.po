@@ -456,7 +456,7 @@ msgid "Maximum height (px)"
 msgstr "Maximální výška (px)"
 
 #: dbem_events.php:331
-msgid "The maximum allowed width for images uploaded, in pixels"
+msgid "The maximum allowed height for images uploaded, in pixels"
 msgstr "Maximální dovolená šířka přidávaných obrázků v pixelech"
 
 #: dbem_events.php:332
@@ -464,7 +464,7 @@ msgid "Maximum size (bytes)"
 msgstr "Maximální velikost (v bytech)"
 
 #: dbem_events.php:332
-msgid "The maximum allowed size for images uploaded, in pixels"
+msgid "The maximum allowed size for images uploaded, in bytes"
 msgstr "Maximální dovolená velikost přidávaných obrázků v pixelech"
 
 #: dbem_events.php:339

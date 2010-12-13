@@ -324,6 +324,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: again better placeholder matching/replacing
 
 = 3.2.12 =
+* Minor bugfix: remove function br2nl, not used and can conflict with other plugins
+* Minor bugfix: some label corrections
 * Minor bugfix: jquery for ajax calendar now supports the language as well
 * Minor bugfix: show events spanning over multiple days (long events) as such when using the show_period option in [events_list]
 * Feature: you can now specify the number of events to be shown in the RSS feed, as well as specify the order, category, author and scope (like for eme_get_events)

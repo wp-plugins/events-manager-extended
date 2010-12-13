@@ -437,7 +437,7 @@ msgid "Maximum height (px)"
 msgstr "Maxhöjd (px)"
 
 #: dbem_events.php:316
-msgid "The maximum allowed width for images uploaded, in pixels"
+msgid "The maximum allowed height for images uploaded, in pixels"
 msgstr "Största tillåtna bredden för uppladdade bilder, i pixlar"
 
 #: dbem_events.php:317
@@ -445,7 +445,7 @@ msgid "Maximum size (bytes)"
 msgstr "Maxstorlek (bytes)"
 
 #: dbem_events.php:317
-msgid "The maximum allowed size for images uploaded, in pixels"
+msgid "The maximum allowed size for images uploaded, in bytes"
 msgstr "Största tillåtna storleken för uppladdade bilder, i pixlar"
 
 #: dbem_events.php:324

@@ -823,7 +823,7 @@ msgid "Maximum width (px)"
 msgstr ""
 
 #: eme_events.php:487
-msgid "The maximum allowed width for images uploaded"
+msgid "The maximum allowed width for images uploaded, in pixels"
 msgstr ""
 
 #: eme_events.php:488
@@ -831,7 +831,7 @@ msgid "Maximum height (px)"
 msgstr ""
 
 #: eme_events.php:488
-msgid "The maximum allowed width for images uploaded, in pixels"
+msgid "The maximum allowed height for images uploaded, in pixels"
 msgstr ""
 
 #: eme_events.php:489
@@ -839,7 +839,7 @@ msgid "Maximum size (bytes)"
 msgstr ""
 
 #: eme_events.php:489
-msgid "The maximum allowed size for images uploaded, in pixels"
+msgid "The maximum allowed size for images uploaded, in bytes"
 msgstr ""
 
 #: eme_events.php:493
