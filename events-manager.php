@@ -949,10 +949,6 @@ function escapeMe(&$val) {
    $val = mysql_real_escape_string($val);
 }
 
-function br2nl($input) {
- return preg_replace('/<br(\s+)?\/?>/i', "\n", $input);
-}
-
 function eme_trans_sanitize_html( $value, $do_convert=1 ) {
    if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
    if ($do_convert) {
