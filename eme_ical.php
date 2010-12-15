@@ -15,6 +15,8 @@ function eme_ical_single_event($event, $events_page_link, $title_format, $descri
    // no html tags allowed in ical
    $title = strip_tags($title);
    $description = eme_replace_placeholders ( $description_format, $event, "rss" );
+   // no \r\n in description, only escaped \n is allowed
+   $description = preg_replace('/\r\n/', "", $description);
    // no html tags allowed in ical, but we can convert br to escaped newlines to maintain readable output
    $description = strip_tags(preg_replace('/<br(\s+)?\/?>/i', "\\n", $description));
    $location = eme_replace_placeholders ( "#_LOCATION, #_ADDRESS, #_TOWN", $event, "rss" );
@@ -98,6 +100,7 @@ function eme_ical() {
    $events_page_link = eme_get_events_page(true, false);
 
    echo "BEGIN:VCALENDAR\r\n";
+   echo "METHOD:PUBLISH\r\n";
    echo "VERSION:2.0\r\n";
    echo "PRODID:-//hacksw/handcal//NONSGML v1.0//EN\r\n";
    $title_format = get_option('eme_event_page_title_format' );
