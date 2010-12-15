@@ -152,6 +152,7 @@ require_once("phpmailer/eme_phpmailer.php") ;
  
 /* Creating the wp_events table to store event data*/
 function eme_install() {
+   global $wpdb;
    // check the user is allowed to make changes
    if ( !current_user_can( SETTING_CAPABILITY  ) ) {
       return;
