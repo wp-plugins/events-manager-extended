@@ -293,8 +293,9 @@ add_action('edit_user_profile', 'eme_phone_field') ;
 // when editing your own profile
 add_action('show_user_profile', 'eme_phone_field') ;
 
-function eme_phone_field($user_ID) {
-   $eme_phone=get_user_meta($user_ID,'eme_phone',true);
+function eme_phone_field($user) {
+   //$eme_phone=get_user_meta($user,'eme_phone',true);
+   $eme_phone=$user->eme_phone;
    ?>
    <h3><?php _e('Phone number', 'eme')?></h3>
    <table class='form-table'>
