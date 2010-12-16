@@ -2504,6 +2504,10 @@ function eme_admin_general_css() {
    if (file_exists($file_name)) {
       echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."myown.css' type='text/css'/>\n";
    }
+   $file_name= get_stylesheet_directory()."/eme.css";
+   if (file_exists($file_name)) {
+      echo "<link rel='stylesheet' href='".get_stylesheet_directory_uri()."/eme.css' type='text/css'/>\n";
+   }
 }
 add_action ( 'wp_head', 'eme_general_css' );
 add_action ( 'admin_head', 'eme_admin_general_css' );
