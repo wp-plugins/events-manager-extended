@@ -2489,6 +2489,10 @@ function eme_general_css() {
    if (file_exists($file_name)) {
       echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."myown.css' type='text/css'/>\n";
    }
+   $file_name= get_stylesheet_directory()."/eme.css";
+   if (file_exists($file_name)) {
+      echo "<link rel='stylesheet' href='".get_stylesheet_directory_uri()."/eme.css' type='text/css'/>\n";
+   }
    $gmap_is_active = get_option('eme_gmap_is_active' );
    if ($gmap_is_active) {
       echo "<script type='text/javascript' src='".EME_PLUGIN_URL."eme_location_map.js'></script>\n";
