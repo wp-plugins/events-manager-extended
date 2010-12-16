@@ -370,8 +370,7 @@ function eme_get_calendar($args="") {
       
       $event_page_link = eme_get_events_page(true, false);
       if (stristr($event_page_link, "?"))
-         //$joiner = "&amp;";
-         $joiner = "&";
+         $joiner = "&amp;";
       else
          $joiner = "?";
       

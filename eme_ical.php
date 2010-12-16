@@ -2,7 +2,7 @@
 
 function eme_ical_single_event($event, $events_page_link, $title_format, $description_format) {
    if (stristr ( $events_page_link, "?" ))
-      $joiner = "&";
+      $joiner = "&amp;";
    else
       $joiner = "?";
 

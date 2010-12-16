@@ -734,7 +734,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
       if (preg_match('/#_LINKEDNAME$/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
-            $joiner = "&";
+            $joiner = "&amp;";
          else
             $joiner = "?";
          $event_string = str_replace($result, "<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".eme_trans_sanitize_html($event['event_name'])."'>".eme_trans_sanitize_html($event['event_name'])."</a>" , $event_string );
@@ -749,7 +749,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
       if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
-            $joiner = "&";
+            $joiner = "&amp;";
          else
             $joiner = "?";
          $event_string = str_replace($result, $events_page_link.$joiner."event_id=".$event['event_id'] , $event_string );
@@ -819,7 +819,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
       if (preg_match('/#_LOCATIONPAGEURL$/', $result)) { 
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
-            $joiner = "&";
+            $joiner = "&amp;";
          else
             $joiner = "?";
          $location_page_link = $events_page_link.$joiner."location_id=".$event['location_id'];

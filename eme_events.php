@@ -826,7 +826,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    if ($paging==1 && $limit>0) {
       $this_page_url=get_permalink($post->ID);
       if (stristr($this_page_url, "?"))
-         $joiner = "&";
+         $joiner = "&amp;";
       else
          $joiner = "?";
       if ($events_count > $limit) {
@@ -2428,7 +2428,7 @@ function eme_rss() {
       
       $events_page_link = eme_get_events_page(true, false);
       if (stristr ( $events_page_link, "?" ))
-         $joiner = "&";
+         $joiner = "&amp;";
       else
          $joiner = "?";
       

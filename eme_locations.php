@@ -512,7 +512,7 @@ function eme_global_map($atts) {
       ), $atts));
    $events_page_link = eme_get_events_page(true, false);
    if (stristr($events_page_link, "?"))
-      $joiner = "&";
+      $joiner = "&amp;";
    else
       $joiner = "?";
 
@@ -598,7 +598,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       if (preg_match('/#_LOCATIONPAGEURL$/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
-            $joiner = "&";
+            $joiner = "&amp;";
          else
             $joiner = "?";
          $location_page_link = $events_page_link.$joiner."location_id=".$location['location_id'];
