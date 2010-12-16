@@ -101,7 +101,7 @@ function eme_locations_edit_layout($location, $message = "") {
          
          <!-- we need titlediv and title for qtranslate as ID -->
          <div id="titlediv" class="form-field form-required">
-           <label for="location_name"><?php _e('Location name', 'eme') ?></label>
+           <label><?php _e('Location name', 'eme') ?></label>
            <input name="location_name" id="title" type="text" value="<?php echo eme_sanitize_html($location['location_name']); ?>" size="40" />
            <input type="hidden" name="translated_location_name" value="<?php echo eme_trans_sanitize_html($location['location_name']); ?>" />
            <p><?php _e('The name of the location', 'eme') ?>.</p>
@@ -150,8 +150,8 @@ function eme_locations_edit_layout($location, $message = "") {
          <div id="event-map" style="width: 450px; height: 300px; background: green; display: hide; margin-right:8px"></div>
          <br style="clear:both;" />
          <?php endif; ?>
-         <div id="poststuff">
-            <label for="location_description"><?php _e('Location description', 'eme') ?></label>
+         <div id="loc_description">
+            <label><?php _e('Location description', 'eme') ?></label>
             <div class="inside">
                <div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
                   <?php the_editor($location['location_description']); ?>
@@ -218,7 +218,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                         <?php foreach ($locations as $this_location) : ?>  
                         <tr>
                            <td><input type="checkbox" class ="row-selector" value="<?php echo $this_location['location_id'] ?>" name="locations[]"/></td>
-                           <td><a href="<?php echo admin_url("admin.php?page=events-manager-locations&action=edit&location_ID=".$this_location['location_id']); ?>"><?php echo eme_trans_sanitize_html($this_location['location_name']); ?></a></td>
+                           <td><a href="<?php echo admin_url("admin.php?page=events-manager-locations&amp;action=edit&amp;location_ID=".$this_location['location_id']); ?>"><?php echo eme_trans_sanitize_html($this_location['location_name']); ?></a></td>
                            <td><?php echo eme_trans_sanitize_html($this_location['location_address']); ?></td>
                            <td><?php echo eme_trans_sanitize_html($this_location['location_town']); ?></td>
                         </tr>
@@ -250,7 +250,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                       <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="<?php echo admin_url("admin.php?page=events-manager-locations"); ?>" class="add:the-list: validate">
                         <input type="hidden" name="action" value="addlocation" />
                         <div id="titlediv" class="form-field form-required">
-                          <label for="location_name"><?php _e('Location name', 'eme') ?></label>
+                          <label><?php _e('Location name', 'eme') ?></label>
                           <input name="location_name" id="title" type="text" value="<?php echo eme_sanitize_html($new_location['location_name']); ?>" size="40" />
                           <input type="hidden" name="translated_location_name" value="<?php echo eme_trans_sanitize_html($new_location['location_name']); ?>" />
                           <p><?php _e('The name of the location', 'eme') ?>.</p>
@@ -290,8 +290,8 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                            <div id="event-map" style="width: 450px; height: 300px; background: green; display: hide; margin-right:8px"></div>
                            <br style="clear:both;" />
                          <?php endif; ?>
-                           <div id="poststuff">
-                              <label for="location_description"><?php _e('Location description', 'eme') ?></label>
+                           <div id="loc_description">
+                              <label><?php _e('Location description', 'eme') ?></label>
                               <div class="inside">
                                  <div id="<?php echo user_can_richedit() ? 'postdivrich' : 'postdiv'; ?>" class="postarea">
                                     <?php the_editor($new_location['location_description']); ?>

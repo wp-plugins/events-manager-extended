@@ -102,8 +102,8 @@ function eme_categories_table_layout($message = "") {
                         $table .= "    
                            <tr>
                            <td><input type='checkbox' class ='row-selector' value='".$this_category['category_id']."' name='categories[]'/></td>
-                           <td><a href='".admin_url("admin.php?page=events-manager-categories&action=editcat&category_ID=".$this_category['category_id'])."'>".$this_category['category_id']."</a></td>
-                           <td><a href='".admin_url("admin.php?page=events-manager-categories&action=editcat&category_ID=".$this_category['category_id'])."'>".$this_category['category_name']."</a></td>
+                           <td><a href='".admin_url("admin.php?page=events-manager-categories&amp;action=editcat&amp;category_ID=".$this_category['category_id'])."'>".$this_category['category_id']."</a></td>
+                           <td><a href='".admin_url("admin.php?page=events-manager-categories&amp;action=editcat&amp;category_ID=".$this_category['category_id'])."'>".$this_category['category_name']."</a></td>
                            </tr>
                         ";
                      }

@@ -394,7 +394,7 @@ function eme_bookings_compact_table($event_id) {
    $destination = admin_url("edit.php"); 
    $available_seats = eme_get_available_seats($event_id);
    $booked_seats = eme_get_booked_seats($event_id);
-   $printable_address = admin_url("/admin.php?page=events-manager-people&action=printable&event_id=$event_id");
+   $printable_address = admin_url("/admin.php?page=events-manager-people&amp;action=printable&amp;event_id=$event_id");
    $count_respondents=count($bookings);
    if ($count_respondents>0) { 
       $table = 
@@ -676,7 +676,7 @@ function eme_registration_seats_form_table($event_id=0) {
          <td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='selected_bookings[]' />
              <input type='hidden' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='bookings[]' /></td>
          <td><strong>
-         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
+         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
          </strong>
          </td>
          <td>
@@ -815,7 +815,7 @@ function eme_registration_approval_form_table($event_id=0) {
          <td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='selected_bookings[]' /></td>
              <input type='hidden' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='pending_bookings[]' /></td>
          <td><strong>
-         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
+         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
          </strong>
          </td>
          <td>

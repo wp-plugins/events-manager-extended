@@ -640,7 +640,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
       if (preg_match('/#_EDITEVENTLINK$/', $result)) { 
          $link = "";
          if(is_user_logged_in())
-            $link = "<a href=' ".admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event['event_id'])."'>".__('Edit')."</a>";
+            $link = "<a href=' ".admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event['event_id'])."'>".__('Edit')."</a>";
          $event_string = str_replace($result, $link , $event_string );
       }
       if (preg_match('/#_24HSTARTTIME$/', $result)) { 
@@ -1003,7 +1003,7 @@ function eme_explain_deactivation_needed() {
 }
 
 function eme_explain_conversion_needed() {
-   $advice = sprintf(__("It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>.",'eme'),admin_url("admin.php?page=events-manager&do_character_conversion=true"));
+   $advice = sprintf(__("It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>.",'eme'),admin_url("admin.php?page=events-manager&amp;do_character_conversion=true"));
    ?>
 <div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
 <?php
@@ -1015,7 +1015,7 @@ function eme_hello_to_new_user() {
    $advice = sprintf ( __ ( "<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> 
    <p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>
    <p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>
-   <p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'eme' ), $current_user->display_name, admin_url("widgets.php"), 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', admin_url("admin.php?page=events-manager-options"), admin_url("admin.php?page=events-manager&disable_hello_to_user=true") );
+   <p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>", 'eme' ), $current_user->display_name, admin_url("widgets.php"), 'http://www.e-dynamics.be/wordpress/#template-tags', 'http://www.e-dynamics.be/wordpress/#shortcodes', admin_url("admin.php?page=events-manager-options"), admin_url("admin.php?page=events-manager&amp;disable_hello_to_user=true") );
    ?>
 <div id="message" class="updated">
       <?php

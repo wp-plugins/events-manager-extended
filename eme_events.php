@@ -1200,7 +1200,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
       admin_show_warnings();
    ?>
    <!--<div id='new-event' class='switch-tab'><a href="<?php
-   echo admin_url("admin.php?page=events-manager&action=edit_event")?>><?php
+   echo admin_url("admin.php?page=events-manager&amp;action=edit_event")?>><?php
    _e ( 'New Event ...', 'eme' );
    ?></a></div>-->
       <?php
@@ -1294,7 +1294,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
      <tr <?php echo "$class $style"; ?>>
          <td><input type='checkbox' class='row-selector' value='<?php echo $event ['event_id']; ?>' name='events[]' /></td>
          <td><strong>
-         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&action=edit_event&event_id=".$event ['event_id']); ?>"><?php echo eme_trans_sanitize_html($event ['event_name']); ?></a>
+         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event ['event_id']); ?>"><?php echo eme_trans_sanitize_html($event ['event_name']); ?></a>
          </strong>
          <?php
          $categories = explode(',', $event ['event_category_ids']);
@@ -1304,7 +1304,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
                echo "<br/><span title='".__('Category','eme').": ".eme_trans_sanitize_html($category['category_name'])."'>".eme_trans_sanitize_html($category['category_name'])."</span>";
          }
          if ($event ['event_rsvp']) {
-            $printable_address = admin_url("/admin.php?page=events-manager-people&action=printable&event_id=".$event['event_id']);
+            $printable_address = admin_url("/admin.php?page=events-manager-people&amp;action=printable&amp;event_id=".$event['event_id']);
             $available_seats = eme_get_available_seats($event['event_id']);
             $total_seats = $event ['event_seats'];
             echo "<br/>".__('RSVP Info: ','eme').__('Free: ','eme' ).$available_seats.", ".__('Max: ','eme').$total_seats;
@@ -1320,7 +1320,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
          ?> 
          </td>
          <td>
-         <a href="<?php echo admin_url("admin.php?page=events-manager&action=duplicate_event&event_id=".$event ['event_id']); ?>" title="<?php _e ( 'Duplicate this event', 'eme' ); ?>"><strong>+</strong></a>
+         <a href="<?php echo admin_url("admin.php?page=events-manager&amp;action=duplicate_event&amp;event_id=".$event ['event_id']); ?>" title="<?php _e ( 'Duplicate this event', 'eme' ); ?>"><strong>+</strong></a>
          </td>
          <td>
              <?php echo $location_summary; ?>
@@ -1336,7 +1336,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
             ?>
                <b><?php echo $recurrence_desc; ?>
             <br />
-            <a href="<?php echo admin_url("admin.php?page=events-manager&action=edit_recurrence&recurrence_id=".$event ['recurrence_id']); ?>"><?php _e ( 'Reschedule', 'eme' ); ?></a></b>
+            <a href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_recurrence&amp;recurrence_id=".$event ['recurrence_id']); ?>"><?php _e ( 'Reschedule', 'eme' ); ?></a></b>
             <?php
             }
             ?>
@@ -1360,16 +1360,16 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
       $forward = $offset + $limit;
       $backward = $offset - $limit;
       echo "<div id='events-pagination'> ";
-      echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$forward")."'>&gt;&gt;</a>";
+      echo "<a style='float: right' href='" . admin_url("admin.php?page=events-manager&amp;scope=$scope&amp;category=$o_category&amp;offset=$forward")."'>&gt;&gt;</a>";
       if ($backward >= 0)
-         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$backward")."'>&lt;&lt;</a>";
+         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&amp;scope=$scope&amp;category=$o_category&amp;offset=$backward")."'>&lt;&lt;</a>";
       echo "</div>";
    }
    if ($events_count <= $limit && $offset>0) {
       $backward = $offset - $limit;
       echo "<div id='events-pagination'> ";
       if ($backward >= 0)
-         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&scope=$scope&category=$o_category&offset=$backward")."'>&lt;&lt;</a>";
+         echo "<a style='float: left' href='" . admin_url("admin.php?page=events-manager&amp;scope=$scope&amp;category=$o_category&amp;offset=$backward")."'>&lt;&lt;</a>";
       echo "</div>";
    }
    ?>
@@ -1402,12 +1402,12 @@ function eme_event_form($event, $title, $element) {
    // change prefix according to event/recurrence
    if (isset($_GET ['action']) && $_GET ['action'] == "edit_recurrence") {
       $pref = "recurrence_";
-      $form_destination = "admin.php?page=events-manager&action=update_recurrence&recurrence_id=" . $element;
+      $form_destination = "admin.php?page=events-manager&amp;action=update_recurrence&amp;recurrence_id=" . $element;
       $saved_bydays = explode ( ",", $event ['recurrence_byday'] );
       $show_recurrent_form = 1;
    } else {
       $pref = "event_";
-      $form_destination = "admin.php?page=events-manager&action=update_event&event_id=" . $element;
+      $form_destination = "admin.php?page=events-manager&amp;action=update_event&amp;event_id=" . $element;
       if ($event ['recurrence_id']) {
          # editing a single event of an recurrence: don't show the recurrence form
          $show_recurrent_form = 0;
@@ -1517,9 +1517,11 @@ function eme_event_form($event, $title, $element) {
                               }
                               echo "<option value='$key' $selected>$value</option>";
                            }
-                           _e('Private events are only visible for logged in users, draft events are not visible from the front end.','eme');
                         ?>
                         </select>
+                        <?php
+                           _e('Private events are only visible for logged in users, draft events are not visible from the front end.','eme');
+                        ?>
                         </p>
                      </div>
                   </div>
@@ -1925,6 +1927,8 @@ function eme_event_form($event, $title, $element) {
                <p class="submit">
                   <input type="submit" name="events_update" value="<?php _e ( 'Submit Event', 'eme' ); ?> &raquo;" />
                </p>
+
+               </div>
             </div>
          </div>
       </div>
@@ -2258,7 +2262,7 @@ function eme_admin_map_script() {
                width: 50%;
             }     */
 </style>
-<script src="http://maps.google.com/maps/api/js?v=3.1&sensor=false" type="text/javascript"></script>
+<script src="http://maps.google.com/maps/api/js?v=3.1&amp;sensor=false" type="text/javascript"></script>
 <script type="text/javascript">
          //<![CDATA[
             $j_eme_admin=jQuery.noConflict();
