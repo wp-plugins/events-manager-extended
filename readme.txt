@@ -336,3 +336,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: NL language update (thanks to Paul Jonker)
 * Feature: better CSS, create in your theme CSS dir the file 'eme.css' if you want to override the CSS in events_manager.css (see the FAQ section)  
   ==> read the FAQ about how to size/style the balloon in the google map
+* Deprecated: the use of 'myown.css' in the plugin dir (use 'eme.css' in your theme CSS dir)
