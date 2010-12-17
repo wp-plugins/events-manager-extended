@@ -252,18 +252,27 @@ function eme_get_calendar($args="") {
    $limit_post=date("Y-m-d", mktime(0,0,0,$month_post, 7 , $year_post));
    $conditions [] = "((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post'))";
 
-   // the category conditions
-   if ($category && get_option('eme_categories_enabled')) {
-      //show a specific category
-      if ($category != '' && is_numeric($category)){
-         $conditions[] = "FIND_IN_SET($category,event_category_ids)";
-      } elseif ( preg_match('/^([0-9],?)+$/', $category)) {
+   // the category conditions (same code as in eme_events.php)
+   if (get_option('eme_categories_enabled')) {
+      if (is_numeric($category)) {
+         if ($category>0)
+            $conditions [] = " FIND_IN_SET($category,event_category_ids)";
+      } elseif ( preg_match('/^([0-9],?)+$/', $category) ) {
          $category = explode(',', $category);
          $category_conditions = array();
-         foreach($category as $cat){
-            $category_conditions[] = "FIND_IN_SET($cat,event_category_ids)";
+         foreach ($category as $cat) {
+            if (is_numeric($cat) && $cat>0)
+               $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
          }
-         $conditions[] = "(".implode(' OR ', $category_conditions).")";
+         $conditions [] = "(".implode(' OR', $category_conditions).")";
+      } elseif ( preg_match('/^([0-9] ?)+$/', $category) ) {
+         $category = explode(' ', $category);
+         $category_conditions = array();
+         foreach ($category as $cat) {
+            if (is_numeric($cat) && $cat>0)
+               $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
+         }
+         $conditions [] = "(".implode(' AND ', $category_conditions).")";
       }
    }
 
