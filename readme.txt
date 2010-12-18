@@ -324,6 +324,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: again better placeholder matching/replacing
 
 = 3.2.12 =
+* Security fix: extra code so no html can be inserted into a name/phone/comment when doing a booking
 * Minor bugfix: remove function br2nl, not used and can conflict with other plugins
 * Minor bugfix: some label corrections
 * Minor bugfix: jquery for ajax calendar now supports the language as well
