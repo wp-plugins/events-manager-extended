@@ -833,16 +833,16 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $forward = $offset + $limit;
          $backward = $offset - $limit;
          $output.= "<div id='events-pagination'> ";
-         $output.= "<a style='float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
+         $output.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
          if ($backward >= 0)
-            $output.= "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+            $output.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
          $output.= "</div>";
       }
       if ($events_count <= $limit && $offset>0) {
          $backward = $offset - $limit;
          $output.= "<div id='events-pagination'> ";
          if ($backward >= 0)
-            $output.= "<a style='float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+            $output.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
          $output.= "</div>";
       }
    }

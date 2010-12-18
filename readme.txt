@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 2.8   
 Tested up to: 3.0.3
-Stable tag: 3.2.11
+Stable tag: 3.2.12
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. 
              
@@ -324,17 +324,20 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: again better placeholder matching/replacing
 
 = 3.2.12 =
+* Security fix: extra code so no html can be inserted into a name/phone/comment when doing a booking
 * Minor bugfix: remove function br2nl, not used and can conflict with other plugins
 * Minor bugfix: some label corrections
 * Minor bugfix: jquery for ajax calendar now supports the language as well
 * Minor bugfix: show events spanning over multiple days (long events) as such when using the show_period option in [events_list]
 * Minor bugfix: when editing your profile, the phonenumber of admin was always shown, even though you changed it correctly to your own
+* Minor bugfix: full calendar also supports multiple categories now
 * Bugfix: eme_install could fail, corrected
-* Bugfix: better multiline support for ICAL events and a bit support for outlook 2003
-* Feature: you can now specify the number of events to be shown in the RSS feed, as well as specify the order, category, author and scope (like for eme_get_events)
+* Improvement: better multiline support for ICAL events and a bit support for outlook 2003
 * Improvement: the categories of an event are now shown if any in the RSS feed
 * Improvement: add locales nn and nb to localised_date_format info
 * Improvement: NL language update (thanks to Paul Jonker)
-* Feature: better CSS, create in your theme CSS dir the file 'eme.css' if you want to override the CSS in events_manager.css (see the FAQ section)  
-  ==> read the FAQ about how to size/style the balloon in the google map
+* Improvement: CSS added for navigation arrows in the frontend (eme_nav_left and eme_nav_right)
+* Feature: you can now specify the number of events to be shown in the RSS feed, as well as specify the order, category, author and scope (like for eme_get_events)
+* Feature: better CSS adaptation possible: create in your theme CSS dir the file 'eme.css' if you want to override the CSS in events_manager.css
+  (see the FAQ section)  
 * Deprecated: the use of 'myown.css' in the plugin dir (use 'eme.css' in your theme CSS dir)
