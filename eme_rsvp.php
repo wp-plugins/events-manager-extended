@@ -169,8 +169,8 @@ function eme_catch_rsvp() {
          $booker_wp_id=$current_user->ID;
          $booker = eme_get_person_by_wp_id($booker_wp_id); 
       } else {
-         $bookerName = strip_tags(stripslashes($_POST['bookerName']);
-         $bookerEmail = strip_tags(stripslashes($_POST['bookerEmail']);
+         $bookerName = eme_strip_tags($_POST['bookerName']);
+         $bookerEmail = eme_strip_tags($_POST['bookerEmail']);
          $booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
       }
       $event_id = intval($_POST['event_id']);
@@ -189,9 +189,9 @@ add_action('init','eme_catch_rsvp');
  
 function eme_book_seats() {
    global $current_user;
-   $bookerPhone = strip_tags(stripslashes($_POST['bookerPhone'])); 
    $bookedSeats = intval($_POST['bookedSeats']);
-   $bookerComment = strip_tags(stripslashes($_POST['bookerComment']));
+   $bookerPhone = eme_strip_tags($_POST['bookerPhone']); 
+   $bookerComment = eme_strip_tags($_POST['bookerComment']);
    $honeypot_check = stripslashes($_POST['honeypot_check']);
    $event_id = intval($_POST['event_id']);
    $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
@@ -205,8 +205,8 @@ function eme_book_seats() {
       $booker = eme_get_person_by_wp_id($booker_wp_id); 
    } else {
       $booker_wp_id=0;
-      $bookerEmail = strip_tags(stripslashes($_POST['bookerEmail']));
-      $bookerName = strip_tags(stripslashes($_POST['bookerName']));
+      $bookerEmail = eme_strip_tags($_POST['bookerEmail']);
+      $bookerName = eme_strip_tags($_POST['bookerName']);
       $booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
    }
    

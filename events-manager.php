@@ -963,6 +963,10 @@ function eme_sanitize_html( $value ) {
    return htmlspecialchars($value,ENT_QUOTES);
 }
 
+function eme_strip_tags ( $value ) {
+   return preg_replace("/^\s*$/","",strip_tags(stripslashes($value)));
+}
+
 function admin_show_warnings() {
    $db_version = get_option('eme_version');
    $old_db_version = get_option('dbem_version');
