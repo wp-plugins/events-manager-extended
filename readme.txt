@@ -336,6 +336,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: the categories of an event are now shown if any in the RSS feed
 * Improvement: add locales nn and nb to localised_date_format info
 * Improvement: NL language update (thanks to Paul Jonker)
+* Improvement: CSS added for navigation arrows in the frontend (eme_nav_left and eme_nav_right)
 * Feature: better CSS, create in your theme CSS dir the file 'eme.css' if you want to override the CSS in events_manager.css (see the FAQ section)  
   ==> read the FAQ about how to size/style the balloon in the google map
 * Deprecated: the use of 'myown.css' in the plugin dir (use 'eme.css' in your theme CSS dir)
