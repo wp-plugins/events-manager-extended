@@ -2,7 +2,7 @@
 Contributors: liedekef
 Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
-Requires at least: 2.8   
+Requires at least: 3.0.0
 Tested up to: 3.0.3
 Stable tag: 3.2.12
 
