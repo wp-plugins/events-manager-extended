@@ -345,3 +345,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.2.12 =
 * Bugfix: showperiod works correctly again
 * Feature: added long_events to eme_events (shortcode and template function) as well
+* Frature: scope=this_week now possible for shortcode [events_list]

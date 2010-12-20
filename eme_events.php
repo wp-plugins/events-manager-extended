@@ -991,6 +991,10 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $limit_start = "$year-$month-00";
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif ($scope == "this_week") {
+      $limit_start = date('Y-m-d',strtotime("last Sunday"));
+      $limit_end   = date('Y-m-d',strtotime("next Saturday"));
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
       $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$matches[2]') OR (event_end_date BETWEEN '$matches[1]' AND '$matches[2]'))";
    } elseif ($scope == "next_month") {
