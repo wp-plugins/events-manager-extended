@@ -791,13 +791,13 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
                $theday = date_i18n (get_option('date_format'), strtotime($day_key));
                if ($showperiod == "monthly" && $themonth != $curmonth) {
                   $output .= "<li class='eme_period'>$themonth</li>";
+                  $curmonth=$themonth;
                } elseif ($showperiod == "daily" && $theday != $curday) {
                   $output .= "<li class='eme_period'>$theday</li>";
+                  $curday=$theday;
                }
                $output .= eme_replace_placeholders ( $format, $event );
             }
-            $curmonth=$themonth;
-            $curday=$theday;
          }
       } else {
          $i=1;

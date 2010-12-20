@@ -341,3 +341,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: better CSS adaptation possible: create in your theme CSS dir the file 'eme.css' if you want to override the CSS in events_manager.css
   (see the FAQ section)  
 * Deprecated: the use of 'myown.css' in the plugin dir (use 'eme.css' in your theme CSS dir)
+
+= 3.2.12 =
+* Bugfix: showperiod works correctly again
