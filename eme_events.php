@@ -718,11 +718,11 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $author = '', $paging=0) {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $paging=0) {
    global $post;
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $paging=0);
+      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $paging=0,'long_events' => 0);
       
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
@@ -769,15 +769,24 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
             $event_end_date = strtotime($event['event_end_date']);
             if ($event_end_date < $event_start_date)
                $event_end_date=$event_start_date;
-            while( $event_start_date <= $event_end_date ) {
-               $event_eventful_date = date('Y-m-d', $event_start_date);
-               //Only show events on the day that they start
-               if(isset($eventful_days[$event_eventful_date]) &&  is_array($eventful_days[$event_eventful_date]) ) {
-                  $eventful_days[$event_eventful_date][] = $event;
-               } else {
-                  $eventful_days[$event_eventful_date] = array($event);
+            if ($long_events) {
+               //Show events on every day that they are still going on
+               while( $event_start_date <= $event_end_date ) {
+                  $event_eventful_date = date('Y-m-d', $event_start_date);
+                  if(isset($eventful_days[$event_eventful_date]) &&  is_array($eventful_days[$event_eventful_date]) ) {
+                     $eventful_days[$event_eventful_date][] = $event;
+                  } else {
+                     $eventful_days[$event_eventful_date] = array($event);
+                  }
+                  $event_start_date += (60*60*24);
                }
-               $event_start_date += (60*60*24);
+            } else {
+               //Only show events on the day that they start
+               if ( isset($eventful_days[$event['event_start_date']]) && is_array($eventful_days[$event['event_start_date']]) ) {
+                  $eventful_days[$event['event_start_date']][] = $event;
+               } else {
+                  $eventful_days[$event['event_start_date']] = array($event);
+               }
             }
             $i++;
          }
@@ -853,8 +862,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'paging' => 0 ), $atts ) );
-   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&paging=$paging" );
+   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'paging' => 0, 'long_events' => 0 ), $atts ) );
+   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&paging=$paging&long_events=$long_events" );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
