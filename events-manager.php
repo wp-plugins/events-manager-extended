@@ -741,7 +741,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } 
 
       if (preg_match('/#_ICALLINK$/', $result)) {
-         $url = site_url ("/?eme_ical=public_single&event_id=".$event['event_id']);
+         $url = site_url ("/?eme_ical=public_single&amp;event_id=".$event['event_id']);
          $icallink = "<a href='$url'>ICAL</a>";
          $event_string = str_replace($result, $icallink , $event_string );
       } 
