@@ -754,6 +754,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    } else {
       $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author );
    }
+   $events_count=count($events);
    $output = "";
    if (! empty ( $events )) {
       # if we want to show events per period, we first need to determine on which days events occur
@@ -791,11 +792,11 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
             $i++;
          }
 
-         # now that we now the days on which event occur, loop through them
+         # now that we now the days on which events occur, loop through them
          $curmonth="";
          $curday="";
-         foreach($eventful_days as $day_key => $events) {
-            foreach($events as $event) {
+         foreach($eventful_days as $day_key => $day_events) {
+            foreach($day_events as $event) {
                $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($day_key));
                $theday = date_i18n (get_option('date_format'), strtotime($day_key));
                if ($showperiod == "monthly" && $themonth != $curmonth) {
@@ -855,6 +856,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $output.= "</div>";
       }
    }
+
+   // now see how to return the output
    if ($echo)
       echo $output;
    else
@@ -984,6 +987,10 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $limit_start = "$year-$month-00";
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif ($scope == "this_week") {
+      $limit_start = date('Y-m-d',strtotime("last Sunday"));
+      $limit_end   = date('Y-m-d',strtotime("next Saturday"));
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif ($scope == "this_month") {
       $year=date('Y');
       $month=date('m');
@@ -991,12 +998,6 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $limit_start = "$year-$month-00";
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
-   } elseif ($scope == "this_week") {
-      $limit_start = date('Y-m-d',strtotime("last Sunday"));
-      $limit_end   = date('Y-m-d',strtotime("next Saturday"));
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
-   } elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
-      $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$matches[2]') OR (event_end_date BETWEEN '$matches[1]' AND '$matches[2]'))";
    } elseif ($scope == "next_month") {
       $year=date('Y', strtotime("+1 month"));
       $month=date('m', strtotime("+1 month"));
