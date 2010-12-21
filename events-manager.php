@@ -130,6 +130,11 @@ add_filter('eme_notes_rss', 'ent2ncr', 8);
 add_filter('eme_notes_map', 'convert_chars', 8);
 add_filter('eme_notes_map', 'js_escape');
  
+// we only want the google map javascript to be loaded if needed, so we set a global
+// variable to 0 here and if we detect #_MAP, we set it to 1. In a footer filter, we then
+// check if it is 1 and if so: include it
+$eme_need_gmap_js=0;
+
 // INCLUDES
 // We let the includes happen at the end, so all init-code is done
 // (like eg. the load_textdomain). Some includes do stuff based on _GET
@@ -613,6 +618,7 @@ function eme_create_events_submenu () {
 }
 
 function eme_replace_placeholders($format, $event, $target="html") {
+   global $eme_need_gmap_js;
    // first we do the custom attributes, since these can contain other placeholders
    preg_match_all("/#_ATT\{.+?\}(\{.+?\})?/", $format, $results);
    foreach($results[0] as $resultKey => $result) {
@@ -688,6 +694,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $location = eme_get_location($event['location_id']);
          $map_div = eme_single_location_map($location);
          $event_string = str_replace($result, $map_div , $event_string );
+         // we found a map (that is not empty), so we need to include the javascript to show it
+         if ($map_div)
+            $eme_need_gmap_js=1;
       }
       if (preg_match('/#_DIRECTIONS$/', $result)) {
          $location = eme_get_location($event['location_id']);

@@ -2511,10 +2511,6 @@ function eme_general_css() {
    if (file_exists($file_name)) {
       echo "<link rel='stylesheet' href='".get_stylesheet_directory_uri()."/eme.css' type='text/css'/>\n";
    }
-   $gmap_is_active = get_option('eme_gmap_is_active' );
-   if ($gmap_is_active) {
-      echo "<script type='text/javascript' src='".EME_PLUGIN_URL."eme_location_map.js'></script>\n";
-   }
 }
 function eme_admin_general_css() {
    echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
@@ -2530,6 +2526,16 @@ function eme_admin_general_css() {
 add_action ( 'wp_head', 'eme_general_css' );
 add_action ( 'admin_head', 'eme_admin_general_css' );
 //add_filter('feed_link','substitute_rss')
+
+function eme_general_footer() {
+   global $eme_need_gmap_js;
+   $gmap_is_active = get_option('eme_gmap_is_active' );
+   // we only include the map js if wanted/needed
+   if ($gmap_is_active && $eme_need_gmap_js) {
+      echo "<script type='text/javascript' src='".EME_PLUGIN_URL."eme_location_map.js'></script>\n";
+   }
+}
+add_action('wp_footer', 'eme_general_footer');
 
 function eme_delete_event($event_id) {
    global $wpdb;
