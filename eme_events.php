@@ -692,7 +692,6 @@ function eme_admin_css() {
    } 
    #events-pagination {
       text-align: center; 
-      
    }
    #events-pagination a {
       margin: 0 20px 0 20px;
@@ -705,7 +704,6 @@ function eme_admin_css() {
    } 
    #new-event {
       float: left;
-    
    }
    </style>";
    echo $css;
@@ -743,10 +741,29 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    } else {
       $orig_format = false;
    }
-   if ($paging==1 && isset($_GET['eme_offset'])) {
+   if ($limit>0 && $paging==1 && isset($_GET['eme_offset'])) {
       $offset=intval($_GET['eme_offset']);
    } else {
       $offset=0;
+   }
+
+   // for browsing: if limit=0,paging=1 and only for this_week,this_month or today
+   if ($limit==0 && $paging==1) {
+      $scope_offset=0;
+	if (isset($_GET['eme_offset']))
+	   $scope_offset=$_GET['eme_offset'];
+	$prev_offset=$scope_offset-1;
+	$next_offset=$scope_offset+1;
+      if ($scope=="this_week") {
+	$scope = date('Y-m-d',strtotime("last Sunday $scope_offset weeks"))."--".date('Y-m-d',strtotime("next Saturday $scope_offset weeks"));
+      }
+      if ($scope=="this_month") {
+        $number_of_days_month=eme_days_in_month($month,$year);
+	$scope = date('Y-m-d',strtotime("first day of this month $scope_offset months"))."--".date('Y-m-d',strtotime("last day of this month $scope_offset months"));
+      }
+      if ($scope=="today") {
+	$scope = date('Y-m-d',strtotime("$scope_offset days"));
+      }
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
    if ($limit==0) {
@@ -755,6 +772,40 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author );
    }
    $events_count=count($events);
+
+   // get the paging output ready
+   $pagination_top = "<div id='events-pagination-top'> ";
+   if ($paging==1 && $limit>0) {
+      $this_page_url=get_permalink($post->ID);
+      if (stristr($this_page_url, "?"))
+         $joiner = "&amp;";
+      else
+         $joiner = "?";
+      if ($events_count > $limit) {
+         $forward = $offset + $limit;
+         $backward = $offset - $limit;
+         if ($backward >= 0)
+            $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+         $pagination_top.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
+      }
+      if ($events_count <= $limit && $offset>0) {
+         $backward = $offset - $limit;
+         if ($backward >= 0)
+            $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+      }
+   }
+   if ($paging==1 && $limit==0) {
+      $this_page_url=get_permalink($post->ID);
+      if (stristr($this_page_url, "?"))
+         $joiner = "&amp;";
+      else
+         $joiner = "?";
+      $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt;</a>";
+      $pagination_top.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>&gt;&gt;</a>";
+   }
+   $pagination_top.= "</div>";
+   $pagination_bottom = str_replace("events-pagination-top","events-pagination-bottom",$pagination_top);
+
    $output = "";
    if (! empty ( $events )) {
       # if we want to show events per period, we first need to determine on which days events occur
@@ -832,31 +883,10 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $output = "<ul class='eme-no-events'><li>" . get_option('eme_no_events_message' ) . "</li></ul>";
    }
    $events_count=count($events);
-  
-   if ($paging==1 && $limit>0) {
-      $this_page_url=get_permalink($post->ID);
-      if (stristr($this_page_url, "?"))
-         $joiner = "&amp;";
-      else
-         $joiner = "?";
-      if ($events_count > $limit) {
-         $forward = $offset + $limit;
-         $backward = $offset - $limit;
-         $output.= "<div id='events-pagination'> ";
-         $output.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
-         if ($backward >= 0)
-            $output.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
-         $output.= "</div>";
-      }
-      if ($events_count <= $limit && $offset>0) {
-         $backward = $offset - $limit;
-         $output.= "<div id='events-pagination'> ";
-         if ($backward >= 0)
-            $output.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
-         $output.= "</div>";
-      }
-   }
 
+   // now add the pagination
+   $output = $pagination_top . $output . $pagination_bottom;
+  
    // now see how to return the output
    if ($echo)
       echo $output;

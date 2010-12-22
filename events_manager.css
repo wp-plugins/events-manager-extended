@@ -158,3 +158,14 @@ table.fullcalendar td.month_name {
 	font-size: 80%;     
 	list-style: none;
 }
+#events-pagination-top,#events-pagination-bottom {
+      text-align: center;
+}
+#events-pagination-top a,#events-pagination-bottom a {
+      margin: 0 20px 0 20px;
+      text-decoration: none;
+      width: 80px;
+      padding: 3px 0;
+      border: 1px solid #ccc;
+}
+
