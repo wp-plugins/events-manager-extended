@@ -347,5 +347,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: paging count in events_list was wrong if you used paging=1 and showperiod options together
 * Feature: added long_events to eme_events (shortcode and template function) as well
 * Feature: scope=this_week now possible for shortcode [events_list]
-* Feature: paging possible if you use paging=1, limit=0 and scope=today,this_week_this_month in the [events_list] shortcode
+* Feature: paging possible if you use paging=1, limit=0 and scope=today,this_week,this_month in the [events_list] shortcode. Eg:
+  [events_list paging=1 limit=0 scope=this_week]
 * Improvement: the google map javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
