@@ -1324,7 +1324,6 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
          if ($i>$limit)
             break;
          $class = ($i % 2) ? ' class="alternate"' : '';
-         // FIXME set to american
          $localised_start_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_start_date']));
          $localised_end_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_end_date']));
          $style = "";
