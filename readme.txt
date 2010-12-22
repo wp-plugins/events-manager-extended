@@ -350,3 +350,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: period paging is now possible if you use paging=1, limit=0 and scope=today,this_week,this_month in the [events_list] shortcode. Eg:
   [events_list paging=1 limit=0 scope=this_week]
 * Improvement: the google map javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
+* Improvement: show the database error if event inserting fails

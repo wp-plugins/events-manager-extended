@@ -244,8 +244,13 @@ function eme_events_subpanel() {
                $feedback_message = __ ( 'New recurrent event inserted!', 'eme' );
             } else {
                // INSERT new event 
-               $wpdb->insert ( $event_table_name, $event );
-               $feedback_message = __ ( 'New event successfully inserted!', 'eme' );
+               $wpdb->show_errors(true);
+               if (!$wpdb->insert ( $event_table_name, $event )) {
+                  $wpdb->print_error();
+                  $feedback_message = __ ( 'Database insert failed!', 'eme' );
+               } else {
+                  $feedback_message = __ ( 'New event successfully inserted!', 'eme' );
+               }
             }
          } else {
             // something exists
