@@ -663,7 +663,6 @@ function eme_registration_seats_form_table($event_id=0) {
       foreach ( $bookings as $event_booking ) {
          $event=eme_get_event($event_booking['event_id']);
          $class = ($i % 2) ? ' class="alternate"' : '';
-         // FIXME set to american
          $localised_start_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event['event_start_date']));
          $localised_end_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event['event_end_date']));
          $style = "";
@@ -802,7 +801,6 @@ function eme_registration_approval_form_table($event_id=0) {
       foreach ( $pending_bookings as $event_booking ) {
          $event=eme_get_event($event_booking['event_id']);
          $class = ($i % 2) ? ' class="alternate"' : '';
-         // FIXME set to american
          $localised_start_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event['event_start_date']));
          $localised_end_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event['event_end_date']));
          $style = "";
