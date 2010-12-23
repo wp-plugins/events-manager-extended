@@ -867,6 +867,16 @@ function eme_ascii_encode($e) {
     return $output;
 }
 
+// template function
+function eme_is_event_rsvpable() {
+   if (eme_is_single_event_page() && isset($_REQUEST['event_id'])) {
+      $event = eme_get_event(intval($_REQUEST['event_id']));
+      if($event)
+         return $event['event_rsvp'];
+   }
+   return 0;
+}
+
 function eme_event_needs_approval($event_id) {
    global $wpdb;
    $events_table = $wpdb->prefix . EVENTS_TBNAME;
