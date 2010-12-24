@@ -346,6 +346,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: showperiod works correctly again
 * Bugfix: paging count in events_list was wrong if you used paging=1 and showperiod options together
 * Bugfix: readded missing template function eme_is_event_rsvpable
+* Bugfix: eventful can now be a boolean (true/false) next to 1/0
 * Feature: added long_events to eme_events (shortcode and template function) as well
 * Feature: scope=this_week now possible for shortcode [events_list]
 * Feature: period paging is now possible if you use paging=1, limit=0 and scope=today,this_week,this_month in the [events_list] shortcode. Eg:

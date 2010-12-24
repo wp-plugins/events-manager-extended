@@ -30,6 +30,7 @@ function eme_get_calendar($args="") {
    $r = wp_parse_args( $args, $defaults );
    extract( $r );
    $echo = (bool) $r ['echo'];
+   $long_events = $r ['long_events'];
    
    // this comes from global wordpress preferences
    $start_of_week = get_option('start_of_week');

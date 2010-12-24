@@ -45,25 +45,25 @@ function eme_people_page() {
 
 add_action('init','eme_ajax_actions'); 
 function eme_ajax_actions() {
-   if(isset($_GET['eme_ajax_action']) && $_GET['eme_ajax_action'] == 'booking_data') {
-      if(isset($_GET['id']))
-         echo "[ {bookedSeats:".eme_get_booked_seats($_GET['id']).", availableSeats:".eme_get_available_seats($_GET['id'])."}]"; 
+   if (isset($_GET['eme_ajax_action']) && $_GET['eme_ajax_action'] == 'booking_data') {
+      if (isset($_GET['id']))
+         echo "[ {bookedSeats:".eme_get_booked_seats(intval($_GET['id'])).", availableSeats:".eme_get_available_seats(intval($_GET['id']))."}]"; 
       die();
    }
-   if(isset($_GET['action']) && $_GET['action'] == 'printable'){
-      if(isset($_GET['event_id']))
+   if (isset($_GET['action']) && $_GET['action'] == 'printable'){
+      if (isset($_GET['event_id']))
          eme_printable_booking_report(intval($_GET['event_id']));
    }
    
-   if(isset($_GET['query']) && $_GET['query'] == 'GlobalMapData') { 
-      eme_global_map_json($_GET['eventful'],$_GET['scope']);      
+   if (isset($_GET['query']) && $_GET['query'] == 'GlobalMapData') { 
+      eme_global_map_json((bool) $_GET['eventful'],$_GET['scope']);
       die();
    }
 }
 
 function eme_global_map_json($eventful = false, $scope = "all") {
    $json = '{"locations":[';
-   $locations = eme_get_locations($eventful,$scope);
+   $locations = eme_get_locations((bool) $eventful,$scope);
    $json_locations = array();
    foreach($locations as $location) {
       $json_location = array();

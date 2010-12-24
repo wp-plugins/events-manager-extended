@@ -343,7 +343,7 @@ function eme_get_locations($eventful = false, $scope="all") {
    // for the query: we don't do "SELECT *" because the data returned from this function is also used in the function eme_global_map_json()
    // and some fields from the events table contain carriage returns, which can't be passed along
    // The function eme_global_map_json tries to remove these, but the data is not needed and better be safe than sorry
-   if ($eventful == 'true') {
+   if ($eventful) {
       $sql = "SELECT $locations_table.* from $locations_table JOIN $events_table ON $locations_table.location_id = $events_table.location_id WHERE $events_table.event_status in (1,2) AND $locations_table.location_name != '' $condition";
    } else {
       $sql = "SELECT * FROM $locations_table WHERE location_name != '' ORDER BY location_name";
@@ -510,6 +510,7 @@ function eme_global_map($atts) {
          'width' => 450,
          'height' => 300
       ), $atts));
+   $eventful = (bool) $eventful;
    $events_page_link = eme_get_events_page(true, false);
    if (stristr($events_page_link, "?"))
       $joiner = "&amp;";
