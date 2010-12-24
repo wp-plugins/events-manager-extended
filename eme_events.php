@@ -410,7 +410,7 @@ function eme_options_subpanel() {
 <h3><?php _e ( 'Events page', 'eme' ); ?></h3>
 <table class="form-table">
    <?php
-   eme_options_select ( __ ( 'Events page' ), 'eme_events_page', eme_get_all_pages (), __ ( 'This option allows you to select which page to use as an events page.', 'eme' )."<br/><strong>".__ ( 'The content of this pagea (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data.','eme' )."</strong>" );
+   eme_options_select ( __ ( 'Events page' ), 'eme_events_page', eme_get_all_pages (), __ ( 'This option allows you to select which page to use as an events page.', 'eme' )."<br/><strong>".__ ( 'The content of this page (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data.','eme' )."</strong>" );
    eme_options_radio_binary ( __ ( 'Show events page in lists?', 'eme' ), 'eme_list_events_page', __ ( 'Check this option if you want the events page to appear together with other pages in pages lists.', 'eme' )."<br/><strong>".__ ( 'This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended.', 'eme' )."</strong>" ); 
    eme_options_radio_binary ( __ ( 'Display calendar in events page?', 'eme' ), 'eme_display_calendar_in_events_page', __ ( 'This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page.','eme' ) );
    ?>
