@@ -670,7 +670,7 @@ InfoBox.prototype.close = function () {
 					mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
 				},
 				mapTypeId: google.maps.MapTypeId.ROADMAP
-			}
+			};
 			var map = new google.maps.Map(document.getElementById("eme_global_map"), myOptions);
 			//var infowindow = new google.maps.InfoWindow();
 			var infowindow = new InfoBox(myBalloonOptions);
@@ -761,7 +761,7 @@ InfoBox.prototype.close = function () {
 	var divs = document.getElementsByTagName('div');
 	for (var i = 0; i < divs.length; i++) {
 		divname = divs[i].id; 
-		if(divname.indexOf("eme-location-map_") == 0) { 
+		if(divname.indexOf("eme-location-map_") === 0) { 
 			var map_id = divname.replace("eme-location-map_","");
 			var lat_id = window['latitude_'+map_id]; 
 			var lon_id = window['longitude_'+map_id]; 

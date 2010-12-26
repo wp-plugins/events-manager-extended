@@ -31,7 +31,7 @@ function loadGMap() {
 					mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
 				},
 				mapTypeId: google.maps.MapTypeId.ROADMAP
-			}
+			};
 			var map = new google.maps.Map(document.getElementById("eme_global_map"), myOptions);
 			var infowindow = new google.maps.InfoWindow();
 
@@ -64,7 +64,7 @@ function loadGMap() {
 			//console.log(locationsBound);
 			map.fitBounds(locationsBound);
 			map.setCenter(new google.maps.LatLng(center_lat + vertical_compensation,center_lon)); 
-			var letters = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O');
+			var letters = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 
 			$j_eme_locations.each(locations, function(i, item) {
 				var letter = letters[i];
@@ -121,7 +121,7 @@ function loadGMap() {
 	var divs = document.getElementsByTagName('div');
 	for (var i = 0; i < divs.length; i++) {
 		divname = divs[i].id; 
-		if(divname.indexOf("eme-location-map_") == 0) { 
+		if(divname.indexOf("eme-location-map_") === 0) { 
 			var map_id = divname.replace("eme-location-map_","");
 			var lat_id = window['latitude_'+map_id]; 
 			var lon_id = window['longitude_'+map_id]; 
