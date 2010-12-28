@@ -46,8 +46,8 @@ function eme_people_page() {
 add_action('init','eme_ajax_actions'); 
 function eme_ajax_actions() {
    if (isset($_GET['eme_ajax_action']) && $_GET['eme_ajax_action'] == 'booking_data') {
-      if (isset($_GET['id']))
-         echo "[ {bookedSeats:".eme_get_booked_seats(intval($_GET['id'])).", availableSeats:".eme_get_available_seats(intval($_GET['id']))."}]"; 
+      if (isset($_GET['event_id']))
+         echo "[ {bookedSeats:".eme_get_booked_seats(intval($_GET['event_id'])).", availableSeats:".eme_get_available_seats(intval($_GET['event_id']))."}]"; 
       die();
    }
    if (isset($_GET['action']) && $_GET['action'] == 'printable'){
