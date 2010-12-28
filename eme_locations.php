@@ -503,33 +503,38 @@ function eme_delete_image_files_for_location_id($location_id) {
 }
 
 function eme_global_map($atts) {
-   if (get_option('eme_gmap_is_active') == '1') {
-   extract(shortcode_atts(array(
-         'eventful' => "false",
-         'scope' => 'all',
-         'width' => 450,
-         'height' => 300
-      ), $atts));
-   $eventful = (bool) $eventful;
-   $events_page_link = eme_get_events_page(true, false);
-   if (stristr($events_page_link, "?"))
-      $joiner = "&amp;";
-   else
-      $joiner = "?";
+   global $eme_need_gmap_js;
 
-   $result = "";
-   $result .= "<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
-   $result .= "<script type='text/javascript'>
-   <!--// 
-     eventful = $eventful;
-     scope = '$scope';
-     events_page_link = '$events_page_link';
-     joiner = '$joiner'
-   //-->
-   </script>";
-   //$result .= "<script src='".EME_PLUGIN_URL."eme_global_map.js' type='text/javascript'></script>";
-   $result .= "<ol id='eme_locations_list'></ol>"; 
-   
+   if (get_option('eme_gmap_is_active') == '1') {
+      // the locations shortcode has been deteced, so we indicate
+      // that we want the javascript in the footer as well
+      $eme_need_gmap_js=1;
+      extract(shortcode_atts(array(
+                  'eventful' => "false",
+                  'scope' => 'all',
+                  'width' => 450,
+                  'height' => 300
+                  ), $atts));
+      $eventful = (bool) $eventful;
+      $events_page_link = eme_get_events_page(true, false);
+      if (stristr($events_page_link, "?"))
+         $joiner = "&amp;";
+      else
+         $joiner = "?";
+
+      $result = "";
+      $result .= "<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
+      $result .= "<script type='text/javascript'>
+         <!--// 
+         eventful = $eventful;
+      scope = '$scope';
+      events_page_link = '$events_page_link';
+      joiner = '$joiner'
+         //-->
+         </script>";
+      //$result .= "<script src='".EME_PLUGIN_URL."eme_global_map.js' type='text/javascript'></script>";
+      $result .= "<ol id='eme_locations_list'></ol>"; 
+
    } else {
       $result = "";
    }
