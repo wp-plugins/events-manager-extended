@@ -311,44 +311,35 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
    echo ob_get_clean();
 }
 
-function eme_get_locations($eventful = false, $scope="all") { 
+function eme_get_locations($eventful = false, $scope="all", $category = '') { 
    global $wpdb;
    $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
-
-   $tzstring = get_option('timezone_string');
-   if (!empty($tzstring) ) {
-      @date_default_timezone_set ($tzstring);
-   }
-
-        $timestamp = time ();
-        $date_time_array = getdate ( $timestamp );
-        $hours = $date_time_array ['hours'];
-        $minutes = $date_time_array ['minutes'];
-        $seconds = $date_time_array ['seconds'];
-        $month = $date_time_array ['mon'];
-        $day = $date_time_array ['mday'];
-        $year = $date_time_array ['year'];
-        $today = strftime ( '%Y-%m-%d', mktime ( $hours, $minutes, $seconds, $month, $day, $year ) );
-
-        $condition = "";
-   if (($scope != "past") && ($scope != "all") && ($scope != "future"))
-      $scope = "future";
-   if ($scope == "future")
-      //This is so events with future dates are counted too
-      $condition = "AND ($events_table.event_start_date >= '$today' OR ($events_table.event_end_date >= '$today' AND $events_table.event_end_date != '0000-00-00' AND $events_table.event_end_date IS NOT NULL))";
-   if ($scope == "past")
-      $condition = "AND $events_table.event_start_date < '$today'";
+   $locations = array();
 
    // for the query: we don't do "SELECT *" because the data returned from this function is also used in the function eme_global_map_json()
    // and some fields from the events table contain carriage returns, which can't be passed along
    // The function eme_global_map_json tries to remove these, but the data is not needed and better be safe than sorry
    if ($eventful) {
-      $sql = "SELECT $locations_table.* from $locations_table JOIN $events_table ON $locations_table.location_id = $events_table.location_id WHERE $events_table.event_status in (1,2) AND $locations_table.location_name != '' $condition";
+      $events = eme_get_events(0, $scope, "ASC", 0, "", $category);
+      foreach ($events as $event) {
+         $location_id=$event['location_id'];
+         if ($location_id && $event['location_name'] != "") {
+            $this_location = array();
+            $this_location['location_id'] = $location_id;
+            $this_location['location_name'] = $event['location_name'];
+            $this_location['location_address'] = $event['location_address'];
+            $this_location['location_town'] = $event['location_town'];
+            $this_location['location_latitude'] = $event['location_latitude'];
+            $this_location['location_longitude'] = $event['location_longitude'];
+            $this_location['location_description'] = $event['location_description'];
+            $locations[$location_id]=$this_location;
+         }
+      }
    } else {
       $sql = "SELECT * FROM $locations_table WHERE location_name != '' ORDER BY location_name";
+      $locations = $wpdb->get_results($sql, ARRAY_A); 
    }
-   $locations = $wpdb->get_results($sql, ARRAY_A); 
    return $locations;
 }
 
@@ -512,6 +503,7 @@ function eme_global_map($atts) {
       extract(shortcode_atts(array(
                   'eventful' => "false",
                   'scope' => 'all',
+                  'category' => '',
                   'width' => 450,
                   'height' => 300
                   ), $atts));
@@ -528,6 +520,7 @@ function eme_global_map($atts) {
          <!--// 
          eventful = $eventful;
       scope = '$scope';
+      category = '$category';
       events_page_link = '$events_page_link';
       joiner = '$joiner'
          //-->

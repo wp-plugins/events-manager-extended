@@ -13,7 +13,7 @@ function loadGMap() {
 	// first the global map (if present)
 	if (document.getElementById("eme_global_map")) {
 		var locations;
-		$j_eme_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope}, function(data) {
+		$j_eme_locations.getJSON(document.URL,{ajax: 'true', query:'GlobalMapData', eventful:eventful, scope:scope, category:category}, function(data) {
 			locations = data.locations;
 			var latitudes = new Array();
 			var longitudes = new Array();

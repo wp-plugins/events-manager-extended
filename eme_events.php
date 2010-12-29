@@ -1134,9 +1134,10 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
          
          if ($this_event ['location_id'] ) {
             $this_location = eme_get_location ( $this_event ['location_id'] );
-            $this_event ['location_name'] = $this_location ['location_name'];
-            $this_event ['location_address'] = $this_location ['location_address'];
-            $this_event ['location_town'] = $this_location ['location_town'];
+            // add all location info to the event
+            foreach ($this_location as $key => $value) {
+               $this_event [$key] = $value;
+            }
          }
 
          $this_event ['event_attributes'] = @unserialize($this_event ['event_attributes']);
