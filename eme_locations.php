@@ -311,7 +311,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
    echo ob_get_clean();
 }
 
-function eme_get_locations($eventful = false, $scope="all", $category = '') { 
+function eme_get_locations($eventful = false, $scope="all", $category = '', $offset = 0) { 
    global $wpdb;
    $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
@@ -321,7 +321,7 @@ function eme_get_locations($eventful = false, $scope="all", $category = '') {
    // and some fields from the events table contain carriage returns, which can't be passed along
    // The function eme_global_map_json tries to remove these, but the data is not needed and better be safe than sorry
    if ($eventful) {
-      $events = eme_get_events(0, $scope, "ASC", 0, "", $category);
+      $events = eme_get_events(0, $scope, "ASC", $offset, "", $category);
       foreach ($events as $event) {
          $location_id=$event['location_id'];
          if ($location_id && $event['location_name'] != "") {
@@ -503,6 +503,7 @@ function eme_global_map($atts) {
       extract(shortcode_atts(array(
                   'eventful' => "false",
                   'scope' => 'all',
+                  'paging' => 0,
                   'category' => '',
                   'width' => 450,
                   'height' => 300
@@ -514,12 +515,44 @@ function eme_global_map($atts) {
       else
          $joiner = "?";
 
+      // for browsing: if paging=1 and only for this_week,this_month or today
+      if ($paging==1) {
+         $scope_offset=0;
+         if (isset($_GET['eme_offset']))
+            $scope_offset=$_GET['eme_offset'];
+         $prev_offset=$scope_offset-1;
+         $next_offset=$scope_offset+1;
+         if ($scope=="this_week") {
+            $scope = date('Y-m-d',strtotime("last Sunday $scope_offset weeks"))."--".date('Y-m-d',strtotime("next Saturday $scope_offset weeks"));
+         }
+         if ($scope=="this_month") {
+            $number_of_days_month=eme_days_in_month($month,$year);
+            $scope = date('Y-m-d',strtotime("first day of this month $scope_offset months"))."--".date('Y-m-d',strtotime("last day of this month $scope_offset months"));
+         }
+         if ($scope=="today") {
+            $scope = date('Y-m-d',strtotime("$scope_offset days"));
+         }
+      }
+
       $result = "";
       $result .= "<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
+      if ($paging==1 && $limit==0) {
+         $result .= "<div id='locations-pagination-top'> ";
+         $this_page_url=get_permalink($post->ID);
+         if (stristr($this_page_url, "?"))
+            $joiner = "&amp;";
+         else
+            $joiner = "?";
+         $result.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt;</a>";
+         $result.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>&gt;&gt;</a>";
+         $result.= "</div>";
+      }
+
       $result .= "<script type='text/javascript'>
          <!--// 
          eventful = $eventful;
       scope = '$scope';
+      offset = '$offset';
       category = '$category';
       events_page_link = '$events_page_link';
       joiner = '$joiner'

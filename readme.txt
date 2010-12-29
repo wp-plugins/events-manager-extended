@@ -351,7 +351,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added long_events to eme_events (shortcode and template function) as well
 * Feature: scope=this_week now possible for shortcode [events_list]
 * Feature: period paging is now possible if you use paging=1, limit=0 and scope=today,this_week,this_month in the [events_list] shortcode. Eg:
-  [events_list paging=1 limit=0 scope=this_week]
+* Feature: period paging is now possible if you use eventful=true, paging=1 and scope=today,this_week,this_month in the [locations_map] shortcode. Eg:
+  [locations_map eventful=true paging=1 scope=this_week]
 * Feature: new placeholder #_PAST_FUTURE_CLASS, returning a string that indicates wether this event is in the future or not (eme-future-event or eme-past-event), can be used as extra CSS to the event list 
 * Feature: shortcode [locations_map] can now use the same values for scope and category as the shortcode [events_list], these are only honoured if the parameter eventful=true
 * Improvement: the google map javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top

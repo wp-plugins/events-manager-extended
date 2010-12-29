@@ -740,7 +740,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $scope = "future";
    if ($order != "DESC")
       $order = "ASC";
-   if ($format == ''){
+   if ($format == '') {
       $orig_format = true;
       $format = get_option('eme_event_list_item_format' );
    } else {
@@ -755,19 +755,19 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    // for browsing: if limit=0,paging=1 and only for this_week,this_month or today
    if ($limit==0 && $paging==1) {
       $scope_offset=0;
-	if (isset($_GET['eme_offset']))
-	   $scope_offset=$_GET['eme_offset'];
-	$prev_offset=$scope_offset-1;
-	$next_offset=$scope_offset+1;
+      if (isset($_GET['eme_offset']))
+         $scope_offset=$_GET['eme_offset'];
+      $prev_offset=$scope_offset-1;
+      $next_offset=$scope_offset+1;
       if ($scope=="this_week") {
-	$scope = date('Y-m-d',strtotime("last Sunday $scope_offset weeks"))."--".date('Y-m-d',strtotime("next Saturday $scope_offset weeks"));
+         $scope = date('Y-m-d',strtotime("last Sunday $scope_offset weeks"))."--".date('Y-m-d',strtotime("next Saturday $scope_offset weeks"));
       }
       if ($scope=="this_month") {
-        $number_of_days_month=eme_days_in_month($month,$year);
-	$scope = date('Y-m-d',strtotime("first day of this month $scope_offset months"))."--".date('Y-m-d',strtotime("last day of this month $scope_offset months"));
+         $number_of_days_month=eme_days_in_month($month,$year);
+         $scope = date('Y-m-d',strtotime("first day of this month $scope_offset months"))."--".date('Y-m-d',strtotime("last day of this month $scope_offset months"));
       }
       if ($scope=="today") {
-	$scope = date('Y-m-d',strtotime("$scope_offset days"));
+         $scope = date('Y-m-d',strtotime("$scope_offset days"));
       }
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
