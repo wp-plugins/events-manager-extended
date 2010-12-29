@@ -621,6 +621,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
    global $eme_need_gmap_js;
    // first we do the custom attributes, since these can contain other placeholders
    preg_match_all("/#_ATT\{.+?\}(\{.+?\})?/", $format, $results);
+   // make sure we set the largest matched placeholders first, otherwise if you found e.g.
+   // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
+   usort($results[0],'sort_stringlenth');
    foreach($results[0] as $resultKey => $result) {
       //Strip string of placeholder and just leave the reference
       $attRef = substr( substr($result, 0, strpos($result, '}')), 6 );
@@ -641,6 +644,10 @@ function eme_replace_placeholders($format, $event, $target="html") {
    $event_string = $format;
    $rsvp_is_active = get_option('eme_rsvp_enabled'); 
    preg_match_all("/#@?_?[A-Za-z0-9]+/", $format, $placeholders);
+   // make sure we set the largest matched placeholders first, otherwise if you found e.g.
+   // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
+   usort($placeholders[0],'sort_stringlenth');
+
    foreach($placeholders[0] as $result) {
       // matches all fields placeholder
       if (preg_match('/#_EDITEVENTLINK$/', $result)) { 
@@ -927,6 +934,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
    // for extra date formatting, eg. #_{d/m/Y}
    preg_match_all("/#@?_\{[A-Za-z0-9 -\/,\.\\\]+\}/", $format, $results);
+   // make sure we set the largest matched placeholders first, otherwise if you found e.g.
+   // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
+   usort($results[0],'sort_stringlenth');
    foreach($results[0] as $result) {
       if(substr($result, 0, 3 ) == "#@_") {
          $date = "event_start_date";
@@ -966,6 +976,11 @@ function eme_sanitize_request( $value ) {
 function escapeMe(&$val) {
    $val = mysql_real_escape_string($val);
 }
+
+function sort_stringlenth($a,$b){
+   return strlen($b)-strlen($a);
+}
+
 
 function eme_trans_sanitize_html( $value, $do_convert=1 ) {
    if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);

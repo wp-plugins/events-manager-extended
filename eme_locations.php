@@ -538,6 +538,10 @@ add_shortcode('locations_map', 'eme_global_map');
 function eme_replace_locations_placeholders($format, $location, $target="html") {
    $location_string = $format;
    preg_match_all("/#@?_?[A-Za-z]+/", $format, $placeholders);
+   // make sure we set the largest matched placeholders first, otherwise if you found e.g.
+   // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
+   usort($placeholders[0],'sort_stringlenth');
+
    foreach($placeholders[0] as $result) {
       // echo "RESULT: $result <br>";
       // matches alla fields placeholder
