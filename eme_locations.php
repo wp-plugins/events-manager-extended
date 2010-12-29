@@ -536,6 +536,7 @@ function eme_global_map($atts) {
 add_shortcode('locations_map', 'eme_global_map'); 
 
 function eme_replace_locations_placeholders($format, $location, $target="html") {
+   global $eme_need_gmap_js;
    $location_string = $format;
    preg_match_all("/#@?_?[A-Za-z]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
@@ -548,6 +549,10 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       if (preg_match('/#_MAP$/', $result)) {
          $map_div = eme_single_location_map($location);
          $location_string = str_replace($result, $map_div , $location_string ); 
+         // we found a map (that is not empty), so we need to include the javascript to show it
+         if ($map_div)
+            $eme_need_gmap_js=1;
+
       }
 //    if (preg_match('/#_GOOGLEDIRECTIONS/', $result)) {
 //       $google_directions = "Get Directions";
