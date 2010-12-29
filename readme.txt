@@ -342,7 +342,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
   (see the FAQ section)  
 * Deprecated: the use of 'myown.css' in the plugin dir (use 'eme.css' in your theme CSS dir)
 
-= 3.2.12 =
+= 3.2.13 =
 * Bugfix: showperiod works correctly again
 * Bugfix: paging count in events_list was wrong if you used paging=1 and showperiod options together
 * Bugfix: re-added missing template function eme_is_event_rsvpable
