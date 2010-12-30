@@ -231,15 +231,15 @@ function eme_book_seats() {
          if (!$booker) {
             $booker = eme_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id);
          }
-      eme_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
+         eme_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
       
-      $result = __('Your booking has been recorded','eme');
-      $mailing_is_active = get_option('eme_rsvp_mail_notify_is_active');
-      if($mailing_is_active) {
-         eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,"");
-      } 
+         $result = __('Your booking has been recorded','eme');
+         $mailing_is_active = get_option('eme_rsvp_mail_notify_is_active');
+         if($mailing_is_active) {
+            eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,"");
+         } 
       } else {
-      $result = __('Booking cannot be made: not enough seats available!', 'eme');
+         $result = __('Booking cannot be made: not enough seats available!', 'eme');
       }
    }
    return $result;
