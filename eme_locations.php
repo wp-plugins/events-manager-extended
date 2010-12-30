@@ -322,18 +322,20 @@ function eme_get_locations($eventful = false, $scope="all", $category = '', $off
    // The function eme_global_map_json tries to remove these, but the data is not needed and better be safe than sorry
    if ($eventful) {
       $events = eme_get_events(0, $scope, "ASC", $offset, "", $category);
-      foreach ($events as $event) {
-         $location_id=$event['location_id'];
-         if ($location_id && $event['location_name'] != "") {
-            $this_location = array();
-            $this_location['location_id'] = $location_id;
-            $this_location['location_name'] = $event['location_name'];
-            $this_location['location_address'] = $event['location_address'];
-            $this_location['location_town'] = $event['location_town'];
-            $this_location['location_latitude'] = $event['location_latitude'];
-            $this_location['location_longitude'] = $event['location_longitude'];
-            $this_location['location_description'] = $event['location_description'];
-            $locations[$location_id]=$this_location;
+      if ($events) {
+         foreach ($events as $event) {
+            $location_id=$event['location_id'];
+            if ($location_id && $event['location_name'] != "") {
+               $this_location = array();
+               $this_location['location_id'] = $location_id;
+               $this_location['location_name'] = $event['location_name'];
+               $this_location['location_address'] = $event['location_address'];
+               $this_location['location_town'] = $event['location_town'];
+               $this_location['location_latitude'] = $event['location_latitude'];
+               $this_location['location_longitude'] = $event['location_longitude'];
+               $this_location['location_description'] = $event['location_description'];
+               $locations[$location_id]=$this_location;
+            }
          }
       }
    } else {
