@@ -528,8 +528,13 @@ function eme_global_map($atts) {
             $scope = date('Y-m-d',strtotime("last Sunday $scope_offset weeks"))."--".date('Y-m-d',strtotime("next Saturday $scope_offset weeks"));
          }
          if ($scope=="this_month") {
+            // "first day of this month, last day of this month" works for newer versions of php (5.3+), but for compatibility:
+            $year=date('Y', strtotime("+$scope_offset month"));
+            $month=date('m', strtotime("+$scope_offset month"));
             $number_of_days_month=eme_days_in_month($month,$year);
-            $scope = date('Y-m-d',strtotime("first day of this month $scope_offset months"))."--".date('Y-m-d',strtotime("last day of this month $scope_offset months"));
+            $limit_start = "$year-$month-01";
+            $limit_end   = "$year-$month-$number_of_days_month";
+            $scope = "$limit_start--$limit_end";
          }
          if ($scope=="today") {
             $scope = date('Y-m-d',strtotime("$scope_offset days"));

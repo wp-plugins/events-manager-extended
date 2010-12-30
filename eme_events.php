@@ -769,8 +769,13 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $scope = date('Y-m-d',strtotime("last Sunday $scope_offset weeks"))."--".date('Y-m-d',strtotime("next Saturday $scope_offset weeks"));
       }
       if ($scope=="this_month") {
+         // "first day of this month, last day of this month" works for newer versions of php (5.3+), but for compatibility:
+         $year=date('Y', strtotime("+$scope_offset month"));
+         $month=date('m', strtotime("+$scope_offset month"));
          $number_of_days_month=eme_days_in_month($month,$year);
-         $scope = date('Y-m-d',strtotime("first day of this month $scope_offset months"))."--".date('Y-m-d',strtotime("last day of this month $scope_offset months"));
+         $limit_start = "$year-$month-01";
+         $limit_end   = "$year-$month-$number_of_days_month";
+         $scope = "$limit_start--$limit_end";
       }
       if ($scope=="today") {
          $scope = date('Y-m-d',strtotime("$scope_offset days"));
@@ -1025,7 +1030,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $year=date('Y');
       $month=$matches[1];
       $number_of_days_month=eme_days_in_month($month,$year);
-      $limit_start = "$year-$month-00";
+      $limit_start = "$year-$month-01";
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif ($scope == "this_week") {
@@ -1036,14 +1041,14 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $year=date('Y');
       $month=date('m');
       $number_of_days_month=eme_days_in_month($month,$year);
-      $limit_start = "$year-$month-00";
+      $limit_start = "$year-$month-01";
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif ($scope == "next_month") {
       $year=date('Y', strtotime("+1 month"));
       $month=date('m', strtotime("+1 month"));
       $number_of_days_month=eme_days_in_month($month,$year);
-      $limit_start = "$year-$month-00";
+      $limit_start = "$year-$month-01";
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
