@@ -348,6 +348,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: re-added missing template function eme_is_event_rsvpable
 * Bugfix: eventful can now be a boolean (true/false) next to 1/0
 * Bugfix: finally a good method to match all placeholders and not ending up replacing e.g. #_LOCATION in #_LOCATIONPAGEURL by something not wanted
+* Bugfix: monthly offsets needs to be calculated based on the first day of the current month, not the current day, otherwise if we're now on the 31st we'll skip next month since it has only 30 days
 * Workaround: work around a bug in wordpress phpmailer, where it searches for class-smtp.php in the wrong location
 * Feature: added long_events to eme_events (shortcode and template function) as well
 * Feature: scope=this_week now possible for shortcode [events_list]

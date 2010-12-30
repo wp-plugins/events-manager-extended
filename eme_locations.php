@@ -529,8 +529,12 @@ function eme_global_map($atts) {
          }
          if ($scope=="this_month") {
             // "first day of this month, last day of this month" works for newer versions of php (5.3+), but for compatibility:
-            $year=date('Y', strtotime("+$scope_offset month"));
-            $month=date('m', strtotime("+$scope_offset month"));
+            // the year/month should be based on the first of the month, so if we are the 13th, we substract 12 days to get to day 1
+            // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
+            //    otherwise if we're now on the 31st we'll skip next month since it has only 30 days
+            $day_offset=date('j')-1;
+            $year=date('Y', strtotime("+$scope_offset month")-$day_offset*86400);
+            $month=date('m', strtotime("+$scope_offset month")-$day_offset*86400);
             $number_of_days_month=eme_days_in_month($month,$year);
             $limit_start = "$year-$month-01";
             $limit_end   = "$year-$month-$number_of_days_month";
