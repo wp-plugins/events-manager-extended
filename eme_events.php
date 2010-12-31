@@ -114,7 +114,7 @@ function eme_events_subpanel() {
       }
       
       $events = eme_get_events ( 21, "future", $order, $offset );
-      eme_events_table ( $events, 20, "Future events", "future", $offset );
+      eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
    }
 
    // UPDATE or CREATE action
@@ -294,7 +294,7 @@ function eme_events_subpanel() {
          //$wpdb->query($sql); 
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
          $events = eme_get_events ( 21, "future" );
-         eme_events_table ( $events, 20, "Future events", "future", $offset );
+         eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
       } else {
          // validation unsuccessful       
          echo "<div id='message' class='error '>
@@ -318,7 +318,7 @@ function eme_events_subpanel() {
             $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
             echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
             $events = eme_get_events ( 21, "future" );
-            eme_events_table ( $events, 20, "Future events", "future", $offset );
+            eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
          }
       }
       
@@ -334,7 +334,7 @@ function eme_events_subpanel() {
          $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
          $events = eme_get_events ( 21, "future" );
-         eme_events_table ( $events, 20, "Future events", "future", $offset );
+         eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
       }
    }
    if ($action == 'edit_recurrence') {
@@ -348,7 +348,7 @@ function eme_events_subpanel() {
          $feedback_message = __('You have no right to update','eme'). " '" . $recurrence ['event_name'] . "' !";
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
          $events = eme_get_events ( 21, "future" );
-         eme_events_table ( $events, 20, "Future events", "future", $offset );
+         eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
       }
    }
    
