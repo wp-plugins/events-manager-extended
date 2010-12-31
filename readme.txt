@@ -359,3 +359,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: shortcode [locations_map] can now use the same values for scope and category as the shortcode [events_list], these are only honoured if the parameter eventful=true
 * Improvement: the google map javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
 * Improvement: show the database error if event inserting fails
+* Improvement: the zoomlevel was not correct on the [locations_map] shortcode: due to map.fitbounds, the map zoomed out too much if there were no markers, or zoomed in too much if only one marker
