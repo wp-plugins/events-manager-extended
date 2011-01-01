@@ -555,18 +555,20 @@ function eme_global_map($atts) {
       }
 
       $result = "";
-      $result .= "<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
+      // get the paging output ready
+      $pagination_top = "<div id='locations-pagination-top'> ";
       if ($paging==1 && $limit==0) {
-         $result .= "<div id='locations-pagination-top'> ";
          $this_page_url=get_permalink($post->ID);
          if (stristr($this_page_url, "?"))
             $joiner = "&amp;";
          else
             $joiner = "?";
-         $result.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
-         $result.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
-         $result.= "</div>";
+         $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
+         $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
       }
+      $pagination_top.= "</div>";
+      $pagination_bottom = str_replace("locations-pagination-top","locations-pagination-bottom",$pagination_top);
+      $result .= $pagination_top."<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>".$pagination_bottom;
 
       $result .= "<script type='text/javascript'>
          <!--// 
