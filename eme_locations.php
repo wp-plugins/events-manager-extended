@@ -525,7 +525,12 @@ function eme_global_map($atts) {
          $prev_offset=$scope_offset-1;
          $next_offset=$scope_offset+1;
          if ($scope=="this_week") {
-            $scope = date('Y-m-d',strtotime("last Sunday $scope_offset weeks"))."--".date('Y-m-d',strtotime("next Saturday $scope_offset weeks"));
+            $day_offset=date('w');
+            $start_day=time()-$day_offset*86400;
+            $end_day=$start_day+6*86400;
+            $scope = date('Y-m-d',$start_day+$scope_offset*7*86400)."--".date('Y-m-d',$end_day+$scope_offset*7*86400);
+            $prev_text = date_i18n (get_option('date_format'),$start_day+$prev_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$prev_offset*7*86400);
+            $next_text = date_i18n (get_option('date_format'),$start_day+$next_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$next_offset*7*86400);
          }
          if ($scope=="this_month") {
             // "first day of this month, last day of this month" works for newer versions of php (5.3+), but for compatibility:
@@ -533,15 +538,19 @@ function eme_global_map($atts) {
             // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
             //    otherwise if we're now on the 31st we'll skip next month since it has only 30 days
             $day_offset=date('j')-1;
-            $year=date('Y', strtotime("+$scope_offset month")-$day_offset*86400);
-            $month=date('m', strtotime("+$scope_offset month")-$day_offset*86400);
+            $year=date('Y', strtotime("$scope_offset month")-$day_offset*86400);
+            $month=date('m', strtotime("$scope_offset month")-$day_offset*86400);
             $number_of_days_month=eme_days_in_month($month,$year);
             $limit_start = "$year-$month-01";
             $limit_end   = "$year-$month-$number_of_days_month";
             $scope = "$limit_start--$limit_end";
+            $prev_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$prev_offset month")-$day_offset*86400);
+            $next_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$next_offset month")-$day_offset*86400);
          }
          if ($scope=="today") {
             $scope = date('Y-m-d',strtotime("$scope_offset days"));
+            $prev_text = date_i18n (get_option('date_format'), strtotime("$prev_offset days"));
+            $next_text = date_i18n (get_option('date_format'), strtotime("$next_offset days"));
          }
       }
 
@@ -554,8 +563,8 @@ function eme_global_map($atts) {
             $joiner = "&amp;";
          else
             $joiner = "?";
-         $result.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt;</a>";
-         $result.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>&gt;&gt;</a>";
+         $result.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
+         $result.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
          $result.= "</div>";
       }
 

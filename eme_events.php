@@ -419,13 +419,13 @@ function eme_options_subpanel() {
 <table class="form-table">
    <?php
    eme_options_radio_binary ( __ ( 'Remove leading zeros from minutes?', 'eme' ), 'eme_time_remove_leading_zeros', __ ( 'PHP date/time functions have no notation to show minutes without leading zeros. Checking this option will return eg. 9 for 09 and empty for 00.', 'eme' ) ); 
-   eme_options_textarea ( __ ( 'Default event list format header', 'eme' ), 'eme_event_list_item_format_header', __( 'This content will appear just above your code for the default event list format. Default is <code>&lt;ul class=\'eme_events_list\'&gt;</code>', 'eme' ) );
+   eme_options_textarea ( __ ( 'Default event list format header', 'eme' ), 'eme_event_list_item_format_header', __( 'This content will appear just above your code for the default event list format. If you leave this empty, the value <code>&lt;ul class=\'eme_events_list\'&gt;</code> will be used.', 'eme' ) );
    eme_options_textarea ( __ ( 'Default event list format', 'eme' ), 'eme_event_list_item_format', __ ( 'The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a <code>&lt;!&ndash;&ndash;more&ndash;&ndash;&gt;</code> marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href="http://www.php.net/manual/en/function.date.php">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM starttime/endtime notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event.', 'eme' )."<br>".__('Use <code>#_PAST_FUTURE_CLASS</code> to return a class name indicating this event is future or past (<code>eme-future-event</code> or <code>eme-past-event</code>), use the returned value in eg. the li-statement for each event in the list of events','eme') );
-   eme_options_textarea ( __ ( 'Default event list format footer', 'eme' ), 'eme_event_list_item_format_footer', __ ( 'This content will appear just below your code for the default event list format. Default is <code>&lt;/ul&gt;</code>', 'eme' ) );
+   eme_options_textarea ( __ ( 'Default event list format footer', 'eme' ), 'eme_event_list_item_format_footer', __ ( 'This content will appear just below your code for the default event list format. If you leave this empty, the value <code>&lt;/ul&gt;</code> will be used.', 'eme' ) );
 
    eme_options_input_text ( __ ( 'Single event page title format', 'eme' ), 'eme_event_page_title_format', __ ( 'The format of a single event page title. Follow the previous formatting instructions.', 'eme' ) );
    eme_options_textarea ( __ ( 'Default single event format', 'eme' ), 'eme_single_event_format', __ ( 'The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings.', 'eme' ).__('<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask directions to the event.','eme').__('<br/> Use <code>#_CATEGORIES</code> to insert a comma seperated list of categories an event is in.','eme').__('<br/> Use <code>#_ATTENDEES</code> to get a list of the names attending the event.','eme') );
-   eme_options_input_text ( __ ( 'Monthly period date format', 'eme' ), 'eme_show_period_monthly_dateformat', __ ( 'The format of the datestring used when you use showperiod=monthly as an option to &#91;the events_list] shortcode. Use php date() compatible settings.', 'eme') . __( ' The default is: '). DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT );
+   eme_options_input_text ( __ ( 'Monthly period date format', 'eme' ), 'eme_show_period_monthly_dateformat', __ ( 'The format of the datestring used when you use showperiod=monthly as an option to &#91;the events_list] shortcode, also used for monthly pagination. Use php date() compatible settings.', 'eme') . __( ' The default is: '). DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT );
    eme_options_input_text ( __ ( 'Events page title', 'eme' ), 'eme_events_page_title', __ ( 'The title on the multiple events page.', 'eme' ) );
    eme_options_input_text ( __ ( 'No events message', 'eme' ), 'eme_no_events_message', __ ( 'The message displayed when no events are available.', 'eme' ) );
    ?>
@@ -766,7 +766,12 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $prev_offset=$scope_offset-1;
       $next_offset=$scope_offset+1;
       if ($scope=="this_week") {
-         $scope = date('Y-m-d',strtotime("last Sunday $scope_offset weeks"))."--".date('Y-m-d',strtotime("next Saturday $scope_offset weeks"));
+         $day_offset=date('w');
+         $start_day=time()-$day_offset*86400;
+         $end_day=$start_day+6*86400;
+         $scope = date('Y-m-d',$start_day+$scope_offset*7*86400)."--".date('Y-m-d',$end_day+$scope_offset*7*86400);
+         $prev_text = date_i18n (get_option('date_format'),$start_day+$prev_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$prev_offset*7*86400);
+         $next_text = date_i18n (get_option('date_format'),$start_day+$next_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$next_offset*7*86400);
       }
       if ($scope=="this_month") {
          // "first day of this month, last day of this month" works for newer versions of php (5.3+), but for compatibility:
@@ -774,15 +779,19 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
          //    otherwise if we're now on the 31st we'll skip next month since it has only 30 days
          $day_offset=date('j')-1;
-         $year=date('Y', strtotime("+$scope_offset month")-$day_offset*86400);
-         $month=date('m', strtotime("+$scope_offset month")-$day_offset*86400);
+         $year=date('Y', strtotime("$scope_offset month")-$day_offset*86400);
+         $month=date('m', strtotime("$scope_offset month")-$day_offset*86400);
          $number_of_days_month=eme_days_in_month($month,$year);
          $limit_start = "$year-$month-01";
          $limit_end   = "$year-$month-$number_of_days_month";
          $scope = "$limit_start--$limit_end";
+         $prev_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$prev_offset month")-$day_offset*86400);
+         $next_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$next_offset month")-$day_offset*86400);
       }
       if ($scope=="today") {
          $scope = date('Y-m-d',strtotime("$scope_offset days"));
+         $prev_text = date_i18n (get_option('date_format'), strtotime("$prev_offset days"));
+         $next_text = date_i18n (get_option('date_format'), strtotime("$next_offset days"));
       }
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
@@ -805,8 +814,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $forward = $offset + $limit;
          $backward = $offset - $limit;
          if ($backward >= 0)
-            $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
-         $pagination_top.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
+            $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+         $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
       }
       if ($events_count <= $limit && $offset>0) {
          $backward = $offset - $limit;
@@ -820,8 +829,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $joiner = "&amp;";
       else
          $joiner = "?";
-      $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt;</a>";
-      $pagination_top.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>&gt;&gt;</a>";
+      $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
+      $pagination_top.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
    }
    $pagination_top.= "</div>";
    $pagination_bottom = str_replace("events-pagination-top","events-pagination-bottom",$pagination_top);
@@ -1038,8 +1047,11 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif ($scope == "this_week") {
-      $limit_start = date('Y-m-d',strtotime("last Sunday"));
-      $limit_end   = date('Y-m-d',strtotime("next Saturday"));
+      $day_offset=date('w');
+      $start_day=time()-$day_offset*86400;
+      $end_day=$start_day+6*86400;
+      $limit_start = date('Y-m-d',$start_day);
+      $limit_end   = date('Y-m-d',$end_day);
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif ($scope == "this_month") {
       $year=date('Y');
