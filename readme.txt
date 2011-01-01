@@ -360,3 +360,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: the google map javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
 * Improvement: show the database error if event inserting fails
 * Improvement: the zoomlevel was not correct on the [locations_map] shortcode: due to map.fitbounds, the map zoomed out too much if there were no markers, or zoomed in too much if only one marker
+* Improvement: the submenus concerning RSVP are no longer shown if RSVP is not active, the same goes for categories

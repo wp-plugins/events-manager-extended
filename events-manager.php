@@ -604,14 +604,18 @@ function eme_create_events_submenu () {
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
       $plugin_page = add_submenu_page('events-manager', __('Locations', 'eme'), __('Locations', 'eme'), EDIT_CAPABILITY, 'events-manager-locations', "eme_locations_page");
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
-      $plugin_page = add_submenu_page('events-manager', __('Event Categories','eme'),__('Categories','eme'), SETTING_CAPABILITY, "events-manager-categories", 'eme_categories_subpanel');
-                add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
-      $plugin_page = add_submenu_page('events-manager', __('People', 'eme'), __('People', 'eme'), MIN_CAPABILITY, 'events-manager-people', "eme_people_page");
-      add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-      $plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'eme'), __('Pending Approvals', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-approval', "eme_registration_approval_page");
-      add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-      $plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-seats', "eme_registration_seats_page");
-      add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+      if (get_option('eme_categories_enabled')) {
+         $plugin_page = add_submenu_page('events-manager', __('Event Categories','eme'),__('Categories','eme'), SETTING_CAPABILITY, "events-manager-categories", 'eme_categories_subpanel');
+         add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
+      }
+      if (get_option('eme_rsvp_enabled')) {
+         $plugin_page = add_submenu_page('events-manager', __('People', 'eme'), __('People', 'eme'), MIN_CAPABILITY, 'events-manager-people', "eme_people_page");
+         add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+         $plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'eme'), __('Pending Approvals', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-approval', "eme_registration_approval_page");
+         add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+         $plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-seats', "eme_registration_seats_page");
+         add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+      }
       $plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), SETTING_CAPABILITY, "events-manager-options", 'eme_options_subpanel');
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
    }
