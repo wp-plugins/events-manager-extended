@@ -126,14 +126,14 @@ function loadGMap() {
 			map.initialZoom = true;
 			google.maps.event.addListener(map, 'zoom_changed', function() {
 				zoomChangeBoundsListener = google.maps.event.addListener(map, 'bounds_changed', function(event) {
-					if (this.getZoom() > 15 && this.initialZoom == true) {
+					if (this.getZoom() > 14 && this.initialZoom == true) {
 					// Change max/min zoom here
 						this.setZoom(14);
 						this.initialZoom = false;
 					}
-					if (this.getZoom() < 3 && this.initialZoom == true) {
+					if (this.getZoom() < 1 && this.initialZoom == true) {
 						// Change max/min zoom here
-						this.setZoom(3);
+						this.setZoom(1);
 						this.initialZoom = false;
 					}
 			        	google.maps.event.removeListener(zoomChangeBoundsListener);
