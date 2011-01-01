@@ -352,6 +352,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Workaround: work around a bug in wordpress phpmailer, where it searches for class-smtp.php in the wrong location
 * Feature: added long_events to eme_events (shortcode and template function) as well
 * Feature: scope=this_week now possible for shortcode [events_list]
+* Feature: filter by contact_person now possible for shortcodes [events_list] and [events_calendar]
 * Feature: period paging is now possible if you use paging=1, limit=0 and scope=today,this_week,this_month in the [events_list] shortcode. Eg:
 * Feature: period paging is now possible if you use eventful=true, paging=1 and scope=today,this_week,this_month in the [locations_map] shortcode. Eg:
   [locations_map eventful=true paging=1 scope=this_week]

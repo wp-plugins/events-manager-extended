@@ -58,7 +58,7 @@ class WP_Widget_eme_list extends WP_Widget {
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
       $category = empty( $instance['category'] ) ? '' : $instance['category'];
       $authorid = empty( $instance['authorid'] ) ? '' : $instance['authorid'];
-         $categories = eme_get_categories();
+      $categories = eme_get_categories();
       $format = empty( $instance['format'] ) ? DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT : $instance['format'];
 ?>
   <p>

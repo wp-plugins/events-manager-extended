@@ -7,9 +7,10 @@ function eme_get_calendar_shortcode($atts) {
          'year' => '',
          'echo' => 0,
          'long_events' => 0,
-         'author' => ''
+         'author' => '',
+         'contact_person' => ''
       ), $atts)); 
-   $result = eme_get_calendar("full={$full}&month={$month}&year={$year}&echo={$echo}&long_events={$long_events}&category={$category}&author={$author}");
+   $result = eme_get_calendar("full={$full}&month={$month}&year={$year}&echo={$echo}&long_events={$long_events}&category={$category}&author={$author}&contact_person={$contact_person}");
    return $result;
 }
 add_shortcode('events_calendar', 'eme_get_calendar_shortcode');
@@ -25,7 +26,8 @@ function eme_get_calendar($args="") {
       'year' => '',
       'echo' => 1,
       'long_events' => 0,
-      'author' => ''
+      'author' => '',
+      'contact_person' => ''
    );
    $r = wp_parse_args( $args, $defaults );
    extract( $r );
@@ -151,7 +153,7 @@ function eme_get_calendar($args="") {
 
    $random = (rand(100,200));
    $full ? $class = 'eme-calendar-full' : $class='eme-calendar';
-   $calendar="<div class='$class' id='eme-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div><div class='cat_chosen' style='display:none' >$category</div><div class='author_chosen' style='display:none' >$author</div>";
+   $calendar="<div class='$class' id='eme-calendar-$random'><div style='display:none' class='month_n'>$month</div><div class='year_n' style='display:none' >$year</div><div class='cat_chosen' style='display:none' >$category</div><div class='author_chosen' style='display:none' >$author</div><div class='contact_person_chosen' style='display:none' >$contact_person</div>";
    
    $weekdays = array(__('Sunday'),__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'));
    $n = 0 ;
@@ -282,13 +284,27 @@ function eme_get_calendar($args="") {
       $authinfo=get_userdatabylogin($author);
       $conditions [] = " event_author = ".$authinfo->ID;
    }elseif( preg_match('/,/', $author) ){
-      $author = explode(',', $author);
+      $authors = explode(',', $author);
       $author_conditions = array();
-      foreach($author as $authname) {
-            $authinfo=get_userdatabylogin($author);
+      foreach($authors as $authname) {
+            $authinfo=get_userdatabylogin($authname);
             $author_conditions[] = " event_author = ".$authinfo->ID;
       }
       $conditions [] = "(".implode(' OR ', $author_conditions).")";
+   }
+
+   // now filter the contact ID
+   if ($contact_person != '' && !preg_match('/,/', $contact_person)){
+      $authinfo=get_userdatabylogin($contact_person);
+      $conditions [] = " event_contactperson_id = ".$authinfo->ID;
+   }elseif( preg_match('/,/', $contact_person) ){
+      $contact_persons = explode(',', $contact_person);
+      $contact_person_conditions = array();
+      foreach($contact_persons as $authname) {
+            $authinfo=get_userdatabylogin($authname);
+            $contact_person_conditions[] = " event_contactperson_id = ".$authinfo->ID;
+      }
+      $conditions [] = "(".implode(' OR ', $contact_person_conditions).")";
    }
 
    $where = implode ( " AND ", $conditions );
@@ -461,10 +477,11 @@ function eme_ajaxize_calendar() {
          year_n = tableDiv.children('div.year_n').text();
          cat_chosen = tableDiv.children('div.cat_chosen').text();
          author_chosen = tableDiv.children('div.author_chosen').text();
+         contact_person_chosen = tableDiv.children('div.contact_person_chosen').text();
          parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
             if (parseInt(month_n,10) == 1)
             year_n = parseInt(year_n,10) -1;
-         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen <?php echo $jquery_override_lang; ?>}, function(data){
+         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: prevMonth, calyear: year_n, full: fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen, contact_person: contact_person_chosen <?php echo $jquery_override_lang; ?>}, function(data){
             tableDiv.replaceWith(data);
             initCalendar();
          });
@@ -480,10 +497,11 @@ function eme_ajaxize_calendar() {
          year_n = tableDiv.children('div.year_n').text();
          cat_chosen = tableDiv.children('div.cat_chosen').text();
          author_chosen = tableDiv.children('div.author_chosen').text();
+         contact_person_chosen = tableDiv.children('div.contact_person_chosen').text();
          parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
             if (parseInt(month_n,10) == 12)
             year_n = parseInt(year_n,10) + 1;
-         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen <?php echo $jquery_override_lang; ?>}, function(data){
+         $j_eme_calendar.get("<?php echo site_url(); ?>", {eme_ajaxCalendar: 'true', calmonth: nextMonth, calyear: year_n, full : fullcalendar, long_events: showlong_events, category: cat_chosen, author: author_chosen, contact_person: contact_person_chosen <?php echo $jquery_override_lang; ?>}, function(data){
             tableDiv.replaceWith(data);
             initCalendar();
          });
@@ -513,8 +531,9 @@ function eme_filter_calendar_ajax() {
       (isset($_GET['calmonth'])) ? $month = eme_sanitize_request($_GET['calmonth']) : $month = ''; 
       (isset($_GET['calyear'])) ? $year = eme_sanitize_request($_GET['calyear']) : $year = ''; 
       (isset($_GET['author'])) ? $author = eme_sanitize_request($_GET['author']) : $author = ''; 
+      (isset($_GET['contact_person'])) ? $author = eme_sanitize_request($_GET['contact_person']) : $contact_person = ''; 
       // $calyear = eme_sanitize_request($_GET['calyear']);
-      eme_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year.'&author='.$author);
+      eme_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year.'&author='.$author.'&contact_person='.$contact_person);
       die();
    }
 }

@@ -727,11 +727,11 @@ add_action ( 'admin_print_scripts', 'eme_admin_css' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $paging=0) {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person, $paging=0) {
    global $post;
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $paging=0,'long_events' => 0);
+      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', $paging=0,'long_events' => 0);
       
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
@@ -740,7 +740,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
       // authorID filter: you can use "1,3", but not "1+3" since an event can have only one author
       //$authorID = ( preg_match('/^([0-9],?)+$/', $r ['authorID'] ) ) ? $r ['authorID'] : '' ;
-      $author = $r ['author'] ? $r ['author'] : '' ;
+      //$author = $r ['author'] ? $r ['author'] : '' ;
    }
    if ($scope == "")
       $scope = "future";
@@ -796,9 +796,9 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
    if ($limit==0) {
-      $events = eme_get_events ( 0, $scope, $order, $offset, 0, $category, $author );
+      $events = eme_get_events ( 0, $scope, $order, $offset, 0, $category, $author, $contact_person );
    } else {
-      $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author );
+      $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author, $contact_person );
    }
    $events_count=count($events);
 
@@ -924,8 +924,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'paging' => 0, 'long_events' => 0 ), $atts ) );
-   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&paging=$paging&long_events=$long_events" );
+   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0 ), $atts ) );
+   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person&paging=$paging&long_events=$long_events" );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -996,7 +996,7 @@ function eme_is_multiple_events_page() {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = '', $author = '') {
+function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = '', $author = '', $contact_person = '') {
    global $wpdb;
 
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
@@ -1116,13 +1116,27 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $authinfo=get_userdatabylogin($author);
       $conditions [] = " event_author = ".$authinfo->ID;
    }elseif( preg_match('/,/', $author) ){
-      $author = explode(',', $author);
+      $authors = explode(',', $author);
       $author_conditions = array();
-      foreach($author as $authname) {
-            $authinfo=get_userdatabylogin($author);
+      foreach($authors as $authname) {
+            $authinfo=get_userdatabylogin($authname);
             $author_conditions[] = " event_author = ".$authinfo->ID;
       }
       $conditions [] = "(".implode(' OR ', $author_conditions).")";
+   }
+
+   // now filter the contact ID
+   if ($contact_person != '' && !preg_match('/,/', $contact_person)){
+      $authinfo=get_userdatabylogin($contact_person);
+      $conditions [] = " event_contactperson_id = ".$authinfo->ID;
+   }elseif( preg_match('/,/', $contact_person) ){
+      $contact_persons = explode(',', $contact_person);
+      $contact_person_conditions = array();
+      foreach($contact_persons as $authname) {
+            $authinfo=get_userdatabylogin($authname);
+            $contact_person_conditions[] = " event_contactperson_id = ".$authinfo->ID;
+      }
+      $conditions [] = "(".implode(' OR ', $contact_person_conditions).")";
    }
 
    // extra conditions for authors: if we're in the admin itf, return only the events for which you have the right to change anything
@@ -2449,10 +2463,10 @@ if ($gmap_is_active) {
 
 }
 
-function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS", $scope="future", $order = "ASC",$category='',$author='',$limit=5) {
+function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS", $scope="future", $order = "ASC",$category='',$author='',$contact_person='',$limit=5) {
    if (strpos ( $justurl, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'RSS', 'scope' => 'future', 'order' => 'ASC', 'category' => '', 'author' => '', 'limit' => 5 );
+      $defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'RSS', 'scope' => 'future', 'order' => 'ASC', 'category' => '', 'author' => '', 'contact_person' => '', 'limit' => 5 );
       
       $r = wp_parse_args ( $justurl, $defaults );
       extract ( $r );
@@ -2460,7 +2474,7 @@ function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS", $scope="future", $
    }
    if ($text == '')
       $text = "RSS";
-   $url = site_url ("/?eme_rss=main&scope=$scope&order=$order&category=$category&author=$author&limit=$limit");
+   $url = site_url ("/?eme_rss=main&scope=$scope&order=$order&category=$category&author=$author&contact_person=$contact_person&limit=$limit");
    $link = "<a href='$url'>$text</a>";
    
    if ($justurl)
@@ -2474,8 +2488,8 @@ function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS", $scope="future", $
 }
 
 function eme_rss_link_shortcode($atts) {
-   extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'RSS', 'scope' => 'future', 'order' => 'ASC', 'category' => '', 'author' => '', 'limit' => 5 ), $atts ) );
-   $result = eme_rss_link ( "justurl=$justurl&echo=0&text=$text&limit=$limit&scope=$scope&order=$order&category=$category&showperiod=$showperiod&author=$author" );
+   extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'RSS', 'scope' => 'future', 'order' => 'ASC', 'category' => '', 'author' => '', 'contact_person' => '', 'limit' => 5 ), $atts ) );
+   $result = eme_rss_link ( "justurl=$justurl&echo=0&text=$text&limit=$limit&scope=$scope&order=$order&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person" );
    return $result;
 }
 add_shortcode ( 'events_rss_link', 'eme_rss_link_shortcode' );
@@ -2491,6 +2505,11 @@ function eme_rss() {
          $author=$_GET['author'];
       } else {
          $author="";
+      }
+      if (isset($_GET['contact_person'])) {
+         $author=$_GET['contact_person'];
+      } else {
+         $contact_person="";
       }
       if (isset($_GET['order'])) {
          $order=$_GET['order'];
@@ -2537,7 +2556,7 @@ Weblog Editor 2.0
 <?php
       $title_format = get_option('eme_rss_title_format' );
       $description_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", get_option('eme_rss_description_format' ) ) );
-      $events = eme_get_events ( $limit, $scope, $order, 0, "", $category, $author );
+      $events = eme_get_events ( $limit, $scope, $order, 0, "", $category, $author, $contact_person );
       foreach ( $events as $event ) {
          $title = eme_replace_placeholders ( $title_format, $event, "rss" );
          $description = eme_replace_placeholders ( $description_format, $event, "rss" );
