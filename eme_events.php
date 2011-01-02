@@ -2399,7 +2399,7 @@ function eme_admin_map_script() {
                      position: results[0].geometry.location
                   });
                   var infowindow = new google.maps.InfoWindow({
-                     content: '<div class=\"eme-location-balloon\"><strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p></div>',
+                     content: '<div class=\"eme-location-balloon\"><strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p></div>'
                   });
                   infowindow.open(map,marker);
                   $j_eme_admin('input#location_latitude').val(results[0].geometry.location.lat());
