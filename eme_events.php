@@ -770,8 +770,11 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $start_day=time()-$day_offset*86400;
          $end_day=$start_day+6*86400;
          $scope = date('Y-m-d',$start_day+$scope_offset*7*86400)."--".date('Y-m-d',$end_day+$scope_offset*7*86400);
-         $prev_text = date_i18n (get_option('date_format'),$start_day+$prev_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$prev_offset*7*86400);
-         $next_text = date_i18n (get_option('date_format'),$start_day+$next_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$next_offset*7*86400);
+         //$prev_text = date_i18n (get_option('date_format'),$start_day+$prev_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$prev_offset*7*86400);
+         //$next_text = date_i18n (get_option('date_format'),$start_day+$next_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$next_offset*7*86400);
+         $scope_text = date_i18n (get_option('date_format'),$start_day+$scope_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$scope_offset*7*86400);
+         $prev_text = __('Previous week','eme');
+         $next_text = __('Next week','eme');
       }
       if ($scope=="this_month") {
          // "first day of this month, last day of this month" works for newer versions of php (5.3+), but for compatibility:
@@ -785,13 +788,19 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $limit_start = "$year-$month-01";
          $limit_end   = "$year-$month-$number_of_days_month";
          $scope = "$limit_start--$limit_end";
-         $prev_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$prev_offset month")-$day_offset*86400);
-         $next_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$next_offset month")-$day_offset*86400);
+         //$prev_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$prev_offset month")-$day_offset*86400);
+         //$next_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$next_offset month")-$day_offset*86400);
+         $scope_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$scope_offset month")-$day_offset*86400);
+         $prev_text = __('Previous month','eme');
+         $next_text = __('Next month','eme');
       }
       if ($scope=="today") {
          $scope = date('Y-m-d',strtotime("$scope_offset days"));
-         $prev_text = date_i18n (get_option('date_format'), strtotime("$prev_offset days"));
-         $next_text = date_i18n (get_option('date_format'), strtotime("$next_offset days"));
+         //$prev_text = date_i18n (get_option('date_format'), strtotime("$prev_offset days"));
+         //$next_text = date_i18n (get_option('date_format'), strtotime("$next_offset days"));
+         $scope_text = date_i18n (get_option('date_format'), strtotime("$scope_offset days"));
+         $prev_text = __('Previous day','eme');
+         $next_text = __('Next day','eme');
       }
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
@@ -830,6 +839,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       else
          $joiner = "?";
       $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
+      $pagination_top.= "<span class='eme_nav_center'>$scope_text</span>";
       $pagination_top.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
    }
    $pagination_top.= "</div>";
