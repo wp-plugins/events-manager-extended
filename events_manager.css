@@ -164,7 +164,7 @@ table.fullcalendar td.month_name {
 #locations-pagination-top,#locations-pagination-bottom,#events-pagination-top,#events-pagination-bottom {
       text-align: center;
 }
-#locations-pagination-top,#locations-pagination-bottom,#events-pagination-top a,#events-pagination-bottom a {
+#locations-pagination-top a,#locations-pagination-bottom a,#events-pagination-top a,#events-pagination-bottom a {
       margin: 0 20px 0 20px;
       text-decoration: none;
       padding: 3px 0;
