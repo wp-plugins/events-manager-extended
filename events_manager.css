@@ -115,6 +115,9 @@ table#eme-location-data th {
 	max-width: none !important;
 	background: none !important;
 }
+#eme_locations_list {
+   clear:both;
+}
 #eme_locations_list li {
    cursor:default;
 }
