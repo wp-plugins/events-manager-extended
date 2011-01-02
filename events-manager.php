@@ -135,6 +135,9 @@ add_filter('eme_notes_map', 'js_escape');
 // check if it is 1 and if so: include it
 $eme_need_gmap_js=0;
 
+// we only want the jquery for the calendar to load if/when needed
+$eme_need_calendar_js=0;
+
 // INCLUDES
 // We let the includes happen at the end, so all init-code is done
 // (like eg. the load_textdomain). Some includes do stuff based on _GET

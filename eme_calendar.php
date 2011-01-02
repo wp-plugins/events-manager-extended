@@ -1,5 +1,9 @@
 <?php
 function eme_get_calendar_shortcode($atts) { 
+   // the calendar shortcode is being used, so we need the jquery for the calendar
+   global $eme_need_calendar_js;
+   $eme_need_calendar_js=1;
+
    extract(shortcode_atts(array(
          'category' => 0,
          'full' => 0,
@@ -438,11 +442,14 @@ function eme_days_in_month($month, $year) {
 }
 
 function eme_ajaxize_calendar() {
+   global $eme_need_calendar_js;
+
    if (isset($_GET['lang'])) {
       $jquery_override_lang=", lang: '".$_GET['lang']."'";
    } else {
       $jquery_override_lang="";
    }
+   if ($eme_need_calendar_js) {
 ?>
    <script type='text/javascript'>
       $j_eme_calendar=jQuery.noConflict();
@@ -520,8 +527,9 @@ function eme_ajaxize_calendar() {
    </script>
    
 <?php
+   }
 }
-add_action('wp_head', 'eme_ajaxize_calendar');
+add_action('wp_footer', 'eme_ajaxize_calendar');
 
 function eme_filter_calendar_ajax() {
    if(isset($_GET['eme_ajaxCalendar']) && $_GET['eme_ajaxCalendar'] == true) {
