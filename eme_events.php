@@ -816,7 +816,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    if ($paging==1 && $limit>0) {
       $prev_text=__('Previous page','eme');
       $next_text=__('Next page','eme');
-      $page_number = floor($offset/$limit) + $offset % $limit +1;
+      $page_number = floor($offset/$limit) + 1;
       $this_page_url=get_permalink($post->ID);
       if (stristr($this_page_url, "?"))
          $joiner = "&amp;";
