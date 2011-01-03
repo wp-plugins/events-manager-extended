@@ -600,6 +600,17 @@ function eme_global_map($atts) {
 }
 add_shortcode('locations_map', 'eme_global_map'); 
 
+function eme_display_single_location_shortcode($atts){
+   global $eme_need_gmap_js;
+   extract ( shortcode_atts ( array ('id'=>''), $atts ) );
+   $location=eme_get_location($id);
+   $map_div = eme_single_location_map($location);
+   if ($map_div)
+       $eme_need_gmap_js=1;
+   return $map_div;
+}
+add_shortcode('display_single_location', 'eme_display_single_location_shortcode');
+
 function eme_replace_locations_placeholders($format, $location, $target="html") {
    global $eme_need_gmap_js;
    $location_string = $format;
