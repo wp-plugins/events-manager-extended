@@ -178,3 +178,7 @@ table.fullcalendar td.month_name {
 .eme_nav_right {
    float: right;
 }
+/* eliminate the vertical space between the "Your Street Address" text entry box and the "Get Directions" submit button in cases where the button wraps below the text box in the map location balloon */
+#saddr {
+  margin-bottom:0;
+}
