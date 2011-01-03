@@ -814,6 +814,9 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    // get the paging output ready
    $pagination_top = "<div id='events-pagination-top'> ";
    if ($paging==1 && $limit>0) {
+      $prev_text=__('Previous page','eme');
+      $next_text=__('Next page','eme');
+      $page_number = $offset % $limit +1;
       $this_page_url=get_permalink($post->ID);
       if (stristr($this_page_url, "?"))
          $joiner = "&amp;";
@@ -823,13 +826,15 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $forward = $offset + $limit;
          $backward = $offset - $limit;
          if ($backward >= 0)
-            $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
-         $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$forward'>&gt;&gt;</a>";
+            $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt; $prev_text</a>";
+	 $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number"</span>";
+         $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$forward'>$next_text &gt;&gt;</a>";
       }
       if ($events_count <= $limit && $offset>0) {
          $backward = $offset - $limit;
          if ($backward >= 0)
-            $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt;</a>";
+            $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt; $prev_text</a>";
+	 $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number"</span>";
       }
    }
    if ($paging==1 && $limit==0) {
@@ -838,9 +843,9 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $joiner = "&amp;";
       else
          $joiner = "?";
-      $pagination_top.= "<a style='eme_nav_left float: left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
+      $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
       $pagination_top.= "<span class='eme_nav_center'>$scope_text</span>";
-      $pagination_top.= "<a style='eme_nav_right float: right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
+      $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
    }
    $pagination_top.= "</div>";
    $pagination_bottom = str_replace("events-pagination-top","events-pagination-bottom",$pagination_top);
