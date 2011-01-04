@@ -359,6 +359,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: new placeholder #_PAST_FUTURE_CLASS, returning a string that indicates wether this event is in the future or not (eme-future-event or eme-past-event), can be used as extra CSS to the event list 
 * Feature: shortcode [locations_map] can now use the same values for scope and category as the shortcode [events_list], these are only honoured if the parameter eventful=true
 * Feature: new shortcode [display_single_location], accepts 'id' as parameter with value the location ID you want to show
+* Feature: new placeholder #_LOCATIONID that just gives you the location ID
 * Improvement: the google map javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
 * Improvement: the calendar jquery javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
 * Improvement: show the database error if event inserting fails
