@@ -96,7 +96,8 @@ function eme_events_subpanel() {
    if ($offset == "")
       $offset = "0";
    $event_table_name = $wpdb->prefix . EVENTS_TBNAME;
-   // Debug code, to make sure I get the correct page
+
+   $list_limit = get_option('eme_events_admin_limit');
    
    // DELETE action
    if ($action == 'deleteEvents') {
@@ -113,8 +114,8 @@ function eme_events_subpanel() {
          }
       }
       
-      $events = eme_get_events ( 21, "future", $order, $offset );
-      eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
+      $events = eme_get_events ( $list_limit+1, "future", $order, $offset );
+      eme_events_table ( $events, $list_limit, __ ( 'Future events', 'eme' ), "future", $offset );
    }
 
    // UPDATE or CREATE action
@@ -293,8 +294,8 @@ function eme_events_subpanel() {
          
          //$wpdb->query($sql); 
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 21, "future" );
-         eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
+         $events = eme_get_events ( $list_limit+1, "future" );
+         eme_events_table ( $events, $list_limit, __ ( 'Future events', 'eme' ), "future", $offset );
       } else {
          // validation unsuccessful       
          echo "<div id='message' class='error '>
@@ -317,8 +318,8 @@ function eme_events_subpanel() {
          } else {
             $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
             echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-            $events = eme_get_events ( 21, "future" );
-            eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
+            $events = eme_get_events ( $list_limit+1, "future" );
+            eme_events_table ( $events, $list_limit, __ ( 'Future events', 'eme' ), "future", $offset );
          }
       }
       
@@ -333,8 +334,8 @@ function eme_events_subpanel() {
       } else {
          $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 21, "future" );
-         eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
+         $events = eme_get_events ( $list_limit+1, "future" );
+         eme_events_table ( $events, $list_limit, __ ( 'Future events', 'eme' ), "future", $offset );
       }
    }
    if ($action == 'edit_recurrence') {
@@ -347,8 +348,8 @@ function eme_events_subpanel() {
       } else {
          $feedback_message = __('You have no right to update','eme'). " '" . $recurrence ['event_name'] . "' !";
          echo "<div id='message' class='updated fade'><p>".eme_trans_sanitize_html($feedback_message)."</p></div>";
-         $events = eme_get_events ( 21, "future" );
-         eme_events_table ( $events, 20, __ ( 'Future events', 'eme' ), "future", $offset );
+         $events = eme_get_events ( $list_limit+1, "future" );
+         eme_events_table ( $events, $list_limit, __ ( 'Future events', 'eme' ), "future", $offset );
       }
    }
    
@@ -365,8 +366,8 @@ function eme_events_subpanel() {
             $title = __ ( 'Future Events', 'eme' );
             $scope = "future";
       }
-      $events = eme_get_events ( 21, $scope, $order, $offset, "", $category );
-      eme_events_table ( $events, 20, $title, $scope, $offset, $category );
+      $events = eme_get_events ( $list_limit+1, $scope, $order, $offset, "", $category );
+      eme_events_table ( $events, $list_limit, $title, $scope, $offset, $category );
    }
 }
 
@@ -413,6 +414,7 @@ function eme_options_subpanel() {
    eme_options_select ( __ ( 'Events page' ), 'eme_events_page', eme_get_all_pages (), __ ( 'This option allows you to select which page to use as an events page.', 'eme' )."<br/><strong>".__ ( 'The content of this page (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data.','eme' )."</strong>" );
    eme_options_radio_binary ( __ ( 'Show events page in lists?', 'eme' ), 'eme_list_events_page', __ ( 'Check this option if you want the events page to appear together with other pages in pages lists.', 'eme' )."<br/><strong>".__ ( 'This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended.', 'eme' )."</strong>" ); 
    eme_options_radio_binary ( __ ( 'Display calendar in events page?', 'eme' ), 'eme_display_calendar_in_events_page', __ ( 'This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page.','eme' ) );
+   eme_options_input_text ( __('Number of events to show per page in admin interface', 'eme' ), 'eme_events_admin_limit', __( 'Indicates the number of events shown on one page in the admin interface', 'eme') );
    ?>
 </table>
 <h3><?php _e ( 'Events format', 'eme' ); ?></h3>
@@ -1265,7 +1267,10 @@ function eme_get_event($event_id) {
 }
 
 function eme_duplicate_event($event_id) {
-   global $wpdb, $EZSQL_ERROR;
+   global $wpdb;
+
+   $list_limit = get_option('eme_events_admin_limit');
+
    //First, duplicate.
    $event_table_name = $wpdb->prefix . EVENTS_TBNAME;
    $eventArray = $wpdb->get_row("SELECT * FROM {$event_table_name} WHERE event_id={$event_id}", ARRAY_A );
@@ -1293,8 +1298,8 @@ function eme_duplicate_event($event_id) {
       $scope = $_GET ['scope'];
       $offset = intval($_GET ['offset']);
       $order = $_GET ['order'];
-      $events = eme_get_events ( 21, $scope, $order, $offset );
-      eme_events_table ( $events, 20, $title, $scope, $offset );
+      $events = eme_get_events ( $list_limit+1, $scope, $order, $offset );
+      eme_events_table ( $events, $list_limit, $title, $scope, $offset );
    }
 }
 
@@ -1387,18 +1392,19 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
      <?php
       $i = 1;
       foreach ( $events as $event ) {
-         if ($i>$limit)
+         if ($limit && $i>$limit)
             break;
          $class = ($i % 2) ? ' class="alternate"' : '';
          $localised_start_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_start_date']));
          $localised_end_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_end_date']));
-         $style = "";
          $today = date ( "Y-m-d" );
          
          $location_summary = "<b>" . eme_trans_sanitize_html($event ['location_name']) . "</b><br/>" . eme_trans_sanitize_html($event ['location_address']) . " - " . eme_trans_sanitize_html($event ['location_town']);
          
+         $style = "";
          if ($event ['event_start_date'] < $today)
             $style = "style ='background-color: #FADDB7;'";
+         
          ?>
      <tr <?php echo "$class $style"; ?>>
          <td><input type='checkbox' class='row-selector' value='<?php echo $event ['event_id']; ?>' name='events[]' /></td>
