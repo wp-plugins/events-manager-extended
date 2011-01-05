@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 3.0.0
 Tested up to: 3.0.4
-Stable tag: 3.2.14
+Stable tag: 3.2.15
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. 
              
@@ -372,4 +372,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: "missing argument" fix
 
 = 3.2.15 =
-* Bugfix: better indication for eme_need_gmap_js and eme_need_calendar_js
+* Bugfix: better indication for eme_need_gmap_js and eme_need_calendar_js, so it works for templating as well
+* Bugfix: fix broken empty attributes detection again

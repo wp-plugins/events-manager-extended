@@ -824,19 +824,25 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $joiner = "&amp;";
       else
          $joiner = "?";
+      $left_nav_hidden_class="";
+      $right_nav_hidden_class="";
       if ($events_count > $limit) {
          $forward = $offset + $limit;
          $backward = $offset - $limit;
-         if ($backward >= 0)
-            $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt; $prev_text</a>";
-	 $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
-         $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$forward'>$next_text &gt;&gt;</a>";
+         if ($backward < 0)
+            $left_nav_hidden_class="style='visibility:hidden;'";
+         $pagination_top.= "<a class='eme_nav_left' $left_nav_hidden_class href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt; $prev_text</a>";
+         $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
+         $pagination_top.= "<a class='eme_nav_right' $right_nav_hidden_class href='" . $this_page_url.$joiner."eme_offset=$forward'>$next_text &gt;&gt;</a>";
       }
       if ($events_count <= $limit && $offset>0) {
          $backward = $offset - $limit;
-         if ($backward >= 0)
-            $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt; $prev_text</a>";
-	 $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
+         if ($backward < 0)
+            $left_nav_hidden_class="style='visibility:hidden;'";
+         $right_nav_hidden_class="style='visibility:hidden;'";
+         $pagination_top.= "<a class='eme_nav_left' $left_nav_hidden_class href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt; $prev_text</a>";
+         $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
+         $pagination_top.= "<a class='eme_nav_right' $right_nav_hidden_class href='" . $this_page_url.$joiner."eme_offset=$forward'>$next_text &gt;&gt;</a>";
       }
    }
    if ($paging==1 && $limit==0) {
