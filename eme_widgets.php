@@ -124,9 +124,6 @@ class WP_Widget_eme_calendar extends WP_Widget {
       $this->alt_option_name = 'widget_eme_calendar';
    }
    function widget( $args, $instance ) {
-      global $eme_need_calendar_js;
-      $eme_need_calendar_js=1;
-
       extract($args);
       $title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Calendar','eme' ) : $instance['title'], $instance, $this->id_base);
       $long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;

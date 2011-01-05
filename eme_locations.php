@@ -601,18 +601,14 @@ function eme_global_map($atts) {
 add_shortcode('locations_map', 'eme_global_map'); 
 
 function eme_display_single_location_shortcode($atts){
-   global $eme_need_gmap_js;
    extract ( shortcode_atts ( array ('id'=>''), $atts ) );
    $location=eme_get_location($id);
    $map_div = eme_single_location_map($location);
-   if ($map_div)
-       $eme_need_gmap_js=1;
    return $map_div;
 }
 add_shortcode('display_single_location', 'eme_display_single_location_shortcode');
 
 function eme_replace_locations_placeholders($format, $location, $target="html") {
-   global $eme_need_gmap_js;
    $location_string = $format;
    preg_match_all("/#@?_?[A-Za-z]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
@@ -625,10 +621,6 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       if (preg_match('/#_MAP$/', $result)) {
          $map_div = eme_single_location_map($location);
          $location_string = str_replace($result, $map_div , $location_string ); 
-         // we found a map (that is not empty), so we need to include the javascript to show it
-         if ($map_div)
-            $eme_need_gmap_js=1;
-
       }
 //    if (preg_match('/#_GOOGLEDIRECTIONS/', $result)) {
 //       $google_directions = "Get Directions";
@@ -709,12 +701,15 @@ function eme_add_directions_form($location) {
 }
 
 function eme_single_location_map($location) {
+   global $eme_need_gmap_js;
+
    $gmap_is_active = get_option('eme_gmap_is_active'); 
    $map_text = addslashes(eme_replace_locations_placeholders(get_option('eme_location_baloon_format'), $location));
    $map_text = preg_replace("/\r\n|\n\r|\n/","<br />",$map_text);
    // if gmap is not active: we don't show the map
    // if the location name is empty: we don't show the map
    if ($gmap_is_active && !empty($location['location_name']) && !empty($location['location_address']) && !empty($location['location_town'])) {
+      $eme_need_gmap_js=1;
       //$id_base = $location['location_id'];
       // we can't create a unique <div>-id based on location id, because you can have multiple maps on the sampe page for
       // different events but they can go to the same location...

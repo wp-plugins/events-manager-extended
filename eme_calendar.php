@@ -1,9 +1,5 @@
 <?php
 function eme_get_calendar_shortcode($atts) { 
-   // the calendar shortcode is being used, so we need the jquery for the calendar
-   global $eme_need_calendar_js;
-   $eme_need_calendar_js=1;
-
    extract(shortcode_atts(array(
          'category' => 0,
          'full' => 0,
@@ -22,6 +18,9 @@ add_shortcode('events_calendar', 'eme_get_calendar_shortcode');
 function eme_get_calendar($args="") {
    global $wp_locale;
    global $wpdb;
+   // the calendar is being used, so we need the jquery for the calendar
+   global $eme_need_calendar_js;
+   $eme_need_calendar_js=1;
 
    $defaults = array(
       'category' => 0,
