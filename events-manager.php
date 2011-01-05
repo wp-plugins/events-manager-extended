@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.2.14
+Version: 3.2.12
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
@@ -626,11 +626,9 @@ function eme_create_events_submenu () {
 }
 
 function eme_replace_placeholders($format, $event, $target="html") {
+   global $eme_need_gmap_js;
    // first we do the custom attributes, since these can contain other placeholders
    preg_match_all("/#_ATT\{.+?\}(\{.+?\})?/", $format, $results);
-   // make sure we set the largest matched placeholders first, otherwise if you found e.g.
-   // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
-   usort($results[0],'sort_stringlenth');
    foreach($results[0] as $resultKey => $result) {
       //Strip string of placeholder and just leave the reference
       $attRef = substr( substr($result, 0, strpos($result, '}')), 6 );
@@ -716,6 +714,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $location = eme_get_location($event['location_id']);
          $map_div = eme_single_location_map($location);
          $event_string = str_replace($result, $map_div , $event_string );
+         // we found a map (that is not empty), so we need to include the javascript to show it
+         if ($map_div)
+            $eme_need_gmap_js=1;
       }
       if (preg_match('/#_DIRECTIONS$/', $result)) {
          $location = eme_get_location($event['location_id']);
