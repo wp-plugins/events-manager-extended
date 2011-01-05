@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.2.12
+Version: 3.2.15
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Manage events specifying precise spatial data (Location, Town, etc).
 Author: Franky Van Liedekerke
