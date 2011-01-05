@@ -370,3 +370,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.14 =
 * Bugfix: "missing argument" fix
+
+= 3.2.15 =
+* Bugfix: better indication for eme_need_gmap_js and eme_need_calendar_js
