@@ -663,6 +663,18 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
          }
          $location_string = str_replace($result, $field_value , $location_string ); 
       }
+      if (preg_match('/#_LOCATIONID$/', $result)) {
+         $field = "location_id";
+         $field_value = $location[$field];
+         $field_value = eme_trans_sanitize_html($field_value);
+         if ($target == "html") {
+            $field_value = apply_filters('eme_general', $field_value);
+         } else {
+            $field_value = apply_filters('eme_general_rss', $field_value);
+         }
+         $location_string = str_replace($result, $field_value , $location_string ); 
+      }
+
 
       if (preg_match('/#_IMAGE$/', $result)) {
             if($location['location_image_url'] != '')
