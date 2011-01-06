@@ -774,7 +774,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $scope = date('Y-m-d',$start_day+$scope_offset*7*86400)."--".date('Y-m-d',$end_day+$scope_offset*7*86400);
          //$prev_text = date_i18n (get_option('date_format'),$start_day+$prev_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$prev_offset*7*86400);
          //$next_text = date_i18n (get_option('date_format'),$start_day+$next_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$next_offset*7*86400);
-         $scope_text = date_i18n (get_option('date_format'),$start_day+$scope_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$scope_offset*7*86400);
+         $scope_text = date_i18n (get_option('date_format'),$start_day+$scope_offset*7*86400)." -- ".date_i18n (get_option('date_format'),$end_day+$scope_offset*7*86400);
          $prev_text = __('Previous week','eme');
          $next_text = __('Next week','eme');
       }
