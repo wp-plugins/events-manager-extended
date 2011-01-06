@@ -9,6 +9,10 @@ $j_eme_locations(document).ready(function() {
 	loadMapScript();
 });
 
+function htmlDecode(value){ 
+  return $j_eme_locations('<div/>').html(value).text(); 
+}
+
 function loadGMap() {
 	// first the global map (if present)
 	if (document.getElementById("eme_global_map")) {
@@ -79,7 +83,8 @@ function loadGMap() {
 				customIcon = "http://www.google.com/mapfiles/marker" + letter + ".png";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
 				var balloon_id = "eme-location-balloon-id";
-				var balloon_content = "<div id=\""+balloon_id+"\" class=\"eme-location-balloon\">"+location_info+"</div>";
+				//var balloon_content = "<div id=\""+balloon_id+"\" class=\"eme-location-balloon\">"+location_info+"</div>";
+				var balloon_content = "<div id=\""+balloon_id+"\" class=\"eme-location-balloon\">"+htmlDecode(item.location_balloon)+"</div>";
 				infowindow.balloon_id = balloon_id;
 				var marker = new google.maps.Marker({
 					position: point,

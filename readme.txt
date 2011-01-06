@@ -374,3 +374,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.2.15 =
 * Bugfix: better indication for eme_need_gmap_js and eme_need_calendar_js, so it works for templating as well
 * Bugfix: fix broken empty attributes detection again
+
+= 3.2.16 = 
+* Feature: the global map now shows the same balloon info as the single map created from the placeholder #_MAP
