@@ -164,7 +164,7 @@ msgid "Display calendar in events page?"
 msgstr "Zobrazit kalendář na stránce s událostmi?"
 
 #: dbem_events.php:255
-msgid "This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page."
+msgid "This option allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page."
 msgstr "Tato volba umožňuje zobrazit kalendář na stránce s událostmi místo předvoleného seznamu. Doporučujeme nezobrazovat současně kalendář na stránce a ve widgetu."
 
 #: dbem_events.php:257
@@ -176,7 +176,7 @@ msgid "Default event list format"
 msgstr "Předvolený formát seznamu událostí"
 
 #: dbem_events.php:260
-msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on."
+msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, e.g. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on."
 msgstr "Formát všech událostí na seznamu.<br/>Vložte jeden nebo více z následujících příkazů: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Použijte <code>#_LINKEDNAME</code> pro název události s odkazem na příslušnou stránku události.<br/> Použijte <code>#_EVENTPAGEURL</code> ke zobrazení adresy stránky s událostí a vytvořte svůj vlastní přizpůsobený odkaz.<br/> Použijte <code>#_LOCATIONPAGEURL</code> ke zobrazení adresy stránky s místem konání vytvořte svůj vlastní přizpůsobený odkaz.<br/>Pro vložení datumu a času použijte <a href=\"http://www.php.net/manual/cs/function.date.php\">řetězce PHP pro formátování času</a>  se symbolem<code>#</code> vpředu, např. <code>#m</code>, <code>#M</code>, <code>#j</code>, apod.<br/> Pro čas ukončení vložte <code>#@</code> vpředu, např. <code>#@h</code>, <code>#@i</code>, apod.<br/> Bez obav můžete použít HTML tagy <code>li</code>, <code>br</code> a tak dále."
 
 #: dbem_events.php:261
@@ -252,7 +252,7 @@ msgid "Default location baloon format"
 msgstr "Přednastavený formát bubliny místa konání"
 
 #: dbem_events.php:274
-msgid "The format of of the text appearing in the baloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
+msgid "The format of the text appearing in the baloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
 msgstr "Formát textu, který se objeví na stránce události v bublině na mapě. <br/>Vložte jeden nebo více z příkazů: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> či <code>#_IMAGE</code>."
 
 #: dbem_events.php:275
@@ -384,7 +384,7 @@ msgid "Notification sender address"
 msgstr "E-mailová adresa odesílatele potvrzení"
 
 #: dbem_events.php:315
-msgid "Insert the address of the notification sender. It must corresponds with your gmail account user"
+msgid "Insert the address of the notification sender. It must corresponds with your Gmail account user"
 msgstr "Vložte adresu příjemce potvrzení."
 
 #: dbem_events.php:316
@@ -416,12 +416,12 @@ msgid "Use SMTP authentication?"
 msgstr "Vyžaduje SMTP ověření?"
 
 #: dbem_events.php:319
-msgid "SMTP authenticatio is often needed. If you use GMail, make sure to set this parameter to Yes"
-msgstr "SMTP ověření je často vyžadováno. Pokud používáte GMail, ověřte si, že parametr je nastaven na Ano."
+msgid "SMTP authenticatio is often needed. If you use Gmail, make sure to set this parameter to Yes"
+msgstr "SMTP ověření je často vyžadováno. Pokud používáte Gmail, ověřte si, že parametr je nastaven na Ano."
 
 #: dbem_events.php:320
-msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use GMail, set this value to 'ssl://smtp.gmail.com:465'."
-msgstr "SMTP host. Obvykle odpovídá 'localhost'. Pokud používáte GMail, nastavte jej 'ssl://smtp.gmail.com:465'."
+msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use Gmail, set this value to 'ssl://smtp.Gmail.com:465'."
+msgstr "SMTP host. Obvykle odpovídá 'localhost'. Pokud používáte Gmail, nastavte jej 'ssl://smtp.Gmail.com:465'."
 
 #: dbem_events.php:321
 msgid "SMTP username"
@@ -1180,7 +1180,7 @@ msgstr "Nastavení"
 #~ msgid ""
 #~ "To insert date and time values, use <a href=\"http://www.php.net/manual/"
 #~ "en/function.date.php\">PHP time format characters</a>  with a # symbol "
-#~ "before them, i.e. #m. #M, #j, etc. "
+#~ "before them, e.g. #m. #M, #j, etc. "
 #~ msgstr ""
 #~ "Per inserire valori di data e ora, utilizzare i <a href=\"http://www.php."
 #~ "net/manual/it/function.date.php\">caratteri di stringa formato PHP</a>  "

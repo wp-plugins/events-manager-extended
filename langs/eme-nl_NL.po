@@ -612,7 +612,7 @@ msgid "Use recurrence?"
 msgstr "Terugkeerpatroon gebruiken?"
 
 #: eme_events.php:402
-msgid "Select yes to enable the possiblity to create recurrent events."
+msgid "Select yes to enable the possibility to create recurrent events."
 msgstr "Selecteer ja voor de mogelijkheid te hebben om terugkerende evenementen te maken."
 
 #: eme_events.php:403
@@ -685,7 +685,7 @@ msgid "Display calendar in events page?"
 msgstr "Kalender laten zien in evenementenpagina?"
 
 #: eme_events.php:415
-msgid "This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page."
+msgid "This option allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page."
 msgstr "Deze optie maakt het mogelijk de kalender te laten zien in de evenementenpagina in plaats van de standaard lijst. Het is aanbevolen de kalender-widget niet samen met een kalender-pagina te laten zien."
 
 #: eme_events.php:418
@@ -697,7 +697,7 @@ msgid "Remove leading zeros from minutes?"
 msgstr "Voorloop-nullen van minuut-notatie verbergen?"
 
 #: eme_events.php:421
-msgid "PHP date/time functions have no notation to show minutes without leading zeros. Checking this option will return eg. 9 for 09 and empty for 00."
+msgid "PHP date/time functions have no notation to show minutes without leading zeros. Checking this option will return e.g. 9 for 09 and empty for 00."
 msgstr "PHP date/time functies hebben geen notatie om minuten zonder voorloop-nul te laten zien. Deze optie aangevinkt laat bijv. 9 i.p.v. 09 en leeg i.p.v. 00 zien."
 
 #: eme_events.php:422
@@ -713,7 +713,7 @@ msgid "Default event list format"
 msgstr "Standaard opmaak evenementenlijst"
 
 #: eme_events.php:423
-msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a <code>&lt;!&ndash;&ndash;more&ndash;&ndash;&gt;</code> marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM starttime/endtime notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event."
+msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a <code>&lt;!&ndash;&ndash;more&ndash;&ndash;&gt;</code> marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, e.g. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM start-time/end-time notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event."
 msgstr "Het formaat van een event in een lijst.<br/>Gebruik één of meer van de volgende placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Gebruik <code>#_EXCERPT</code> om <code>#_NOTES</code> te tonen tot u de markeercode &lt;!&ndash;&ndash;more&ndash;&ndash;&gt; plaatst.<br/> Gebruik <code>#_LINKEDNAME</code> voor de naam van het evenement met een link naar de pagina van het destreffende evenement.<br/> Gebruik <code>#_EVENTPAGEURL</code> om de URL van het evenement te printen en zo eigen links te maken.<br/> Gebruik <code>#_LOCATIONPAGEURL</code> om de URL van de locatie te printen en zo eigen links te maken.<br/>Gebruik <code>#_EDITEVENTLINK</code> om een link toe te voegen naar de edit-pagina voor dit event, dit is enkel zichtbaar als de gebruiker is aangemeld.<br/>Om datum en tijd waarden in te voegen, gebruik <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a> met een <code>#</code> symbool ervoor, bv. <code>#m</code>, <code>#M</code>, <code>#j</code>, enz.<br/> Voor de eindtijd, zet <code>#@</code> voor het character, bv. <code>#@h</code>, <code>#@i</code>, etc.<br/> U kan ook een datum formaat maken zonder <code>#</code> ervoor te zetten, door het te omsingelen met #_{} of #@_{} (bv. <code>#_{d/m/Y}</code>). Als er geen einddatum is, zal de waarde niet getoond worden.<br/>Gebruik <code>#_12HSTARTTIME</code> en <code>#_12HENDTIME</code> voor AM/PM starttijd/eindtijd notatie, idem <code>#_24HSTARTTIME</code> en <code>#_24HENDTIME</code>.<br/>U mag ook HTML tags gebruiken, zoals <code>li</code>, <code>br</code> enz.<br/>Voor eigen attributen, gebruik <code>#_ATT{key}{alternative text}</code>, de tweede accolades zijn optioneel en worden enkel gebruikt als het attribuut niet is gedefinieerd of leeg is. De key zal zichtbaar zijn als een optie bij het toevoegen van attributen aan het event."
 
 #: eme_events.php:424
@@ -745,7 +745,7 @@ msgid "<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask di
 msgstr "<br/>Gebruik <code>#_DIRECTIONS</code> om een formulier in te voegen waarmee mensen een routebeschrijving naar het evenement kunnen aanvragen."
 
 #: eme_events.php:427
-msgid "<br/> Use <code>#_CATEGORIES</code> to insert a comma seperated list of categories an event is in."
+msgid "<br/> Use <code>#_CATEGORIES</code> to insert a comma-separated list of categories an event is in."
 msgstr "<br/>Gebruik <code>#_CATEGORIES</code> om een komma-gescheiden lijst in te voegen van categorieën waar het evenement onder valt."
 
 #: eme_events.php:427
@@ -757,7 +757,7 @@ msgid "Monthly period date format"
 msgstr "Datumopmaak Maandelijks periode"
 
 #: eme_events.php:428
-msgid "The format of the datestring used when you use showperiod=monthly as an option to &#91;the events_list] shortcode. Use php date() compatible settings."
+msgid "The format of the date-string used when you use showperiod=monthly as an option to &#91;the events_list] shortcode. Use php date() compatible settings."
 msgstr "De opmaak van de datumstring die wordt gebruikt wanneer je showperiod=monthly als optie hanteert voor &#91;the events_list] shortcode. Gebruik php date() compatible instellingen."
 
 #: eme_events.php:428
@@ -797,7 +797,7 @@ msgid "Small calendar title separator"
 msgstr "Scheidingsteken voor de titel van de kleine kalender"
 
 #: eme_events.php:437
-msgid "The separator appearing on the above title when more than one events are taking place on the same day."
+msgid "The separator appearing on the above title when more than one event is taking place on the same day."
 msgstr "Scheidingsteken dat verschijnt bij de de bovenstaande titel, wanneer er meerdere evenementen op dezelfde dag zijn."
 
 #: eme_events.php:438
@@ -833,7 +833,7 @@ msgid "Default location balloon format"
 msgstr "Standaard locatie \"ballon\"-opmaak."
 
 #: eme_events.php:447
-msgid "The format of of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
+msgid "The format of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
 msgstr "De opmaak van de tekst die verschijnt in ballon met een beschrijving van de locatie in de kaart.<br/>Voeg een van de volgende placeholders in: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> of <code>#_IMAGE</code>."
 
 #: eme_events.php:447
@@ -997,7 +997,7 @@ msgid "Notification sender address"
 msgstr "Adres van de verzender van de melding"
 
 #: eme_events.php:478
-msgid "Insert the address of the notification sender. It must corresponds with your gmail account user"
+msgid "Insert the address of the notification sender. It must corresponds with your Gmail account user"
 msgstr "Voeg het adres van de afzender van de melding in. Het moet overeenkomen met uw Gmail-gebruikersaccount "
 
 #: eme_events.php:479
@@ -1053,12 +1053,12 @@ msgid "Use SMTP authentication?"
 msgstr "SMTP authenticatie gebruiken?"
 
 #: eme_events.php:485
-msgid "SMTP authentication is often needed. If you use GMail, make sure to set this parameter to Yes"
-msgstr "SMTP authenticatie is vaak verplicht. Als u GMail gebruikt, zet u dezeparameter op Ja"
+msgid "SMTP authentication is often needed. If you use Gmail, make sure to set this parameter to Yes"
+msgstr "SMTP authenticatie is vaak verplicht. Als u Gmail gebruikt, zet u dezeparameter op Ja"
 
 #: eme_events.php:486
-msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use GMail, set this value to 'ssl://smtp.gmail.com:465'."
-msgstr "De SMTP host. Normaalgesproken 'localhost'. Als u  GMail gebruikt, zet u deze waarde op  'ssl://smtp.gmail.com:465'."
+msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use Gmail, set this value to 'ssl://smtp.Gmail.com:465'."
+msgstr "De SMTP host. Normaal gesproken 'localhost'. Als u Gmail gebruikt, zet u deze waarde op 'ssl://smtp.Gmail.com:465'."
 
 #: eme_events.php:487
 msgid "SMTP username"

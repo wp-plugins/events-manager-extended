@@ -192,7 +192,7 @@ msgid "Use recurrence?"
 msgstr "¿Activar periodicidad?"
 
 #: dbem_events.php:328
-msgid "Select yes to enable the possiblity to create recurrent events."
+msgid "Select yes to enable the possibility to create recurrent events."
 msgstr "Permite crear eventos periódicos (diarios, semanales, mensuales, anuales, etc)."
 
 #: dbem_events.php:329
@@ -257,7 +257,7 @@ msgid "Display calendar in events page?"
 msgstr "¿Mostrar calendario en página de eventos?"
 
 #: dbem_events.php:340
-msgid "This options allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page."
+msgid "This option allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page."
 msgstr "Muestra el calendario en la página de eventos en lugar de la lista de eventos predeterminada. No se recomienda mostrar el calendario en la página y en el widget simultáneamente."
 
 #: dbem_events.php:343
@@ -277,7 +277,7 @@ msgid "Default event list format"
 msgstr "Formato de listado de eventos"
 
 #: dbem_events.php:348
-msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM starttime/endtime notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event."
+msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, e.g. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM start-time/end-time notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event."
 msgstr "El formato de cada evento de la lista.<br/>Puede utilizar los siguientes marcadores: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> para mostrar el contenido de <code>#_NOTES</code> hasta el marcador &lt;!&ndash;&ndash; more &ndash;&ndash;&gt;.<br/> Use <code>#_LINKEDNAME</code> para mostrar el título enlazado a la página del evento.<br/> Use <code>#_EVENTPAGEURL</code> para mostrar la URL de la página del evento y personalizar los enlaces.<br/> Use <code>#_LOCATIONPAGEURL</code> para mostrar la URL de la página del lugar y personalizar los enlaces.<br/>Use <code>#_EDITEVENTLINK</code> para mostrar un link a la página de edición del evento, que se verá sólo si el usuario inició sesión.<br/>Para valores de fecha y hora, use <a href=\"http://www.php.net/manual/es/function.date.php\">los formatos de fecha/hora de PHP</a> precedidos por un <code>#</code>, ej. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> Para la hora de finalización, use <code>#@</code> antes del caracter, ej. <code>#@h</code>, <code>#@i</code>, etc.<br/> También puede definir un formato de fecha sin usar <code>#</code>, encerrándolo entre #_{} or #@_{} (ej. <code>#_{d/m/Y}</code>). Si no hay fecha de finalización, dicho valor no se mostrará.<br/>Use <code>#_12HSTARTTIME</code> y <code>#_12HENDTIME</code> para notación horaria AM/PM; <code>#_24HSTARTTIME</code> y <code>#_24HENDTIME</code> para 24h.<br/>Siéntase libre de usar tags HTML como <code>li</code>, <code>br</code> y similares.<br/>Para atributos personalizados, use <code>#_ATT{clave}{texto alternativo}</code>, las segundas llaves son opcionales y se mostrarán si el atributo no está definido o se dejó en blanco para ese evento. Esta clave se mostrará como una opción al agregar atributos al evento."
 
 #: dbem_events.php:349
@@ -337,7 +337,7 @@ msgid "Small calendar title separator"
 msgstr "Calendario pequeño:<br/>Separador del título del evento"
 
 #: dbem_events.php:362
-msgid "The separator appearing on the above title when more than one events are taking place on the same day."
+msgid "The separator appearing on the above title when more than one event is taking place on the same day."
 msgstr "Afecta al texto que se muestra al posar el mouse sobre un día que contiene más de un evento."
 
 #: dbem_events.php:363
@@ -373,7 +373,7 @@ msgid "Default location balloon format"
 msgstr "Formato de globo del lugar"
 
 #: dbem_events.php:372
-msgid "The format of of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
+msgid "The format of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
 msgstr "Formato del texto descriptivo del lugar que aparece en el mapa, encerrado en un globo que señala la ubicación.<br/>Puede utilizar los siguientes marcadores: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> e <code>#_IMAGE</code>."
 
 #: dbem_events.php:373
@@ -501,7 +501,7 @@ msgid "Notification sender address"
 msgstr "E-mail del remitente de las notificaciones"
 
 #: dbem_events.php:399
-msgid "Insert the address of the notification sender. It must corresponds with your gmail account user"
+msgid "Insert the address of the notification sender. It must corresponds with your Gmail account user"
 msgstr "La dirección de e-mail que se utilizará como remitente para enviar las notificaciones por e-mail."
 
 #: dbem_events.php:400
@@ -533,12 +533,12 @@ msgid "Use SMTP authentication?"
 msgstr "¿Activar autenticación SMTP?"
 
 #: dbem_events.php:403
-msgid "SMTP authentication is often needed. If you use GMail, make sure to set this parameter to Yes"
+msgid "SMTP authentication is often needed. If you use Gmail, make sure to set this parameter to Yes"
 msgstr "La autenticación SMTP es usualmente necesaria. Si utiliza Gmail, asegúrese de activar esta opción."
 
 #: dbem_events.php:404
-msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use GMail, set this value to 'ssl://smtp.gmail.com:465'."
-msgstr "Dirección del servidor SMTP. Usualmente es \"localhost\"; si utiliza Gmail, configure este valor como \"'ssl://smtp.gmail.com:465\"."
+msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use Gmail, set this value to 'ssl://smtp.Gmail.com:465'."
+msgstr "Dirección del servidor SMTP. Usualmente es \"localhost\"; si utiliza Gmail, configure este valor como \"'ssl://smtp.Gmail.com:465\"."
 
 #: dbem_events.php:405
 msgid "SMTP username"

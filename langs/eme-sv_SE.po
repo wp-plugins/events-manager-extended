@@ -157,7 +157,7 @@ msgid "Default event list format"
 msgstr "Standardformat för evenemangslista"
 
 #: dbem_events.php:245
-msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on."
+msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, e.g. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on."
 msgstr "Formatet för evenemang i lista.<br/>Infoga någon av följande platshållare: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Använd <code>#_LINKEDNAME</code> för eventnamnet med en länk till det evenemangets sida.<br/> Använd <code>#_EVENTPAGEURL</code> för att skriva ut URL:en till evenemangets sida, för att kunna formatera länken själv.<br/> Använd <code>#_LOCATIONPAGEURL</code> för att skriva ut URL:en till platssidan, för att formatera länken själv.<br/>För att infoga datum och tid, använd <a href=\"http://www.php.net/manual/en/function.date.php\">PHP tecken för tidsformat</a>  med symbolen <code>#</code> före tecknen, d.v.s.. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> För sluttiden, placera <code>#@</code> före tecknen, d.v.s. <code>#@h</code>, <code>#@i</code>, etc.<br/> Använd gärna HTML-element, såsom <code>li</code>, <code>br</code> och så vidare."
 
 #: dbem_events.php:246
@@ -233,7 +233,7 @@ msgid "Default location baloon format"
 msgstr "Standardformat för 'platsballonger'"
 
 #: dbem_events.php:259
-msgid "The format of of the text appearing in the baloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
+msgid "The format of the text appearing in the baloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
 msgstr "Formatet på den text som visas i 'ballongen' som beskriver platser i kartan.<br/>Infoga en eller flera av följande platshållare: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> eller <code>#_IMAGE</code>."
 
 #: dbem_events.php:260
@@ -365,8 +365,8 @@ msgid "Notification sender address"
 msgstr "Avsändaradress för notifikationer"
 
 #: dbem_events.php:300
-msgid "Insert the address of the notification sender. It must corresponds with your gmail account user"
-msgstr "Ange avsändaradressen för notifikationerna. Måste överensstämma med ditt gmail-användarkonto"
+msgid "Insert the address of the notification sender. It must corresponds with your Gmail account user"
+msgstr "Ange avsändaradressen för notifikationerna. Måste överensstämma med ditt Gmail-användarkonto"
 
 #: dbem_events.php:301
 msgid "Default notification receiver address"
@@ -397,12 +397,12 @@ msgid "Use SMTP authentication?"
 msgstr "Använd SMTP-autentisering?"
 
 #: dbem_events.php:304
-msgid "SMTP authenticatio is often needed. If you use GMail, make sure to set this parameter to Yes"
+msgid "SMTP authenticatio is often needed. If you use Gmail, make sure to set this parameter to Yes"
 msgstr "SMTP-autentisering är oftast nödvändig. Om du använder Gmail, se till att ange Ja"
 
 #: dbem_events.php:305
-msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use GMail, set this value to 'ssl://smtp.gmail.com:465'."
-msgstr "SMTP-host. Är vanligtvis 'localhost'. Om du använder Gmail, ange värdet 'ssl://smtp.gmail.com:465'."
+msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use Gmail, set this value to 'ssl://smtp.Gmail.com:465'."
+msgstr "SMTP-host. Är vanligtvis 'localhost'. Om du använder Gmail, ange värdet 'ssl://smtp.Gmail.com:465'."
 
 #: dbem_events.php:306
 msgid "SMTP username"
@@ -1093,7 +1093,7 @@ msgstr "Lägg till ny"
 #~ msgid ""
 #~ "To insert date and time values, use <a href=\"http://www.php.net/manual/"
 #~ "en/function.date.php\">PHP time format characters</a>  with a # symbol "
-#~ "before them, i.e. #m. #M, #j, etc. "
+#~ "before them, e.g. #m. #M, #j, etc. "
 #~ msgstr ""
 #~ "Per inserire valori di data e ora, utilizzare i <a href=\"http://www.php."
 #~ "net/manual/it/function.date.php\">caratteri di stringa formato PHP</a>  "
