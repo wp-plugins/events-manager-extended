@@ -12,6 +12,7 @@ function eme_attributes_form($event) {
       get_option('eme_rss_description_format' ).
       get_option('eme_rss_title_format' ).
       get_option('eme_single_event_format' ).
+      get_option('eme_small_calendar_event_title_format' ).
       get_option('eme_single_location_format' ).
       get_option('eme_contactperson_email_body' ).
       get_option('eme_respondent_email_body' );
