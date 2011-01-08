@@ -377,4 +377,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.2.16 = 
 * Feature: the global map now shows the same balloon info as the single map created from the placeholder #_MAP
-* Feature: the "Small calendar title" can now also use custom attributes as placeholders
+* Feature: the calendar options "Small calendar title" and "Full calendar events format" can now also use custom attributes as placeholders

@@ -218,22 +218,6 @@ function eme_get_calendar($args="") {
    
    $calendar .= " </table>\n</div>";
    
-   // let's start filling up the conditions
-   $events_table = $wpdb->prefix.EVENTS_TBNAME; 
-   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
-   $conditions = array ();
-   // only show appropriate events
-   if (!is_admin()) {
-      if (is_user_logged_in()) {
-         $conditions [] = "event_status IN (1,2)";
-      } else {
-         $conditions [] = "event_status=1";
-      }
-      if (get_option('eme_rsvp_hide_full_events')) {
-         $conditions [] = "(event_rsvp=0 OR (event_rsvp=1 AND event_seats > (SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE $bookings_table.event_id = $events_table.event_id)))";
-      }
-   }
-
    // query the database for events in this time span
    if ($month == 1) {
       $month_pre=12;
@@ -256,84 +240,7 @@ function eme_get_calendar($args="") {
    $number_of_days_pre=eme_days_in_month($month_pre, $year_pre);
    $limit_pre=date("Y-m-d", mktime(0,0,0,$month_pre, $number_of_days_pre-7 , $year_pre));
    $limit_post=date("Y-m-d", mktime(0,0,0,$month_post, 7 , $year_post));
-   $conditions [] = "((event_start_date BETWEEN '$limit_pre' AND '$limit_post') OR (event_end_date BETWEEN '$limit_pre' AND '$limit_post'))";
-
-   // the category conditions (same code as in eme_events.php)
-   if (get_option('eme_categories_enabled')) {
-      if (is_numeric($category)) {
-         if ($category>0)
-            $conditions [] = " FIND_IN_SET($category,event_category_ids)";
-      } elseif ( preg_match('/^([0-9],?)+$/', $category) ) {
-         $category = explode(',', $category);
-         $category_conditions = array();
-         foreach ($category as $cat) {
-            if (is_numeric($cat) && $cat>0)
-               $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
-         }
-         $conditions [] = "(".implode(' OR', $category_conditions).")";
-      } elseif ( preg_match('/^([0-9] ?)+$/', $category) ) {
-         $category = explode(' ', $category);
-         $category_conditions = array();
-         foreach ($category as $cat) {
-            if (is_numeric($cat) && $cat>0)
-               $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
-         }
-         $conditions [] = "(".implode(' AND ', $category_conditions).")";
-      }
-   }
-
-   // now filter the author ID
-   if ($author != '' && !preg_match('/,/', $author)){
-      $authinfo=get_userdatabylogin($author);
-      $conditions [] = " event_author = ".$authinfo->ID;
-   }elseif( preg_match('/,/', $author) ){
-      $authors = explode(',', $author);
-      $author_conditions = array();
-      foreach($authors as $authname) {
-            $authinfo=get_userdatabylogin($authname);
-            $author_conditions[] = " event_author = ".$authinfo->ID;
-      }
-      $conditions [] = "(".implode(' OR ', $author_conditions).")";
-   }
-
-   // now filter the contact ID
-   if ($contact_person != '' && !preg_match('/,/', $contact_person)){
-      $authinfo=get_userdatabylogin($contact_person);
-      $conditions [] = " event_contactperson_id = ".$authinfo->ID;
-   }elseif( preg_match('/,/', $contact_person) ){
-      $contact_persons = explode(',', $contact_person);
-      $contact_person_conditions = array();
-      foreach($contact_persons as $authname) {
-            $authinfo=get_userdatabylogin($authname);
-            $contact_person_conditions[] = " event_contactperson_id = ".$authinfo->ID;
-      }
-      $conditions [] = "(".implode(' OR ', $contact_person_conditions).")";
-   }
-
-   $where = implode ( " AND ", $conditions );
-   if ($where != "")
-      $where = " WHERE " . $where;
-
-   $sql = "SELECT event_id,
-      event_status,
-      event_name,
-      event_start_date,
-      event_start_time,
-      event_end_date,
-      event_category_ids,
-      location_id,
-      DATE_FORMAT(event_start_date, '%w') AS 'event_weekday_n',
-      DATE_FORMAT(event_start_date, '%e') AS 'event_day',
-      DATE_FORMAT(event_start_date, '%c') AS 'event_month_n',
-      DATE_FORMAT(event_start_time, '%Y') AS 'event_year',
-      DATE_FORMAT(event_start_time, '%k') AS 'event_hh',
-      DATE_FORMAT(event_start_time, '%i') AS 'event_mm'
-
-      FROM $events_table 
-      $where
-      ORDER BY event_start_date ASC, event_start_time ASC";
-
-   $events=$wpdb->get_results($sql, ARRAY_A);
+   $events = eme_get_events(0, "$limit_pre--$limit_post", "ASC", 0, "", $category , $author , $contact_person );
 
 //----- DEBUG ------------
 //foreach($events as $event) { //DEBUG
