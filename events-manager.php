@@ -107,7 +107,10 @@ $location_required_fields = array("location_name" => __('The location name', 'em
 
 // To enable activation through the activate function
 register_activation_hook(__FILE__,'eme_install');
+// when deactivation is needed
 register_deactivation_hook(__FILE__,'eme_uninstall');
+// when a new blog is added for network installation and the plugin is network activated
+add_action( 'wpmu_new_blog', 'eme_new_blog', 10, 6);      
 
 // filters for general events field (corresponding to those of  "the_title")
 add_filter('eme_general', 'wptexturize');
@@ -157,9 +160,29 @@ include("eme_ical.php");
 
 require_once("phpmailer/eme_phpmailer.php") ;
 //require_once("phpmailer/language/phpmailer.lang-en.php") ;
- 
-/* Creating the wp_events table to store event data*/
+
 function eme_install() {
+   global $wpdb;
+   if (function_exists('is_multisite') && is_multisite()) {
+      // check if it is a network activation - if so, run the activation function for each blog id
+      if (isset($_GET['networkwide']) && ($_GET['networkwide'] == 1)) {
+         $old_blog = $wpdb->blogid;
+         // Get all blog ids
+         $blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs"));
+         foreach ($blogids as $blog_id) {
+            switch_to_blog($blog_id);
+            _eme_install();
+         }
+         switch_to_blog($old_blog);
+         return;
+      }  
+   } 
+   // executed if no network activation
+   _eme_install();     
+}
+
+// the private function; for activation
+function _eme_install() {
    global $wpdb;
    // check the user is allowed to make changes
    if ( !current_user_can( SETTING_CAPABILITY  ) ) {
@@ -223,6 +246,27 @@ function eme_install() {
 }
 
 function eme_uninstall() {
+   global $wpdb;
+
+   if (function_exists('is_multisite') && is_multisite()) {
+      // check if it is a network activation - if so, run the activation function for each blog id
+      if (isset($_GET['networkwide']) && ($_GET['networkwide'] == 1)) {
+         $old_blog = $wpdb->blogid;
+         // Get all blog ids
+         $blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs"));
+         foreach ($blogids as $blog_id) {
+            switch_to_blog($blog_id);
+            _eme_uninstall();
+         }
+         switch_to_blog($old_blog);
+         return;
+      }  
+   } 
+   // executed if no network activation
+   _eme_uninstall();
+}
+
+function _eme_uninstall() {
    $drop_data = get_option('eme_uninstall_drop_data');
    if ($drop_data) {
       eme_drop_table(EVENTS_TBNAME);
@@ -234,6 +278,17 @@ function eme_uninstall() {
       eme_drop_table(CATEGORIES_TBNAME);
       eme_delete_events_page();
       eme_options_delete();
+   }
+}
+
+function eme_new_blog($blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+   global $wpdb;
+ 
+   if (is_plugin_active_for_network('events-manager-extended/events-manager.php')) {
+      $old_blog = $wpdb->blogid;
+      switch_to_blog($blog_id);
+      _eme_install();
+      switch_to_blog($old_blog);
    }
 }
 
