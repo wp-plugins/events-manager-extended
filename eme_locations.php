@@ -703,10 +703,10 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
 function eme_add_directions_form($location) {
    $res = '<form action="http://maps.google.com/maps" method="get" target="_blank" style="text-align:left;">';
-   $res .= '<label for="saddr">'.__('Your Street Address','eme').'</label><br />';
+   $res .= '<div><label for="saddr">'.__('Your Street Address','eme').'</label><br />';
    $res .= '<input type="text" name="saddr" id="saddr" value="" />';
    $res .= '<input type="hidden" name="daddr" value="'.$location['location_address'].', '.$location['location_town'].'" />';
-   $res .= '<input type="hidden" name="hl" value="'.$locale_code.'" />';
+   $res .= '<input type="hidden" name="hl" value="'.$locale_code.'" /></div>';
    $res .= '<input type="submit" value="'.__('Get Directions','eme').'" />';
    $res .= '</form>';
    return $res;
