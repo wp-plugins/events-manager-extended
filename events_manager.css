@@ -108,6 +108,7 @@ table#eme-location-data th {
 .eme-location-balloon {
 	font-size: 95%;  
 	line-height: 100%;
+   margin-bottom: 4em;
 }
 /* for google maps to work ok in IE, we need at least 690px as max-width for the images */
 #eme_global_map img,
