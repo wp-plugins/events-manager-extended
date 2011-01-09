@@ -851,7 +851,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             if ($field == "event_excerpt") {
                $matches = explode('<!--more-->', $event['event_notes']);
                $field_value = $matches[0];
-               $field_value = apply_filters('eme_notes_excerpt', $field_value);
+               $field_value = apply_filters('eme_notes', $field_value);
             } else {
                $field_value = apply_filters('eme_notes', $field_value);
             }

@@ -379,3 +379,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: the global map now shows the same balloon info as the single map created from the placeholder #_MAP
 * Feature: the calendar options "Small calendar title" and "Full calendar events format" can now also use custom attributes as placeholders
 * Feature: EME installs fine for subsites now if you network activate the plugin for a multisite setup
+* Bugfix: #_EXCERPT layout was not ok, should be the same as for #_NOTES
