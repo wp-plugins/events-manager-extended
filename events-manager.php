@@ -769,9 +769,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $location = eme_get_location($event['location_id']);
          $map_div = eme_single_location_map($location);
          $event_string = str_replace($result, $map_div , $event_string );
-         // we found a map (that is not empty), so we need to include the javascript to show it
-         if ($map_div)
-            $eme_need_gmap_js=1;
       }
       if (preg_match('/#_DIRECTIONS$/', $result)) {
          $location = eme_get_location($event['location_id']);
