@@ -573,8 +573,8 @@ function eme_global_map($atts) {
          else
             $joiner = "?";
          $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
-         $pagination_top.= "<span class='eme_nav_center'>$scope_text</span>";
          $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
+         $pagination_top.= "<span class='eme_nav_center'>$scope_text</span>";
       }
       $pagination_top.= "</div>";
       $pagination_bottom = str_replace("locations-pagination-top","locations-pagination-bottom",$pagination_top);

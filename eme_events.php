@@ -832,8 +832,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          if ($backward < 0)
             $left_nav_hidden_class="style='visibility:hidden;'";
          $pagination_top.= "<a class='eme_nav_left' $left_nav_hidden_class href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt; $prev_text</a>";
-         $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
          $pagination_top.= "<a class='eme_nav_right' $right_nav_hidden_class href='" . $this_page_url.$joiner."eme_offset=$forward'>$next_text &gt;&gt;</a>";
+         $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
       }
       if ($events_count <= $limit && $offset>0) {
          $backward = $offset - $limit;
@@ -841,8 +841,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
             $left_nav_hidden_class="style='visibility:hidden;'";
          $right_nav_hidden_class="style='visibility:hidden;'";
          $pagination_top.= "<a class='eme_nav_left' $left_nav_hidden_class href='" . $this_page_url.$joiner."eme_offset=$backward'>&lt;&lt; $prev_text</a>";
-         $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
          $pagination_top.= "<a class='eme_nav_right' $right_nav_hidden_class href='" . $this_page_url.$joiner."eme_offset=$forward'>$next_text &gt;&gt;</a>";
+         $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
       }
    }
    if ($paging==1 && $limit==0) {
@@ -852,8 +852,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       else
          $joiner = "?";
       $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
-      $pagination_top.= "<span class='eme_nav_center'>$scope_text</span>";
       $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
+      $pagination_top.= "<span class='eme_nav_center'>$scope_text</span>";
    }
    $pagination_top.= "</div>";
    $pagination_bottom = str_replace("events-pagination-top","events-pagination-bottom",$pagination_top);
