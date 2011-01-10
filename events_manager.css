@@ -149,7 +149,7 @@ table.fullcalendar {
 }
 table.fullcalendar td {
 	text-align: left;
-	width: 50px;  
+	width: 14%;  
 	height: 50px;             
 	border: 1px solid #888;
 	vertical-align: text-top;
@@ -160,6 +160,8 @@ table.fullcalendar tr.days-names td {
 }
 table.fullcalendar td.month_name {
 	text-align: center;
+	width: 70%;  
+	white-space: nowrap;
 }
 .eme-calendar-full ul {
 	font-size: 80%;     
