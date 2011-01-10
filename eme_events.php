@@ -1007,7 +1007,11 @@ function eme_are_events_available($scope = "future") {
 // Returns true if the page in question is the events page
 function eme_is_events_page() {
    $events_page_id = get_option('eme_events_page' );
-   return is_page ( $events_page_id );
+   if ($events_page_id) {
+      return is_page ( $events_page_id );
+   } else {
+      return false;
+   }
 }
 
 function eme_is_single_event_page() {
