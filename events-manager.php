@@ -141,6 +141,12 @@ $eme_need_gmap_js=0;
 // we only want the jquery for the calendar to load if/when needed
 $eme_need_calendar_js=0;
 
+// set the timezone
+$tzstring = get_option('timezone_string');
+if (!empty($tzstring) ) {
+   @date_default_timezone_set ($tzstring);
+}
+
 // INCLUDES
 // We let the includes happen at the end, so all init-code is done
 // (like eg. the load_textdomain). Some includes do stuff based on _GET
