@@ -29,7 +29,7 @@ function eme_new_event_page() {
       "event_freq" => '',
       "location_id" => 0,
       "event_author" => 0,
-      "event_contactperson_id" => 0,
+      "event_contactperson_id" => get_option('eme_default_contact_person'),
       "event_category_ids" => '',
       "event_attributes" => '',
       "event_page_title_format" => '',
@@ -169,7 +169,7 @@ function eme_events_subpanel() {
       $event ['registration_requires_approval'] = (isset ($_POST ['registration_requires_approval']) && is_numeric($_POST ['registration_requires_approval'])) ? $_POST ['registration_requires_approval']:0;
       $event ['event_seats'] = (isset ($_POST ['event_seats']) && is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
       
-      if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '' && $_POST ['event_contactperson_id'] != '-1') {
+      if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '') {
          $event ['event_contactperson_id'] = $_POST ['event_contactperson_id'];
       } else {
          $event ['event_contactperson_id'] = 0;
@@ -470,7 +470,9 @@ function eme_options_subpanel() {
 <h3><?php _e ( 'RSVP: registrations and bookings', 'eme' ); ?></h3>
 <table class='form-table'>
      <?php
-   eme_options_select ( __ ( 'Default contact person', 'eme' ), 'eme_default_contact_person', eme_get_indexed_users (), __ ( 'Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event', 'eme' ) );
+   $indexed_users[-1]=__('Event author','eme');
+   $indexed_users+=eme_get_indexed_users();
+   eme_options_select ( __ ( 'Default contact person', 'eme' ), 'eme_default_contact_person', $indexed_users, __ ( 'Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Require WP membership to be able to register?', 'eme' ), 'eme_rsvp_registered_users_only', __ ( 'Check this option if you want that only WP registered users can book for an event.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'By default enable registrations for new events?', 'eme' ), 'eme_rsvp_reg_for_new_events', __ ( 'Check this option if you want to enable registrations by default for new events.', 'eme' ) );
    eme_options_input_text ( __ ( 'Default number of spaces', 'eme' ), 'eme_rsvp_default_number_spaces', __ ( 'The default number of spaces an event has.', 'eme' ) );
@@ -1746,7 +1748,7 @@ function eme_event_form($event, $title, $element) {
                      <div class="inside">
                         <p><?php _e('Contact','eme'); ?>
                            <?php
-                           wp_dropdown_users ( array ('name' => 'event_contactperson_id', 'show_option_none' => __ ( "Select...", 'eme' ), 'selected' => $event ['event_contactperson_id'] ) );
+                           wp_dropdown_users ( array ('name' => 'event_contactperson_id', 'show_option_none' => __ ( "Event author", 'eme' ), 'selected' => $event ['event_contactperson_id'] ) );
                            ?>
                         </p>
                      </div>

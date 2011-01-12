@@ -519,7 +519,8 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
    if($event['event_contactperson_id'] && $event['event_contactperson_id']>0) 
       $contact_id = $event['event_contactperson_id']; 
    else
-      $contact_id = get_option('eme_default_contact_person');
+      $contact_id = $event['event_author']; 
+      //$contact_id = get_option('eme_default_contact_person');
 
    $contact_name = eme_get_user_name($contact_id);
    $contact_email = eme_get_user_email($contact_id);
