@@ -942,8 +942,9 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    }
    $events_count=count($events);
 
-   // now add the pagination
-   $output = $pagination_top . $output . $pagination_bottom;
+   // now add the pagination if needed
+   if ($paging==1)
+   	$output = $pagination_top . $output . $pagination_bottom;
   
    // now see how to return the output
    if ($echo)

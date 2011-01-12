@@ -386,5 +386,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
   eme_event_list_filter (1 parameter: array of events)
 * Improvement: some browser incompatibiliets solved
 * Improvement: if the setting "Events page" is not set, no more will other pages be overwritten with events data
+* Improvement: widget title is allowed to be empty
 * Bugfix: #_EXCERPT layout was not ok, should be the same as for #_NOTES
 

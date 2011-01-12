@@ -563,7 +563,6 @@ function eme_global_map($atts) {
          }
       }
 
-      $result = "";
       // get the paging output ready
       $pagination_top = "<div id='locations-pagination-top'> ";
       if ($paging==1 && $limit==0) {
@@ -578,7 +577,10 @@ function eme_global_map($atts) {
       }
       $pagination_top.= "</div>";
       $pagination_bottom = str_replace("locations-pagination-top","locations-pagination-bottom",$pagination_top);
-      $result .= $pagination_top."<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>".$pagination_bottom;
+      if ($paging==1)
+         $result = $pagination_top."<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>".$pagination_bottom;
+      else
+         $result = "<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
 
       $result .= "<script type='text/javascript'>
          <!--// 

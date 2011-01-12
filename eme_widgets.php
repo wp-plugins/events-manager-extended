@@ -8,7 +8,8 @@ class WP_Widget_eme_list extends WP_Widget {
    }
    function widget( $args, $instance ) {
       extract($args);
-      $title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Events','eme' ) : $instance['title'], $instance, $this->id_base);
+      //$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Events','eme' ) : $instance['title'], $instance, $this->id_base);
+      $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
       $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
@@ -125,7 +126,8 @@ class WP_Widget_eme_calendar extends WP_Widget {
    }
    function widget( $args, $instance ) {
       extract($args);
-      $title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Calendar','eme' ) : $instance['title'], $instance, $this->id_base);
+      //$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Calendar','eme' ) : $instance['title'], $instance, $this->id_base);
+      $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
       $long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;
       $category = empty( $instance['category'] ) ? '' : $instance['category'];
       if ($instance['authorid']==-1 ) {
