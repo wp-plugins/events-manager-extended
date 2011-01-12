@@ -379,9 +379,11 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: the global map now shows the same balloon info as the single map created from the placeholder #_MAP
 * Feature: the calendar options "Small calendar title" and "Full calendar events format" can now also use custom attributes as placeholders
 * Feature: EME installs fine for subsites now if you network activate the plugin for a multisite setup
-* Feature: added action hook executed after creation of new event or update of event:
+* Feature: added action hook executed after creation or update of an event or recurrence:
   eme_insert_event_action (1 parameter: $event)
   eme_update_event_action (1 parameter: $event)
+  eme_insert_recurrence_action (2 parameters: $event,$recurrence)
+  eme_update_recurrence_action (2 parameters: $event,$recurrence)
 * Feature: added filter to filter the event list returned:
   eme_event_list_filter (1 parameter: array of events)
 * Improvement: some browser incompatibiliets solved

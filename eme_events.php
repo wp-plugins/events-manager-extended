@@ -103,7 +103,7 @@ function eme_events_subpanel() {
       foreach ( $selectedEvents as $event_ID ) {
          $tmp_event = array();
          $tmp_event = eme_get_event ( $event_ID );
-	 if (current_user_can( EDIT_CAPABILITY) ||
+         if (current_user_can( EDIT_CAPABILITY) ||
              (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
             if ($tmp_event['recurrence_id']>0) {
                eme_remove_recurrence ( $tmp_event['recurrence_id'] );
