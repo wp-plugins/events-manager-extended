@@ -1,13 +1,9 @@
 <?php
 $form_add_message = "";
 $form_delete_message = "";
+
 function eme_add_booking_form($event_id) {
    global $form_add_message, $current_user;
- 
-   $tzstring = get_option('timezone_string');
-   if (!empty($tzstring) ) {
-      @date_default_timezone_set ($tzstring);
-   }
 
    $bookerName="";
    $bookerEmail="";
@@ -99,11 +95,6 @@ function eme_add_booking_form($event_id) {
 function eme_delete_booking_form($event_id) {
    global $form_delete_message;
    
-   $tzstring = get_option('timezone_string');
-   if (!empty($tzstring) ) {
-      @date_default_timezone_set ($tzstring);
-   }
-
    $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
    if ($eme_rsvp_registered_users_only) {
       $readonly="disabled=\"disabled\"";

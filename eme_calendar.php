@@ -40,11 +40,6 @@ function eme_get_calendar($args="") {
    // this comes from global wordpress preferences
    $start_of_week = get_option('start_of_week');
 
-   $tzstring = get_option('timezone_string');
-   if (!empty($tzstring) ) {
-      @date_default_timezone_set ($tzstring);
-   }
-
    //if(isset($_GET['calmonth']) && $_GET['calmonth'] != '')   {
    // $month =  eme_sanitize_request($_GET['calmonth']) ;
    //} else {

@@ -1051,10 +1051,6 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    if ($order != "DESC")
       $order = "ASC";
    
-   $tzstring = get_option('timezone_string');
-   if (!empty($tzstring) ) {
-      @date_default_timezone_set ($tzstring);
-   }
    $today = date("Y-m-d");
    
    $conditions = array ();

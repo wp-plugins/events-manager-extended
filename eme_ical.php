@@ -6,11 +6,6 @@ function eme_ical_single_event($event, $events_page_link, $title_format, $descri
    else
       $joiner = "?";
 
-   $tzstring = get_option('timezone_string');
-   if (!empty($tzstring) ) {
-      @date_default_timezone_set ($tzstring);
-   }
-
    $title = eme_replace_placeholders ( $title_format, $event, "rss" );
    // no html tags allowed in ical
    $title = strip_tags($title);
