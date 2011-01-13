@@ -385,10 +385,10 @@ function eme_ajaxize_calendar() {
 
          $j_eme_calendar('#eme_locations.calendar li').each(function(){
                $j_eme_calendar(this).click(function(){
-                  location_id = $(this).attr('class').replace('location-','');
+                  location_id = $j_eme_calendar(this).attr('class').replace('location-','');
                   $j_eme_calendar('.location_chosen').text(location_id);
-                  prev_month_link = $('.prev-month:first');
-                  tableDiv = $(prev_month_link).closest('table').parent();
+                  prev_month_link = $j_eme_calendar('.prev-month:first');
+                  tableDiv = $j_eme_calendar(prev_month_link).closest('table').parent();
                   ($j_eme_calendar(prev_month_link).hasClass('full-link')) ?
                      fullcalendar = 1 : fullcalendar = 0;
                   ($j_eme_calendar(prev_month_link).hasClass('long_events')) ?

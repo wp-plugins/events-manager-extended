@@ -620,7 +620,7 @@ function get_locations_shortcode($atts) {
       'link'      => false,
       'class'     => ''
    ), $atts));
-   $class = $class ? " class = \"{$class}\"" : "";
+   $class = $class ? "class=\"{$class}\"" : "";
    $locations = eme_get_locations($eventful, $scope, $category, $offset);
    $events_page_link = eme_get_events_page(true, false);
    if (stristr($this_page_url, "?"))
@@ -642,7 +642,7 @@ function get_locations_shortcode($atts) {
    $out .= "</ul>";
    return $out;
 }
-add_shortcode('event_locations','get_locations_shortcode');
+add_shortcode('events_locations','get_locations_shortcode');
 
 function eme_replace_locations_placeholders($format, $location, $target="html") {
    $location_string = $format;
