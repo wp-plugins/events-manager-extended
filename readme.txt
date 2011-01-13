@@ -386,6 +386,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
   eme_update_recurrence_action (2 parameters: $event,$recurrence)
 * Feature: added filter to filter the event list returned:
   eme_event_list_filter (1 parameter: array of events)
+* Feature: making location_id also a possible filter for the calendar shortcode
 * Improvement: you can now specify header/footer html code for the list widget as well
 * Improvement: some browser incompatibiliets solved
 * Improvement: if the setting "Events page" is not set, no more will other pages be overwritten with events data

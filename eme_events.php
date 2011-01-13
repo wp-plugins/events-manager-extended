@@ -213,8 +213,8 @@ function eme_events_subpanel() {
       
       /* Marcus Begin Edit */
       $event_attributes = array();
-      for($i=1 ; isset($_POST["mtm_{$i}_ref"]) && trim($_POST["mtm_{$i}_ref"])!='' ; $i++ ){
-         if(trim($_POST["mtm_{$i}_name"]) != ''){
+      for($i=1 ; isset($_POST["mtm_{$i}_ref"]) && trim($_POST["mtm_{$i}_ref"])!='' ; $i++ ) {
+         if(trim($_POST["mtm_{$i}_name"]) != '') {
             $event_attributes[$_POST["mtm_{$i}_ref"]] = stripslashes($_POST["mtm_{$i}_name"]);
          }
       }
