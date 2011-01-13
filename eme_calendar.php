@@ -382,6 +382,20 @@ function eme_ajaxize_calendar() {
             ($j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
             nextMonthCalendar(tableDiv, fullcalendar, long_events);
          } );
+
+         $j_eme_calendar('#eme_locations.calendar li').each(function(){
+               $j_eme_calendar(this).click(function(){
+                  location_id = $(this).attr('class').replace('location-','');
+                  $j_eme_calendar('.location_chosen').text(location_id);
+                  prev_month_link = $('.prev-month:first');
+                  tableDiv = $(prev_month_link).closest('table').parent();
+                  ($j_eme_calendar(prev_month_link).hasClass('full-link')) ?
+                     fullcalendar = 1 : fullcalendar = 0;
+                  ($j_eme_calendar(prev_month_link).hasClass('long_events')) ?
+                     long_events = 1 : long_events = 0;
+                  reloadCalendar(tableDiv, fullcalendar, long_events);
+               } );
+         } );
       }
       function prevMonthCalendar(tableDiv, fullcalendar, showlong_events) {
          if (fullcalendar === undefined) {
@@ -434,6 +448,34 @@ function eme_ajaxize_calendar() {
             eme_ajaxCalendar: 'true',
             calmonth: nextMonth,
             calyear: year_n,
+            full : fullcalendar,
+            long_events: showlong_events,
+            category: cat_chosen,
+            author: author_chosen,
+            contact_person: contact_person_chosen,
+            location_id: location_chosen <?php echo $jquery_override_lang; ?>
+         }, function(data){
+            tableDiv.replaceWith(data);
+            initCalendar();
+         });
+      }
+      function reloadCalendar(tableDiv, fullcalendar, showlong_events) {
+         if (fullcalendar === undefined) {
+            fullcalendar = 0;
+         }
+         if (showlong_events === undefined) {
+            showlong_events = 0;
+         }
+         month_n = tableDiv.children('div.month_n').text();
+         year_n = tableDiv.children('div.year_n').text();
+         cat_chosen = tableDiv.children('div.cat_chosen').text();
+         author_chosen = tableDiv.children('div.author_chosen').text();
+         contact_person_chosen = tableDiv.children('div.contact_person_chosen').text();
+         location_chosen = tableDiv.children('div.location_chosen').text();
+         $j_eme_calendar.get("<?php echo site_url(); ?>", {
+            eme_ajaxCalendar: 'true',
+            calmonth: parseInt(month_n,10),
+            calyear: parseInt(year_n,10),
             full : fullcalendar,
             long_events: showlong_events,
             category: cat_chosen,

@@ -610,6 +610,40 @@ function eme_display_single_location_shortcode($atts){
 }
 add_shortcode('display_single_location', 'eme_display_single_location_shortcode');
 
+function get_locations_shortcode($atts) {
+   global $wpdb, $jquery_override_lang;
+   extract(shortcode_atts(array(
+      'eventful'  => false,
+      'category'  => '',
+      'scope'     => 'all',
+      'offset'    => 0,
+      'link'      => false,
+      'class'     => ''
+   ), $atts));
+   $class = $class ? " class = \"{$class}\"" : "";
+   $locations = eme_get_locations($eventful, $scope, $category, $offset);
+   $events_page_link = eme_get_events_page(true, false);
+   if (stristr($this_page_url, "?"))
+      $joiner = "&amp;";
+   else
+      $joiner = "?";
+
+   $out = "<ul id=\"eme_locations\" {$class}>";
+   if (!$link)
+      $out .= "<li class=\"location-0\">All</li>";
+   foreach ($locations as $location) {
+      $location_name = $location['location_name'];
+      if ($link) {
+         $location_page_link = $events_page_link.$joiner."location_id=".$location['location_id'];
+         $location_name = "<a href=\"{$location_page_link}\" title=\"{$location_name}\">{$location_name}</a>";  
+      }
+      $out .= "<li class=\"location-{$location['location_id']}\">{$location_name}</li>";
+   }
+   $out .= "</ul>";
+   return $out;
+}
+add_shortcode('event_locations','get_locations_shortcode');
+
 function eme_replace_locations_placeholders($format, $location, $target="html") {
    $location_string = $format;
    preg_match_all("/#@?_?[A-Za-z]+/", $format, $placeholders);
