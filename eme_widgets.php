@@ -13,6 +13,8 @@ class WP_Widget_eme_list extends WP_Widget {
       $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
+      $header = empty( $instance['header'] ) ? '<ul>' : $instance['header'];
+      $footer = empty( $instance['footer'] ) ? '</ul>' : $instance['footer'];
       if ($instance['authorid']==-1 ) {
          $author='';
       } else {
@@ -27,8 +29,9 @@ class WP_Widget_eme_list extends WP_Widget {
 
       $events_list = eme_get_events_list($limit,$scope,$order,$format,false,$category,'',$author);
       if ($events_list == __('No events', 'eme'))
-         $events_list = "<li>$events_list</li>";
-      echo "<ul>$events_list</ul>";
+         echo "<ul><li>$events_list</li></ul>";
+      else
+         echo $header.$events_list.$footer;
       echo $after_widget;
    }
    function update( $new_instance, $old_instance ) {
@@ -48,6 +51,8 @@ class WP_Widget_eme_list extends WP_Widget {
       $instance['category'] = $new_instance['category'];
       $instance['format'] = $new_instance['format'];
       $instance['authorid'] = $new_instance['authorid'];
+      $instance['header'] = $new_instance['header'];
+      $instance['footer'] = $new_instance['footer'];
       return $instance;
    }
    function form( $instance ) {
@@ -57,6 +62,8 @@ class WP_Widget_eme_list extends WP_Widget {
       $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
+      $header = empty( $instance['header'] ) ? '<ul>' : $instance['header'];
+      $footer = empty( $instance['footer'] ) ? '</ul>' : $instance['footer'];
       $category = empty( $instance['category'] ) ? '' : $instance['category'];
       $authorid = empty( $instance['authorid'] ) ? '' : $instance['authorid'];
       $categories = eme_get_categories();
@@ -111,9 +118,17 @@ wp_dropdown_users ( array ('id' => $this->get_field_id('authorid'), 'name' => $t
 ?>
   </p>
   <p>
+    <label for="<?php echo $this->get_field_id('header'); ?>"><?php _e('List header format<br />(if empty &lt;ul&gt; is used)','eme'); ?>: </label>
+    <input type="text" id="<?php echo $this->get_field_id('header'); ?>" name="<?php echo $this->get_field_name('header'); ?>" value="<?php echo $header;?>" />
+  </p>
+  <p>
     <label for="<?php echo $this->get_field_id('format'); ?>"><?php _e('List item format','eme'); ?>:</label>
     <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo eme_sanitize_html($format);?></textarea>
   </p> 
+  <p>
+    <label for="<?php echo $this->get_field_id('footer'); ?>"><?php _e('List footer format<br />(if empty &lt;ul/&gt; is used)','eme'); ?>: </label>
+    <input type="text" id="<?php echo $this->get_field_id('footer'); ?>" name="<?php echo $this->get_field_name('footer'); ?>" value="<?php echo $footer;?>" />
+  </p>
 <?php
     }
 }     
