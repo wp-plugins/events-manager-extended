@@ -59,7 +59,7 @@ define('DEFAULT_LOCATION_PAGE_TITLE_FORMAT', '#_NAME');
 define('DEFAULT_LOCATION_BALLOON_FORMAT', "<strong>#_NAME</strong><br/>#_ADDRESS - #_TOWN<br/><a href='#_LOCATIONPAGEURL'>Details</a>");
 define('DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT', "<li>#_NAME - #j #M #Y - #H:#i</li>");
 define('DEFAULT_LOCATION_NO_EVENTS_MESSAGE', __('<li>No events in this location</li>', 'eme'));
-define("IMAGE_UPLOAD_DIR", "wp-content/uploads/locations-pics");
+define("IMAGE_UPLOAD_DIR", get_option('upload_path')."/locations-pics");
 define('DEFAULT_IMAGE_MAX_WIDTH', 700);
 define('DEFAULT_IMAGE_MAX_HEIGHT', 700);
 define('DEFAULT_IMAGE_MAX_SIZE', 204800); 
@@ -247,8 +247,8 @@ function _eme_install() {
         eme_create_events_page(); 
      }
       // wp-content must be chmodded 777. Maybe just wp-content.
-      if(!file_exists("../".IMAGE_UPLOAD_DIR))
-            mkdir("../".IMAGE_UPLOAD_DIR, 0777);
+      if(!file_exists(ABSPATH.IMAGE_UPLOAD_DIR))
+            mkdir(ABSPATH.IMAGE_UPLOAD_DIR, 0777);
 }
 
 function eme_uninstall() {
