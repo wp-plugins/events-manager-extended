@@ -376,6 +376,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: fix broken empty attributes detection again
 
 = 3.2.16 = 
+* Feature: email now also sent when someone cancels a registration
 * Feature: the global map now shows the same balloon info as the single map created from the placeholder #_MAP
 * Feature: the calendar options "Small calendar title" and "Full calendar events format" can now also use custom attributes as placeholders
 * Feature: EME installs fine for subsites now if you network activate the plugin for a multisite setup
