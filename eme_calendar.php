@@ -382,21 +382,8 @@ function eme_ajaxize_calendar() {
             ($j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
             nextMonthCalendar(tableDiv, fullcalendar, long_events);
          } );
-
-         $j_eme_calendar('#eme_locations.calendar li').each(function(){
-               $j_eme_calendar(this).click(function(){
-                  location_id = $j_eme_calendar(this).attr('class').replace('location-','');
-                  $j_eme_calendar('.location_chosen').text(location_id);
-                  prev_month_link = $j_eme_calendar('.prev-month:first');
-                  tableDiv = $j_eme_calendar(prev_month_link).closest('table').parent();
-                  ($j_eme_calendar(prev_month_link).hasClass('full-link')) ?
-                     fullcalendar = 1 : fullcalendar = 0;
-                  ($j_eme_calendar(prev_month_link).hasClass('long_events')) ?
-                     long_events = 1 : long_events = 0;
-                  reloadCalendar(tableDiv, fullcalendar, long_events);
-               } );
-         } );
       }
+
       function prevMonthCalendar(tableDiv, fullcalendar, showlong_events) {
          if (fullcalendar === undefined) {
              fullcalendar = 0;

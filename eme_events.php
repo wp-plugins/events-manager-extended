@@ -1116,8 +1116,10 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
          $conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
    }
    
-   if ($location_id != "")
-      $conditions [] = " location_id = ".intval($location_id);
+   if (is_numeric($location_id)) {
+      if ($location_id>0)
+         $conditions [] = " location_id = ".intval($location_id);
+   }
       
    if (get_option('eme_categories_enabled')) {
       if (is_numeric($category)) {

@@ -640,6 +640,30 @@ function get_locations_shortcode($atts) {
       $out .= "<li class=\"location-{$location['location_id']}\">{$location_name}</li>";
    }
    $out .= "</ul>";
+   $out .= <<<EOD
+      <script type="text/javascript">
+      //<![CDATA[
+      jQuery.noConflict();
+
+      jQuery(document).ready(function($) {
+         $('#eme_locations.calendar li').each(function(){
+               $(this).click(function(){
+                  location_id = $(this).attr('class').replace('location-','');
+                  $('.location_chosen').text(location_id);
+                  prev_month_link = $('.prev-month:first');
+                  tableDiv = $(prev_month_link).closest('table').parent();
+                  ($(prev_month_link).hasClass('full-link')) ?
+                     fullcalendar = 1 : fullcalendar = 0;
+                  ($(prev_month_link).hasClass('long_events')) ?
+                     long_events = 1 : long_events = 0;
+                  reloadCalendar(tableDiv, fullcalendar, long_events);
+               } );
+         } );
+      });   
+      //]]> 
+
+      </script>
+EOD;
    return $out;
 }
 add_shortcode('events_locations','get_locations_shortcode');
