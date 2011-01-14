@@ -7,6 +7,7 @@ function eme_add_booking_form($event_id) {
 
    $bookerName="";
    $bookerEmail="";
+   $event = eme_get_event($event_id);
    $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
    if ($eme_rsvp_registered_users_only) {
       $readonly="disabled=\"disabled\"";
@@ -25,7 +26,6 @@ function eme_add_booking_form($event_id) {
    }
    $destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
 
-   $event = eme_get_event($event_id);
    $event_start_datetime = strtotime($event['event_start_date']." ".$event['event_start_time']);
    if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_datetime ) {
       $ret_string = "";
@@ -95,6 +95,7 @@ function eme_add_booking_form($event_id) {
 function eme_delete_booking_form($event_id) {
    global $form_delete_message;
    
+   $event = eme_get_event($event_id);
    $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
    if ($eme_rsvp_registered_users_only) {
       $readonly="disabled=\"disabled\"";
@@ -114,7 +115,6 @@ function eme_delete_booking_form($event_id) {
    $destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
    $module = "<h3>".__('Cancel your booking', 'eme')."</h3><br/>";
    
-   $event = eme_get_event($event_id);
    $event_start_datetime = strtotime($event['event_start_date']." ".$event['event_start_time']);
    if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_datetime ) {
       $ret_string = "";
@@ -153,13 +153,15 @@ function eme_catch_rsvp() {
          session_start();
    }
 
+   $event_id = intval($_POST['event_id']);
+   $event = eme_get_event($event_id);
    $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
    if ($eme_rsvp_registered_users_only && !is_user_logged_in()) {
       return;
    }
 
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'add_booking') { 
-      $result = eme_book_seats();
+      $result = eme_book_seats($event);
       $form_add_message = $result;
    } 
 
@@ -174,7 +176,6 @@ function eme_catch_rsvp() {
          $bookerEmail = eme_strip_tags($_POST['bookerEmail']);
          $booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
       }
-      $event_id = intval($_POST['event_id']);
       if ($booker) {
          $person_id = $booker['person_id'];
          $result = eme_delete_booking_by_person_id($person_id,$event_id);
@@ -188,13 +189,13 @@ function eme_catch_rsvp() {
 }
 add_action('init','eme_catch_rsvp');
  
-function eme_book_seats() {
+function eme_book_seats($event) {
    global $current_user;
    $bookedSeats = intval($_POST['bookedSeats']);
    $bookerPhone = eme_strip_tags($_POST['bookerPhone']); 
    $bookerComment = eme_strip_tags($_POST['bookerComment']);
    $honeypot_check = stripslashes($_POST['honeypot_check']);
-   $event_id = intval($_POST['event_id']);
+   $event_id = $event['event_id'];
    $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
    if ($eme_rsvp_registered_users_only) {
       // we require a user to be WP registered to be able to book
