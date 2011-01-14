@@ -745,6 +745,7 @@ InfoBox.prototype.close = function () {
 					infowindow.close();
 					infowindow.setContent(location_info);
 					infowindow.open(map,marker);
+					$j_eme_locations(window).scrollTop($j_eme_locations('#eme_global_map').position().top)
 				});
 				google.maps.event.addListener(map, "click", function() {
 					infowindow.close();

@@ -103,6 +103,7 @@ function loadGMap() {
 				$j_eme_locations('li#location-'+item.location_id+' a').click(function() {
 					infowindow.setContent(balloon_content);
 					infowindow.open(map,marker);
+                                        $j_eme_locations(window).scrollTop($j_eme_locations('#eme_global_map').position().top);
 				});
 				google.maps.event.addListener(marker, "click", function() {
 					// This also works, but relies on global variables:
