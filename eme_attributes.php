@@ -6,9 +6,7 @@ function eme_attributes_form($event) {
       get_option('eme_event_list_item_format' ).
       get_option('eme_event_page_title_format' ).
       get_option('eme_full_calendar_event_format' ).
-      get_option('eme_location_baloon_format' ).
       get_option('eme_location_event_list_item_format' ).
-      get_option('eme_location_page_title_format' ).
       get_option('eme_rss_description_format' ).
       get_option('eme_rss_title_format' ).
       get_option('eme_single_event_format' ).
@@ -16,6 +14,9 @@ function eme_attributes_form($event) {
       get_option('eme_single_location_format' ).
       get_option('eme_contactperson_email_body' ).
       get_option('eme_respondent_email_body' );
+      #get_option('eme_location_baloon_format' ).
+      #get_option('eme_location_page_title_format' ).
+
    //We now have one long string of formats
    preg_match_all("/#_ATT\{.+?\}(\{.+?\})?/", $formats, $placeholders);
    $attributes = array();

@@ -709,7 +709,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
    // and now all the other placeholders
    $event_string = $format;
    $rsvp_is_active = get_option('eme_rsvp_enabled'); 
-   preg_match_all("/#@?_?[A-Za-z0-9]+/", $format, $placeholders);
+   preg_match_all("/#@?_?[A-Za-z0-9\[\]]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
    // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
    usort($placeholders[0],'sort_stringlenth');
@@ -833,7 +833,16 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $event_string = str_replace($result, $icallink , $event_string );
       } 
 
-      if (preg_match('/#_EVENTPAGEURL(\[(.+\)]))?/', $result)) {
+      if (preg_match('/#_EVENTPAGEURL\[(.+)\]/', $result, $matches)) {
+         $events_page_link = eme_get_events_page(true, false);
+         if (stristr($events_page_link, "?"))
+            $joiner = "&amp;";
+         else
+            $joiner = "?";
+         $event_string = str_replace($result, $events_page_link.$joiner."event_id=".intval($matches[1]) , $event_string );
+      }
+
+      if (preg_match('/#_EVENTPAGEURL/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
             $joiner = "&amp;";

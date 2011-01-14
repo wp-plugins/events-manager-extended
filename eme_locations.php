@@ -670,7 +670,7 @@ add_shortcode('events_locations','get_locations_shortcode');
 
 function eme_replace_locations_placeholders($format, $location, $target="html") {
    $location_string = $format;
-   preg_match_all("/#@?_?[A-Za-z]+/", $format, $placeholders);
+   preg_match_all("/#@?_?[A-Za-z0-9\[\]]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
    // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
    usort($placeholders[0],'sort_stringlenth');
@@ -737,7 +737,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
 
       if (preg_match('/#_IMAGE$/', $result)) {
-            if($location['location_image_url'] != '')
+         if($location['location_image_url'] != '')
             $location_image = "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
          else
             $location_image = "";
@@ -749,6 +749,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
             $joiner = "&amp;";
          else
             $joiner = "?";
+
          $location_page_link = $events_page_link.$joiner."location_id=".$location['location_id'];
          $location_string = str_replace($result, $location_page_link , $location_string ); 
       }
@@ -892,3 +893,12 @@ function eme_locations_autocomplete() {
 
    }
 }
+
+function eme_is_single_location_page() {
+   return (eme_is_events_page () && (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] != ''));
+}
+
+function eme_is_multiple_locations_page() {
+   return (eme_is_events_page () && ! (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] != ''));
+}
+

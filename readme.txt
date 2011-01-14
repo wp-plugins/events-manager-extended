@@ -379,13 +379,15 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: the global map now shows the same balloon info as the single map created from the placeholder #_MAP
 * Feature: the calendar options "Small calendar title" and "Full calendar events format" can now also use custom attributes as placeholders
 * Feature: EME installs fine for subsites now if you network activate the plugin for a multisite setup
-* Feature: added action hook executed after creation or update of an event or recurrence:
+* Feature: added action hooks:
   eme_insert_event_action (1 parameter: $event)
   eme_update_event_action (1 parameter: $event)
   eme_insert_recurrence_action (2 parameters: $event,$recurrence)
   eme_update_recurrence_action (2 parameters: $event,$recurrence)
-* Feature: added filter to filter the event list returned:
+  eme_insert_rsvp_action (1 parameter: $booking), executed after inserting rsvp info into the db
+* Feature: added filter to filter the event (list) returned:
   eme_event_list_filter (1 parameter: array of events)
+  eme_event_filter (1 parameter: $event)
 * Feature: making location_id also a possible filter for the calendar shortcode
 * Feature: new shortcode [events_locations], giving you a list of all locations (for all possible parameters: see the doc site), when used in combo with the calendar it can be used to show only specific events in the calendar (use the 'class' parameter then with value 'calendar')
 * Improvement: you can now specify header/footer html code for the list widget as well

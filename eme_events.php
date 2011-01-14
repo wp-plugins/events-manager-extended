@@ -1280,6 +1280,7 @@ function eme_get_event($event_id) {
 
    $event ['event_attributes'] = @unserialize($event ['event_attributes']);
    $event ['event_attributes'] = (!is_array($event ['event_attributes'])) ?  array() : $event ['event_attributes'] ;
+   if (has_filter('eme_event_filter')) $event=apply_filter('eme_event_filter',$event);
    return $event;
 }
 

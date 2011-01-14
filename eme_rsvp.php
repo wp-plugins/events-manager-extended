@@ -277,6 +277,10 @@ function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
    $person_id = intval($person_id);
    $seats = intval($seats);
    $comment = eme_sanitize_request($comment);
+   $booking['event_id']=$event_id;
+   $booking['person_id']=$person_id;
+   $booking['booking_seats']=$seats;
+   $booking['booking_comment']=$comment;
    // checking whether the booker has already booked places
 // $sql = "SELECT * FROM $bookings_table WHERE event_id = '$event_id' and person_id = '$person_id'; ";
 // //echo $sql;
@@ -288,8 +292,15 @@ function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
 //    $fields['booking_seats'] = $total_booked_seats;
 //    $wpdb->update($bookings_table, $fields, $where);
 // } else {
-      $sql = "INSERT INTO $bookings_table (event_id, person_id, booking_seats,booking_comment) VALUES ($event_id, $person_id, $seats,'$comment')";
-      $wpdb->query($sql);
+      //$sql = "INSERT INTO $bookings_table (event_id, person_id, booking_seats,booking_comment) VALUES ($event_id, $person_id, $seats,'$comment')";
+      //$wpdb->query($sql);
+      if ($wpdb->insert($bookings_table,$booking)) {
+         $booking['booking_id'] =$wpdb->insert_id;
+         if (has_action('eme_insert_rsvp_action')) do_action('eme_insert_rsvp_action',$booking);
+         return $booking['booking_id'];
+      } else {
+         return false;
+      }
 // }
 } 
 function eme_delete_all_bookings_for_person_id($person_id) {
