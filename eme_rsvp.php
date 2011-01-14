@@ -59,7 +59,7 @@ function eme_add_booking_form($event_id) {
             <tr><th scope='row'>".__('Name', 'eme')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
             <tr><th scope='row'>".__('E-Mail', 'eme')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
             <tr><th scope='row'>".__('Phone number', 'eme')."$bookerPhone_required:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
-            <tr><th scope='row'>".__('Seats', 'eme')."*:</th><td><select name='bookedSeats' >";
+            <tr id='seats_booking'><th scope='row'>".__('Seats', 'eme')."*:</th><td><select name='bookedSeats' >";
       foreach($booked_places_options as $option) {
          $module .= $option."\n";
       }
