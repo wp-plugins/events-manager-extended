@@ -388,7 +388,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added filter to filter the event (list) returned:
   eme_event_list_filter (1 parameter: array of events)
   eme_event_filter (1 parameter: $event)
-* Feature: making location_id also a possible filter for the calendar shortcode
+* Feature: making location_id also a possible filter for the calendar and events_list shortcode
 * Feature: new shortcode [events_locations], giving you a list of all locations (for all possible parameters: see the doc site), when used in combo with the calendar it can be used to show only specific events in the calendar (use the 'class' parameter then with value 'calendar')
 * Improvement: you can now specify header/footer html code for the list widget as well
 * Improvement: some browser incompatibiliets solved

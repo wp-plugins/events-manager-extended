@@ -955,8 +955,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0 ), $atts ) );
-   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person&paging=$paging&long_events=$long_events" );
+   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0 ), $atts ) );
+   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person&paging=$paging&long_events=$long_events&location_id=$location_id" );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -1116,10 +1116,38 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
          $conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
    }
    
-   if (is_numeric($location_id)) {
-      if ($location_id>0)
-         $conditions [] = " location_id = ".intval($location_id);
+   if (is_numeric($location_id) && $location_id>0) {
+      $conditions [] = " location_id = $location_id";
+   } elseif ( preg_match('/^([0-9],?)+$/', $location_id) ) {
+      $location_ids=explode(',', $location_id);
+      $location_conditions = array();
+      foreach ($location_ids as $loc) {
+         if (is_numeric($loc) && $loc>0)
+               $location_conditions[] = " location_id = $loc";
+         }
+         $conditions [] = "(".implode(' OR', $location_conditions).")";
+   } elseif ( preg_match('/^([0-9] ?)+$/', $location_id) ) {
+      $location_ids=explode(' ', $location_id);
+      $location_conditions = array();
+      foreach ($location_ids as $loc) {
+         if (is_numeric($loc) && $loc>0)
+               $location_conditions[] = " location_id = $loc";
+         }
+         $conditions [] = "(".implode(' AND', $location_conditions).")";
    }
+
+   // now filter the contact ID
+   if ($location_id != '' && !preg_match('/,/', $location_id)) {
+   }elseif( preg_match('/,/', $contact_person) ){
+      $contact_persons = explode(',', $contact_person);
+      $contact_person_conditions = array();
+      foreach($contact_persons as $authname) {
+            $authinfo=get_userdatabylogin($authname);
+            $contact_person_conditions[] = " event_contactperson_id = ".$authinfo->ID;
+      }
+      $conditions [] = "(".implode(' OR ', $contact_person_conditions).")";
+   }
+
       
    if (get_option('eme_categories_enabled')) {
       if (is_numeric($category)) {
