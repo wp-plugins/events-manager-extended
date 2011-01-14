@@ -965,7 +965,7 @@ add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
 function eme_display_single_event_shortcode($atts){
    extract ( shortcode_atts ( array ('id'=>''), $atts ) );
    $event = eme_get_event ( $id );
-   $single_event_format = get_option('eme_single_event_format' );
+   $single_event_format = ( $event['event_single_event_format'] != '' ) ? $event['event_single_event_format'] : get_option('eme_single_event_format' );
    $page_body = eme_replace_placeholders ($single_event_format, $event);
    return $page_body;
 }
