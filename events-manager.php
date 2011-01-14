@@ -847,8 +847,14 @@ function eme_replace_placeholders($format, $event, $target="html") {
          // DETAILS is an alternative for NOTES
          if ($field == "event_details")
             $field = "event_notes";
-         $field_value = $event[$field];
          
+         // when on the single event page, never show just the excerpt
+         if ($field == "event_excerpt" && eme_is_single_event_page()) {
+            $field = "event_notes";
+         }
+
+         $field_value = $event[$field];
+
          if ($target == "html") {
             //If excerpt, we use more link text
             if ($field == "event_excerpt") {
