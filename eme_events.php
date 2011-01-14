@@ -1222,7 +1222,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
          $this_event ['event_attributes'] = (!is_array($this_event ['event_attributes'])) ?  array() : $this_event ['event_attributes'] ;
          array_push ( $inflated_events, $this_event );
       }
-      if (has_filter('eme_event_list_filter')) $inflated_events=apply_filter('eme_event_list_filter',$inflated_events);
+      if (has_filter('eme_event_list_filter')) $inflated_events=apply_filters('eme_event_list_filter',$inflated_events);
       return $inflated_events;
    } else {
       return null;
@@ -1280,7 +1280,7 @@ function eme_get_event($event_id) {
 
    $event ['event_attributes'] = @unserialize($event ['event_attributes']);
    $event ['event_attributes'] = (!is_array($event ['event_attributes'])) ?  array() : $event ['event_attributes'] ;
-   if (has_filter('eme_event_filter')) $event=apply_filter('eme_event_filter',$event);
+   if (has_filter('eme_event_filter')) $event=apply_filters('eme_event_filter',$event);
    return $event;
 }
 
