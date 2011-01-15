@@ -669,17 +669,21 @@ EOD;
 add_shortcode('events_locations','get_locations_shortcode');
 
 function eme_replace_locations_placeholders($format, $location, $target="html") {
-   global $eme_placeholders;
-   $eme_placeholders=array();
 
-   $location_string = $format;
-   preg_match_all("/#@?_?[A-Za-z0-9\[\]]+/", $format, $placeholders);
+   preg_match_all("/#(ESC)?@?_?[A-Za-z0-9\[\]]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
    // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
    usort($placeholders[0],'sort_stringlenth');
 
    foreach($placeholders[0] as $result) {
-      $eme_placeholders[$result]=1;
+      $need_escape = 0;
+      $orig_result = '';
+      if (strstr($result,'#ESC')) {
+         $orig_result = $result;
+         $result = str_replace("#ESC","#",$result);
+         $need_escape=1;
+      }
+
       // echo "RESULT: $result <br>";
       // matches alla fields placeholder
       if (preg_match('/#_MAP$/', $result)) {
@@ -749,11 +753,15 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
          $replacement = eme_add_directions_form($location);
       }
 
-      $location_string = str_replace($result, $replacement , $location_string );
-      if ($replacement != '') $eme_placeholders[$result]=$replacement;
-
+      if ($need_escape) {
+         $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+         $format = str_replace($orig_result, $replacement ,$format );
+      } else {
+         $format = str_replace($result, $replacement ,$format );
+      }
+      $format = str_replace($result, $replacement , $format );
    }
-   return do_shortcode($location_string);   
+   return do_shortcode($format);   
 }
 
 function eme_add_directions_form($location) {

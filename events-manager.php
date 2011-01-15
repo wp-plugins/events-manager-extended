@@ -137,7 +137,6 @@ add_filter('eme_notes_map', 'js_escape');
 // variable to 0 here and if we detect #_MAP, we set it to 1. In a footer filter, we then
 // check if it is 1 and if so: include it
 $eme_need_gmap_js=0;
-$eme_placeholders=array();
 
 // we only want the jquery for the calendar to load if/when needed
 $eme_need_calendar_js=0;
@@ -692,15 +691,20 @@ function eme_create_events_submenu () {
 
 function eme_replace_placeholders($format, $event, $target="html") {
    global $eme_need_gmap_js;
-   global $eme_placeholders;
-   $eme_placeholders=array();
 
    // first we do the custom attributes, since these can contain other placeholders
-   preg_match_all("/#_ATT\{.+?\}(\{.+?\})?/", $format, $results);
+   preg_match_all("/#(ESC)?_ATT\{.+?\}(\{.+?\})?/", $format, $results);
    foreach($results[0] as $resultKey => $result) {
+      $need_escape = 0;
+      $orig_result = '';
+      if (strstr($result,'/#ESC/')) {
+         $orig_result = $result;
+         $result = str_replace("#ESC","#",$result);
+         $need_escape=1;
+      }
+      $replacement = "";
       //Strip string of placeholder and just leave the reference
       $attRef = substr( substr($result, 0, strpos($result, '}')), 6 );
-      $replacement = "";
       if (isset($event['event_attributes'][$attRef])) {
          $replacement = $event['event_attributes'][$attRef];
       }
@@ -708,21 +712,32 @@ function eme_replace_placeholders($format, $event, $target="html") {
          && isset($results[1][$resultKey])
          && $results[1][$resultKey] != '' ) {
          //Check to see if we have a second set of braces;
-         $replacement = substr( $results[1][$resultKey], 1, strlen(trim($results[1][$resultKey]))-2 );
+         $replacement = substr( $results[2][$resultKey], 1, strlen(trim($results[2][$resultKey]))-2 );
       }
-      $format = str_replace($result, $replacement ,$format );
-      if ($replacement != '') $eme_placeholders["#_ATT{".$attRef."}"]=$replacement;
+
+      if ($need_escape) {
+         $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+         $format = str_replace($orig_result, $replacement ,$format );
+      } else {
+         $format = str_replace($result, $replacement ,$format );
+      }
    }
 
    // and now all the other placeholders
-   $event_string = $format;
    $rsvp_is_active = get_option('eme_rsvp_enabled'); 
-   preg_match_all("/#@?_?[A-Za-z0-9\[\]]+/", $format, $placeholders);
+   preg_match_all("/#(ESC)?@?_?[A-Za-z0-9\[\]]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
    // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
    usort($placeholders[0],'sort_stringlenth');
 
    foreach($placeholders[0] as $result) {
+      $need_escape = 0;
+      $orig_result = '';
+      if (strstr($result,'#ESC')) {
+         $orig_result = $result;
+         $result = str_replace("#ESC","#",$result);
+         $need_escape=1;
+      }
       $replacement = "";
       // matches all fields placeholder
       if (preg_match('/#_EDITEVENTLINK$/', $result)) { 
@@ -992,16 +1007,28 @@ function eme_replace_placeholders($format, $event, $target="html") {
          }
       }
 
-      $event_string = str_replace($result, $replacement, $event_string );
-      if ($replacement != '') $eme_placeholders[$result]=$replacement;
+      if ($need_escape) {
+         $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+         $format = str_replace($orig_result, $replacement ,$format );
+      } else {
+         $format = str_replace($result, $replacement ,$format );
+      }
+      $format = str_replace($result, $replacement, $format );
    }
 
    // for extra date formatting, eg. #_{d/m/Y}
-   preg_match_all("/#@?_\{[A-Za-z0-9 -\/,\.\\\]+\}/", $format, $results);
+   preg_match_all("/#(ESC)?@?_\{[A-Za-z0-9 -\/,\.\\\]+\}/", $format, $results);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
    // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
    usort($results[0],'sort_stringlenth');
    foreach($results[0] as $result) {
+      $need_escape = 0;
+      $orig_result = '';
+      if (strstr($result,'#ESC')) {
+         $orig_result = $result;
+         $result = str_replace("#ESC","#",$result);
+         $need_escape=1;
+      }
       $replacement = '';
       if(substr($result, 0, 3 ) == "#@_") {
          $date = "event_start_date";
@@ -1015,10 +1042,16 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } else {
          $replacement = date_i18n(substr($result, $offset, (strlen($result)-($offset+1)) ), strtotime($event[$date]));
       }
-      $event_string = str_replace($result, $replacement, $event_string );
-      if ($replacement != '') $eme_placeholders[$result]=$replacement;
+
+      if ($need_escape) {
+         $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+         $format = str_replace($orig_result, $replacement ,$format );
+      } else {
+         $format = str_replace($result, $replacement ,$format );
+      }
+      $format = str_replace($result, $replacement, $format );
    }
-   return do_shortcode($event_string);   
+   return do_shortcode($format);   
 }
 
 function eme_sanitize_request( $value ) {
