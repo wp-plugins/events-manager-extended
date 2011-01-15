@@ -395,11 +395,11 @@ At this stage, Events Manager Extended is only available in English and Italian.
   <p>#j, #M #Y - #H:#i</p><p>#_TOWN </p><p>#_NOTES</p>#_LOCATIONPAGEURL
   [events_if tag='#ESC_ATT{color}' value='red'] color: #_ATT{color} [/events_if]
   [events_if tag='#ESC_ATT{price}'] price: #_ATT{price} [/events_if]
-* Improvement: you can now specify header/footer html code for the list widget as well
+* Feature: you can now specify header/footer html code for the list widget as well
+* Feature: widget title is allowed to be empty
 * Improvement: some browser incompatibiliets solved
 * Improvement: if the setting "Events page" is not set, no more will other pages be overwritten with events data
-* Improvement: widget title is allowed to be empty
 * Change: the #_EXCERPT now only works (show the part before the more-tag) if not on the single event page, there it would show the whole content
 * Bugfix: #_EXCERPT layout was not ok, should be the same as for #_NOTES
-* Bugfix: the setting for "default contact person" was being ignored and has been corrected. Also I specified that the default contact person is the event author from now on
+* Bugfix: the setting for "default contact person" was being ignored and has been corrected. Also I specified that the default contact person is the event author from now on (can still be changed in the settings page)
 
