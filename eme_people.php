@@ -270,7 +270,7 @@ function eme_get_people() {
    return $result;
 }
 
-function eme_add_person($name, $email, $phone, $wp_id) {
+function eme_add_person($name, $email, $phone, $wp_id, $registration_wp_users_only) {
    global $wpdb; 
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;
    $name = eme_sanitize_request($name);
@@ -279,8 +279,7 @@ function eme_add_person($name, $email, $phone, $wp_id) {
    $wp_id = eme_sanitize_request($wp_id);
    $sql = "INSERT INTO $people_table (person_name, person_email, person_phone, wp_id) VALUES ('$name', '$email', '$phone', '$wp_id');";
    $wpdb->query($sql);
-   $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
-   if ($eme_rsvp_registered_users_only) {
+   if ($registration_wp_users_only) {
       $new_person = eme_get_person_by_wp_id($wp_id);
    } else {
       $new_person = eme_get_person_by_name_and_email($name, $email);

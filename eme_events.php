@@ -25,6 +25,7 @@ function eme_new_event_page() {
       "event_rsvp" => 0,
       "rsvp_number_days" => 0,
       "registration_requires_approval" => 0,
+      "registration_wp_users_only" => 0,
       "event_seats" => 0,
       "event_freq" => '',
       "location_id" => 0,
@@ -167,6 +168,7 @@ function eme_events_subpanel() {
       $event ['event_rsvp'] = (isset ($_POST ['event_rsvp']) && is_numeric($_POST ['event_rsvp'])) ? $_POST ['event_rsvp']:0;
       $event ['rsvp_number_days'] = (isset ($_POST ['rsvp_number_days']) && is_numeric($_POST ['rsvp_number_days'])) ? $_POST ['rsvp_number_days']:0;
       $event ['registration_requires_approval'] = (isset ($_POST ['registration_requires_approval']) && is_numeric($_POST ['registration_requires_approval'])) ? $_POST ['registration_requires_approval']:0;
+      $event ['registration_wp_users_only'] = (isset ($_POST ['registration_wp_users_only']) && is_numeric($_POST ['registration_wp_users_only'])) ? $_POST ['registration_wp_users_only']:0;
       $event ['event_seats'] = (isset ($_POST ['event_seats']) && is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
       
       if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '') {
@@ -475,7 +477,7 @@ function eme_options_subpanel() {
    $indexed_users[-1]=__('Event author','eme');
    $indexed_users+=eme_get_indexed_users();
    eme_options_select ( __ ( 'Default contact person', 'eme' ), 'eme_default_contact_person', $indexed_users, __ ( 'Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event', 'eme' ) );
-   eme_options_radio_binary ( __ ( 'Require WP membership to be able to register?', 'eme' ), 'eme_rsvp_registered_users_only', __ ( 'Check this option if you want that only WP registered users can book for an event.', 'eme' ) );
+#   eme_options_radio_binary ( __ ( 'Require WP membership to be able to register?', 'eme' ), 'eme_rsvp_registered_users_only', __ ( 'Check this option if you want that only WP registered users can book for an event.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'By default enable registrations for new events?', 'eme' ), 'eme_rsvp_reg_for_new_events', __ ( 'Check this option if you want to enable registrations by default for new events.', 'eme' ) );
    eme_options_input_text ( __ ( 'Default number of spaces', 'eme' ), 'eme_rsvp_default_number_spaces', __ ( 'The default number of spaces an event has.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Use captcha for booking form?', 'eme' ), 'eme_captcha_for_booking', __ ( 'Check this option if you want to use a captcha on the booking form, to thwart spammers a bit.', 'eme' ) );
@@ -1618,6 +1620,7 @@ function eme_event_form($event, $title, $element) {
       $event_number_spaces=$event ['event_seats'];
    }
    $event ['registration_requires_approval'] ? $registration_requires_approval = "checked='checked'" : $registration_requires_approval = '';
+   $event ['registration_wp_users_only'] ? $registration_wp_users_only = "checked='checked'" : $registration_wp_users_only = '';
    
    ?>
    <form id="eventForm" method="post"  action="<?php echo $form_destination; ?>">
@@ -1789,6 +1792,9 @@ function eme_event_form($event, $title, $element) {
                            <p>
                               <input id="approval_required-checkbox" name='registration_requires_approval' value='1' type='checkbox' <?php echo $registration_requires_approval; ?> />
                               <?php _e ( 'Require approval for registration','eme' ); ?>
+                           <br />
+                              <input id="wp_member_required-checkbox" name='registration_wp_users_only' value='1' type='checkbox' <?php echo $registration_wp_users_only; ?> />
+                              <?php _e ( 'Require WP membership for registration','eme' ); ?>
                            <br />
                               <?php _e ( 'Spaces','eme' ); ?> :
                               <input id="seats-input" type="text" name="event_seats" size='5' value="<?php echo $event_number_spaces; ?>" />

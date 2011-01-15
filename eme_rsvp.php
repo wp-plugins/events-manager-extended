@@ -8,8 +8,8 @@ function eme_add_booking_form($event_id) {
    $bookerName="";
    $bookerEmail="";
    $event = eme_get_event($event_id);
-   $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
-   if ($eme_rsvp_registered_users_only) {
+   $registration_wp_users_only=$event['registration_wp_users_only'];
+   if ($registration_wp_users_only) {
       $readonly="disabled=\"disabled\"";
       // we require a user to be WP registered to be able to book
       if (!is_user_logged_in()) {
@@ -96,8 +96,8 @@ function eme_delete_booking_form($event_id) {
    global $form_delete_message;
    
    $event = eme_get_event($event_id);
-   $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
-   if ($eme_rsvp_registered_users_only) {
+   $registration_wp_users_only=$event['registration_wp_users_only'];
+   if ($registration_wp_users_only) {
       $readonly="disabled=\"disabled\"";
       // we require a user to be WP registered to be able to book
       if (!is_user_logged_in()) {
@@ -127,8 +127,8 @@ function eme_delete_booking_form($event_id) {
       $module .= "<div class='eme-rsvp-message'>$form_delete_message</div>";
 
    $module  .= "<form name='booking-delete-form' method='post' action='$destination'>
-         <table class='eme-rsvp-form'>
-            <tr><th scope='row'>".__('Name', 'eme').":</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
+      <table class='eme-rsvp-form'>
+         <tr><th scope='row'>".__('Name', 'eme').":</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
          <tr><th scope='row'>".__('E-Mail', 'eme').":</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
       </table>
       <input type='hidden' name='eme_eventAction' value='delete_booking'/>
@@ -155,8 +155,8 @@ function eme_catch_rsvp() {
 
    $event_id = intval($_POST['event_id']);
    $event = eme_get_event($event_id);
-   $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
-   if ($eme_rsvp_registered_users_only && !is_user_logged_in()) {
+   $registration_wp_users_only=$event['registration_wp_users_only'];
+   if ($registration_wp_users_only && !is_user_logged_in()) {
       return;
    }
 
@@ -166,7 +166,7 @@ function eme_catch_rsvp() {
    } 
 
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'delete_booking') { 
-      if ($eme_rsvp_registered_users_only) {
+      if ($registration_wp_users_only) {
          // we require a user to be WP registered to be able to book
          get_currentuserinfo();
          $booker_wp_id=$current_user->ID;
@@ -204,8 +204,8 @@ function eme_book_seats($event) {
    $bookerComment = eme_strip_tags($_POST['bookerComment']);
    $honeypot_check = stripslashes($_POST['honeypot_check']);
    $event_id = $event['event_id'];
-   $eme_rsvp_registered_users_only=get_option('eme_rsvp_registered_users_only');
-   if ($eme_rsvp_registered_users_only) {
+   $registration_wp_users_only=$event['registration_wp_users_only'];
+   if ($registration_wp_users_only) {
       // we require a user to be WP registered to be able to book
       get_currentuserinfo();
       $booker_wp_id=$current_user->ID;
@@ -233,13 +233,13 @@ function eme_book_seats($event) {
    } elseif (!$bookerName || !$bookerEmail || !$bookedSeats) {
       // if any of name, email or bookedseats are empty: return an error
       $result = __('Please fill in all the required fields','eme');
-   } elseif (!$eme_rsvp_registered_users_only && !$bookerPhone) {
+   } elseif (!$registration_wp_users_only && !$bookerPhone) {
       // no member of wordpress: we need a phonenumber then
       $result = __('Please fill in all the required fields','eme');
    } else {
       if ($bookedSeats && eme_are_seats_available_for($event_id, $bookedSeats)) {
          if (!$booker) {
-            $booker = eme_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id);
+            $booker = eme_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id, $registration_wp_users_only);
          }
          eme_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
       

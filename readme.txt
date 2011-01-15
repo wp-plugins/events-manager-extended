@@ -397,6 +397,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
   [events_if tag='#ESC_ATT{price}'] price: #_ATT{price} [/events_if]
 * Feature: you can now specify header/footer html code for the list widget as well
 * Feature: widget title is allowed to be empty
+* Feature: "require WP membership for registration" can now be set per event
 * Improvement: some browser incompatibiliets solved
 * Improvement: if the setting "Events page" is not set, no more will other pages be overwritten with events data
 * Change: the #_EXCERPT now only works (show the part before the more-tag) if not on the single event page, there it would show the whole content
