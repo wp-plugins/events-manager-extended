@@ -669,6 +669,9 @@ EOD;
 add_shortcode('events_locations','get_locations_shortcode');
 
 function eme_replace_locations_placeholders($format, $location, $target="html") {
+   global $eme_placeholders;
+   $eme_placeholders=array();
+
    $location_string = $format;
    preg_match_all("/#@?_?[A-Za-z0-9\[\]]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
@@ -676,73 +679,62 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
    usort($placeholders[0],'sort_stringlenth');
 
    foreach($placeholders[0] as $result) {
+      $eme_placeholders[$result]=1;
       // echo "RESULT: $result <br>";
       // matches alla fields placeholder
       if (preg_match('/#_MAP$/', $result)) {
-         $map_div = eme_single_location_map($location);
-         $location_string = str_replace($result, $map_div , $location_string ); 
+         $replacement = eme_single_location_map($location);
       }
-//    if (preg_match('/#_GOOGLEDIRECTIONS/', $result)) {
-//       $google_directions = "Get Directions";
-//       $location_string = str_replace($result, $google_directions , $location_string );
-//    }
       if (preg_match('/#_PASTEVENTS$/', $result)) {
-         $list = eme_events_in_location_list($location, "past");
-         $location_string = str_replace($result, $list , $location_string ); 
+         $replacement = eme_events_in_location_list($location, "past");
       }
       if (preg_match('/#_NEXTEVENTS$/', $result)) {
-         $list = eme_events_in_location_list($location);
-         $location_string = str_replace($result, $list , $location_string ); 
+         $replacement = eme_events_in_location_list($location);
       }
       if (preg_match('/#_ALLEVENTS$/', $result)) {
-         $list = eme_events_in_location_list($location, "all");
-         $location_string = str_replace($result, $list , $location_string ); 
+         $replacement = eme_events_in_location_list($location, "all");
       }
 
       if (preg_match('/#_(NAME|ADDRESS|TOWN|DESCRIPTION)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
-         $field_value = $location[$field];
+         $replacement = $location[$field];
       
          if ($field == "location_description") {
             // no real sanitizing needed, but possible translation
             // this is the same as for an event in fact
-            $field_value = eme_trans_sanitize_html($field_value,0);
+            $replacement = eme_trans_sanitize_html($replacement,0);
             if ($target == "html")
-               $field_value = apply_filters('eme_notes', $field_value);
+               $replacement = apply_filters('eme_notes', $replacement);
             else
               if ($target == "map")
-               $field_value = apply_filters('eme_notes_map', $field_value);
+               $replacement = apply_filters('eme_notes_map', $replacement);
               else
-               $field_value = apply_filters('eme_notes_rss', $field_value);
+               $replacement = apply_filters('eme_notes_rss', $replacement);
          } else {
-            $field_value = eme_trans_sanitize_html($field_value);
+            $replacement = eme_trans_sanitize_html($replacement);
             if ($target == "html")
-               $field_value = apply_filters('eme_general', $field_value); 
+               $replacement = apply_filters('eme_general', $replacement); 
             else 
-               $field_value = apply_filters('eme_general_rss', $field_value); 
+               $replacement = apply_filters('eme_general_rss', $replacement); 
          }
-         $location_string = str_replace($result, $field_value , $location_string ); 
-      }
-      if (preg_match('/#_LOCATIONID$/', $result)) {
-         $field = "location_id";
-         $field_value = $location[$field];
-         $field_value = eme_trans_sanitize_html($field_value);
-         if ($target == "html") {
-            $field_value = apply_filters('eme_general', $field_value);
-         } else {
-            $field_value = apply_filters('eme_general_rss', $field_value);
-         }
-         $location_string = str_replace($result, $field_value , $location_string ); 
       }
 
+      if (preg_match('/#_LOCATIONID$/', $result)) {
+         $field = "location_id";
+         $replacement = $location[$field];
+         $replacement = eme_trans_sanitize_html($replacement);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement);
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
+      }
 
       if (preg_match('/#_IMAGE$/', $result)) {
          if($location['location_image_url'] != '')
-            $location_image = "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
-         else
-            $location_image = "";
-         $location_string = str_replace($result, $location_image , $location_string ); 
+            $replacement = "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
       }
+
       if (preg_match('/#_LOCATIONPAGEURL$/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
@@ -750,16 +742,18 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
          else
             $joiner = "?";
 
-         $location_page_link = $events_page_link.$joiner."location_id=".$location['location_id'];
-         $location_string = str_replace($result, $location_page_link , $location_string ); 
-      }
-      if (preg_match('/#_DIRECTIONS/', $result)) {
-         $directions_form = eme_add_directions_form($location);
-         $location_string = str_replace($result, $directions_form , $location_string );
+         $replacement = $events_page_link.$joiner."location_id=".$location['location_id'];
       }
 
+      if (preg_match('/#_DIRECTIONS/', $result)) {
+         $replacement = eme_add_directions_form($location);
+      }
+
+      $location_string = str_replace($result, $replacement , $location_string );
+      if ($replacement != '') $eme_placeholders[$result]=$replacement;
+
    }
-   return $location_string;   
+   return do_shortcode($location_string);   
 }
 
 function eme_add_directions_form($location) {

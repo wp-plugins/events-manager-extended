@@ -211,7 +211,6 @@ function eme_events_subpanel() {
       }
       $validation_result = eme_validate_event ( $event );
       
-      /* Marcus Begin Edit */
       $event_attributes = array();
       for($i=1 ; isset($_POST["mtm_{$i}_ref"]) && trim($_POST["mtm_{$i}_ref"])!='' ; $i++ ) {
          if(trim($_POST["mtm_{$i}_name"]) != '') {
@@ -219,20 +218,23 @@ function eme_events_subpanel() {
          }
       }
       $event['event_attributes'] = serialize($event_attributes);
-      /* Marcus End Edit */
       
       if ($validation_result == "OK") {
          // validation successful
          if(isset($_POST['location-select-id']) && $_POST['location-select-id'] != "") {
-            $event ['location_id'] = $_POST['location-select-id'];
+            $event['location_id'] = $_POST['location-select-id'];
          } else {
-            $related_location = eme_get_identical_location ( $location );
-            // print_r($related_location); 
-            if ($related_location) {
-               $event ['location_id'] = $related_location ['location_id'];
+            if (empty($location['location_name']) && empty($location['location_address']) && empty($location['location_town'])) {
+               $event['location_id'] = 0;
             } else {
-               $new_location = eme_insert_location ( $location );
-               $event ['location_id'] = $new_location ['location_id'];
+               $related_location = eme_get_identical_location ( $location );
+               // print_r($related_location); 
+               if ($related_location) {
+                  $event['location_id'] = $related_location['location_id'];
+               } else {
+                  $new_location = eme_insert_location ( $location );
+                  $event['location_id'] = $new_location['location_id'];
+               }
             }
          }
          if (! $event_ID && ! $recurrence_ID) {

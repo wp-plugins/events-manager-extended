@@ -59,7 +59,7 @@ function eme_add_booking_form($event_id) {
             <tr><th scope='row'>".__('Name', 'eme')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
             <tr><th scope='row'>".__('E-Mail', 'eme')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
             <tr><th scope='row'>".__('Phone number', 'eme')."$bookerPhone_required:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
-            <tr id='seats_booking'><th scope='row'>".__('Seats', 'eme')."*:</th><td><select name='bookedSeats' >";
+            <tr><th scope='row'>".__('Seats', 'eme')."*:</th><td><select name='bookedSeats' >";
       foreach($booked_places_options as $option) {
          $module .= $option."\n";
       }
@@ -524,21 +524,27 @@ function eme_get_bookings_list_for($event_id) {
 }
 
 function eme_replace_attendees_placeholders($format, $attendee, $target="html") {
+   global $eme_placeholders;
+   // emtpy it
+   $eme_placeholders=array();
+
    $attendee_string = $format;
    preg_match_all("/#@?_?[A-Za-z]+/", $format, $placeholders);
    foreach($placeholders[0] as $result) {
+      $replacement='';
       if (preg_match('/#_(NAME|PHONE|ID|EMAIL)$/', $result)) {
          $field = "person_".ltrim(strtolower($result), "#_");
-         $field_value = $attendee[$field];
-         $field_value = eme_sanitize_html($field_value);
+         $replacement = $attendee[$field];
+         $replacement = eme_sanitize_html($replacement);
          if ($target == "html")
-            $field_value = apply_filters('eme_general', $field_value); 
+            $replacement = apply_filters('eme_general', $replacement); 
          else 
-            $field_value = apply_filters('eme_general_rss', $field_value); 
-         $attendee_string = str_replace($result, $field_value , $attendee_string ); 
+            $replacement = apply_filters('eme_general_rss', $replacement); 
+         $attendee_string = str_replace($result, $replacement , $attendee_string ); 
+         if ($replacement != '') $eme_placeholders[$result]=$replacement;
       }
    }
-   return $attendee_string;   
+   return do_shortcode($attendee_string);   
 }
 
 function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,$action="") {
