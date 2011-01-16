@@ -2,13 +2,13 @@
 
 function eme_if_shortcode($atts,$content) {
    extract ( shortcode_atts ( array ('tag' => '', 'value' => '', 'notvalue' => '', 'lt' => '', 'gt' => '' ), $atts ) );
-   if (!empty($value)) {
+   if (is_numeric($value) || !empty($value)) {
       if ($tag==$value) return $content;
-   } elseif (!empty($notvalue)) {
+   } elseif (is_numeric($notvalue) || !empty($notvalue)) {
       if ($tag!=$notvalue) return $content;
-   } elseif (!empty($lt)) {
+   } elseif (is_numeric($lt) || !empty($lt)) {
       if ($tag<$lt) return $content;
-   } elseif (!empty($gt)) {
+   } elseif (is_numeric($gt) || !empty($gt)) {
       if ($tag>$gt) return $content;
    } else {
       if (!empty($tag)) return $content;
