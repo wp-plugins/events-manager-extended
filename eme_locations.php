@@ -367,11 +367,11 @@ function eme_get_location($location_id=0) {
 }
 
 function eme_image_url_for_location_id($location_id) {
-   $file_name= ABSPATH.IMAGE_UPLOAD_DIR."/location-".$location_id;
+   $file_name= IMAGE_UPLOAD_DIR."/location-".$location_id;
    $mime_types = array('gif','jpg','png');foreach($mime_types as $type) { 
       $file_path = "$file_name.$type";
       if (file_exists($file_path)) {
-         $result = site_url("/".IMAGE_UPLOAD_DIR."/location-$location_id.$type");
+         $result = IMAGE_UPLOAD_URL."/location-$location_id.$type";
          return $result;
       }
    }
