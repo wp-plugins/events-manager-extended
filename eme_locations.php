@@ -476,18 +476,18 @@ function eme_location_has_events($location_id) {
 }
 
 function eme_upload_location_picture($location) {
-   if(!file_exists(ABSPATH.IMAGE_UPLOAD_DIR))
-            mkdir(ABSPATH.IMAGE_UPLOAD_DIR, 0777);
+   if(!file_exists(IMAGE_UPLOAD_DIR))
+            mkdir(IMAGE_UPLOAD_DIR, 0777);
    eme_delete_image_files_for_location_id($location['location_id']);
    $mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
    list($width, $height, $type, $attr) = getimagesize($_FILES['location_image']['tmp_name']);
-   $image_path = ABSPATH.IMAGE_UPLOAD_DIR."/location-".$location['location_id'].".".$mime_types[$type];
+   $image_path = IMAGE_UPLOAD_DIR."/location-".$location['location_id'].".".$mime_types[$type];
    if (!move_uploaded_file($_FILES['location_image']['tmp_name'], $image_path)) 
       $msg = "<p>".__('The image could not be loaded','eme')."</p>";
 }
 
 function eme_delete_image_files_for_location_id($location_id) {
-   $file_name= ABSPATH.IMAGE_UPLOAD_DIR."/location-".$location_id;
+   $file_name= IMAGE_UPLOAD_DIR."/location-".$location_id;
    $mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
    foreach($mime_types as $type) { 
       if (file_exists($file_name.".".$type))
