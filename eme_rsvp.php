@@ -524,7 +524,7 @@ function eme_get_bookings_list_for($event_id) {
 }
 
 function eme_replace_attendees_placeholders($format, $attendee, $target="html") {
-   preg_match_all("/#(ESC)?@?_?[A-Za-z]+/", $format, $placeholders);
+   preg_match_all("/#(ESC)?@?_?[A-Za-z0)9_]+/", $format, $placeholders);
    foreach($placeholders[0] as $result) {
       $need_escape = 0;
       $orig_result = '';

@@ -670,7 +670,7 @@ add_shortcode('events_locations','get_locations_shortcode');
 
 function eme_replace_locations_placeholders($format, $location, $target="html") {
 
-   preg_match_all("/#(ESC)?@?_?[A-Za-z0-9\[\]]+/", $format, $placeholders);
+   preg_match_all("/#(ESC)?@?_?[A-Za-z0-9_\[\]]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
    // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
    usort($placeholders[0],'sort_stringlenth');
@@ -759,6 +759,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
             $replacement = 1;
          else
             $replacement = 0;
+print "TTT: $replacement";
       }
 
       if ($need_escape) {

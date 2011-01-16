@@ -3,9 +3,9 @@
 function eme_if_shortcode($atts,$content) {
    extract ( shortcode_atts ( array ('tag' => '', 'value' => '', 'notvalue' => '', 'lt' => '', 'gt' => '' ), $atts ) );
    if (!empty($value)) {
-      if ($tag===$value) return $content;
+      if ($tag==$value) return $content;
    } elseif (!empty($notvalue)) {
-      if ($tag!==$value) return $content;
+      if ($tag!=$notvalue) return $content;
    } elseif (!empty($lt)) {
       if ($tag<$lt) return $content;
    } elseif (!empty($gt)) {
