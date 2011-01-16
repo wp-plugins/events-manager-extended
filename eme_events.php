@@ -1672,7 +1672,7 @@ function eme_event_form($event, $title, $element) {
                               echo "<option value='$key' $selected>$value</option>";
                            }
                         ?>
-                        </select>
+                        </select><br />
                         <?php
                            _e('Private events are only visible for logged in users, draft events are not visible from the front end.','eme');
                         ?>
