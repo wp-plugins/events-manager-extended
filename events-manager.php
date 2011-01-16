@@ -966,20 +966,23 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       if (preg_match('/#_CONTACTNAME$/', $result)) {
          $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
+         if ($user_id==-1) $user_id=$event['event_author'];
          $replacement = eme_get_user_name($user_id);
       }
       if (preg_match('/#_CONTACTEMAIL$/', $result)) {
          $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
+         if ($user_id==-1) $user_id=$event['event_author'];
          $email = eme_get_user_email($user_id);
          // ascii encode for primitive harvesting protection ...
          $replacement=eme_ascii_encode($email);
       }
       if (preg_match('/#_CONTACTPHONE$/', $result)) {
          $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
+         if ($user_id==-1) $user_id=$event['event_author'];
          $phone = eme_get_user_phone($user_id);
          // ascii encode for primitive harvesting protection ...
          $replacement=eme_ascii_encode($phone);
-      }  
+      }
       if (preg_match('/#_IMAGE$/', $result)) {
          if ($event['location_image_url'] != '')
               $replacement = "<img src='".$event['location_image_url']."' alt='".$event['location_name']."'/>";
