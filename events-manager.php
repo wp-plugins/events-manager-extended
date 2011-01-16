@@ -1015,7 +1015,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } else {
          $format = str_replace($result, $replacement ,$format );
       }
-      $format = str_replace($result, $replacement, $format );
    }
 
    // for extra date formatting, eg. #_{d/m/Y}
@@ -1051,7 +1050,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } else {
          $format = str_replace($result, $replacement ,$format );
       }
-      $format = str_replace($result, $replacement, $format );
    }
    return do_shortcode($format);   
 }

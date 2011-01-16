@@ -683,6 +683,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
       }
+      $replacement = "";
 
       // echo "RESULT: $result <br>";
       // matches alla fields placeholder
@@ -759,7 +760,6 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       } else {
          $format = str_replace($result, $replacement ,$format );
       }
-      $format = str_replace($result, $replacement , $format );
    }
    return do_shortcode($format);   
 }

@@ -549,7 +549,6 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
          } else {
             $format = str_replace($result, $replacement ,$format );
          }
-         $format = str_replace($result, $replacement , $format ); 
       }
    }
    return do_shortcode($attendee_string);   
