@@ -2224,50 +2224,50 @@ $j_eme_event(document).ready( function() {
    // is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
 
    $j_eme_event('textarea#event_page_title_format').focus(function(){
-      var tmp_value='<?php echo addslashes(preg_replace("/\r\n|\r|\n/","___",get_option('eme_event_page_title_format' ))); ?>';
-      tmp_value=tmp_value.replace(/___/g,"\n");
+      var tmp_value='<?php echo rawurlencode(get_option('eme_event_page_title_format' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == '')
          $j_eme_event(this).val(tmp_value);
    }); 
    $j_eme_event('textarea#event_page_title_format').blur(function(){
-      var tmp_value='<?php echo addslashes(preg_replace("/\r\n|\r|\n/","___",get_option('eme_event_page_title_format' ))); ?>';
-      tmp_value=tmp_value.replace(/___/g,"\n");
+      var tmp_value='<?php echo rawurlencode(get_option('eme_event_page_title_format' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == tmp_value)
          $j_eme_event(this).val('');
    }); 
    $j_eme_event('textarea#event_single_event_format').focus(function(){
-      var tmp_value='<?php echo addslashes(preg_replace("/\r\n|\r|\n/","___",get_option('eme_single_event_format' ))); ?>';
-      tmp_value=tmp_value.replace(/___/g,"\n");
+      var tmp_value='<?php echo rawurlencode(get_option('eme_single_event_format' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == '')
          $j_eme_event(this).val(tmp_value);
    }); 
    $j_eme_event('textarea#event_single_event_format').blur(function(){
-      var tmp_value='<?php echo addslashes(preg_replace("/\r\n|\r|\n/","___",get_option('eme_single_event_format' ))); ?>';
-      tmp_value=tmp_value.replace(/___/g,"\n");
+      var tmp_value='<?php echo rawurlencode(get_option('eme_single_event_format' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == tmp_value)
          $j_eme_event(this).val('');
    }); 
    $j_eme_event('textarea#event_contactperson_email_body').focus(function(){
-      var tmp_value='<?php echo addslashes(preg_replace("/\r\n|\r|\n/","___",get_option('eme_contactperson_email_body' ))); ?>';
-      tmp_value=tmp_value.replace(/___/g,"\n");
+      var tmp_value='<?php echo rawurlencode(get_option('eme_contactperson_email_body' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == '')
          $j_eme_event(this).val(tmp_value);
    })
    $j_eme_event('textarea#event_contactperson_email_body').blur(function(){
-      var tmp_value='<?php echo addslashes(preg_replace("/\r\n|\r|\n/","___",get_option('eme_contactperson_email_body' ))); ?>';
-      tmp_value=tmp_value.replace(/___/g,"\n");
+      var tmp_value='<?php echo rawurlencode(get_option('eme_contactperson_email_body' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == tmp_value)
          $j_eme_event(this).val('');
    }); 
    $j_eme_event('textarea#event_respondent_email_body').focus(function(){
-      var tmp_value='<?php echo addslashes(preg_replace("/\r\n|\r|\n/","___",get_option('eme_respondent_email_body' ))); ?>';
-      tmp_value=tmp_value.replace(/___/g,"\n");
+      var tmp_value='<?php echo rawurlencode(get_option('eme_respondent_email_body' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == '')
          $j_eme_event(this).val(tmp_value);
    }); 
    $j_eme_event('textarea#event_respondent_email_body').blur(function(){
-      var tmp_value='<?php echo addslashes(preg_replace("/\r\n|\r|\n/","___",get_option('eme_respondent_email_body' ))); ?>';
-      tmp_value=tmp_value.replace(/___/g,"\n");
+      var tmp_value='<?php echo rawurlencode(get_option('eme_respondent_email_body' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == tmp_value)
          $j_eme_event(this).val('');
    }); 

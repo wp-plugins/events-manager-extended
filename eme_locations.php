@@ -759,7 +759,6 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
             $replacement = 1;
          else
             $replacement = 0;
-print "TTT: $replacement";
       }
 
       if ($need_escape) {
