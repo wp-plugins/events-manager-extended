@@ -396,12 +396,13 @@ At this stage, Events Manager Extended is only available in English and Italian.
   [events_if tag='#ESC_ATT{color}' value='red'] color: #_ATT{color} [/events_if]
   [events_if tag='#ESC_ATT{price}'] price: #_ATT{price} [/events_if]
   [events_if tag='#ESC_TOWN'] Town: #_TOWN [/events_if]
-* Feature: for conditional tags, I added 2 extra shortcodes: one to check if you're viewing a single event details page and idem for a single location=
+* Feature: for conditional tags, I added 2 extra shortcodes: one to check if you're viewing a single event details page and idem for a single location:
   #_IS_SINGLE_EVENT and #_IS_SINGLE_LOC
 * Feature: you can now specify header/footer html code for the list widget as well
 * Feature: widget title is allowed to be empty
 * Feature: "require WP membership for registration" can now be set per event
-* Improvement: some browser incompatibiliets solved
+* Improvement: some browser incompatibilities solved
+* Improvement: more robust javascript for prefilling the formatting per event
 * Improvement: if the setting "Events page" is not set, no more will other pages be overwritten with events data
 * Change: the #_EXCERPT now only works (show the part before the more-tag) if not on the single event page, there it would show the whole content
 * Bugfix: #_EXCERPT layout was not ok, should be the same as for #_NOTES
