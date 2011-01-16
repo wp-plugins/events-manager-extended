@@ -1012,6 +1012,13 @@ function eme_replace_placeholders($format, $event, $target="html") {
          }
       }
 
+      if (preg_match('/#_IS_SINGLE_EVENT/', $result)) {
+         if (eme_is_single_event_page())
+            $replacement = 1;
+         else
+            $replacement = 0;
+      }
+
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
          $format = str_replace($orig_result, $replacement ,$format );

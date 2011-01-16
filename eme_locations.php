@@ -754,6 +754,13 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
          $replacement = eme_add_directions_form($location);
       }
 
+      if (preg_match('/#_IS_SINGLE_LOC/', $result)) {
+         if (eme_is_single_location_page())
+            $replacement = 1;
+         else
+            $replacement = 0;
+      }
+
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
          $format = str_replace($orig_result, $replacement ,$format );
@@ -895,12 +902,3 @@ function eme_locations_autocomplete() {
 
    }
 }
-
-function eme_is_single_location_page() {
-   return (eme_is_events_page () && (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] != ''));
-}
-
-function eme_is_multiple_locations_page() {
-   return (eme_is_events_page () && ! (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] != ''));
-}
-

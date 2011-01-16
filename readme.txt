@@ -392,9 +392,12 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: making location_id also a possible filter for the calendar and events_list shortcode
 * Feature: new shortcode [events_locations], giving you a list of all locations (for all possible parameters: see the doc site), when used in combo with the calendar it can be used to show only specific events in the calendar (use the 'class' parameter then with value 'calendar')
 * Feature: you can now use conditional placeholder formatting using a new shortcode [events_if] in your formatting, by prepending them with "#ESC". An example for default single event formatting:
-  <p>#j, #M #Y - #H:#i</p><p>#_TOWN </p><p>#_NOTES</p>#_LOCATIONPAGEURL
+  <p>#j, #M #Y - #H:#i</p><p>#_NOTES</p>#_LOCATIONPAGEURL
   [events_if tag='#ESC_ATT{color}' value='red'] color: #_ATT{color} [/events_if]
   [events_if tag='#ESC_ATT{price}'] price: #_ATT{price} [/events_if]
+  [events_if tag='#ESC_TOWN'] Town: #_TOWN [/events_if]
+* Feature: for conditional tags, I added 2 extra shortcodes: one to check if you're viewing a single event details page and idem for a single location=
+  #_IS_SINGLE_EVENT and #_IS_SINGLE_LOC
 * Feature: you can now specify header/footer html code for the list widget as well
 * Feature: widget title is allowed to be empty
 * Feature: "require WP membership for registration" can now be set per event
