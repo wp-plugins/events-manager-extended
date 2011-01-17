@@ -342,6 +342,7 @@ function eme_get_locations($eventful = false, $scope="all", $category = '', $off
       $sql = "SELECT * FROM $locations_table WHERE location_name != '' ORDER BY location_name";
       $locations = $wpdb->get_results($sql, ARRAY_A); 
    }
+   if (has_filter('eme_location_list_filter')) $locations=apply_filters('eme_location_list_filter',$locations);
    return $locations;
 }
 
@@ -363,6 +364,8 @@ function eme_get_location($location_id=0) {
       $location = $wpdb->get_row($sql, ARRAY_A);
       $location['location_image_url'] = eme_image_url_for_location_id($location['location_id']);
    }
+
+   if (has_filter('eme_location_filter')) $location=apply_filters('eme_location_filter',$location);
    return $location;
 }
 

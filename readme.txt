@@ -386,9 +386,11 @@ At this stage, Events Manager Extended is only available in English and Italian.
   eme_insert_recurrence_action (2 parameters: $event,$recurrence)
   eme_update_recurrence_action (2 parameters: $event,$recurrence)
   eme_insert_rsvp_action (1 parameter: $booking), executed after inserting rsvp info into the db
-* Feature: added filter to filter the event (list) returned:
+* Feature: added filters:
+  eme_event_filter (1 parameter: $event array)
   eme_event_list_filter (1 parameter: array of events)
-  eme_event_filter (1 parameter: $event)
+  eme_location_filter (1 parameter: $location array)
+  eme_location_list_filter (1 parameter: array of locations)
 * Feature: making location_id also a possible filter for the calendar and events_list shortcode
 * Feature: new shortcode [events_locations], giving you a list of all locations (for all possible parameters: see the doc site), when used in combo with the calendar it can be used to show only specific events in the calendar (use the 'class' parameter then with value 'calendar')
 * Feature: you can now use conditional placeholder formatting using a new shortcode [events_if] in your formatting, by prepending them with "#ESC". An example for default single event formatting:
