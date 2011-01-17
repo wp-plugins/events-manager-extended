@@ -654,7 +654,7 @@ function eme_create_events_page() {
       'post_name'  => $wpdb->escape(__('events','eme')),
       'post_type'  => 'page',
    );
-   if($int_post_id = wp_insert_post($postarr)){
+   if ($int_post_id = wp_insert_post($postarr)) {
       update_option('eme_events_page', $int_post_id);
    }
 }
@@ -668,9 +668,9 @@ function eme_delete_events_page() {
 // Create the Manage Events and the Options submenus 
 add_action('admin_menu','eme_create_events_submenu');
 function eme_create_events_submenu () {
-     if(function_exists('add_submenu_page')) {
+   if(function_exists('add_submenu_page')) {
       add_object_page(__('Events', 'eme'),__('Events', 'eme'),MIN_CAPABILITY,'events-manager','eme_events_subpanel', EME_PLUGIN_URL.'images/calendar-16.png');
-         // Add a submenu to the custom top-level menu: 
+      // Add a submenu to the custom top-level menu: 
       $plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),MIN_CAPABILITY,'events-manager','eme_events_subpanel');
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
       $plugin_page = add_submenu_page('events-manager', __('Add new', 'eme'), __('Add new','eme'), MIN_CAPABILITY, 'events-manager-new_event', "eme_new_event_page");
