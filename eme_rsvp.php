@@ -523,14 +523,9 @@ function eme_get_bookings_list_for($event_id) {
 }
 
 function eme_replace_attendees_placeholders($format, $attendee, $target="html") {
-   preg_match_all("/#(ESC)?@?_?[A-Za-z0)9_]+/", $format, $placeholders);
+   preg_match_all("/#_?[A-Za-z0)9_]+/", $format, $placeholders);
    foreach($placeholders[0] as $result) {
       $need_escape = 0;
-      $orig_result = $result;
-      if (strstr($result,'#ESC')) {
-         $result = str_replace("#ESC","#",$result);
-         $need_escape=1;
-      }
       $replacement='';
       if (preg_match('/#_(NAME|PHONE|ID|EMAIL)$/', $result)) {
          $field = "person_".ltrim(strtolower($result), "#_");
@@ -541,11 +536,7 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
          else 
             $replacement = apply_filters('eme_general_rss', $replacement); 
 
-         if ($need_escape) {
-            $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
-         }
-
-	 $format = str_replace($orig_result, $replacement ,$format );
+	 $format = str_replace($result, $replacement ,$format );
       }
    }
    return do_shortcode($attendee_string);   
