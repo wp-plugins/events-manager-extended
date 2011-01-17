@@ -1029,7 +1029,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = 0;
       }
 
-      if (preg_match('/#_IS_ON_ADMIN/', $result)) {
+      if (preg_match('/#_IS_ADMIN_PAGE/', $result)) {
          if (is_admin())
             $replacement = 1;
          else
