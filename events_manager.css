@@ -127,15 +127,22 @@ table.eme-calendar-table td {
 	padding: 2px 4px;
 	text-align: center;
 }
+
 table.eme-calendar-table tr.days-names {
 	font-weight: bold;
+	font-size: 1em;
+}
+table.eme-calendar-table td.eventful-pre, table.eme-calendar-table td.eventful-post {
+	font-size: 1.4em;
 }
 table.eme-calendar-table td.eventless-pre, table.eme-calendar-table td.eventless-post {
 	color: #ccc;
+	font-size: 1.4em;
 }
 table.eme-calendar-table td.eventful a, table.eme-calendar-table td.eventful-today a {
   font-weight: bold;
   color: #FD7E29;
+	font-size: 1.4em;
 }
 table.eme-calendar-table td.eventless-today {
    background-color: #CFCFCF;  
@@ -145,17 +152,10 @@ table.eme-calendar-table thead {
 	font-weight: bold;  
 }
 
-.eme-calendar-table, #event-list-box, #event-calendar-box {
-	background-color:#eee;
-	-moz-box-shadow:3px 3px 3px rgba(0, 0, 0, 0.4);
-	-webkit-box-shadow:3px 3px 3px rgba(0, 0, 0, 0.4);
-	box-shadow:3px 3px 3px rgba(0, 0, 0, 0.4);
-}
 table.fullcalendar {
 	table-layout:fixed;
 	border-collapse:collapse;
 	width:100%;
-	font-size:1.4em;
 }
 table.fullcalendar td {
 	padding:0 !important;
@@ -188,7 +188,6 @@ table.fullcalendar tr.days-names td {
 	font-weight:bold;
 	text-align:center;
 	vertical-align:middle;
-	background-color:#bbb;
 }
 table.fullcalendar tbody td {
 	height:4em;
@@ -202,9 +201,6 @@ table.fullcalendar ul li {
 	margin:7px 0 0 0;
 	font-size:.5em;
 	line-height:normal;
-}
-table.fullcalendar td.eventless-today, table.fullcalendar td.eventful-today {
-	background-color:#ddd;
 }
 
 #events-pagination-top {
