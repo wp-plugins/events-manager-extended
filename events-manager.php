@@ -1022,6 +1022,20 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = 0;
       }
 
+      if (preg_match('/#_IS_LOGGED_IN/', $result)) {
+         if (is_user_logged_in())
+            $replacement = 1;
+         else
+            $replacement = 0;
+      }
+
+      if (preg_match('/#_IS_ON_ADMIN/', $result)) {
+         if (is_admin())
+            $replacement = 1;
+         else
+            $replacement = 0;
+      }
+
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
          $format = str_replace($orig_result, $replacement ,$format );
