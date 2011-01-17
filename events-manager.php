@@ -701,9 +701,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
    preg_match_all("/#(ESC)?_ATT\{.+?\}(\{.+?\})?/", $format, $results);
    foreach($results[0] as $resultKey => $result) {
       $need_escape = 0;
-      $orig_result = '';
+      $orig_result = $result;
       if (strstr($result,'/#ESC/')) {
-         $orig_result = $result;
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
       }
@@ -722,10 +721,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
-         $format = str_replace($orig_result, $replacement ,$format );
-      } else {
-         $format = str_replace($result, $replacement ,$format );
       }
+      $format = str_replace($orig_result, $replacement ,$format );
    }
 
    // and now all the other placeholders
@@ -737,9 +734,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
    foreach($placeholders[0] as $result) {
       $need_escape = 0;
-      $orig_result = '';
+      $orig_result = $result;
+      $found = 1;
       if (strstr($result,'#ESC')) {
-         $orig_result = $result;
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
       }
@@ -748,22 +745,21 @@ function eme_replace_placeholders($format, $event, $target="html") {
       if (preg_match('/#_EDITEVENTLINK$/', $result)) { 
          if(is_user_logged_in())
             $replacement = "<a href=' ".admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event['event_id'])."'>".__('Edit')."</a>";
-      }
-      if (preg_match('/#_24HSTARTTIME$/', $result)) { 
+
+      } elseif (preg_match('/#_24HSTARTTIME$/', $result)) { 
          $replacement = substr($event['event_start_time'], 0,5);
-      }
-      if (preg_match('/#_24HENDTIME$/', $result)) { 
+
+      } elseif (preg_match('/#_24HENDTIME$/', $result)) { 
          $replacement = substr($event['event_end_time'], 0,5);
-      }
-      if (preg_match('/#_PAST_FUTURE_CLASS$/', $result)) { 
+
+      } elseif (preg_match('/#_PAST_FUTURE_CLASS$/', $result)) { 
          if (strtotime($event['event_start_time']) > time()) {
             $replacement="eme-future-event";
          } else {
             $replacement="eme-past-event";
          }
-      }
-      
-      if (preg_match('/#_12HSTARTTIME$/', $result)) {
+
+      } elseif (preg_match('/#_12HSTARTTIME$/', $result)) {
          $AMorPM = "AM"; 
          $hour = substr($event['event_start_time'], 0,2);
          $minute = substr($event['event_start_time'], 3,2);
@@ -777,8 +773,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
          // hour 0 does not exist in AM/PM notation
          if ($hour == 0) $hour=12;
          $replacement = "$hour:$minute $AMorPM";
-      }
-      if (preg_match('/#_12HENDTIME$/', $result)) {
+
+      } elseif (preg_match('/#_12HENDTIME$/', $result)) {
          $AMorPM = "AM"; 
          $hour = substr($event['event_end_time'], 0,2);
          $minute = substr($event['event_end_time'], 3,2);
@@ -791,74 +787,68 @@ function eme_replace_placeholders($format, $event, $target="html") {
          }
          if ($hour == 0) $hour=12;
          $replacement = "$hour:$minute $AMorPM";
-      }     
-      
-      if (preg_match('/#_MAP$/', $result)) {
+
+      } elseif (preg_match('/#_MAP$/', $result)) {
          $location = eme_get_location($event['location_id']);
          $replacement = eme_single_location_map($location);
-      }
-      if (preg_match('/#_DIRECTIONS$/', $result)) {
+
+      } elseif (preg_match('/#_DIRECTIONS$/', $result)) {
          $location = eme_get_location($event['location_id']);
          $replacement = eme_add_directions_form($location);
-      }
-      if (preg_match('/#_ADDBOOKINGFORM$/', $result)) {
+
+      } elseif (preg_match('/#_ADDBOOKINGFORM$/', $result)) {
          if ($target == "rss") {
             $replacement = "";
          } elseif ($rsvp_is_active && $event['event_rsvp']) {
             $replacement = eme_add_booking_form($event['event_id']);
          }
-      }
-      if (preg_match('/#_REMOVEBOOKINGFORM$/', $result)) {
+
+      } elseif (preg_match('/#_REMOVEBOOKINGFORM$/', $result)) {
          if ($target == "rss") {
             $replacement = "";
          } elseif ($rsvp_is_active && $event['event_rsvp']) {
             $replacement = eme_delete_booking_form($event['event_id']);
          }
-      }
-      if (preg_match('/#_(AVAILABLESPACES|AVAILABLESEATS)$/', $result)) {
+
+      } elseif (preg_match('/#_(AVAILABLESPACES|AVAILABLESEATS)$/', $result)) {
          if ($rsvp_is_active && $event['event_rsvp']) {
             $replacement = eme_get_available_seats($event['event_id']);
          }
-      }
-      if (preg_match('/#_(RESERVEDSPACES|BOOKEDSEATS)$/', $result)) {
+
+      } elseif (preg_match('/#_(RESERVEDSPACES|BOOKEDSEATS)$/', $result)) {
          if ($rsvp_is_active && $event['event_rsvp']) {
             $replacement = eme_get_booked_seats($event['event_id']);
          }
-      }
 
-      if (preg_match('/#_LINKEDNAME$/', $result)) {
+      } elseif (preg_match('/#_LINKEDNAME$/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
             $joiner = "&amp;";
          else
             $joiner = "?";
          $replacement="<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".eme_trans_sanitize_html($event['event_name'])."'>".eme_trans_sanitize_html($event['event_name'])."</a>";
-      } 
 
-      if (preg_match('/#_ICALLINK$/', $result)) {
+      } elseif (preg_match('/#_ICALLINK$/', $result)) {
          $url = site_url ("/?eme_ical=public_single&amp;event_id=".$event['event_id']);
          $replacement = "<a href='$url'>ICAL</a>";
-      } 
 
-      if (preg_match('/#_EVENTPAGEURL\[(.+)\]/', $result, $matches)) {
+      } elseif (preg_match('/#_EVENTPAGEURL\[(.+)\]/', $result, $matches)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
             $joiner = "&amp;";
          else
             $joiner = "?";
          $replacement = $events_page_link.$joiner."event_id=".intval($matches[1]);
-      }
 
-      if (preg_match('/#_EVENTPAGEURL/', $result)) {
+      } elseif (preg_match('/#_EVENTPAGEURL/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
             $joiner = "&amp;";
          else
             $joiner = "?";
          $replacement = $events_page_link.$joiner."event_id=".$event['event_id'];
-      }
 
-      if (preg_match('/#_(DETAILS|NOTES|EXCERPT)$/', $result)) {
+      } elseif (preg_match('/#_(DETAILS|NOTES|EXCERPT)$/', $result)) {
          $field = "event_".ltrim(strtolower($result), "#_");
          // DETAILS is an alternative for NOTES
          if ($field == "event_details")
@@ -898,9 +888,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
                $replacement = apply_filters('the_content_rss', $replacement);
             }
          }
-      }
 
-      if (preg_match('/#_NAME$/', $result)) {
+      } elseif (preg_match('/#_NAME$/', $result)) {
          $field = "event_name";
          $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
@@ -909,9 +898,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } else {
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
-      }
 
-      if (preg_match('/#_(ADDRESS|TOWN)$/', $result)) {
+      } elseif (preg_match('/#_(ADDRESS|TOWN)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
          $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
@@ -920,18 +908,16 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } else { 
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
-      }
 
-      if (preg_match('/#_LOCATIONPAGEURL$/', $result)) { 
+      } elseif (preg_match('/#_LOCATIONPAGEURL$/', $result)) { 
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
             $joiner = "&amp;";
          else
             $joiner = "?";
          $replacement = $events_page_link.$joiner."location_id=".$event['location_id'];
-      }
 
-      if (preg_match('/#_LOCATIONID$/', $result)) {
+      } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
          $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
@@ -940,9 +926,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } else {
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
-      }
 
-      if (preg_match('/#_LOCATION$/', $result)) {
+      } elseif (preg_match('/#_LOCATION$/', $result)) {
          $field = "location_name";
          $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
@@ -951,9 +936,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } else {
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
-      }
 
-      if (preg_match('/#_ATTENDEES$/', $result)) {
+      } elseif (preg_match('/#_ATTENDEES$/', $result)) {
          if ($rsvp_is_active && $event['event_rsvp']) {
             $replacement=eme_get_bookings_list_for($event['event_id']);
             if ($target == "html") {
@@ -962,50 +946,45 @@ function eme_replace_placeholders($format, $event, $target="html") {
                $replacement = apply_filters('eme_general_rss', $replacement); 
             }
          }
-      }
 
-      if (preg_match('/#_CONTACTNAME$/', $result)) {
+      } elseif (preg_match('/#_CONTACTNAME$/', $result)) {
          $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
          if ($user_id==-1) $user_id=$event['event_author'];
          $replacement = eme_get_user_name($user_id);
-      }
-      if (preg_match('/#_CONTACTEMAIL$/', $result)) {
+
+      } elseif (preg_match('/#_CONTACTEMAIL$/', $result)) {
          $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
          if ($user_id==-1) $user_id=$event['event_author'];
          $email = eme_get_user_email($user_id);
          // ascii encode for primitive harvesting protection ...
          $replacement=eme_ascii_encode($email);
-      }
-      if (preg_match('/#_CONTACTPHONE$/', $result)) {
+
+      } elseif (preg_match('/#_CONTACTPHONE$/', $result)) {
          $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
          if ($user_id==-1) $user_id=$event['event_author'];
          $phone = eme_get_user_phone($user_id);
          // ascii encode for primitive harvesting protection ...
          $replacement=eme_ascii_encode($phone);
-      }
-      if (preg_match('/#_IMAGE$/', $result)) {
+
+      } elseif (preg_match('/#_IMAGE$/', $result)) {
          if ($event['location_image_url'] != '')
               $replacement = "<img src='".$event['location_image_url']."' alt='".$event['location_name']."'/>";
-      }
 
-      // matches all PHP date placeholders for startdate-time
-      if (preg_match('/^#[A-Za-z]$/', $result)) {
+      } elseif (preg_match('/^#[A-Za-z]$/', $result)) {
+         // matches all PHP date placeholders for startdate-time
          $replacement=date_i18n( ltrim($result,"#"), strtotime( $event['event_start_date']." ".$event['event_start_time']));
          if (get_option('eme_time_remove_leading_zeros') && $result=="#i") {
             $replacement=ltrim($replacement,"0");
          }
-      }
-      
-      // matches all PHP time placeholders for enddate-time
-      if (preg_match('/^#@[A-Za-z]$/', $result)) {
+
+      } elseif (preg_match('/^#@[A-Za-z]$/', $result)) {
+         // matches all PHP time placeholders for enddate-time
          $replacement=date_i18n( ltrim($result,"#@"), strtotime( $event['event_end_date']." ".$event['event_end_time']));
          if (get_option('eme_time_remove_leading_zeros') && $result=="#@i") {
             $replacement=ltrim($replacement,"0");
          }
-      }
-      
-      //Add a placeholder for categories
-      if (preg_match('/^#_CATEGORIES$/', $result) && get_option('eme_categories_enabled')) {
+
+      } elseif (preg_match('/^#_CATEGORIES$/', $result) && get_option('eme_categories_enabled')) {
          $categories = eme_get_event_categories($event['event_id']);
          $replacement = eme_trans_sanitize_html(join(",",$categories));
          if ($target == "html") {
@@ -1013,35 +992,34 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } else {
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
-      }
 
-      if (preg_match('/#_IS_SINGLE_EVENT/', $result)) {
+      } elseif (preg_match('/#_IS_SINGLE_EVENT/', $result)) {
          if (eme_is_single_event_page())
             $replacement = 1;
          else
             $replacement = 0;
-      }
 
-      if (preg_match('/#_IS_LOGGED_IN/', $result)) {
+      } elseif (preg_match('/#_IS_LOGGED_IN/', $result)) {
          if (is_user_logged_in())
             $replacement = 1;
          else
             $replacement = 0;
-      }
 
-      if (preg_match('/#_IS_ADMIN_PAGE/', $result)) {
+      } elseif (preg_match('/#_IS_ADMIN_PAGE/', $result)) {
          if (is_admin())
             $replacement = 1;
          else
             $replacement = 0;
+
+      } else {
+         $found = 0;
       }
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
-         $format = str_replace($orig_result, $replacement ,$format );
-      } else {
-         $format = str_replace($result, $replacement ,$format );
       }
+      if ($found)
+         $format = str_replace($orig_result, $replacement ,$format );
    }
 
    // for extra date formatting, eg. #_{d/m/Y}
@@ -1051,9 +1029,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
    usort($results[0],'sort_stringlenth');
    foreach($results[0] as $result) {
       $need_escape = 0;
-      $orig_result = '';
+      $orig_result = $result;
       if (strstr($result,'#ESC')) {
-         $orig_result = $result;
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
       }
@@ -1073,10 +1050,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
-         $format = str_replace($orig_result, $replacement ,$format );
-      } else {
-         $format = str_replace($result, $replacement ,$format );
       }
+      $format = str_replace($orig_result, $replacement ,$format );
    }
    return do_shortcode($format);   
 }

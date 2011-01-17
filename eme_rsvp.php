@@ -526,9 +526,8 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
    preg_match_all("/#(ESC)?@?_?[A-Za-z0)9_]+/", $format, $placeholders);
    foreach($placeholders[0] as $result) {
       $need_escape = 0;
-      $orig_result = '';
+      $orig_result = $result;
       if (strstr($result,'#ESC')) {
-         $orig_result = $result;
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
       }
@@ -544,10 +543,9 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
 
          if ($need_escape) {
             $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
-            $format = str_replace($orig_result, $replacement ,$format );
-         } else {
-            $format = str_replace($result, $replacement ,$format );
          }
+
+	 $format = str_replace($orig_result, $replacement ,$format );
       }
    }
    return do_shortcode($attendee_string);   

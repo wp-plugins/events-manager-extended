@@ -677,9 +677,9 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
    foreach($placeholders[0] as $result) {
       $need_escape = 0;
-      $orig_result = '';
+      $orig_result = $result;
+      $found=1;
       if (strstr($result,'#ESC')) {
-         $orig_result = $result;
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
       }
@@ -689,18 +689,17 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       // matches alla fields placeholder
       if (preg_match('/#_MAP$/', $result)) {
          $replacement = eme_single_location_map($location);
-      }
-      if (preg_match('/#_PASTEVENTS$/', $result)) {
-         $replacement = eme_events_in_location_list($location, "past");
-      }
-      if (preg_match('/#_NEXTEVENTS$/', $result)) {
-         $replacement = eme_events_in_location_list($location);
-      }
-      if (preg_match('/#_ALLEVENTS$/', $result)) {
-         $replacement = eme_events_in_location_list($location, "all");
-      }
 
-      if (preg_match('/#_(NAME|ADDRESS|TOWN|DESCRIPTION)$/', $result)) {
+      } elseif (preg_match('/#_PASTEVENTS$/', $result)) {
+         $replacement = eme_events_in_location_list($location, "past");
+
+      } elseif (preg_match('/#_NEXTEVENTS$/', $result)) {
+         $replacement = eme_events_in_location_list($location);
+
+      } elseif (preg_match('/#_ALLEVENTS$/', $result)) {
+         $replacement = eme_events_in_location_list($location, "all");
+
+      } elseif (preg_match('/#_(NAME|ADDRESS|TOWN|DESCRIPTION)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
          $replacement = $location[$field];
       
@@ -722,9 +721,8 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
             else 
                $replacement = apply_filters('eme_general_rss', $replacement); 
          }
-      }
 
-      if (preg_match('/#_LOCATIONID$/', $result)) {
+      } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
          $replacement = $location[$field];
          $replacement = eme_trans_sanitize_html($replacement);
@@ -733,14 +731,12 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
          } else {
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
-      }
 
-      if (preg_match('/#_IMAGE$/', $result)) {
+      } elseif (preg_match('/#_IMAGE$/', $result)) {
          if($location['location_image_url'] != '')
             $replacement = "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
-      }
 
-      if (preg_match('/#_LOCATIONPAGEURL$/', $result)) {
+      } elseif (preg_match('/#_LOCATIONPAGEURL$/', $result)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))
             $joiner = "&amp;";
@@ -748,39 +744,37 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
             $joiner = "?";
 
          $replacement = $events_page_link.$joiner."location_id=".$location['location_id'];
-      }
 
-      if (preg_match('/#_DIRECTIONS/', $result)) {
+      } elseif (preg_match('/#_DIRECTIONS/', $result)) {
          $replacement = eme_add_directions_form($location);
-      }
 
-      if (preg_match('/#_IS_SINGLE_LOC/', $result)) {
+      } elseif (preg_match('/#_IS_SINGLE_LOC/', $result)) {
          if (eme_is_single_location_page())
             $replacement = 1;
          else
             $replacement = 0;
-      }
 
-      if (preg_match('/#_IS_LOGGED_IN/', $result)) {
+      } elseif (preg_match('/#_IS_LOGGED_IN/', $result)) {
          if (is_user_logged_in())
             $replacement = 1;
          else
             $replacement = 0;
-      }
 
-      if (preg_match('/#_IS_ADMIN_PAGE/', $result)) {
+      } elseif (preg_match('/#_IS_ADMIN_PAGE/', $result)) {
          if (is_admin())
             $replacement = 1;
          else
             $replacement = 0;
+
+      } else {
+         $found = 0;
       }
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
-         $format = str_replace($orig_result, $replacement ,$format );
-      } else {
-         $format = str_replace($result, $replacement ,$format );
       }
+      if ($found)
+         $format = str_replace($orig_result, $replacement ,$format );
    }
    return do_shortcode($format);   
 }
