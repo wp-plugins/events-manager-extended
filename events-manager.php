@@ -1107,6 +1107,7 @@ function admin_show_warnings() {
    if ($db_version && $db_version < EME_DB_VERSION) {
       // first the important warning
       eme_explain_deactivation_needed();
+      exit(1);
    } elseif (!$db_version && $old_db_version) {
       // transfer from dbem to eme warning
       $advice = __("You have installed the new version of Events Manager Extended. This version has among other things switched from 'dbem' to 'eme' for API calls (used in templates) and for CSS. So if you use these, please replace the string 'dbem' by 'eme' in your custom templates and/or CSS. After that, please deacticate/reactivate the plugin to adjust for the new version.",'eme');
@@ -1136,7 +1137,7 @@ function admin_show_warnings() {
 function eme_explain_deactivation_needed() {
    $advice = __("It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen.",'eme');
    ?>
-<div id="message" class="updated"><p> <?php echo $advice; ?> </p></div>
+<div id="message" class="error"><p> <?php echo $advice; ?> </p></div>
 <?php
 }
 

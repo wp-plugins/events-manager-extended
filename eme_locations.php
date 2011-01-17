@@ -185,6 +185,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
             <br/>
          </div>
          <h2><?php _e('Locations', 'eme') ?></h2>
+         <?php admin_show_warnings(); ?>
          
          <?php if($message != "") : ?>
             <div id="message" class="updated fade below-h2" style="background-color: rgb(255, 251, 204);">
@@ -246,7 +247,6 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                   <div class="form-wrap"> 
                      <div id="ajax-response"/>
                   <h3><?php _e('Add location', 'eme') ?></h3>
-                      <?php admin_show_warnings(); ?>
                       <form enctype="multipart/form-data" name="addlocation" id="addlocation" method="post" action="<?php echo admin_url("admin.php?page=events-manager-locations"); ?>" class="add:the-list: validate">
                         <input type="hidden" name="action" value="addlocation" />
                         <div id="titlediv" class="form-field form-required">
