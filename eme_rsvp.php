@@ -113,7 +113,6 @@ function eme_delete_booking_form($event_id) {
       $bookerEmail="";
    }
    $destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
-   $module = "<h3>".__('Cancel your booking', 'eme')."</h3><br/>";
    
    $event_start_datetime = strtotime($event['event_start_date']." ".$event['event_start_time']);
    if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_datetime ) {
