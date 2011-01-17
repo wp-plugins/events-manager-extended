@@ -178,15 +178,17 @@ function eme_get_calendar($args="") {
          $days_initials .= "<td>".$wp_locale->get_weekday_initial($weekday)."</td>";
    } 
 
-   $full ? $fullclass = 'fullcalendar' : $fullclass='';
-   // Build the heading portion of the calendar table 
-   $calendar .=  "<table class='eme-calendar-table $fullclass'>\n". 
-      "<thead>\n<tr>\n".
-      "<td>$previous_link</td><td class='month_name' colspan='5'>$month_name $year</td><td>$next_link</td>\n". 
-      "</tr>\n</thead>\n". 
-      "<tr class='days-names'>\n". 
-      $days_initials. 
-      "</tr>\n"; 
+   if ($full) {
+      $fullclass = 'fullcalendar';
+      $head = "<td class='month_name' colspan='7'>$previous_link $next_link $month_name $year</td>\n";
+   } else {
+      $fullclass='';
+      $head = "<td>$previous_link</td><td class='month_name' colspan='5'>$month_name $year</td><td>$next_link</td>\n";
+   }
+   // Build the heading portion of the calendar table
+   $calendar .=  "<table class='eme-calendar-table $fullclass'>\n".
+                 "<thead>\n<tr>\n".$head."</tr>\n</thead>\n".
+                 "<tr class='days-names'>\n".$days_initials."</tr>\n";
 
    // Now we break each key of the array
    // into a week and create a new table row for each 
