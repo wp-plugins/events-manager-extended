@@ -832,6 +832,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $url = site_url ("/?eme_ical=public_single&amp;event_id=".$event['event_id']);
          $replacement = "<a href='$url'>ICAL</a>";
 
+      } elseif (preg_match('/#_ICALURL$/', $result)) {
+         $replacement = site_url ("/?eme_ical=public_single&amp;event_id=".$event['event_id']);
+
       } elseif (preg_match('/#_EVENTPAGEURL\[(.+)\]/', $result, $matches)) {
          $events_page_link = eme_get_events_page(true, false);
          if (stristr($events_page_link, "?"))

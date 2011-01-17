@@ -406,6 +406,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: you can now specify header/footer html code for the list widget as well
 * Feature: widget title is allowed to be empty
 * Feature: "require WP membership for registration" can now be set per event
+* Frature: added #_ICALURL, giving you just the url to the ical, so you can build your own link
 * Improvement: some browser incompatibilities solved
 * Improvement: more robust javascript for prefilling the formatting per event
 * Improvement: if the setting "Events page" is not set, no more will other pages be overwritten with events data
