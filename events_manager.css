@@ -144,7 +144,7 @@ table.eme-calendar-table thead {
 	font-size: 120%;  
 	font-weight: bold;  
 }
-/* CHANGED SECTION START *************** */
+
 .eme-calendar-table {
 	background-color:#fff;
 }
@@ -197,7 +197,6 @@ table.fullcalendar ul li {
 table.fullcalendar td.eventless-today, table.fullcalendar td.eventful-today {
 	background-color:#eee;
 }
-/* CHANGED SECTION END *************** */
 
 #events-pagination-top {
   margin-bottom:1em;
