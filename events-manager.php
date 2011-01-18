@@ -805,11 +805,41 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = eme_add_booking_form($event['event_id']);
          }
 
+      } elseif (preg_match('/#_ADDBOOKINGFORM_IF_NOT_REGISTERED$/', $result)) {
+         if ($target == "rss") {
+            $replacement = "";
+         } elseif ($rsvp_is_active && $event['event_rsvp']
+                   && is_user_logged_in()
+                   && $event['registration_wp_users_only]') {
+            get_currentuserinfo();
+            $person_id=$current_user->ID;
+            if (!eme_get_booking_by_person_event_id($person_id,$event['event_id']))
+
+               $replacement = eme_add_booking_form($event['event_id']);
+         } else {
+            $replacement = "";
+         }
+
       } elseif (preg_match('/#_REMOVEBOOKINGFORM$/', $result)) {
          if ($target == "rss") {
             $replacement = "";
          } elseif ($rsvp_is_active && $event['event_rsvp']) {
             $replacement = eme_delete_booking_form($event['event_id']);
+         }
+
+      } elseif (preg_match('/#_REMOVEBOOKINGFORM_IF_REGISTERED$/', $result)) {
+         if ($target == "rss") {
+            $replacement = "";
+         } elseif ($rsvp_is_active && $event['event_rsvp']
+                   && is_user_logged_in()
+                   && $event['registration_wp_users_only]') {
+            get_currentuserinfo();
+            $person_id=$current_user->ID;
+            if (eme_get_booking_by_person_event_id($person_id,$event['event_id']))
+
+               $replacement = eme_delete_booking_form($event['event_id']);
+         } else {
+            $replacement = "";
          }
 
       } elseif (preg_match('/#_(AVAILABLESPACES|AVAILABLESEATS)$/', $result)) {
@@ -1015,30 +1045,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = 1;
          else
             $replacement = 0;
-
-      } elseif (preg_match('/#_HAS_REGISTERED/', $result)) {
-         if (is_user_logged_in() && $event['registration_wp_users_only]') {
-            get_currentuserinfo();
-            $person_id=$current_user->ID;
-            if (eme_get_booking_by_person_event_id($person_id,$event['event_id']))
-               $replacement = 1;
-            else
-               $replacement = 0;
-         } else {
-            $replacement = 0;
-         }
-
-      } elseif (preg_match('/#_HAS_NOT_REGISTERED/', $result)) {
-         if (is_user_logged_in() && $event['registration_wp_users_only]') {
-            get_currentuserinfo();
-            $person_id=$current_user->ID;
-            if (!eme_get_booking_by_person_event_id($person_id,$event['event_id']))
-               $replacement = 1;
-            else
-               $replacement = 0;
-         } else {
-            $replacement = 0;
-         }
 
       } else {
          $found = 0;
