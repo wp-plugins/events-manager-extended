@@ -403,6 +403,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
   #_IS_SINGLE_LOC ('1' if you're viewing a single location details, '0' otherwise)
   #_IS_LOGGED_IN ('1' if user is logged into WP, '0' otherwise)
   #_IS_ADMIN_PAGE ('1' if on the admin pages)
+  #_HAS_REGISTERED ('1' if user registered for the event already, only for WP users)
+  #_HAS_NOT_REGISTERED ('1' if user did not yet register for the event, only for WP users)
 * Feature: you can now specify header/footer html code for the list widget as well
 * Feature: widget title is allowed to be empty
 * Feature: "require WP membership for registration" can now be set per event

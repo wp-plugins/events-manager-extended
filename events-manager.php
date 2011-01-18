@@ -696,6 +696,8 @@ function eme_create_events_submenu () {
 
 function eme_replace_placeholders($format, $event, $target="html") {
    global $eme_need_gmap_js;
+   global $current_user;
+
 
    // first we do the custom attributes, since these can contain other placeholders
    preg_match_all("/#(ESC)?_ATT\{.+?\}(\{.+?\})?/", $format, $results);
@@ -1013,6 +1015,30 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = 1;
          else
             $replacement = 0;
+
+      } elseif (preg_match('/#_HAS_REGISTERED/', $result)) {
+         if (is_user_logged_in() && $event['registration_wp_users_only]') {
+            get_currentuserinfo();
+            $person_id=$current_user->ID;
+            if (eme_get_booking_by_person_event_id($person_id,$event['event_id']))
+               $replacement = 1;
+            else
+               $replacement = 0;
+         } else {
+            $replacement = 0;
+         }
+
+      } elseif (preg_match('/#_HAS_NOT_REGISTERED/', $result)) {
+         if (is_user_logged_in() && $event['registration_wp_users_only]') {
+            get_currentuserinfo();
+            $person_id=$current_user->ID;
+            if (!eme_get_booking_by_person_event_id($person_id,$event['event_id']))
+               $replacement = 1;
+            else
+               $replacement = 0;
+         } else {
+            $replacement = 0;
+         }
 
       } else {
          $found = 0;
