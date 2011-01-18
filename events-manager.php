@@ -810,7 +810,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = "";
          } elseif ($rsvp_is_active && $event['event_rsvp']
                    && is_user_logged_in()
-                   && $event['registration_wp_users_only]') {
+                   && $event['registration_wp_users_only']) {
             get_currentuserinfo();
             $person_id=$current_user->ID;
             if (!eme_get_booking_by_person_event_id($person_id,$event['event_id']))
@@ -832,7 +832,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = "";
          } elseif ($rsvp_is_active && $event['event_rsvp']
                    && is_user_logged_in()
-                   && $event['registration_wp_users_only]') {
+                   && $event['registration_wp_users_only']) {
             get_currentuserinfo();
             $person_id=$current_user->ID;
             if (eme_get_booking_by_person_event_id($person_id,$event['event_id']))
