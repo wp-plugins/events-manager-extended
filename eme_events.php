@@ -477,7 +477,7 @@ function eme_options_subpanel() {
    $indexed_users[-1]=__('Event author','eme');
    $indexed_users+=eme_get_indexed_users();
    eme_options_select ( __ ( 'Default contact person', 'eme' ), 'eme_default_contact_person', $indexed_users, __ ( 'Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event', 'eme' ) );
-#   eme_options_radio_binary ( __ ( 'Require WP membership to be able to register?', 'eme' ), 'eme_rsvp_registered_users_only', __ ( 'Check this option if you want that only WP registered users can book for an event.', 'eme' ) );
+   eme_options_radio_binary ( __ ( 'By default require WP membership to be able to register?', 'eme' ), 'eme_rsvp_registered_users_only', __ ( 'Check this option if you want by default that only WP registered users can book for an event.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'By default enable registrations for new events?', 'eme' ), 'eme_rsvp_reg_for_new_events', __ ( 'Check this option if you want to enable registrations by default for new events.', 'eme' ) );
    eme_options_input_text ( __ ( 'Default number of spaces', 'eme' ), 'eme_rsvp_default_number_spaces', __ ( 'The default number of spaces an event has.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Use captcha for booking form?', 'eme' ), 'eme_captcha_for_booking', __ ( 'Check this option if you want to use a captcha on the booking form, to thwart spammers a bit.', 'eme' ) );
@@ -1597,13 +1597,19 @@ function eme_event_form($event, $title, $element) {
    if ($is_new_event) {
       if (get_option('eme_rsvp_reg_for_new_events'))
          $event_RSVP_checked = "checked='checked'";
+      else
+         $event_RSVP_checked = "";
       $event_number_spaces=intval(get_option('eme_rsvp_default_number_spaces'));
+      if (get_option('eme_rsvp_registered_users_only'))
+         $registration_wp_users_only = "checked='checked'";
+      else
+         $registration_wp_users_only = "";
    } else {
       $event ['event_rsvp'] ? $event_RSVP_checked = "checked='checked'" : $event_RSVP_checked = '';
       $event_number_spaces=$event ['event_seats'];
+      $event ['registration_wp_users_only'] ? $registration_wp_users_only = "checked='checked'" : $registration_wp_users_only = '';
    }
    $event ['registration_requires_approval'] ? $registration_requires_approval = "checked='checked'" : $registration_requires_approval = '';
-   $event ['registration_wp_users_only'] ? $registration_wp_users_only = "checked='checked'" : $registration_wp_users_only = '';
    
    ?>
    <form id="eventForm" method="post"  action="<?php echo $form_destination; ?>">
