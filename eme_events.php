@@ -687,57 +687,7 @@ function eme_filter_get_pages($data) {
 }
 add_filter ( 'get_pages', 'eme_filter_get_pages' );
 
-//
-// ADMIN CSS for debug
-function eme_admin_css() {
-   $css = "
-   <style type='text/css'>
-   .debug{
-      color: green;
-      background: #B7F98C;
-      margin: 15px;
-      padding: 10px;
-      border: 1px solid #629948;
-   }
-   .switch-tab {
-      background: #aaa;
-      width: 100px;
-      float: right;
-      text-align: center;
-      margin: 3px 1px 0 5px;
-      padding: 2px;
-   }
-   .switch-tab a {
-      color: #fff;
-      text-decoration: none;
-   }
-   .switch-tab a:hover {
-      color: #D54E21;
-      
-   } 
-   #events-pagination {
-      text-align: center; 
-   }
-   #events-pagination a {
-      margin: 0 20px 0 20px;
-      text-decoration: none;
-      width: 80px;
-      padding: 3px 0; 
-      background: #FAF4B7;
-      border: 1px solid #ccc;
-      border-top: none;
-   } 
-   #new-event {
-      float: left;
-   }
-   </style>";
-   echo $css;
-}
-
-add_action ( 'admin_print_scripts', 'eme_admin_css' );
-
 // TEMPLATE TAGS
-
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
@@ -2122,8 +2072,20 @@ function eme_enqueue_scripts() {
 }
 add_action ( 'template_redirect', 'eme_enqueue_scripts' );
 
+function eme_admin_general_css() {
+   echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
+   $file_name= EME_PLUGIN_DIR."/events-manager-extended/myown.css";
+   if (file_exists($file_name)) {
+      echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."myown.css' type='text/css'/>\n";
+   }
+   $file_name= get_stylesheet_directory()."/eme.css";
+   if (file_exists($file_name)) {
+      echo "<link rel='stylesheet' href='".get_stylesheet_directory_uri()."/eme.css' type='text/css'/>\n";
+   }
+}
 // General script to make sure hidden fields are shown when containing data
 function eme_admin_general_script() {
+   eme_admin_general_css();
    ?>
 <script src="<?php echo EME_PLUGIN_URL; ?>eme.js" type="text/javascript"></script>
 <script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.js" type="text/javascript"></script>
@@ -2649,19 +2611,7 @@ function eme_general_css() {
       echo "<link rel='stylesheet' href='".get_stylesheet_directory_uri()."/eme.css' type='text/css'/>\n";
    }
 }
-function eme_admin_general_css() {
-   echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
-   $file_name= EME_PLUGIN_DIR."/events-manager-extended/myown.css";
-   if (file_exists($file_name)) {
-      echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."myown.css' type='text/css'/>\n";
-   }
-   $file_name= get_stylesheet_directory()."/eme.css";
-   if (file_exists($file_name)) {
-      echo "<link rel='stylesheet' href='".get_stylesheet_directory_uri()."/eme.css' type='text/css'/>\n";
-   }
-}
 add_action ( 'wp_head', 'eme_general_css' );
-add_action ( 'admin_head', 'eme_admin_general_css' );
 //add_filter('feed_link','substitute_rss')
 
 function eme_general_footer() {
