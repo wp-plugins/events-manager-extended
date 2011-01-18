@@ -1006,10 +1006,11 @@ function eme_get_events_page_shortcode($atts) {
 }
 add_shortcode ( 'events_page', 'eme_get_events_page_shortcode' );
 
-function eme_are_events_available($scope = "future") {
+// API function
+function eme_are_events_available($scope = "future",$order = "ASC", $location_id = "", $category = '', $author = '', $contact_person = '') {
    if ($scope == "")
       $scope = "future";
-   $events = eme_get_events ( 1, $scope );
+   $events = eme_get_events ( 1, $scope, $order, 0, $location_id, $category, $author, $contact_person);
    
    if (empty ( $events ))
       return FALSE;
