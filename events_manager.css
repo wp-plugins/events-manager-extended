@@ -127,22 +127,15 @@ table.eme-calendar-table td {
 	padding: 2px 4px;
 	text-align: center;
 }
-
 table.eme-calendar-table tr.days-names {
 	font-weight: bold;
-	font-size: 1em;
-}
-table.eme-calendar-table td.eventful-pre, table.eme-calendar-table td.eventful-post {
-	font-size: 1.4em;
 }
 table.eme-calendar-table td.eventless-pre, table.eme-calendar-table td.eventless-post {
 	color: #ccc;
-	font-size: 1.4em;
 }
 table.eme-calendar-table td.eventful a, table.eme-calendar-table td.eventful-today a {
   font-weight: bold;
   color: #FD7E29;
-	font-size: 1.4em;
 }
 table.eme-calendar-table td.eventless-today {
    background-color: #CFCFCF;  
@@ -151,23 +144,23 @@ table.eme-calendar-table thead {
 	font-size: 120%;  
 	font-weight: bold;  
 }
-
+/* CHANGED SECTION START *************** */
+.eme-calendar-table {
+	background-color:#fff;
+}
 table.fullcalendar {
 	table-layout:fixed;
 	border-collapse:collapse;
 	width:100%;
 }
+#content table.fullcalendar td {
+	border:1px solid #000;
+}
 table.fullcalendar td {
 	padding:0 !important;
-	border:1px solid #aaa;
+	border:1px solid #000;
 	text-align:left;
 	vertical-align:top;
-}
-table.fullcalendar thead td {
-	height:1.4em;
-	padding-bottom:5px !important;
-	border:0;
-	font-size:1.0em;
 }
 table.fullcalendar a.prev-month {
 	float:left;
@@ -185,7 +178,6 @@ table.fullcalendar td.month_name {
 }
 table.fullcalendar tr.days-names td {
 	height:1.4em;
-	font-weight:bold;
 	text-align:center;
 	vertical-align:middle;
 }
@@ -199,9 +191,13 @@ table.fullcalendar ul {
 }
 table.fullcalendar ul li {
 	margin:7px 0 0 0;
-	font-size:.5em;
+	font-size:.7em;
 	line-height:normal;
 }
+table.fullcalendar td.eventless-today, table.fullcalendar td.eventful-today {
+	background-color:#eee;
+}
+/* CHANGED SECTION END *************** */
 
 #events-pagination-top {
   margin-bottom:1em;
