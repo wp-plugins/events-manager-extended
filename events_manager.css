@@ -145,9 +145,11 @@ table.eme-calendar-table thead {
 	font-weight: bold;  
 }
 
+/*
 .eme-calendar-table {
 	background-color:#fff;
 }
+*/
 table.fullcalendar {
 	table-layout:fixed;
 	border-collapse:collapse;
