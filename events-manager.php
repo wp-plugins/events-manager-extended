@@ -983,21 +983,18 @@ function eme_replace_placeholders($format, $event, $target="html") {
          }
 
       } elseif (preg_match('/#_CONTACTNAME$/', $result)) {
-         $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
-         if ($user_id==-1) $user_id=$event['event_author'];
-         $replacement = eme_get_user_name($user_id);
+         $contact = eme_get_contact($event);
+         $replacement = $contact->display_name;
 
       } elseif (preg_match('/#_CONTACTEMAIL$/', $result)) {
-         $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
-         if ($user_id==-1) $user_id=$event['event_author'];
-         $email = eme_get_user_email($user_id);
+         $contact = eme_get_contact($event);
+         $replacement = eme_ascii_encode($contact->user_email);
          // ascii encode for primitive harvesting protection ...
          $replacement=eme_ascii_encode($email);
 
       } elseif (preg_match('/#_CONTACTPHONE$/', $result)) {
-         $event['event_contactperson_id'] ? $user_id = $event['event_contactperson_id'] : $user_id = get_option('eme_default_contact_person');
-         if ($user_id==-1) $user_id=$event['event_author'];
-         $phone = eme_get_user_phone($user_id);
+         $contact = eme_get_contact($event);
+         $phone = eme_get_user_phone($contact->ID);
          // ascii encode for primitive harvesting protection ...
          $replacement=eme_ascii_encode($phone);
 

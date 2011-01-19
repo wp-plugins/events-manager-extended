@@ -44,4 +44,25 @@ function eme_is_multiple_locations_page() {
    return (eme_is_events_page () && ! (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] != ''));
 }
 
+function eme_get_contact($event) {
+   $event['event_contactperson_id'] ? $contact_id = $event['event_contactperson_id'] : $contact_id = get_option('eme_default_contact_person');
+   // suppose the user has been deleted ...
+   if (!get_userdata($contact_id)) $contact_id = get_option('eme_default_contact_person');
+   if ($contact_id == -1)
+      $contact_id = $event['event_author'];
+   $userinfo=get_userdata($contact_id);
+   return $userinfo;
+}
+
+function eme_get_user_phone($user_id) {
+   return get_usermeta($user_id, 'eme_phone');
+}
+
+// got from http://davidwalsh.name/php-email-encode-prevent-spam
+function eme_ascii_encode($e) {
+    $output = "";
+    for ($i = 0; $i < strlen($e); $i++) { $output .= '&#'.ord($e[$i]).';'; }
+    return $output;
+}
+
 ?>

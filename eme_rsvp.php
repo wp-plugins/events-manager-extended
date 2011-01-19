@@ -544,14 +544,9 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
 
 function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,$action="") {
    $event = eme_get_event($event_id);
-   if($event['event_contactperson_id'] && $event['event_contactperson_id']>0) 
-      $contact_id = $event['event_contactperson_id']; 
-   else
-      $contact_id = $event['event_author']; 
-      //$contact_id = get_option('eme_default_contact_person');
-
-   $contact_name = eme_get_user_name($contact_id);
-   $contact_email = eme_get_user_email($contact_id);
+   $contact = eme_get_contact ($event);
+   $contact_email = $contact->user_email;
+   $contact_name = $contact->display_name;
    
    $contact_body = ( $event['event_contactperson_email_body'] != '' ) ? $event['event_contactperson_email_body'] : get_option('eme_contactperson_email_body' );
    $contact_body = eme_replace_placeholders($contact_body, $event, "text");
@@ -880,27 +875,6 @@ function eme_registration_approval_form_table($event_id=0) {
    </form>
 </div>
 <?php
-}
-
-function eme_get_user_email($user_id) {
-   global $wpdb;
-   $sql = "SELECT user_email FROM $wpdb->users WHERE ID = $user_id"; 
-   return $wpdb->get_var( $wpdb->prepare($sql) );
-}
-function eme_get_user_name($user_id) {
-   global $wpdb;
-   $sql = "SELECT display_name FROM $wpdb->users WHERE ID = $user_id"; 
-   return $wpdb->get_var( $wpdb->prepare($sql) );
-}
-function eme_get_user_phone($user_id) {
-   return get_usermeta($user_id, 'eme_phone');
-}
-
-// got from http://davidwalsh.name/php-email-encode-prevent-spam
-function eme_ascii_encode($e) {
-    $output = "";
-    for ($i = 0; $i < strlen($e); $i++) { $output .= '&#'.ord($e[$i]).';'; }
-    return $output;
 }
 
 // template function
