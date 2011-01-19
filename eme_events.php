@@ -408,6 +408,9 @@ function eme_options_subpanel() {
 <h3><?php _e ( 'General options', 'eme' ); ?></h3>
 <table class="form-table">
    <?php
+   if (!get_option('eme_donation_done' )) {
+      eme_options_radio_binary ( __ ( 'Have you donated?' ), 'eme_donation_done', __ ( 'Select yes to indicate you donated to keep development alive (or to just get rid of the donate question above).','eme' ) );
+   }
    eme_options_radio_binary ( __ ( 'Use dropdown for locations?' ), 'eme_use_select_for_locations', __ ( 'Select yes to select location from a drop-down menu; location selection will be faster, but you will lose the ability to insert locations with events.','eme' )."<br/>".__ ( 'When the qtranslate plugin is installed and activated, this setting will be ignored and always considered \'Yes\'.','eme' ) );
    eme_options_radio_binary ( __ ( 'Use recurrence?' ), 'eme_recurrence_enabled', __ ( 'Select yes to enable the possibility to create recurrent events.','eme' ) ); 
    eme_options_radio_binary ( __ ( 'Use RSVP?' ), 'eme_rsvp_enabled', __ ( 'Select yes to enable the RSVP feature so people can register for an event and book places.','eme' ) );
