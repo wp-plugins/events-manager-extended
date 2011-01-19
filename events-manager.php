@@ -713,7 +713,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
    foreach($results[0] as $resultKey => $result) {
       $need_escape = 0;
       $orig_result = $result;
-      if (strstr($result,'/#ESC/')) {
+      if (strstr($result,'#ESC')) {
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
       }
@@ -724,8 +724,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $replacement = $event['event_attributes'][$attRef];
       }
       if( trim($attString) == ''
-         && isset($results[1][$resultKey])
-         && $results[1][$resultKey] != '' ) {
+         && isset($results[2][$resultKey])
+         && $results[2][$resultKey] != '' ) {
          //Check to see if we have a second set of braces;
          $replacement = substr( $results[2][$resultKey], 1, strlen(trim($results[2][$resultKey]))-2 );
       }
