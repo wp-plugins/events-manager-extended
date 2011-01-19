@@ -73,22 +73,35 @@ function eme_options_radio_binary($title, $name, $description) {
          </tr>
 <?php 
 }
+
 function eme_options_select($title, $name, $list, $description) {
-      $option_value = get_option($name); ?>
-    
+      $option_value = get_option($name);
+?>
          <tr valign="top" id='<?php echo $name;?>_row'>
             <th scope="row"><?php _e($title,'eme'); ?></th>
             <td>
             <select name="<?php echo $name; ?>" > 
-               <?php foreach($list as $key => $value) {
-                  "$key" == $option_value ? $selected = "selected='selected' " : $selected = '';
-             echo "<option value='$key' $selected>$value</option>";
-              } ?>
+               <?php
+                 foreach($list as $key => $value) {
+                    "$key" == $option_value ? $selected = "selected='selected' " : $selected = '';
+                    echo "<option value='$key' $selected>$value</option>";
+                 }
+               ?>
             </select> <br/>
             <?php echo $description; ?>
          </td>
          </tr>
 <?php 
+}
+
+function eme_ui_select($option_value, $name, $list) {
+     $val = "<select name=$name>";
+     foreach($list as $key => $value) {
+        "$key" == $option_value ? $selected = "selected='selected' " : $selected = '';
+        $val.= "<option value='$key' $selected>$value</option>";
+     }
+     $val.=" </select>";
+     return $val;
 }
 
 ?>

@@ -369,6 +369,24 @@ function eme_get_location($location_id=0) {
    return $location;
 }
 
+function eme_get_town_location_ids($towns) {
+   global $wpdb;
+   $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
+   if ( preg_match('/^([0-9]+,?)+$/', $towns) ) {
+      $towns=explode(',', $towns);
+      $town_conditions = array();
+      foreach ($towns as $town) {
+         $town_conditions[] = " location_town = '$town'";
+      }
+      $conditions = "(".implode(' OR', $town_conditions).")";
+   } elseif (!empty($towns)) {
+      $conditions = " location_town = '$towns'";
+   }
+   $sql = "SELECT DISTINCT location_id FROM $locations_table WHERE ".$conditions;
+   $location_ids = $wpdb->get_col($sql); 
+   return $location_ids;
+}
+
 function eme_image_url_for_location_id($location_id) {
    $file_name= IMAGE_UPLOAD_DIR."/location-".$location_id;
    $mime_types = array('gif','jpg','png');foreach($mime_types as $type) { 

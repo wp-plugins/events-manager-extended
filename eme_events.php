@@ -444,6 +444,12 @@ function eme_options_subpanel() {
    eme_options_input_text ( __ ( 'No events message', 'eme' ), 'eme_no_events_message', __ ( 'The message displayed when no events are available.', 'eme' ) );
    ?>
 </table>
+<h3><?php _e ( 'Events filtering format', 'eme' ); ?></h3>
+<table class="form-table">
+   <?php
+   eme_options_textarea ( __ ( 'Default event list filtering format', 'eme' ), 'eme_filter_form_format', __ ( 'This defines the layout of the event list filtering form when using the shortcode <code>[events_filterform]</code>. Use <code>#_FILTER_CATS</code>,<code>#_FILTER_LOCS</code>,<code>#_FILTER_TOWNS</code>.', 'eme' ) );
+   ?>
+</table>
 <h3><?php _e ( 'Calendar format', 'eme' ); ?></h3>
 <table class="form-table">
    <?php
@@ -693,17 +699,18 @@ add_filter ( 'get_pages', 'eme_filter_get_pages' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0) {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "") {
    global $post;
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', $paging=0,'long_events' => 0);
+      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', 'paging'=>0, 'long_events' => 0, 'location_id' => 0);
       
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
       $echo = (bool) $r ['echo'];
       // for AND categories: the user enters "+" and this gets translated to " " by wp_parse_args
       $category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) ) ? $r ['category'] : '' ;
+      $location_id = ( preg_match('/^([0-9][, ]?)+$/', $r ['location_id'] ) ) ? $r ['location_id'] : '' ;
       // authorID filter: you can use "1,3", but not "1+3" since an event can have only one author
       //$authorID = ( preg_match('/^([0-9],?)+$/', $r ['authorID'] ) ) ? $r ['authorID'] : '' ;
       //$author = $r ['author'] ? $r ['author'] : '' ;
@@ -771,9 +778,9 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
    if ($limit==0) {
-      $events = eme_get_events ( 0, $scope, $order, $offset, 0, $category, $author, $contact_person );
+      $events = eme_get_events ( 0, $scope, $order, $offset, $location_id, $category, $author, $contact_person );
    } else {
-      $events = eme_get_events ( $limit+1, $scope, $order, $offset, 0, $category, $author, $contact_person );
+      $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person );
    }
    $events_count=count($events);
 
@@ -913,6 +920,36 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 
 function eme_get_events_list_shortcode($atts) {
    extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0 ), $atts ) );
+
+   // the filter list overrides the settings
+   if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'filter') {
+      if (isset($_POST['eme_scope_filter'])) {
+         $scope = $_POST['eme_scope_filter'];
+      }
+      if (isset($_POST['eme_loc_filter'])) {
+         if (is_array($_POST['eme_loc_filter']))
+            $location_id=join(',',$_POST['eme_loc_filter']);
+         else 
+            $location_id=$_POST['eme_loc_filter'];
+      }
+      if (isset($_POST['eme_town_filter'])) {
+         if (is_array($_POST['eme_town_filter']))
+            $towns=join(',',$_POST['eme_town_filter']);
+         else 
+            $towns=$_POST['eme_town_filter'];
+         if (empty($location_id))
+            $location_id = join(',',eme_get_town_location_ids($towns));
+         else
+            $location_id .= ",".join(',',eme_get_town_location_ids($towns));
+      }
+      if (isset($_POST['eme_cat_filter'])) {
+         if (is_array($_POST['eme_cat_filter']))
+            $category=join(',',$_POST['eme_cat_filter']);
+         else 
+            $category=$_POST['eme_cat_filter'];
+      }
+   }
+
    $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person&paging=$paging&long_events=$long_events&location_id=$location_id" );
    return $result;
 }

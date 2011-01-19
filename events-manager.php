@@ -75,6 +75,7 @@ define('DEFAULT_ATTENDEES_LIST_FORMAT','<li>#_NAME</li>');
 define('DEFAULT_CATEGORIES_ENABLED', true);
 define('DEFAULT_GMAP_ENABLED', true);
 define('DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT', "F, Y");
+define('DEFAULT_FILTER_FORM_FORMAT', "#_FILTER_CATS #_FILTER_LOCS");
 define('STATUS_PUBLIC', 1);
 define('STATUS_PRIVATE', 2);
 define('STATUS_DRAFT', 5);
@@ -156,6 +157,7 @@ if (!empty($tzstring) ) {
 // so they need the correct info before doing stuff
 include("captcha_check.php");
 include("eme_functions.php");
+include("eme_filters.php");
 include("eme_events.php");
 include("eme_calendar.php");
 include("eme_widgets.php");
@@ -564,6 +566,7 @@ function eme_add_options($reset=0) {
    'eme_single_event_format' => DEFAULT_SINGLE_EVENT_FORMAT,
    'eme_event_page_title_format' => DEFAULT_EVENT_PAGE_TITLE_FORMAT,
    'eme_show_period_monthly_dateformat' => DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT,
+   'eme_filter_form_format' => DEFAULT_FILTER_FORM_FORMAT,
    'eme_list_events_page' => 0,
    'eme_events_page_title' => DEFAULT_EVENTS_PAGE_TITLE,
    'eme_no_events_message' => __('No events','eme'),
@@ -631,7 +634,7 @@ function eme_add_option($key, $value, $reset) {
 // WP options registration/deletion
 ////////////////////////////////////
 function eme_options_delete() {
-   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_mail_receiver_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_tables','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_conversion_needed','eme_donation_done','eme_hello_to_user');
+   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_mail_receiver_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_tables','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_conversion_needed','eme_donation_done','eme_hello_to_user','eme_filter_form_format');
    foreach ( $options as $opt ) {
       delete_option ( $opt );
       $old_opt=preg_replace("/eme_/","dbem_",$opt);
@@ -640,7 +643,7 @@ function eme_options_delete() {
 }
 
 function eme_options_register() {
-   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_conversion_needed','eme_donation_done','eme_hello_to_user');
+   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_conversion_needed','eme_donation_done','eme_hello_to_user','eme_filter_form_format');
    foreach ( $options as $opt ) {
       register_setting ( 'eme-options', $opt, '' );
    }
@@ -803,6 +806,13 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_DIRECTIONS$/', $result)) {
          $location = eme_get_location($event['location_id']);
          $replacement = eme_add_directions_form($location);
+
+      } elseif (preg_match('/#_EVENTS_FILTERFORM$/', $result)) {
+         if ($target == "rss" || eme_is_single_event_page()) {
+            $replacement = "";
+         } else {
+            $replacement = eme_filter_form();
+         }
 
       } elseif (preg_match('/#_ADDBOOKINGFORM$/', $result)) {
          if ($target == "rss") {
