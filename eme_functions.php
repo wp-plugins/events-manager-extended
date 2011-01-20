@@ -3,15 +3,15 @@
 function eme_if_shortcode($atts,$content) {
    extract ( shortcode_atts ( array ('tag' => '', 'value' => '', 'notvalue' => '', 'lt' => '', 'gt' => '' ), $atts ) );
    if (is_numeric($value) || !empty($value)) {
-      if ($tag==$value) return $content;
+      if ($tag==$value) return do_shortcode($content);
    } elseif (is_numeric($notvalue) || !empty($notvalue)) {
-      if ($tag!=$notvalue) return $content;
+      if ($tag!=$notvalue) return do_shortcode($content);
    } elseif (is_numeric($lt) || !empty($lt)) {
-      if ($tag<$lt) return $content;
+      if ($tag<$lt) return do_shortcode($content);
    } elseif (is_numeric($gt) || !empty($gt)) {
-      if ($tag>$gt) return $content;
+      if ($tag>$gt) return do_shortcode($content);
    } else {
-      if (!empty($tag)) return $content;
+      if (!empty($tag)) return do_shortcode($content);
    }
 }
 add_shortcode ( 'events_if', 'eme_if_shortcode');
