@@ -95,9 +95,23 @@ function eme_options_select($title, $name, $list, $description) {
 }
 
 function eme_ui_select($option_value, $name, $list) {
-     $val = "<select name=$name>";
+     $val = "<select name='$name'>";
      foreach($list as $key => $value) {
         "$key" == $option_value ? $selected = "selected='selected' " : $selected = '';
+        $val.= "<option value='$key' $selected>$value</option>";
+     }
+     $val.=" </select>";
+     return $val;
+}
+
+function eme_ui_multiselect($option_value_arr, $name, $list, $size) {
+     $val = "<select MULTIPLE name='$name' size='$size'>";
+     foreach($list as $key => $value) {
+        if (is_array($option_value_arr)) {
+           in_array($value,$option_value_arr) ? $selected = "selected='selected' " : $selected = '';
+        } else {
+           "$key" == $option_value_arr ? $selected = "selected='selected' " : $selected = '';
+        }
         $val.= "<option value='$key' $selected>$value</option>";
      }
      $val.=" </select>";

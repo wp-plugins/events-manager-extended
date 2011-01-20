@@ -52,6 +52,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
          $categories = eme_get_categories();
          if ($categories) {
             $cat_list = array();
+            $cat_list[0]="---";
             foreach ($categories as $this_category) {
                $id=$this_category['category_id'];
                $cat_list[$id]=eme_trans_sanitize_html($this_category['category_name']);
@@ -66,13 +67,14 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
          $locations = eme_get_locations();
          if ($locations) {
             $loc_list = array();
+            $loc_list[0]="---";
             foreach ($locations as $this_location) {
                $id=$this_location['location_id'];
                $loc_list[$id]=eme_trans_sanitize_html($this_location['location_name']);
             }
-            #if ($multiple)
-            #   eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
-            #else
+            if ($multiple)
+               eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
+            else
                $replacement = eme_ui_select($selected_location,$loc_post_name,$loc_list);
          }
 
@@ -80,13 +82,14 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
          $towns = eme_get_locations();
          if ($towns) {
             $town_list = array();
+            $town_list[0]="---";
             foreach ($towns as $this_town) {
                $id=eme_trans_sanitize_html($this_town['location_town']);
                $town_list[$id]=$id;
             }
-            #if ($multiple)
-            #   eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
-            #else
+            if ($multiple)
+               eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
+            else
                $replacement = eme_ui_select($selected_town,$town_post_name,$town_list);
          }
 
