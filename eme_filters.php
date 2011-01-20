@@ -3,7 +3,7 @@
 function eme_filter_form_shortcode($atts) {
    extract ( shortcode_atts ( array ('multiple' => 0, 'multisize' => 5, 'scope_count' => 12 ), $atts ) );
 
-   $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'));
+   $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'),$multiple,$multisize,$scope_count);
    #$content=eme_replace_filter_form_placeholders("#_FILTER_CATS #_FILTER_LOCS #_FILTER_TOWNS",$multiple,$multisize,$scope_count);
    $this_page_url=get_permalink($post->ID);
    $form = "<form action=$this_page_url method='POST'>";
@@ -57,9 +57,9 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $id=$this_category['category_id'];
                $cat_list[$id]=eme_trans_sanitize_html($this_category['category_name']);
             }
-            #if ($multiple)
-            #   eme_ui_multiselect($selected_category,$cat_post_name,$cat_list,$multisize);
-            #else
+            if ($multiple)
+               $replacement = eme_ui_multiselect($selected_category,$cat_post_name,$cat_list,$multisize);
+            else
                $replacement = eme_ui_select($selected_category,$cat_post_name,$cat_list);
          }
 
@@ -73,7 +73,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $loc_list[$id]=eme_trans_sanitize_html($this_location['location_name']);
             }
             if ($multiple)
-               eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
+               $replacement = eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
             else
                $replacement = eme_ui_select($selected_location,$loc_post_name,$loc_list);
          }
@@ -88,7 +88,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $town_list[$id]=$id;
             }
             if ($multiple)
-               eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
+               $replacement = eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
             else
                $replacement = eme_ui_select($selected_town,$town_post_name,$town_list);
          }
