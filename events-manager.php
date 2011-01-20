@@ -1203,7 +1203,7 @@ function eme_explain_conversion_needed() {
 
 function eme_explain_donation() {
    ?>
-<div style="float:left;background-color:white;padding: 10px 10px 10px 10px; border: 1px solid #ddd; background-color:#FFFFE0;">
+<div style="padding: 10px 10px 10px 10px; border: 1px solid #ddd; background-color:#FFFFE0;">
     <div>
         <h3><?php echo __('Donate', 'eme'); ?></h3>
 <?php
