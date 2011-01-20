@@ -1828,9 +1828,6 @@ function eme_event_form($event, $title, $element) {
             </div>
             <!-- END OF SIDEBAR -->
             <div id="post-body">
-               <p class="submit">
-                  <input type="submit" name="events_update" value="<?php _e ( 'Submit Event', 'eme' ); ?> &raquo;" />
-               </p>
                <div id="post-body-content" class="meta-box-sortables">
                   <!-- we need titlediv for qtranslate as ID -->
                   <div id="titlediv" class="stuffbox">
