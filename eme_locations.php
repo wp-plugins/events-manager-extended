@@ -605,7 +605,7 @@ function eme_global_map($atts) {
 
       $result .= "<script type='text/javascript'>
          <!--// 
-         eventful = $eventful;
+      eventful = '$eventful';
       scope = '$scope';
       offset = '$offset';
       category = '$category';

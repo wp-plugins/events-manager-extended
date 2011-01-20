@@ -476,17 +476,6 @@ function eme_ajaxize_calendar() {
             initCalendar();
          });
       }
-      
-      // function reloadCalendar(e) {
-      //    // e.preventDefault();
-      //    console.log($j_eme_calendar(this).parents('table'));
-      //     $j_eme_calendar.get("<?php site_url(); ?>", {ajax: 'true'}, function(data){
-      //       tableDiv = table.parent();
-      //       tableDiv.html(data);
-      //             });
-      // }
-      //
-      
    </script>
    
 <?php

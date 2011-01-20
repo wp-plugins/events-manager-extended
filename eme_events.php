@@ -749,7 +749,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $prev_text = __('Previous week','eme');
          $next_text = __('Next week','eme');
       }
-      if ($scope=="this_month") {
+      elseif ($scope=="this_month") {
          // "first day of this month, last day of this month" works for newer versions of php (5.3+), but for compatibility:
          // the year/month should be based on the first of the month, so if we are the 13th, we substract 12 days to get to day 1
          // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
@@ -767,10 +767,17 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $prev_text = __('Previous month','eme');
          $next_text = __('Next month','eme');
       }
-      if ($scope=="today") {
+      elseif ($scope=="today") {
          $scope = date('Y-m-d',strtotime("$scope_offset days"));
          //$prev_text = date_i18n (get_option('date_format'), strtotime("$prev_offset days"));
          //$next_text = date_i18n (get_option('date_format'), strtotime("$next_offset days"));
+         $scope_text = date_i18n (get_option('date_format'), strtotime("$scope_offset days"));
+         $prev_text = __('Previous day','eme');
+         $next_text = __('Next day','eme');
+      }
+      elseif ($scope=="tomorrow") {
+         $scope_offset++;
+         $scope = date('Y-m-d',strtotime("$scope_offset days"));
          $scope_text = date_i18n (get_option('date_format'), strtotime("$scope_offset days"));
          $prev_text = __('Previous day','eme');
          $next_text = __('Next day','eme');
@@ -1082,15 +1089,19 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    } elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
       $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$matches[2]') OR (event_end_date BETWEEN '$matches[1]' AND '$matches[2]'))";
    } else {
-      if (($scope != "past") && ($scope != "all") && ($scope != "today"))
+      if (($scope != "past") && ($scope != "all") && ($scope != "today") && ($scope != "tomorrow"))
          $scope = "future";
       if ($scope == "future")
          //This is so events with future dates are counted too
          $conditions [] = " (event_start_date >= '$today' OR (event_end_date >= '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL))";
-      if ($scope == "past")
+      elseif ($scope == "past")
          $conditions [] = " event_start_date < '$today'";
-      if ($scope == "today")
+      elseif ($scope == "today")
          $conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
+      elseif ($scope == "today") {
+         $tomorrow = date("Y-m-d",strtotime($today, "+1 day"));
+         $conditions [] = " (event_start_date = '$totomorrow' OR (event_start_date <= '$tomorrow' AND event_end_date >= '$tomorrow'))";
+      }
    }
    
    if (is_numeric($location_id)) {
@@ -1817,6 +1828,9 @@ function eme_event_form($event, $title, $element) {
             </div>
             <!-- END OF SIDEBAR -->
             <div id="post-body">
+               <p class="submit">
+                  <input type="submit" name="events_update" value="<?php _e ( 'Submit Event', 'eme' ); ?> &raquo;" />
+               </p>
                <div id="post-body-content" class="meta-box-sortables">
                   <!-- we need titlediv for qtranslate as ID -->
                   <div id="titlediv" class="stuffbox">

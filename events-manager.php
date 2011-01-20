@@ -1084,10 +1084,10 @@ function eme_replace_placeholders($format, $event, $target="html") {
       }
       $replacement = '';
       if(substr($result, 0, 3 ) == "#@_") {
-         $date = "event_start_date";
+         $date = "event_end_date";
          $offset = 4;
       } else {
-         $date = "event_end_date";
+         $date = "event_start_date";
          $offset = 3;
       }
       if( $date == "event_end_date" && $event[$date] == $event['event_start_date'] ) {

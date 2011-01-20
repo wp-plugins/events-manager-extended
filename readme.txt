@@ -392,6 +392,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
   eme_location_filter (1 parameter: $location array)
   eme_location_list_filter (1 parameter: array of locations)
 * Feature: making location_id also a possible filter for the calendar and events_list shortcode
+* Feature: extra "scope=tomorrow" possible for events_list shortcode
 * Feature: new shortcode [events_locations], giving you a list of all locations (for all possible parameters: see the doc site), when used in combo with the calendar it can be used to show only specific events in the calendar (use the 'class' parameter then with value 'calendar')
 * Feature: new shortcode [events_filterform], creates a form with dropdowns for categories, locations, towns, weeks, years  (configurable in the settings). To be used on the same page as [events_list], otherwise it has no effect. Accepts 3 parameters: multiple (0/1), if you want to be able to select multiple categories, locations, towns (not weeks, years), multiple_size (the size of the dropdown window if multiple), scope_count (the number of future weeks/months to be shown)
 * Feature: you can now use conditional placeholder formatting using a new shortcode [events_if] in your formatting, by prepending them with "#ESC". An example for default single event formatting:
