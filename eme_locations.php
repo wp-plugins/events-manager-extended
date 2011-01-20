@@ -524,7 +524,7 @@ function eme_global_map($atts) {
       // that we want the javascript in the footer as well
       $eme_need_gmap_js=1;
       extract(shortcode_atts(array(
-                  'eventful' => "false",
+                  'eventful' => false,
                   'scope' => 'all',
                   'paging' => 0,
                   'category' => '',
