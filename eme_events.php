@@ -447,7 +447,7 @@ function eme_options_subpanel() {
 <h3><?php _e ( 'Events filtering format', 'eme' ); ?></h3>
 <table class="form-table">
    <?php
-   eme_options_textarea ( __ ( 'Default event list filtering format', 'eme' ), 'eme_filter_form_format', __ ( 'This defines the layout of the event list filtering form when using the shortcode <code>[events_filterform]</code>. Use <code>#_FILTER_CATS</code>,<code>#_FILTER_LOCS</code>,<code>#_FILTER_TOWNS</code>.', 'eme' ) );
+   eme_options_textarea ( __ ( 'Default event list filtering format', 'eme' ), 'eme_filter_form_format', __ ( 'This defines the layout of the event list filtering form when using the shortcode <code>[events_filterform]</code>. Use <code>#_FILTER_CATS</code>, <code>#_FILTER_LOCS</code>, <code>#_FILTER_TOWNS</code>, <code>#_FILTER_WEEKS</code>, <code>#_FILTER_MONTHS</code>.', 'eme' ) );
    ?>
 </table>
 <h3><?php _e ( 'Calendar format', 'eme' ); ?></h3>
