@@ -14,6 +14,37 @@ function eme_filter_form_shortcode($atts) {
 }
 add_shortcode ( 'events_filterform', 'eme_filter_form_shortcode' );
 
+function eme_create_week_scope($count) {
+   $day_offset=date('w');
+   $start_day=time()-$day_offset*86400;
+   $end_day=$start_day+6*86400;
+   $scope=array();
+   $scope[0] = "";
+   for ( $i = 0; $i < $count; $i++) {
+      $this_scope=date('Y-m-d',$start_day+$i*7*86400)."--".date('Y-m-d',$end_day+$i*7*86400);
+      $scope_text = date_i18n (get_option('date_format'),$start_day+$i*7*86400)." -- ".date_i18n (get_option('date_format'),$end_day+$i*7*86400);
+      $scope[$this_scope] = $scope_text;
+   }
+   return $scope;
+}
+
+function eme_create_month_scope($count) {
+   $day_offset=date('j')-1;
+   $scope=array();
+   $scope[0] = "";
+   for ( $i = 0; $i < $count; $i++) {
+      $year=date('Y', strtotime("$i month")-$day_offset*86400);
+      $month=date('m', strtotime("$i month")-$day_offset*86400);
+      $number_of_days_month=eme_days_in_month($month,$year);
+      $limit_start = "$year-$month-01";
+      $limit_end   = "$year-$month-$number_of_days_month";
+      $this_scope = "$limit_start--$limit_end";
+      $scope_text = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime("$i month")-$day_offset*86400);
+      $scope[$this_scope] = $scope_text;
+   }
+   return $scope;
+}
+
 function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $scope_count) {
    preg_match_all("/#_[A-Za-z0-9_\[\]]+/", $format, $placeholders);
    usort($placeholders[0],'sort_stringlenth');
@@ -94,7 +125,9 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
          }
 
       } elseif (preg_match('/^#_FILTER_WEEKS$/', $result)) {
+         $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_week_scope($scope_count));
       } elseif (preg_match('/^#_FILTER_MONTHS$/', $result)) {
+         $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_month_scope($scope_count));
       } 
 
       $format = str_replace($result, $replacement ,$format );
