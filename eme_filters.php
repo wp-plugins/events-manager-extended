@@ -3,8 +3,8 @@
 function eme_filter_form_shortcode($atts) {
    extract ( shortcode_atts ( array ('multiple' => 0, 'multisize' => 5, 'scope_count' => 12 ), $atts ) );
 
-   #$content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'));
-   $content=eme_replace_filter_form_placeholders("#_FILTER_CATS #_FILTER_LOCS #_FILTER_TOWNS",$multiple,$multisize,$scope_count);
+   $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'));
+   #$content=eme_replace_filter_form_placeholders("#_FILTER_CATS #_FILTER_LOCS #_FILTER_TOWNS",$multiple,$multisize,$scope_count);
    $this_page_url=get_permalink($post->ID);
    $form = "<form action=$this_page_url method='POST'>";
    $form .= "<input type='hidden' name='eme_eventAction' value='filter' />";

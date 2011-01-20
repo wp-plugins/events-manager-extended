@@ -1205,7 +1205,7 @@ function eme_explain_donation() {
    ?>
 <div style="float:left;background-color:white;padding: 10px 10px 10px 10px; border: 1px solid #ddd; background-color:#FFFFE0;">
     <div>
-        <h3><?php echo __('Donate', 'visitor-maps'); ?></h3>
+        <h3><?php echo __('Donate', 'eme'); ?></h3>
 <?php
 _e('If you find this plugin useful to you, please consider making a small donation to help contribute to my time invested and to further development. Thanks for your kind support!', 'eme');
 ?>
