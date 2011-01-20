@@ -508,11 +508,11 @@ function eme_get_bookings_list_for($event_id) {
    global $wpdb; 
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
    $sql = "SELECT DISTINCT person_id FROM $bookings_table WHERE event_id = $event_id";
-   $persons = $wpdb->get_results($sql, ARRAY_A);
-   if ($persons) {
+   $person_ids = $wpdb->get_col($sql);
+   if ($person_ids) {
       $res="<ul class='eme_bookings_list_ul'>";
-      foreach ($persons as $person) {
-         $attendee=eme_get_person($person['person_id']);
+      foreach ($person_ids as $person_id) {
+         $attendee=eme_get_person($person_id);
          $res.=eme_replace_attendees_placeholders(get_option('eme_attendees_list_format'),$attendee);
       }
       $res.="</ul>";
@@ -525,7 +525,6 @@ function eme_get_bookings_list_for($event_id) {
 function eme_replace_attendees_placeholders($format, $attendee, $target="html") {
    preg_match_all("/#_?[A-Za-z0)9_]+/", $format, $placeholders);
    foreach($placeholders[0] as $result) {
-      $need_escape = 0;
       $replacement='';
       if (preg_match('/#_(NAME|PHONE|ID|EMAIL)$/', $result)) {
          $field = "person_".ltrim(strtolower($result), "#_");
@@ -539,7 +538,7 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
 	 $format = str_replace($result, $replacement ,$format );
       }
    }
-   return do_shortcode($attendee_string);   
+   return do_shortcode($format);   
 }
 
 function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,$action="") {

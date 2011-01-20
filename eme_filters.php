@@ -130,6 +130,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
          $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_month_scope($scope_count));
       } 
 
+      $replacement = apply_filters('eme_general', $replacement);
       $format = str_replace($result, $replacement ,$format );
    }
 
