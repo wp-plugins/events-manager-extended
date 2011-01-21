@@ -411,6 +411,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: "require WP membership for registration" can now be set per event
 * Feature: added #_ICALURL, giving you just the url to the ical, so you can build your own link
 * Feature: added #_ADDBOOKINGFORM_IF_NOT_REGISTERED and #_REMOVEBOOKINGFORM_IF_REGISTERED
+* Feature: you can now define a min/max number of spaces a person can book in one go (0 is possible)
 * Improvement: some browser incompatibilities solved
 * Improvement: more robust javascript for prefilling the formatting per event
 * Improvement: if the setting "Events page" is not set, no more will other pages be overwritten with events data

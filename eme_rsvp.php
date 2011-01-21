@@ -35,9 +35,11 @@ function eme_add_booking_form($event_id) {
    }
 
    // you can book the available number of seats, with a max of 10 per time
+   $min = intval(get_option('eme_rsvp_addbooking_min_spaces'));
+   $max_allowed = intval(get_option('eme_rsvp_addbooking_max_spaces'));
    $max = eme_get_available_seats($event_id);
-   if ($max > 10) {
-      $max = 10;
+   if ($max > $max_allowed) {
+      $max = $max_allowed;
    }
    // no seats anymore? No booking form then ...
    if ($max == 0) {
@@ -51,7 +53,7 @@ function eme_add_booking_form($event_id) {
    if(!empty($form_add_message))
       $module .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
    $booked_places_options = array();
-   for ( $i = 1; $i <= $max; $i++) 
+   for ( $i = $min; $i <= $max; $i++) 
       array_push($booked_places_options, "<option value='$i'>$i</option>");
    
       $module  .= "<form id='eme-rsvp-form' name='booking-form' method='post' action='$destination'>
@@ -223,20 +225,25 @@ function eme_book_seats($event) {
    if (get_option('eme_captcha_for_booking')) {
       $msg = response_check_captcha("captcha_check",1);
    }
+   $min_allowed = intval(get_option('eme_rsvp_addbooking_min_spaces'));
+   $max_allowed = intval(get_option('eme_rsvp_addbooking_max_spaces'));
    if(!empty($msg)) {
       $result = __('You entered an incorrect code','eme');
    } elseif ($honeypot_check != "") {
       // a bot fills this in, but a human never will, since it's
       // a hidden field
       $result = __('You are a bad boy','eme');
-   } elseif (!$bookerName || !$bookerEmail || !$bookedSeats) {
+   } elseif (!$bookerName || !$bookerEmail) {
       // if any of name, email or bookedseats are empty: return an error
       $result = __('Please fill in all the required fields','eme');
+   } elseif ($bookedSeats < $min_allowed || $bookedSeats>$max_allowed) {
+      // if any of name, email or bookedseats are empty: return an error
+      $result = __('Please fill in a correct number of spaces to reserve','eme');
    } elseif (!$registration_wp_users_only && !$bookerPhone) {
       // no member of wordpress: we need a phonenumber then
       $result = __('Please fill in all the required fields','eme');
    } else {
-      if ($bookedSeats && eme_are_seats_available_for($event_id, $bookedSeats)) {
+      if (eme_are_seats_available_for($event_id, $bookedSeats)) {
          if (!$booker) {
             $booker = eme_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id, $registration_wp_users_only);
          }
