@@ -12,6 +12,7 @@ class WP_Widget_eme_list extends WP_Widget {
       $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
       $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
+      $showperiod = empty( $instance['showperiod'] ) ? '' : $instance['showperiod'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
       $header = empty( $instance['header'] ) ? '<ul>' : $instance['header'];
       $footer = empty( $instance['footer'] ) ? '</ul>' : $instance['footer'];
@@ -27,7 +28,7 @@ class WP_Widget_eme_list extends WP_Widget {
       if ( $title)
          echo $before_title . $title . $after_title;
 
-      $events_list = eme_get_events_list($limit,$scope,$order,$format,false,$category,'',$author);
+      $events_list = eme_get_events_list($limit,$scope,$order,$format,false,$category,$showperiod,$author);
       if ($events_list == __('No events', 'eme'))
          echo "<ul><li>$events_list</li></ul>";
       else
@@ -42,6 +43,11 @@ class WP_Widget_eme_list extends WP_Widget {
          $instance['scope'] = $new_instance['scope'];
       } else {
          $instance['scope'] = 'future';
+      }
+      if ( in_array( $new_instance['showperiod'], array( 'daily', 'monthly' ) ) ) {
+         $instance['showperiod'] = $new_instance['showperiod'];
+      } else {
+         $instance['showperiod'] = '';
       }
       if ( in_array( $new_instance['order'], array( 'ASC', 'DESC' ) ) ) {
          $instance['order'] = $new_instance['order'];
@@ -61,6 +67,7 @@ class WP_Widget_eme_list extends WP_Widget {
       $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
       $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
+      $showperiod = empty( $instance['showperiod'] ) ? '' : $instance['showperiod'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
       $header = empty( $instance['header'] ) ? '<ul>' : $instance['header'];
       $footer = empty( $instance['footer'] ) ? '</ul>' : $instance['footer'];
@@ -83,6 +90,14 @@ class WP_Widget_eme_list extends WP_Widget {
          <option value="future" <?php selected( $scope, 'future' ); ?>><?php _e('Future events','eme'); ?></option>
          <option value="all" <?php selected( $scope, 'all' ); ?>><?php _e('All events','eme'); ?></option>
          <option value="past" <?php selected( $scope, 'past' ); ?>><?php _e('Past events','eme'); ?></option>
+    </select>
+  </p>
+  <p>
+    <label for="<?php echo $this->get_field_id('showperiod'); ?>"><?php _e('Show events per period','eme'); ?>:</label><br />
+   <select id="<?php echo $this->get_field_id('showperiod'); ?>" name="<?php echo $this->get_field_name('showperiod'); ?>">
+         <option value="" <?php selected( $showperiod, '' ); ?>><?php _e('Select...','eme'); ?></option>
+         <option value="daily" <?php selected( $showperiod, 'daily' ); ?>><?php _e('Daily','eme'); ?></option>
+         <option value="monthly" <?php selected( $showperiod, 'monthly' ); ?>><?php _e('Monthly','eme'); ?></option>
     </select>
   </p>
   <p>
