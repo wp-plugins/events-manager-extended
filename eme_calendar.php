@@ -250,7 +250,7 @@ function eme_get_calendar($args="") {
 
 //----- DEBUG ------------
 //foreach($events as $event) { //DEBUG
-// $calendar .= ("$event->event_day / $event->event_month_n - $event->event_name<br/>");
+// $calendar .= ("$event->event_day / $event->event_month_n - $event->event_name<br />");
 //}
 // ------------------
 

@@ -62,7 +62,7 @@ function eme_categories_table_layout($message = "") {
    $table = "
       <div class='wrap nosubsub'>\n
          <div id='icon-edit' class='icon32'>
-            <br/>
+            <br />
          </div>
          <h2>".__('Categories', 'eme')."</h2>\n ";   
          
@@ -157,7 +157,7 @@ function eme_categories_edit_layout($message = "") {
    $layout = "
    <div class='wrap'>
       <div id='icon-edit' class='icon32'>
-         <br/>
+         <br />
       </div>
          
       <h2>".__('Edit category', 'eme')."</h2>";   

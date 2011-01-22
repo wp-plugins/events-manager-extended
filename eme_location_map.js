@@ -77,8 +77,8 @@ function loadGMap() {
 						 + "' style='list-style-type: upper-alpha'><a >"
 						 + item.location_name+"</a></li>";
 				var location_info = "<div class=\"eme-location-balloon\"><strong>"+ item.location_name
-						    + "</strong><br/>" + item.location_address + ", "
-						    + item.location_town + "<br/><small><a href='" + events_page_link
+						    + "</strong><br />" + item.location_address + ", "
+						    + item.location_town + "<br /><small><a href='" + events_page_link
 						    + joiner + "location_id=" + item.location_id + "'>Details<a></div>";
 				customIcon = "http://www.google.com/mapfiles/marker" + letter + ".png";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));

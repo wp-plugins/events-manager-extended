@@ -78,7 +78,7 @@ class WP_Widget_eme_list extends WP_Widget {
     <input type="text" id="<?php echo $this->get_field_id('limit'); ?>" name="<?php echo $this->get_field_name('limit'); ?>" value="<?php echo $limit;?>" />
   </p>
   <p>
-    <label for="<?php echo $this->get_field_id('scope'); ?>"><?php _e('Scope of the events','eme'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('scope'); ?>"><?php _e('Scope of the events','eme'); ?>:</label><br />
    <select id="<?php echo $this->get_field_id('scope'); ?>" name="<?php echo $this->get_field_name('scope'); ?>">
          <option value="future" <?php selected( $scope, 'future' ); ?>><?php _e('Future events','eme'); ?></option>
          <option value="all" <?php selected( $scope, 'all' ); ?>><?php _e('All events','eme'); ?></option>
@@ -86,7 +86,7 @@ class WP_Widget_eme_list extends WP_Widget {
     </select>
   </p>
   <p>
-    <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order of the events','eme'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('order'); ?>"><?php _e('Order of the events','eme'); ?>:</label><br />
     <select id="<?php echo $this->get_field_id('order'); ?>" name="<?php echo $this->get_field_name('order'); ?>">
          <option value="ASC" <?php selected( $order, 'ASC' ); ?>><?php _e('Ascendant','eme'); ?></option>
          <option value="DESC" <?php selected( $order, 'DESC' ); ?>><?php _e('Descendant','eme'); ?></option>
@@ -96,7 +96,7 @@ class WP_Widget_eme_list extends WP_Widget {
   if(get_option('eme_categories_enabled')) {
 ?>
   <p>
-    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br />
     <select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
       <option value=""><?php _e ( 'Select...', 'eme' ); ?></option>
       <?php
@@ -112,7 +112,7 @@ class WP_Widget_eme_list extends WP_Widget {
   }
 ?>
   <p>
-    <label for="<?php echo $this->get_field_id('authorid'); ?>"><?php _e('Author','eme'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('authorid'); ?>"><?php _e('Author','eme'); ?>:</label><br />
 <?php
 wp_dropdown_users ( array ('id' => $this->get_field_id('authorid'), 'name' => $this->get_field_name('authorid'), 'show_option_none' => __ ( "Select...", 'eme' ), 'selected' => $authorid ) );
 ?>
@@ -126,7 +126,7 @@ wp_dropdown_users ( array ('id' => $this->get_field_id('authorid'), 'name' => $t
     <textarea id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" rows="5" cols="24"><?php echo eme_sanitize_html($format);?></textarea>
   </p> 
   <p>
-    <label for="<?php echo $this->get_field_id('footer'); ?>"><?php _e('List footer format<br />(if empty &lt;ul/&gt; is used)','eme'); ?>: </label>
+    <label for="<?php echo $this->get_field_id('footer'); ?>"><?php _e('List footer format<br />(if empty &lt;/ul&gt; is used)','eme'); ?>: </label>
     <input type="text" id="<?php echo $this->get_field_id('footer'); ?>" name="<?php echo $this->get_field_name('footer'); ?>" value="<?php echo $footer;?>" />
   </p>
 <?php
@@ -195,7 +195,7 @@ class WP_Widget_eme_calendar extends WP_Widget {
       if(get_option('eme_categories_enabled')) {
   ?>
   <p>
-    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e('Category','eme'); ?>:</label><br />
    <select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
       <option value=""><?php _e ( 'Select...', 'eme' ); ?>   </option>
       <?php
@@ -211,7 +211,7 @@ class WP_Widget_eme_calendar extends WP_Widget {
       }
 ?>
   <p>
-    <label for="<?php echo $this->get_field_id('authorid'); ?>"><?php _e('Author','eme'); ?>:</label><br/>
+    <label for="<?php echo $this->get_field_id('authorid'); ?>"><?php _e('Author','eme'); ?>:</label><br />
 <?php
 wp_dropdown_users ( array ('id' => $this->get_field_id('authorid'), 'name' => $this->get_field_name('authorid'), 'show_option_none' => __ ( "Select...", 'eme' ), 'selected' => $authorid ) );
 ?>

@@ -82,7 +82,7 @@ function eme_locations_edit_layout($location, $message = "") {
    <div class="wrap">
       <div id="poststuff">
          <div id="icon-edit" class="icon32">
-            <br/>
+            <br />
          </div>
             
          <h2><?php _e('Edit location', 'eme') ?></h2>
@@ -182,7 +182,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
    ?>
       <div class="wrap nosubsub">
          <div id="icon-edit" class="icon32">
-            <br/>
+            <br />
          </div>
          <h2><?php _e('Locations', 'eme') ?></h2>
          <?php admin_show_warnings(); ?>
@@ -890,7 +890,7 @@ function eme_locations_autocomplete() {
             selectFirst: false,
             formatItem: function(row) {
                item = eval("(" + row + ")");
-               return item.name+'<br/><small>'+item.address+' - '+item.town+ '</small>';
+               return item.name+'<br /><small>'+item.address+' - '+item.town+ '</small>';
             },
             formatResult: function(row) {
                item = eval("(" + row + ")");

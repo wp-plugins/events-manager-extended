@@ -20,7 +20,7 @@ function eme_checkbox_items($name, $array, $saved_values, $horizontal = true) {
          $checked = "checked='checked'";
       $output .=  "<input type='checkbox' name='$name' value='$key' $checked /> $item ";
       if(!$horizontal)  
-         $output .= "<br/>\n";
+         $output .= "<br />\n";
    }
    echo $output;
    
@@ -54,7 +54,7 @@ function eme_options_textarea($title, $name, $description) {
    ?>
    <tr valign="top" id='<?php echo $name;?>_row'>
       <th scope="row"><?php _e($title,'eme')?></th>
-         <td><textarea name="<?php echo $name ?>" id="<?php echo $name ?>" rows="6" cols="60"><?php echo eme_sanitize_html(get_option($name));?></textarea><br/>
+         <td><textarea name="<?php echo $name ?>" id="<?php echo $name ?>" rows="6" cols="60"><?php echo eme_sanitize_html(get_option($name));?></textarea><br />
             <?php echo $description; ?></td>
       </tr>
    <?php
@@ -87,7 +87,7 @@ function eme_options_select($title, $name, $list, $description) {
                     echo "<option value='$key' $selected>$value</option>";
                  }
                ?>
-            </select> <br/>
+            </select> <br />
             <?php echo $description; ?>
          </td>
          </tr>

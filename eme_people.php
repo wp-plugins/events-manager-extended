@@ -35,7 +35,7 @@ function eme_people_page() {
    ?>
    
    <div class='wrap'> 
-   <div id="icon-users" class="icon32"><br/></div>
+   <div id="icon-users" class="icon32"><br /></div>
    <h2>People</h2>
    <?php admin_show_warnings(); eme_people_table($message); ?>
    </div> 
@@ -300,7 +300,7 @@ function eme_phone_field($user) {
    <table class='form-table'>
       <tr>
          <th><label for="eme_phone"><?php _e('Phone number','eme');?></label></th>
-         <td><input type="text" name="eme_phone" id="eme_phone" value="<?php echo $eme_phone; ?>" class="regular-text" /> <br/>
+         <td><input type="text" name="eme_phone" id="eme_phone" value="<?php echo $eme_phone; ?>" class="regular-text" /> <br />
          <?php _e('The phone number used by Events Manager Extended when the user is indicated as the contact person for an event.','eme');?></td>
       </tr>
    </table>
