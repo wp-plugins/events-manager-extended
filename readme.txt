@@ -420,3 +420,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: #_EXCERPT layout was not ok, should be the same as for #_NOTES
 * Bugfix: the setting for "default contact person" was being ignored and has been corrected. Also I specified that the default contact person is the event author from now on (can still be changed in the settings page)
 * Bugfix: stricter matching, only replace placeholders that are found, not everything starting with #
+* Bugfix:  bug that was triggered when "hide RSVP full events" was selected and no RSVP was made yet. It triggered a mysql statement that returned NULL where it should've been 0
