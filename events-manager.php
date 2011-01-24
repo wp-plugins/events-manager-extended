@@ -11,6 +11,7 @@ Author URI: http://www.e-dynamics.be/
 /*
 Copyright (c) 2009, Davide Benini.  $Revision: 1 $
 Copyright (c) 2010, Franky Van Liedekerke.
+Copyright (c) 2011, Franky Van Liedekerke.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
