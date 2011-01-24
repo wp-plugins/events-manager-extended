@@ -417,7 +417,7 @@ function eme_options_subpanel() {
    eme_options_radio_binary ( __ ( 'Use categories?' ), 'eme_categories_enabled', __ ( 'Select yes to enable the category features.','eme' ) );
    eme_options_radio_binary ( __ ( 'Use attributes?' ), 'eme_attributes_enabled', __ ( 'Select yes to enable the attributes feature.','eme' ) );
    eme_options_radio_binary ( __ ( 'Enable Google Maps integration?' ), 'eme_gmap_is_active', __ ( 'Check this option to enable Google Map integration.','eme' ) );
-   eme_options_radio_binary ( __ ( 'Include Google Maps JS in header?' ), 'eme_google_maps_js_in_header', __ ( 'Some themes are badely designed and can have issues showing the google maps. If so, try activating this option which will cause the Google Maps Javascript to always be included in the header of every page (off by default).','eme' ) );
+   eme_options_radio_binary ( __ ( 'Always include JS in header?' ), 'eme_load_js_in_header', __ ( 'Some themes are badely designed and can have issues showing the google maps or advancing in the calendar. If so, try activating this option which will cause the javascript to always be included in the header of every page (off by default).','eme' ) );
    eme_options_radio_binary ( __ ( 'Delete all EME data when uninstalling?', 'eme' ), 'eme_uninstall_drop_data', __ ( 'Check this option if you want to delete all EME data (database tables and options) when deactivating the plugin.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Enable shortcodes in widgets', 'eme' ), 'eme_shortcodes_in_widgets', __ ( 'Check this option if you want to enable the use of shortcodes in widgets (affects shortcodes of any plugin used in widgets, so use with care).', 'eme' ) );
    ?>
@@ -2666,9 +2666,12 @@ function eme_general_css() {
       echo "<link rel='stylesheet' href='".get_stylesheet_directory_uri()."/eme.css' type='text/css'/>\n";
    }
    $gmap_is_active = get_option('eme_gmap_is_active' );
-   $gmap_js_in_header = get_option('eme_google_maps_js_in_header' );
-   if ($gmap_is_active && $gmap_js_in_header) {
+   $load_js_in_header = get_option('eme_load_js_in_header' );
+   if ($gmap_is_active && $load_js_in_header) {
       echo "<script type='text/javascript' src='".EME_PLUGIN_URL."eme_location_map.js'></script>\n";
+   }
+   if ($load_js_in_header) {
+      eme_ajaxize_calendar();
    }
 }
 add_action ( 'wp_head', 'eme_general_css' );
@@ -2677,9 +2680,9 @@ add_action ( 'wp_head', 'eme_general_css' );
 function eme_general_footer() {
    global $eme_need_gmap_js;
    $gmap_is_active = get_option('eme_gmap_is_active' );
-   $gmap_js_in_header = get_option('eme_google_maps_js_in_header' );
+   $load_js_in_header = get_option('eme_load_js_in_header' );
    // we only include the map js if wanted/needed
-   if (!$gmap_js_in_header && $gmap_is_active && $eme_need_gmap_js) {
+   if (!$load_js_in_header && $gmap_is_active && $eme_need_gmap_js) {
       echo "<script type='text/javascript' src='".EME_PLUGIN_URL."eme_location_map.js'></script>\n";
    }
 }
