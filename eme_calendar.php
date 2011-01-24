@@ -361,7 +361,8 @@ function eme_ajaxize_calendar() {
    } else {
       $jquery_override_lang="";
    }
-   if ($eme_need_calendar_js) {
+   $load_js_in_header = get_option('eme_load_js_in_header' );
+   if ($eme_need_calendar_js || $load_js_in_header) {
 ?>
    <script type='text/javascript'>
       $j_eme_calendar=jQuery.noConflict();
