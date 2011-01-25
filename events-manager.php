@@ -736,7 +736,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
       if (isset($event['event_attributes'][$attRef])) {
          $replacement = $event['event_attributes'][$attRef];
       }
-      if( trim($attString) == ''
+      if( trim($replacement) == ''
          && isset($results[2][$resultKey])
          && $results[2][$resultKey] != '' ) {
          //Check to see if we have a second set of braces;
