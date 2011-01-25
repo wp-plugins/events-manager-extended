@@ -11,7 +11,7 @@ function eme_if_shortcode($atts,$content) {
    } elseif (is_numeric($gt) || !empty($gt)) {
       if ($tag>$gt) return do_shortcode($content);
    } elseif (is_numeric($contains) || !empty($contains)) {
-      if (substr($tag,"$contains")) return do_shortcode($content);
+      if (strstr($tag,"$contains")) return do_shortcode($content);
    } else {
       if (!empty($tag)) return do_shortcode($content);
    }
