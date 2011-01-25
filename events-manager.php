@@ -1027,9 +1027,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_CONTACTEMAIL$/', $result)) {
          $contact = eme_get_contact($event);
-         $replacement = eme_ascii_encode($contact->user_email);
          // ascii encode for primitive harvesting protection ...
-         $replacement=eme_ascii_encode($email);
+         $replacement = eme_ascii_encode($contact->user_email);
 
       } elseif (preg_match('/#_CONTACTPHONE$/', $result)) {
          $contact = eme_get_contact($event);
