@@ -981,6 +981,16 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $joiner = "?";
          $replacement = $events_page_link.$joiner."location_id=".$event['location_id'];
 
+      } elseif (preg_match('/#_EVENTID$/', $result)) {
+         $field = "event_id";
+         $replacement = $event[$field];
+         $replacement = eme_trans_sanitize_html($replacement);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement); 
+         }
+
       } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
          $replacement = $event[$field];
