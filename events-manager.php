@@ -1105,14 +1105,16 @@ function eme_replace_placeholders($format, $event, $target="html") {
       }
       $replacement = '';
       if(substr($result, 0, 3 ) == "#@_") {
-         $date = "event_end_date";
+         $my_date = "event_end_date";
+         $my_time = "event_end_time";
          $offset = 4;
       } else {
-         $date = "event_start_date";
+         $my_date = "event_start_date";
+         $my_time = "event_start_time";
          $offset = 3;
       }
 
-      $replacement = date_i18n(substr($result, $offset, (strlen($result)-($offset+1)) ), strtotime($event[$date]));
+      $replacement = date_i18n(substr($result, $offset, (strlen($result)-($offset+1)) ), strtotime($event[$my_date]." ".$event[$my_time]));
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
