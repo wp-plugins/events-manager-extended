@@ -720,7 +720,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
    global $eme_need_gmap_js;
    global $current_user;
 
-
    // first we do the custom attributes, since these can contain other placeholders
    preg_match_all("/#(ESC)?_ATT\{.+?\}(\{.+?\})?/", $format, $results);
    foreach($results[0] as $resultKey => $result) {
@@ -1112,11 +1111,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $date = "event_start_date";
          $offset = 3;
       }
-      if( $date == "event_end_date" && $event[$date] == $event['event_start_date'] ) {
-         $replacement = '';
-      } else {
-         $replacement = date_i18n(substr($result, $offset, (strlen($result)-($offset+1)) ), strtotime($event[$date]));
-      }
+
+      $replacement = date_i18n(substr($result, $offset, (strlen($result)-($offset+1)) ), strtotime($event[$date]));
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));

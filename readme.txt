@@ -426,3 +426,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: you can now use "contains" in the conditional tag [events_if]
 * Feature: added #_EVENTID
 * Bugfix: #_CONTACTEMAIL was no longer correctly replaced
+* Bugfix: using #@_{} notation resulted in empty string if end and start date were the same, not intended behaviour ...
+
