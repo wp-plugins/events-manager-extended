@@ -148,6 +148,11 @@ function eme_catch_rsvp() {
    global $form_delete_message; 
    $result = "";
 
+   // make sure we don't get too far without proper info
+   if (!(isset($_POST['eme_eventAction']) && isset($_POST['event_id']))) {
+      return;
+   }
+
    if (get_option('eme_captcha_for_booking')) {
       // the captcha needs a session
       if (!session_id())
@@ -167,30 +172,7 @@ function eme_catch_rsvp() {
    } 
 
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'delete_booking') { 
-      if ($registration_wp_users_only) {
-         // we require a user to be WP registered to be able to book
-         get_currentuserinfo();
-         $booker_wp_id=$current_user->ID;
-         $booker = eme_get_person_by_wp_id($booker_wp_id); 
-      } else {
-         $bookerName = eme_strip_tags($_POST['bookerName']);
-         $bookerEmail = eme_strip_tags($_POST['bookerEmail']);
-         $booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
-      }
-      if ($booker) {
-         $person_id = $booker['person_id'];
-         $booking = eme_get_booking_by_person_event_id($person_id,$event_id);
-         if ( eme_delete_booking_by_person_event_id($person_id,$event_id) === false) {
-            $result = __('Booking delete failed', 'eme');
-         } else {
-            $result = __('Booking deleted', 'eme');
-            if($mailing_is_active) {
-               eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$booker['person_phone'],$booking['booking_seats'],"","cancelRegistration");
-            } 
-         }
-      } else {
-         $result = __('There are no bookings associated to this name and e-mail', 'eme');
-      }
+      $result = eme_cancel_seats($event);
       $form_delete_message = $result; 
    } 
    return $result;
@@ -198,6 +180,37 @@ function eme_catch_rsvp() {
 }
 add_action('init','eme_catch_rsvp');
  
+function eme_cancel_seats($event) {
+   global $current_user;
+   $event_id = $event['event_id'];
+   $registration_wp_users_only=$event['registration_wp_users_only'];
+   if ($registration_wp_users_only) {
+      // we require a user to be WP registered to be able to book
+      get_currentuserinfo();
+      $booker_wp_id=$current_user->ID;
+      $booker = eme_get_person_by_wp_id($booker_wp_id); 
+   } else {
+      $bookerName = eme_strip_tags($_POST['bookerName']);
+      $bookerEmail = eme_strip_tags($_POST['bookerEmail']);
+      $booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
+   }
+   if ($booker) {
+      $person_id = $booker['person_id'];
+      $booking = eme_get_booking_by_person_event_id($person_id,$event_id);
+      if ( eme_delete_booking_by_person_event_id($person_id,$event_id) === false) {
+         $result = __('Booking delete failed', 'eme');
+      } else {
+         $result = __('Booking deleted', 'eme');
+         if($mailing_is_active) {
+            eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$booker['person_phone'],$booking['booking_seats'],"","cancelRegistration");
+         } 
+      }
+   } else {
+      $result = __('There are no bookings associated to this name and e-mail', 'eme');
+   }
+   return $result;
+}
+
 function eme_book_seats($event) {
    global $current_user;
    $bookedSeats = intval($_POST['bookedSeats']);
