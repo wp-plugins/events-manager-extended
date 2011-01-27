@@ -492,7 +492,7 @@ function eme_filter_calendar_ajax() {
       (isset($_GET['calmonth'])) ? $month = eme_sanitize_request($_GET['calmonth']) : $month = ''; 
       (isset($_GET['calyear'])) ? $year = eme_sanitize_request($_GET['calyear']) : $year = ''; 
       (isset($_GET['author'])) ? $author = eme_sanitize_request($_GET['author']) : $author = ''; 
-      (isset($_GET['contact_person'])) ? $author = eme_sanitize_request($_GET['contact_person']) : $contact_person = ''; 
+      (isset($_GET['contact_person'])) ? $contact_person = eme_sanitize_request($_GET['contact_person']) : $contact_person = ''; 
       (isset($_GET['location_id'])) ? $location_id = eme_sanitize_request($_GET['location_id']) : $location_id = '';
       // $calyear = eme_sanitize_request($_GET['calyear']);
       eme_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year.'&author='.$author.'&contact_person='.$contact_person.'&location_id='.$location_id);
