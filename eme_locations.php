@@ -698,11 +698,15 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
    foreach($placeholders[0] as $result) {
       $need_escape = 0;
+      $need_urlencode = 0;
       $orig_result = $result;
       $found=1;
       if (strstr($result,'#ESC')) {
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
+      } elseif (strstr($result,'#URL')) {
+         $result = str_replace("#URL","#",$result);
+         $need_urlencode=1;
       }
       $replacement = "";
 
@@ -793,6 +797,8 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+      } elseif ($need_urlencode) {
+         $replacement = rawurlencode($replacement);
       }
       if ($found)
          $format = str_replace($orig_result, $replacement ,$format );

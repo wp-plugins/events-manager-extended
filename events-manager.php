@@ -721,13 +721,17 @@ function eme_replace_placeholders($format, $event, $target="html") {
    global $current_user;
 
    // first we do the custom attributes, since these can contain other placeholders
-   preg_match_all("/#(ESC)?_ATT\{.+?\}(\{.+?\})?/", $format, $results);
+   preg_match_all("/#(ESC|URL)?_ATT\{.+?\}(\{.+?\})?/", $format, $results);
    foreach($results[0] as $resultKey => $result) {
       $need_escape = 0;
+      $need_urlencode = 0;
       $orig_result = $result;
       if (strstr($result,'#ESC')) {
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
+      } elseif (strstr($result,'#URL')) {
+         $result = str_replace("#URL","#",$result);
+         $need_urlencode=1;
       }
       $replacement = "";
       //Strip string of placeholder and just leave the reference
@@ -744,6 +748,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+      } elseif ($need_urlencode) {
+         $replacement = rawurlencode($replacement);
       }
       $format = str_replace($orig_result, $replacement ,$format );
    }
@@ -757,11 +763,15 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
    foreach($placeholders[0] as $result) {
       $need_escape = 0;
+      $need_urlencode = 0;
       $orig_result = $result;
       $found = 1;
       if (strstr($result,'#ESC')) {
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
+      } elseif (strstr($result,'#URL')) {
+         $result = str_replace("#URL","#",$result);
+         $need_urlencode=1;
       }
       $replacement = "";
       // matches all fields placeholder
@@ -1086,6 +1096,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+      } elseif ($need_urlencode) {
+         $replacement = rawurlencode($replacement);
       }
       if ($found)
          $format = str_replace($orig_result, $replacement ,$format );
@@ -1098,10 +1110,14 @@ function eme_replace_placeholders($format, $event, $target="html") {
    usort($results[0],'sort_stringlenth');
    foreach($results[0] as $result) {
       $need_escape = 0;
+      $need_urlencode = 0;
       $orig_result = $result;
       if (strstr($result,'#ESC')) {
          $result = str_replace("#ESC","#",$result);
          $need_escape=1;
+      } elseif (strstr($result,'#URL')) {
+         $result = str_replace("#URL","#",$result);
+         $need_urlencode=1;
       }
       $replacement = '';
       if(substr($result, 0, 3 ) == "#@_") {
@@ -1118,6 +1134,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+      } elseif ($need_urlencode) {
+         $replacement = rawurlencode($replacement);
       }
       $format = str_replace($orig_result, $replacement ,$format );
    }
