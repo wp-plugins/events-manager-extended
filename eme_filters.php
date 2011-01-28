@@ -79,8 +79,12 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
 
    foreach($placeholders[0] as $result) {
       $replacement = "";
-      if (preg_match('/^#_FILTER_CATS$/', $result) && get_option('eme_categories_enabled')) {
-         $categories = eme_get_categories();
+      $eventful=0;
+      if (preg_match('/^#_(EVENTFUL_)?FILTER_CATS$/', $result) && get_option('eme_categories_enabled')) {
+         if (strstr($result,'#_EVENTFUL')) {
+            $eventful=1;
+         }
+         $categories = eme_get_categories($eventful,"future");
          if ($categories) {
             $cat_list = array();
             $cat_list[0]="---";
@@ -94,8 +98,12 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $replacement = eme_ui_select($selected_category,$cat_post_name,$cat_list);
          }
 
-      } elseif (preg_match('/^#_FILTER_LOCS$/', $result)) {
-         $locations = eme_get_locations();
+      } elseif (preg_match('/^#_(EVENTFUL_)?FILTER_LOCS$/', $result)) {
+         if (strstr($result,'#_EVENTFUL')) {
+            $eventful=1;
+         }
+         $locations = eme_get_locations($eventful,"future");
+
          if ($locations) {
             $loc_list = array();
             $loc_list[0]="---";
@@ -109,8 +117,11 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $replacement = eme_ui_select($selected_location,$loc_post_name,$loc_list);
          }
 
-      } elseif (preg_match('/^#_FILTER_TOWNS$/', $result)) {
-         $towns = eme_get_locations();
+      } elseif (preg_match('/^#_(EVENTFUL_)?FILTER_TOWNS$/', $result)) {
+         if (strstr($result,'#_EVENTFUL')) {
+            $eventful=1;
+         }
+         $towns = eme_get_locations($eventful,"future");
          if ($towns) {
             $town_list = array();
             $town_list[0]="---";

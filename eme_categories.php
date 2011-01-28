@@ -193,10 +193,29 @@ function eme_categories_edit_layout($message = "") {
    echo $layout;
 }
 
-function eme_get_categories(){
+function eme_get_categories($eventful=false,$scope="future"){
    global $wpdb;
    $categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
-   return $wpdb->get_results("SELECT * FROM $categories_table", ARRAY_A);
+   $categories = array();
+   if ($eventful) {
+      $events = eme_get_events(0, $scope, "ASC");
+      if ($events) {
+         foreach ($events as $event) {
+            $event_cats=split(/\,/,$event['event_category_ids']);
+            if (!empty($event_cats)) {
+               foreach ($event_cats as $category_id) {
+                  $categories[$category_id]=1;
+               }
+            }
+         }
+      }
+      if (!empty($categories)) {
+         $event_cats=join(",",$categories);
+         return $wpdb->get_results("SELECT * FROM $categories_table where category_id in ($event_cats)", ARRAY_A);
+      }
+   } else {
+      return $wpdb->get_results("SELECT * FROM $categories_table", ARRAY_A);
+   }
 }
 
 function eme_get_category($category_id) { 
