@@ -2588,7 +2588,7 @@ function eme_rss() {
       if (isset($_GET['category'])) {
          $category=$_GET['category'];
       } else {
-         $category="*";
+         $category=0;
       }
       if (isset($_GET['scope'])) {
          $scope=$_GET['scope'];
