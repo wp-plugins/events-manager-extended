@@ -201,7 +201,7 @@ function eme_get_categories($eventful=false,$scope="future"){
       $events = eme_get_events(0, $scope, "ASC");
       if ($events) {
          foreach ($events as $event) {
-            $event_cats=split(/\,/,$event['event_category_ids']);
+            $event_cats=split("/,/",$event['event_category_ids']);
             if (!empty($event_cats)) {
                foreach ($event_cats as $category_id) {
                   $categories[$category_id]=1;

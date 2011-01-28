@@ -427,6 +427,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added #_EVENTID
 * Feature: #URL prefix possible for all placeholders, forces raw_urlencode on it, so you can use it every info in custom links
 * Feature: for the filter form, you can now use #_EVENTFUL_FILTER_CATS, #_EVENTFUL_FILTER_LOCS and #_EVENTFUL_FILTER_TOWNS to just show those that have events
+* Improvement: the month in the calendar widget shown depends on the calendar day clicked
 * Bugfix: #_CONTACTEMAIL was no longer correctly replaced
 * Bugfix: using #@_{} notation resulted in empty string if end and start date were the same, not intended behaviour ...
 * Bugfix: using #_{} or #@_{} resulted in the minutes being ignored ...

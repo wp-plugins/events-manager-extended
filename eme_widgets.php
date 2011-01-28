@@ -174,7 +174,12 @@ class WP_Widget_eme_calendar extends WP_Widget {
       $options['title'] = $title;
       $options['long_events'] = $long_events;
       $options['category'] = $category;
-      $options['month'] = date("m");
+      // the month shown depends on the calendar day clicked
+      if (isset ( $_REQUEST ['calendar_day'] ) && $_REQUEST ['calendar_day'] != '') {
+          $options['month'] = date("m", strtotime( $_REQUEST ['calendar_day']) );
+      } else {
+          $options['month'] = date("m");
+      }
       $options['author'] = $author;
       eme_get_calendar($options);
       echo $after_widget;
