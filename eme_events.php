@@ -930,7 +930,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 3, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0 ), $atts ) );
+   extract ( shortcode_atts ( array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0 ), $atts ) );
 
    // the filter list overrides the settings
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'filter') {
