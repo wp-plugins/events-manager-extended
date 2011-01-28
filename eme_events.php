@@ -2583,12 +2583,12 @@ function eme_rss() {
       if (isset($_GET['order'])) {
          $order=$_GET['order'];
       } else {
-         $order="order";
+         $order="ASC";
       }
       if (isset($_GET['category'])) {
          $category=$_GET['category'];
       } else {
-         $category="category";
+         $category="*";
       }
       if (isset($_GET['scope'])) {
          $scope=$_GET['scope'];
