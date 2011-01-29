@@ -712,10 +712,10 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
       $echo = (bool) $r ['echo'];
-      // for categories: the word "none" is also ok, to indicate no category present for an event
+      // for categories: the word "none" is also ok in the list, to indicate no category present for an event
       // for AND categories: the user enters "+" and this gets translated to " " by wp_parse_args
-      $category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) || $r ['category'] == "none" ) ? $r ['category'] : '' ;
-      $location_id = ( preg_match('/^([0-9][, ]?)+$/', $r ['location_id'] ) ) ? $r ['location_id'] : '' ;
+      //$category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) || $r ['category'] == "none" ) ? $r ['category'] : '' ;
+      //$location_id = ( preg_match('/^([0-9][, ]?)+$/', $r ['location_id'] ) ) ? $r ['location_id'] : '' ;
       // authorID filter: you can use "1,3", but not "1+3" since an event can have only one author
       //$authorID = ( preg_match('/^([0-9],?)+$/', $r ['authorID'] ) ) ? $r ['authorID'] : '' ;
       //$author = $r ['author'] ? $r ['author'] : '' ;
