@@ -1113,7 +1113,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    if (is_numeric($location_id)) {
       if ($location_id>0)
          $conditions [] = " location_id = $location_id";
-   } elseif ( preg_match('/^([0-9]+,?)+$/', $location_id) ) {
+   } elseif ( preg_match('/,/', $location_id) ) {
       $location_ids=explode(',', $location_id);
       $location_conditions = array();
       foreach ($location_ids as $loc) {
@@ -1121,7 +1121,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
                $location_conditions[] = " location_id = $loc";
          }
          $conditions [] = "(".implode(' OR', $location_conditions).")";
-   } elseif ( preg_match('/^([0-9]+ ?)+$/', $location_id) ) {
+   } elseif ( preg_match('/ /', $location_id) ) {
       $location_ids=explode(' ', $location_id);
       $location_conditions = array();
       foreach ($location_ids as $loc) {
@@ -1137,7 +1137,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
             $conditions [] = " FIND_IN_SET($category,event_category_ids)";
       } elseif ($category == "none") {
          $conditions [] = "event_category_ids=''";
-      } elseif ( preg_match('/^([0-9]+,?)+$/', $category) ) {
+      } elseif ( preg_match('/,/', $category) ) {
          $category = explode(',', $category);
          $category_conditions = array();
          foreach ($category as $cat) {
@@ -1148,7 +1148,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
             }
          }
          $conditions [] = "(".implode(' OR', $category_conditions).")";
-      } elseif ( preg_match('/^([0-9]+ ?)+$/', $category) ) {
+      } elseif ( preg_match('/ /', $category) ) {
          $category = explode(' ', $category);
          $category_conditions = array();
          foreach ($category as $cat) {
