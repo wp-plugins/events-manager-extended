@@ -424,8 +424,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.3.1 = 
 * Feature: you can now use "contains" in the conditional tag [events_if]
-* Feature: added #_EVENTID
-* Feature: #URL prefix possible for all placeholders, forces raw_urlencode on it, so you can use it every info in custom links
+* Feature: added #_EVENTID, gives you the event ID if you want some unique identifier
+* Feature: #URL prefix possible for all placeholders, forces raw_urlencode on it, so you can use every info in custom links
 * Feature: for the filter form, you can now use #_EVENTFUL_FILTER_CATS, #_EVENTFUL_FILTER_LOCS and #_EVENTFUL_FILTER_TOWNS to just show those that have events
 * Feature: you can indicate "none" as a category as well for the events_list, to find events without categories: [events_list category=none] or [events_list category=2,none]
 * Improvement: the month in the calendar widget shown depends on the calendar day clicked
