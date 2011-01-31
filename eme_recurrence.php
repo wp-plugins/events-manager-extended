@@ -89,6 +89,8 @@ function eme_insert_recurrent_event($event, $recurrence ){
    global $wpdb;
    $recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
       
+   $recurrence['creation_date']="NOW()";
+   $recurrence['modif_date']="NOW()";
    // never try to update a autoincrement value ...
    if (isset($recurrence['recurrence_id']))
       unset ($recurrence['recurrence_id']);
@@ -113,6 +115,8 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    foreach($matching_days as $day) {
       $event['event_start_date'] = date("Y-m-d", $day); 
       $event['event_end_date'] = $event['event_start_date']; 
+      $event['creation_date']=$recurrence['creation_date'];
+      $event['modif_date']=$recurrence['modif_date'];
    //$wpdb->show_errors(true);
       $wpdb->insert($events_table, $event);
    }
@@ -121,6 +125,7 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
 function eme_update_recurrence($event, $recurrence) {
    global $wpdb;
    $recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
+   $recurrence['modif_date']="NOW()";
    $where = array('recurrence_id' => $recurrence['recurrence_id']);
    $wpdb->show_errors(true);
    $wpdb->update($recurrence_table, $recurrence, $where); 
@@ -158,6 +163,7 @@ function eme_update_events_for_recurrence($event,$recurrence) {
          $where=array('event_id' => $existing_event['event_id']);
          $event['event_start_date'] = $existing_event['event_start_date'];
          $event['event_end_date'] = $event['event_start_date'];
+         $event['modif_date']=$recurrence['modif_date'];
          $wpdb->update($events_table, $event, $where); 
       } else {
             $sql = "DELETE FROM $events_table WHERE event_id = '".$existing_event['event_id']."';";
@@ -175,6 +181,8 @@ function eme_update_events_for_recurrence($event,$recurrence) {
          }
       }
       if ($insert_needed==1) {
+         $event['creation_date']=$recurrence['creation_date'];
+         $event['modif_date']=$recurrence['modif_date'];
          $wpdb->insert($events_table, $event);        
       }
    }

@@ -2697,6 +2697,8 @@ add_action('wp_footer', 'eme_general_footer');
 function eme_db_insert_event($event) {
    global $wpdb;
    $table_name = $wpdb->prefix . EVENTS_TBNAME;
+   $event['creation_date']="NOW()";
+   $event['modif_date']="NOW()";
    $wpdb->show_errors(true);
    if (!$wpdb->insert ( $table_name, $event )) {
       $wpdb->print_error();
@@ -2711,6 +2713,7 @@ function eme_db_insert_event($event) {
 function eme_db_update_event($event,$where) {
    global $wpdb;
    $table_name = $wpdb->prefix . EVENTS_TBNAME;
+   $event['modif_date']="NOW()";
    $wpdb->show_errors(true);
    if (!$wpdb->update ( $table_name, $event, $where )) {
       $wpdb->print_error();

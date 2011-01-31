@@ -347,6 +347,8 @@ function eme_create_events_table($charset,$collate) {
          event_end_time time NOT NULL,
          event_start_date date NOT NULL,
          event_end_date date NULL, 
+         creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          event_notes longtext DEFAULT NULL,
          event_rsvp bool DEFAULT 0,
          rsvp_number_days tinyint unsigned DEFAULT 0,
@@ -412,6 +414,8 @@ function eme_create_events_table($charset,$collate) {
       $registration_wp_users_only=get_option('eme_rsvp_registered_users_only');
       maybe_add_column($table_name, 'registration_wp_users_only', "alter table $table_name add registration_wp_users_only bool DEFAULT $registration_wp_users_only;"); 
       maybe_add_column($table_name, 'event_author', "alter table $table_name add event_author mediumint(9) DEFAULT 0;"); 
+      maybe_add_column($table_name, 'creation_date', "alter table $table_name add creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'modif_date', "alter table $table_name add modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       if ($db_version<3) {
          $wpdb->query("ALTER TABLE $table_name MODIFY event_name text;");
          $wpdb->query("ALTER TABLE $table_name MODIFY event_notes longtext;");
@@ -432,6 +436,10 @@ function eme_create_events_table($charset,$collate) {
          $wpdb->query("ALTER TABLE $table_name DROP COLUMN event_author;");
          $wpdb->query("ALTER TABLE $table_name CHANGE event_creator_id event_author mediumint(9) DEFAULT 0;");
       }
+      if ($db_version<13) {
+         $wpdb->query("UPDATE $table_name set creation_date=NOW() where creation_date='0000-00-00 00:00:00'");
+         $wpdb->query("UPDATE $table_name set modif_date=NOW() where modif_date='0000-00-00 00:00:00'");
+      }
    }
 }
 
@@ -446,6 +454,8 @@ function eme_create_recurrence_table($charset,$collate) {
          recurrence_id mediumint(9) NOT NULL AUTO_INCREMENT,
          recurrence_start_date date NOT NULL,
          recurrence_end_date date NOT NULL,
+         creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          recurrence_interval tinyint NOT NULL, 
          recurrence_freq tinytext NOT NULL,
          recurrence_byday tinytext NOT NULL,
@@ -454,12 +464,17 @@ function eme_create_recurrence_table($charset,$collate) {
          ) $charset $collate;";
       dbDelta($sql);
    } else {
-      // Fix buggy columns
+      maybe_add_column($table_name, 'creation_date', "alter table $table_name add creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'modif_date', "alter table $table_name add modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       if ($db_version<3) {
          $wpdb->query("ALTER TABLE $table_name MODIFY recurrence_byday tinytext NOT NULL ;");
       }
       if ($db_version<4) {
          $wpdb->query("ALTER TABLE $table_name DROP COLUMN recurrence_name, DROP COLUMN recurrence_start_time, DROP COLUMN recurrence_end_time, DROP COLUMN recurrence_notes, DROP COLUMN location_id, DROP COLUMN event_contactperson_id, DROP COLUMN event_category_id, DROP COLUMN event_page_title_format, DROP COLUMN event_single_event_format, DROP COLUMN event_contactperson_email_body, DROP COLUMN event_respondent_email_body, DROP COLUMN registration_requires_approval ");
+      }
+      if ($db_version<13) {
+         $wpdb->query("UPDATE $table_name set creation_date=NOW() where creation_date='0000-00-00 00:00:00'");
+         $wpdb->query("UPDATE $table_name set modif_date=NOW() where modif_date='0000-00-00 00:00:00'");
       }
    }
 }
