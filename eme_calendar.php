@@ -11,6 +11,33 @@ function eme_get_calendar_shortcode($atts) {
          'contact_person' => '',
          'location_id' => ''
       ), $atts)); 
+
+   // the filter list overrides the settings
+   if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'filter') {
+      if (isset($_POST['eme_loc_filter'])) {
+         if (is_array($_POST['eme_loc_filter']))
+            $location_id=join(',',$_POST['eme_loc_filter']);
+         else
+            $location_id=$_POST['eme_loc_filter'];
+      }
+      if (isset($_POST['eme_town_filter'])) {
+         if (is_array($_POST['eme_town_filter']))
+            $towns=join(',',$_POST['eme_town_filter']);
+         else
+            $towns=$_POST['eme_town_filter'];
+         if (empty($location_id))
+            $location_id = join(',',eme_get_town_location_ids($towns));
+         else
+            $location_id .= ",".join(',',eme_get_town_location_ids($towns));
+      }
+      if (isset($_POST['eme_cat_filter'])) {
+         if (is_array($_POST['eme_cat_filter']))
+            $category=join(',',$_POST['eme_cat_filter']);
+         else
+            $category=$_POST['eme_cat_filter'];
+      }
+   }
+
    $result = eme_get_calendar("full={$full}&month={$month}&year={$year}&echo={$echo}&long_events={$long_events}&category={$category}&author={$author}&contact_person={$contact_person}&location_id={$location_id}");
    return $result;
 }
