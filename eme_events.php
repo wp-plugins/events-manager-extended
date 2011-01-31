@@ -1059,7 +1059,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    }
    if (preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope )) {
       //$conditions [] = " event_start_date like '$scope'";
-      $conditions [] = " (event_start_date  like '$scope') OR (event_start_date <= '$scope' AND event_end_date >= '$scope')";
+      $conditions [] = " ((event_start_date  like '$scope') OR (event_start_date <= '$scope' AND event_end_date >= '$scope'))";
    } elseif (preg_match ( "/^0000-([0-9]{2})$/", $scope, $matches )) {
       $year=date('Y');
       $month=$matches[1];
