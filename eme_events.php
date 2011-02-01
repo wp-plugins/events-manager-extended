@@ -143,10 +143,8 @@ function eme_events_subpanel() {
       // End of Alex's fix
       //$event['event_start_time'] = $_POST[event_hh].":".$_POST[event_mm].":00";
       //$event['event_end_time'] = $_POST[event_end_hh].":".$_POST[event_end_mm].":00";
-      $event ['event_start_time'] = isset($_POST ['event_start_time']) ? $_POST ['event_start_time'] : '';
-      $event ['event_start_time'] = date ( "G:i:00", strtotime ( $event ['event_start_time'] ) );
-      $event ['event_end_time'] = isset($_POST ['event_end_time']) ? $_POST ['event_end_time'] : '';
-      $event ['event_end_time'] = date ( "G:i:00", strtotime ( $event ['event_end_time'] ) );
+      $event ['event_start_time'] = isset($_POST ['event_start_time']) ? date ("H:i:00", strtotime ($_POST ['event_start_time'])) : '00:00:00';
+      $event ['event_end_time'] = isset($_POST ['event_end_time']) ? date ("H:i:00", strtotime ($_POST ['event_end_time'])) : '00:00:00';
       $recurrence ['recurrence_start_date'] = $event ['event_start_date'];
       $recurrence ['recurrence_end_date'] = $event ['event_end_date'];
       $recurrence ['recurrence_freq'] = isset($_POST['recurrence_freq']) ? $_POST['recurrence_freq'] : '';
