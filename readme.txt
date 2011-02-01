@@ -430,6 +430,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: you can indicate "none" as a category as well for the events_list, to find events without categories: [events_list category=none] or [events_list category=2,none]
 * Feature: the shortcode [events_filterform] can now also be used to filter a calendar rendered by [events_calendar] (not the scope though)
 * Improvement: the month in the calendar widget shown depends on the calendar day clicked
+* Improvement: you can now use [events_list] in a location description, with paging!
 * Bugfix: #_CONTACTEMAIL was no longer correctly replaced
 * Bugfix: using #@_{} notation resulted in empty string if end and start date were the same, not intended behaviour ...
 * Bugfix: using #_{} or #@_{} resulted in the minutes being ignored ...

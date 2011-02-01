@@ -587,7 +587,7 @@ function eme_global_map($atts) {
       // get the paging output ready
       $pagination_top = "<div id='locations-pagination-top'> ";
       if ($paging==1 && $limit==0) {
-         $this_page_url=get_permalink($post->ID);
+         $this_page_url=$_SERVER['REQUEST_URI'];
          if (stristr($this_page_url, "?"))
             $joiner = "&amp;";
          else

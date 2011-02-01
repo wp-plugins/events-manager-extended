@@ -802,7 +802,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $prev_text=__('Previous page','eme');
       $next_text=__('Next page','eme');
       $page_number = floor($offset/$limit) + 1;
-      $this_page_url=get_permalink($post->ID);
+      $this_page_url=$_SERVER['REQUEST_URI'];
       if (stristr($this_page_url, "?"))
          $joiner = "&amp;";
       else
@@ -829,7 +829,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       }
    }
    if ($paging==1 && $limit==0) {
-      $this_page_url=get_permalink($post->ID);
+      $this_page_url=$_SERVER['REQUEST_URI'];
       if (stristr($this_page_url, "?"))
          $joiner = "&amp;";
       else
