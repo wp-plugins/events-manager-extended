@@ -588,6 +588,10 @@ function eme_global_map($atts) {
       $pagination_top = "<div id='locations-pagination-top'> ";
       if ($paging==1 && $limit==0) {
          $this_page_url=$_SERVER['REQUEST_URI'];
+         // remove the offset info
+         $this_page_url= preg_replace("/\&eme_offset=\d+/","",$this_page_url);
+         $this_page_url= preg_replace("/\?eme_offset=\d+$/","",$this_page_url);
+         $this_page_url= preg_replace("/\?eme_offset=\d+\&(.*)/","?$1",$this_page_url);
          if (stristr($this_page_url, "?"))
             $joiner = "&amp;";
          else

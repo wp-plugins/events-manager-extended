@@ -803,6 +803,10 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $next_text=__('Next page','eme');
       $page_number = floor($offset/$limit) + 1;
       $this_page_url=$_SERVER['REQUEST_URI'];
+      // remove the offset info
+      $this_page_url= preg_replace("/\&eme_offset=\d+/","",$this_page_url);
+      $this_page_url= preg_replace("/\?eme_offset=\d+$/","",$this_page_url);
+      $this_page_url= preg_replace("/\?eme_offset=\d+\&(.*)/","?$1",$this_page_url);
       if (stristr($this_page_url, "?"))
          $joiner = "&amp;";
       else
@@ -830,6 +834,10 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    }
    if ($paging==1 && $limit==0) {
       $this_page_url=$_SERVER['REQUEST_URI'];
+      // remove the offset info
+      $this_page_url= preg_replace("/\&eme_offset=\d+/","",$this_page_url);
+      $this_page_url= preg_replace("/\?eme_offset=\d+$/","",$this_page_url);
+      $this_page_url= preg_replace("/\?eme_offset=\d+\&(.*)/","?$1",$this_page_url);
       if (stristr($this_page_url, "?"))
          $joiner = "&amp;";
       else
@@ -1110,6 +1118,10 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       }
    }
    
+   if ($location_id == "this_location" && isset($_GET['location_id'])) {
+      $location_id = $_GET['location_id'];
+   }
+
    if (is_numeric($location_id)) {
       if ($location_id>0)
          $conditions [] = " location_id = $location_id";
