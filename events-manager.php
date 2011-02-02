@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Events Manager Extended
-Version: 3.3.0
+Version: 3.3.1
 Plugin URI: http://www.e-dynamics.be/wordpress
 Description: Description: Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. <a href="admin.php?page=events-manager-options">Settings</a> | <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=SMGDS4GLCYWNG&lc=BE&item_name=To%20support%20development%20of%20EME&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted">Donate</a>
 Author: Franky Van Liedekerke
@@ -240,6 +240,9 @@ function _eme_install() {
    // always reset the drop data option
    update_option('eme_uninstall_drop_data', 0); 
    
+   // always reset the donation option
+   update_option('eme_donation_done', 0); 
+
    // Create events page if necessary
    $events_page_id = get_option('eme_events_page');
    if (!$events_page_id && get_option('dbem_events_page')) {
