@@ -2,7 +2,8 @@
 $feedback_message = "";
  
 function eme_locations_page() {
-      if (!current_user_can( EDIT_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
+   $current_userid=get_current_user_id();
+   if (!current_user_can( EDIT_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
       $message = __('You have no right to update locations!','eme');
       $locations = eme_get_locations();
       eme_locations_table_layout($locations, null, $message);
@@ -28,6 +29,7 @@ function eme_locations_page() {
       $location['location_latitude'] = $_POST['location_latitude'];
       $location['location_longitude'] = $_POST['location_longitude'];
       $location['location_description'] = stripslashes($_POST['content']);
+      $location['location_author'] = $current_userid;
       
       if(empty($location['location_latitude'])) {
          $location['location_latitude']  = 0;
@@ -443,17 +445,16 @@ function eme_validate_location($location) {
 
 function eme_update_location($location) {
    global $wpdb;
-   $locations_table = $wpdb->prefix.LOCATIONS_TBNAME;
+   $table_name = $wpdb->prefix.LOCATIONS_TBNAME;
    $location=eme_sanitize_request($location);
-   $sql="UPDATE ".$locations_table. 
-   " SET location_name='".$location['location_name']."', ".
-      "location_address='".$location['location_address']."',".
-      "location_town='".$location['location_town']."', ".
-      "location_latitude=".$location['location_latitude'].",". 
-      "location_longitude=".$location['location_longitude'].",".
-      "location_description='".$location['location_description']."' ". 
-      "WHERE location_id='".$location['location_id']."';";
-   $wpdb->query($sql);
+   $where ['location_id'] = $location['location_id'];
+   $wpdb->show_errors(true);
+   if (!$wpdb->update ( $table_name, $location, $where )) {
+      $wpdb->print_error();
+      return false;
+   } else {
+      return true;
+   }
 }
 
 function eme_insert_location($location) {
@@ -465,11 +466,16 @@ function eme_insert_location($location) {
       $location['location_longitude'] = 0;
    if (empty($location['location_latitude'])) 
       $location['location_latitude'] = 0;
-   $sql = "INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude, location_description)
-      VALUES ('".$location['location_name']."','".$location['location_address']."','".$location['location_town']."',".$location['location_latitude'].",".$location['location_longitude'].",'".$location['location_description']."')"; 
-   $wpdb->query($sql);
-   $new_location = eme_get_location(mysql_insert_id());
-   return $new_location;
+
+   $wpdb->show_errors(true);
+   if (!$wpdb->insert ( $table_name, $location )) {
+      $wpdb->print_error();
+      return false;
+   } else {
+      $location_ID = $wpdb->insert_id;
+      $new_location = eme_get_location($location_ID);
+      return $new_location;
+   }
 }
 
 function eme_delete_location($location) {

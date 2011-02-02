@@ -186,6 +186,7 @@ function eme_events_subpanel() {
       $location ['location_town'] = isset($_POST ['location_town']) ? stripslashes($_POST ['location_town']) : '';
       $location ['location_latitude'] = isset($_POST ['location_latitude']) ? $_POST ['location_latitude'] : '';
       $location ['location_longitude'] = isset($_POST ['location_longitude']) ? $_POST ['location_longitude'] : '';
+      $location ['location_author']=$current_userid;
       $location ['location_description'] = "";
       //switched to WP TinyMCE field
       //$event ['event_notes'] = stripslashes ( $_POST ['event_notes'] );

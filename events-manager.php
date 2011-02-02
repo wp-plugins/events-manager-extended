@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('EME_DB_VERSION', 13);
+define('EME_DB_VERSION', 14);
 define('EME_PLUGIN_URL', plugins_url('',plugin_basename(__FILE__)).'/'); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -500,6 +500,7 @@ function eme_create_locations_table($charset,$collate) {
          location_latitude float DEFAULT NULL,
          location_longitude float DEFAULT NULL,
          location_description text DEFAULT NULL,
+         location_author mediumint(9) DEFAULT 0,
          UNIQUE KEY (location_id)
          ) $charset $collate;";
       dbDelta($sql);
@@ -511,6 +512,7 @@ function eme_create_locations_table($charset,$collate) {
       $wpdb->query("INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude)
                VALUES ('Taaffes Bar', '19 Shop Street','Galway', 53.2725, -9.05321)");
    } else {
+      maybe_add_column($table_name, 'location_author', "alter table $table_name add location_author mediumint(9) DEFAULT 0;"); 
       if ($db_version<3) {
          $wpdb->query("ALTER TABLE $table_name MODIFY location_name text NOT NULL ;");
       }
