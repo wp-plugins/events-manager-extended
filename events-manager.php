@@ -1252,7 +1252,7 @@ function admin_show_warnings() {
 }
 
 function eme_explain_deactivation_needed() {
-   $advice = __("It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen.",'eme');
+   $advice = __("It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen.",'eme')."<br />".__("<strong>Warning:</strong> make sure the option 'Delete all EME data when upgrading or deactivating' is not activated if you don't want to lose all existing event data!",'eme');
    ?>
 <div id="message" class="error"><p> <?php echo $advice; ?> </p></div>
 <?php
