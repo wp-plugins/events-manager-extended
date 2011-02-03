@@ -437,3 +437,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: using #_{} or #@_{} resulted in the minutes being ignored ...
 * Bugfix: choosing the author in the calendar widget wasn't working (typo)
 * Bugfix: using scope in [events_list] resulted in other conditions to be mangled
+
+= 3.3.2 =
+* Improvement: Czech language update (thanks to Alan Eckhardt)
