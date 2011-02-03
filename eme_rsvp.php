@@ -74,11 +74,10 @@ function eme_add_booking_form($event_id) {
             ";
       }
       // also add a honeypot field: if it gets completed with data, 
-      // it's a bot, since a humand can't see this
-      $module .= "<tr><input type='hidden' name='honeypot_check' value='' /></td></tr>";
-      
+      // it's a bot, since a humand can't see this (using CSS to render it invisible)
       $module .= "
       </table>
+      <span id='honeypot_check'>Keep this field blank: <input type='text' name='honeypot_check' value='' /></span>
       <p>".__('(* marks a required field)', 'eme')."</p>
       <input type='hidden' name='eme_eventAction' value='add_booking'/>
       <input type='hidden' name='event_id' value='$event_id'/>
