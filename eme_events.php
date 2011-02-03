@@ -1121,6 +1121,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       }
    }
    
+   // when used inside a location description, you can use this_location to indicate the current location being viewed
    if ($location_id == "this_location" && isset($_GET['location_id'])) {
       $location_id = $_GET['location_id'];
    }
