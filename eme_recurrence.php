@@ -267,7 +267,8 @@ function eme_get_recurrence_desc($recurrence_id) {
       $natural_days = array();
       foreach($weekday_array as $day)
          array_push($natural_days, $weekdays_name[$day-1]);
-      $output .= implode(" and ", $natural_days);
+      $and_string=__(" and ",'eme');
+      $output .= implode($and_string, $natural_days);
       if ($recurrence['recurrence_interval'] > 1 ) {
          $freq_desc = ", ".sprintf (__("every %s weeks", 'eme'), $recurrence['recurrence_interval']);
       }
@@ -283,7 +284,8 @@ function eme_get_recurrence_desc($recurrence_id) {
       $natural_days = array();
       foreach($weekday_array as $day)
          array_push($natural_days, $weekdays_name[$day-1]);
-      $freq_desc = sprintf (($monthweek_name[$recurrence['recurrence_byweekno']]), implode(" and ", $natural_days));
+      $and_string=__(" and ",'eme');
+      $freq_desc = sprintf (($monthweek_name[$recurrence['recurrence_byweekno']]), implode($and_string, $natural_days));
       if ($recurrence['recurrence_interval'] > 1 ) {
          $freq_desc .= ", ".sprintf (__("every %s months",'eme'), $recurrence['recurrence_interval']);
       }

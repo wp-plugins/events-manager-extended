@@ -2048,7 +2048,7 @@ function eme_event_form($event, $title, $element) {
                            <?php endif; ?>
                             <?php  if(!$use_select_for_locations) : ?> 
                            <tr>
-                              <th><?php _e ( 'Address:' )?> &nbsp;</th>
+                              <th><?php _e ( 'Address:', 'eme' )?> &nbsp;</th>
                               <td><input id="location_address" type="text" name="location_address" value="<?php echo $event ['location_address']; ?>" /></td>
                            </tr>
                            <tr>
@@ -2057,7 +2057,7 @@ function eme_event_form($event, $title, $element) {
                               </p></td>
                            </tr>
                            <tr>
-                              <th><?php _e ( 'Town:' )?> &nbsp;</th>
+                              <th><?php _e ( 'Town:', 'eme' )?> &nbsp;</th>
                               <td><input id="location_town" type="text" name="location_town" value="<?php echo $event ['location_town']?>" /></td>
                            </tr>
                            <tr>
