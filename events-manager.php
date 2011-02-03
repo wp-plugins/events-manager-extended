@@ -1217,7 +1217,9 @@ function admin_show_warnings() {
    if ($db_version && $db_version < EME_DB_VERSION) {
       // the warning is already given via admin_notice, we just want
       // to prevent people to do anything in EME without deactivation/activation first
-      exit(1);
+      // But we allow access to the settings page ...
+      if ((isset($_GET['page']) && $_GET['page'] != 'events-manager-options')
+         exit(1);
    } elseif (!$db_version && $old_db_version) {
       // transfer from dbem to eme warning
       $advice = __("You have installed the new version of Events Manager Extended. This version has among other things switched from 'dbem' to 'eme' for API calls (used in templates) and for CSS. So if you use these, please replace the string 'dbem' by 'eme' in your custom templates and/or CSS. After that, please deacticate/reactivate the plugin to adjust for the new version.",'eme');
