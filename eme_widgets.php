@@ -177,6 +177,7 @@ class WP_Widget_eme_calendar extends WP_Widget {
       // the month shown depends on the calendar day clicked
       if (isset ( $_REQUEST ['calendar_day'] ) && $_REQUEST ['calendar_day'] != '') {
           $options['month'] = date("m", strtotime( $_REQUEST ['calendar_day']) );
+          $options['year'] = date("Y", strtotime( $_REQUEST ['calendar_day']) );
       } else {
           $options['month'] = date("m");
       }
