@@ -1115,7 +1115,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
          $conditions [] = " event_start_date < '$today'";
       elseif ($scope == "today")
          $conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
-      elseif ($scope == "today") {
+      elseif ($scope == "tomorrow") {
          $tomorrow = date("Y-m-d",strtotime($today, "+1 day"));
          $conditions [] = " (event_start_date = '$totomorrow' OR (event_start_date <= '$tomorrow' AND event_end_date >= '$tomorrow'))";
       }
