@@ -1218,7 +1218,7 @@ function admin_show_warnings() {
       // the warning is already given via admin_notice, we just want
       // to prevent people to do anything in EME without deactivation/activation first
       // But we allow access to the settings page ...
-      if ((isset($_GET['page']) && $_GET['page'] != 'events-manager-options')
+      if ((isset($_GET['page']) && $_GET['page'] != 'events-manager-options'))
          exit(1);
    } elseif (!$db_version && $old_db_version) {
       // transfer from dbem to eme warning
