@@ -1089,7 +1089,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/^#_CATEGORIES$/', $result) && get_option('eme_categories_enabled')) {
          $categories = eme_get_event_categories($event['event_id']);
-         $replacement = eme_trans_sanitize_html(join(",",$categories));
+         $replacement = eme_trans_sanitize_html(join(", ",$categories));
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
          } else {

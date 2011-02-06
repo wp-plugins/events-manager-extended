@@ -440,3 +440,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 3.3.2 =
 * Improvement: Czech language update (thanks to Alan Eckhardt)
+* Bugfix: #_CATEGORIES should seperate categories by ", " and not just ","
