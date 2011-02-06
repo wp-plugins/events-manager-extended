@@ -1109,13 +1109,17 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    } else {
       if (($scope != "past") && ($scope != "all") && ($scope != "today") && ($scope != "tomorrow"))
          $scope = "future";
-      if ($scope == "future")
-         $conditions [] = " ((event_start_date = '$today' AND event_start_time >= '$this_time') OR (event_start_date > '$today') OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL) OR (event_end_date = '$today' AND event_end_time >= '$this_time'))";
-      elseif ($scope == "past")
-         $conditions [] = " (event_end_date < '$today' OR (event_end_date = '$today' and event_end_time < '$this_time' )) ";
-      elseif ($scope == "today")
+      if ($scope == "future") {
+         //$conditions [] = " ((event_start_date = '$today' AND event_start_time >= '$this_time') OR (event_start_date > '$today') OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL) OR (event_end_date = '$today' AND event_end_time >= '$this_time'))";
+         // not taking the hour into account until we can enter timezone info as well
+         $conditions [] = " (event_start_date >= '$today' OR (event_end_date >= '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL))";
+      } elseif ($scope == "past") {
+         //$conditions [] = " (event_end_date < '$today' OR (event_end_date = '$today' and event_end_time < '$this_time' )) ";
+         // not taking the hour into account until we can enter timezone info as well
+         $conditions [] = " event_start_date < '$today'";
+      } elseif ($scope == "today") {
          $conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
-      elseif ($scope == "tomorrow") {
+      } elseif ($scope == "tomorrow") {
          $tomorrow = date("Y-m-d",strtotime($today, "+1 day"));
          $conditions [] = " (event_start_date = '$totomorrow' OR (event_start_date <= '$tomorrow' AND event_end_date >= '$tomorrow'))";
       }
