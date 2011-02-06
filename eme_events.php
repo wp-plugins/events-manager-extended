@@ -1054,6 +1054,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $order = "ASC";
    
    $today = date("Y-m-d");
+   $this_hour = date ("H:i:00");
    
    $conditions = array ();
    // if we're not in the admin itf, we don't want draft events
@@ -1109,10 +1110,9 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       if (($scope != "past") && ($scope != "all") && ($scope != "today") && ($scope != "tomorrow"))
          $scope = "future";
       if ($scope == "future")
-         //This is so events with future dates are counted too
-         $conditions [] = " (event_start_date >= '$today' OR (event_end_date >= '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL))";
+         $conditions [] = " ((event_start_date = '$today' AND event_start_time >= '$this_time') OR (event_start_date > '$today') OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL) OR (event_end_date = '$today' AND event_end_time >= '$this_time'))";
       elseif ($scope == "past")
-         $conditions [] = " event_start_date < '$today'";
+         $conditions [] = " (event_end_date < '$today' OR (event_end_date = '$today' and event_end_time < '$this_time' )) ";
       elseif ($scope == "today")
          $conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
       elseif ($scope == "tomorrow") {
