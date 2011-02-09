@@ -442,3 +442,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: Czech language update (thanks to Alan Eckhardt)
 * Improvement: hour also taken into account for future/past events list
 * Bugfix: #_CATEGORIES should seperate categories by ", " and not just ","
+* Bugfix: the filter form was not performing the correct sql for multiple town filtering
+* Bugfix: the filter form was not correctly escaping the input

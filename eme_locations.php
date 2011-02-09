@@ -374,8 +374,7 @@ function eme_get_location($location_id=0) {
 function eme_get_town_location_ids($towns) {
    global $wpdb;
    $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
-   if ( preg_match('/^([0-9]+,?)+$/', $towns) ) {
-      $towns=explode(',', $towns);
+   if ( is_array($towns) ) {
       $town_conditions = array();
       foreach ($towns as $town) {
          $town_conditions[] = " location_town = '$town'";

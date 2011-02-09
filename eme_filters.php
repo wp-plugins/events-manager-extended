@@ -60,19 +60,40 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
    }
 
    if (isset($_POST[$loc_post_name])) {
-      $selected_location=$_POST[$loc_post_name];
+      if (is_array($_POST[$loc_post_name])) {
+         foreach ($_POST[$loc_post_name] as $tmp_post) {
+            $val=eme_sanitize_request($tmp_post);
+            $selected_location[$val]=$val;
+         }
+      } else {
+         $selected_location=eme_sanitize_request($_POST[$loc_post_name]);
+      }
    } else {
       $selected_location="";
    }
 
    if (isset($_POST[$town_post_name])) {
-      $selected_town=$_POST[$town_post_name];
+      if (is_array($_POST[$town_post_name])) {
+         foreach ($_POST[$town_post_name] as $tmp_post) {
+            $val=eme_sanitize_request($tmp_post);
+            $selected_town[$val]=$val;
+         }
+      } else {
+         $selected_town=eme_sanitize_request($_POST[$town_post_name]);
+      }
    } else {
       $selected_town="";
    }
 
    if (isset($_POST[$cat_post_name])) {
-      $selected_category=$_POST[$cat_post_name];
+      if (is_array($_POST[$cat_post_name])) {
+         foreach ($_POST[$cat_post_name] as $tmp_post) {
+            $val=eme_sanitize_request($tmp_post);
+            $selected_category[$val]=$val;
+         }
+      } else {
+         $selected_category=eme_sanitize_request($_POST[$cat_post_name]);
+      }
    } else {
       $selected_category="";
    }
@@ -130,7 +151,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $town_list[$id]=$id;
             }
             if ($multiple)
-               $replacement = eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
+               $replacement = eme_ui_multiselect($selected_town,$town_post_name,$town_list,$multisize);
             else
                $replacement = eme_ui_select($selected_town,$town_post_name,$town_list);
          }

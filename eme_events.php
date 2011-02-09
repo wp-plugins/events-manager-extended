@@ -947,19 +947,17 @@ function eme_get_events_list_shortcode($atts) {
    // the filter list overrides the settings
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'filter') {
       if (isset($_POST['eme_scope_filter'])) {
-         $scope = $_POST['eme_scope_filter'];
+         $scope = eme_sanitize_request($_POST['eme_scope_filter']);
       }
+
       if (isset($_POST['eme_loc_filter'])) {
          if (is_array($_POST['eme_loc_filter']))
-            $location_id=join(',',$_POST['eme_loc_filter']);
-         else 
-            $location_id=$_POST['eme_loc_filter'];
+            $location_id=join(',',eme_sanitize_request($_POST['eme_loc_filter']));
+         else
+            $location_id=eme_sanitize_request($_POST['eme_loc_filter']);
       }
       if (isset($_POST['eme_town_filter'])) {
-         if (is_array($_POST['eme_town_filter']))
-            $towns=join(',',$_POST['eme_town_filter']);
-         else 
-            $towns=$_POST['eme_town_filter'];
+         $towns=eme_sanitize_request($_POST['eme_town_filter']);
          if (empty($location_id))
             $location_id = join(',',eme_get_town_location_ids($towns));
          else
@@ -967,9 +965,9 @@ function eme_get_events_list_shortcode($atts) {
       }
       if (isset($_POST['eme_cat_filter'])) {
          if (is_array($_POST['eme_cat_filter']))
-            $category=join(',',$_POST['eme_cat_filter']);
-         else 
-            $category=$_POST['eme_cat_filter'];
+            $category=join(',',eme_sanitize_request($_POST['eme_cat_filter']));
+         else
+            $category=eme_sanitize_request($_POST['eme_cat_filter']);
       }
    }
 

@@ -108,7 +108,7 @@ function eme_ui_multiselect($option_value_arr, $name, $list, $size) {
      $val = "<select MULTIPLE name='${name}[]' size='$size'>";
      foreach($list as $key => $value) {
         if (is_array($option_value_arr)) {
-           in_array($key,$option_value_arr) ? $selected = "selected='selected' " : $selected = '';
+           in_array($key,$option_value_arr,TRUE) ? $selected = "selected='selected' " : $selected = '';
         } else {
            "$key" == $option_value_arr ? $selected = "selected='selected' " : $selected = '';
         }
