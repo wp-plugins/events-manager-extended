@@ -2147,7 +2147,6 @@ function _eme_is_time_valid($time) {
 // Enqueing jQuery script to make sure it's loaded
 function eme_enqueue_scripts() {
    wp_enqueue_script ( 'jquery' );
-   // wp_enqueue_script('datepicker',EME_PLUGIN_URL.'jquery-ui-datepicker/jquery-ui-personalized-1.6b.js', array('jquery') );
 }
 add_action ( 'template_redirect', 'eme_enqueue_scripts' );
 
@@ -2167,7 +2166,7 @@ function eme_admin_general_script() {
    eme_admin_general_css();
    ?>
 <script src="<?php echo EME_PLUGIN_URL; ?>eme.js" type="text/javascript"></script>
-<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.js" type="text/javascript"></script>
+<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui/jquery-ui-1.8.9.custom.min.js" type="text/javascript"></script>
 <script src="<?php echo EME_PLUGIN_URL; ?>js/timeentry/jquery.timeentry.js" type="text/javascript"></script>
 <?php
    
@@ -2183,15 +2182,14 @@ function eme_admin_general_script() {
    // for english, no translation code is needed
    if ($locale_code != "en") {
       ?>
-<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/i18n/ui.datepicker-<?php echo $locale_code; ?>.js" type="text/javascript"></script>
+<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui/i18n/jquery.ui.datepicker-<?php echo $locale_code; ?>.js" type="text/javascript"></script>
 <?php
    }
    ?>
 
-
 <style type='text/css' media='all'>
 @import
-   "<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.css"
+   "<?php echo EME_PLUGIN_URL; ?>js/jquery-ui/jquery-ui-1.8.9.custom.css"
    ;
 </style>
 <script type="text/javascript">
