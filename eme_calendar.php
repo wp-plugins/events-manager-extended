@@ -14,6 +14,13 @@ function eme_get_calendar_shortcode($atts) {
 
    // the filter list overrides the settings
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'filter') {
+      if (isset($_POST['eme_scope_filter'])) {
+         $scope = eme_sanitize_request($_POST['eme_scope_filter']);
+         if (preg_match ( "/^([0-9]{4})-([0-9]{2})-[0-9]{2}--[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope, $matches )) {
+            $year=$matches[1];
+            $month=$matches[2];
+         }
+      }
       if (isset($_POST['eme_loc_filter'])) {
          if (is_array($_POST['eme_loc_filter']))
             $location_id=join(',',eme_sanitize_request($_POST['eme_loc_filter']));

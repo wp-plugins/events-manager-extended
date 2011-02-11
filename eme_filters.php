@@ -1,9 +1,9 @@
 <?php
 
 function eme_filter_form_shortcode($atts) {
-   extract ( shortcode_atts ( array ('multiple' => 0, 'multisize' => 5, 'scope_count' => 12, 'submit' => 'Submit' ), $atts ) );
+   extract ( shortcode_atts ( array ('multiple' => 0, 'multisize' => 5, 'scope_count' => 12, 'submit' => 'Submit', 'fields'=> 'all' ), $atts ) );
 
-   $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'),$multiple,$multisize,$scope_count);
+   $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'),$multiple,$multisize,$scope_count,$fields);
    #$content=eme_replace_filter_form_placeholders("#_FILTER_CATS #_FILTER_LOCS #_FILTER_TOWNS",$multiple,$multisize,$scope_count);
    $this_page_url=$_SERVER['REQUEST_URI'];
    $form = "<form action=$this_page_url method='POST'>";
@@ -45,7 +45,10 @@ function eme_create_month_scope($count) {
    return $scope;
 }
 
-function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $scope_count) {
+function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $scope_count, $fields) {
+   if ($fields == "all")
+      $fields="categories,locations,towns,weeks,months";
+
    preg_match_all("/#_[A-Za-z0-9_\[\]]+/", $format, $placeholders);
    usort($placeholders[0],'sort_stringlenth');
    $cat_post_name="eme_cat_filter";
@@ -60,40 +63,19 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
    }
 
    if (isset($_POST[$loc_post_name])) {
-      if (is_array($_POST[$loc_post_name])) {
-         foreach ($_POST[$loc_post_name] as $tmp_post) {
-            $val=eme_sanitize_request($tmp_post);
-            $selected_location[$val]=$val;
-         }
-      } else {
-         $selected_location=eme_sanitize_request($_POST[$loc_post_name]);
-      }
+      $selected_location=eme_sanitize_request($_POST[$loc_post_name]);
    } else {
       $selected_location="";
    }
 
    if (isset($_POST[$town_post_name])) {
-      if (is_array($_POST[$town_post_name])) {
-         foreach ($_POST[$town_post_name] as $tmp_post) {
-            $val=eme_sanitize_request($tmp_post);
-            $selected_town[$val]=$val;
-         }
-      } else {
-         $selected_town=eme_sanitize_request($_POST[$town_post_name]);
-      }
+      $selected_town=eme_sanitize_request($_POST[$town_post_name]);
    } else {
       $selected_town="";
    }
 
    if (isset($_POST[$cat_post_name])) {
-      if (is_array($_POST[$cat_post_name])) {
-         foreach ($_POST[$cat_post_name] as $tmp_post) {
-            $val=eme_sanitize_request($tmp_post);
-            $selected_category[$val]=$val;
-         }
-      } else {
-         $selected_category=eme_sanitize_request($_POST[$cat_post_name]);
-      }
+      $selected_category=eme_sanitize_request($_POST[$cat_post_name]);
    } else {
       $selected_category="";
    }
@@ -105,8 +87,9 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
          if (strstr($result,'#_EVENTFUL')) {
             $eventful=1;
          }
+
          $categories = eme_get_categories($eventful,"future");
-         if ($categories) {
+         if (strstr($fields,'categories') && $categories) {
             $cat_list = array();
             $cat_list[0]="---";
             foreach ($categories as $this_category) {
@@ -125,7 +108,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
          }
          $locations = eme_get_locations($eventful,"future");
 
-         if ($locations) {
+         if (strstr($fields,'locations') && $locations) {
             $loc_list = array();
             $loc_list[0]="---";
             foreach ($locations as $this_location) {
@@ -143,7 +126,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
             $eventful=1;
          }
          $towns = eme_get_locations($eventful,"future");
-         if ($towns) {
+         if (strstr($fields,'towns') && $towns) {
             $town_list = array();
             $town_list[0]="---";
             foreach ($towns as $this_town) {
@@ -157,9 +140,11 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
          }
 
       } elseif (preg_match('/^#_FILTER_WEEKS$/', $result)) {
-         $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_week_scope($scope_count));
+         if (strstr($fields,'weeks'))
+            $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_week_scope($scope_count));
       } elseif (preg_match('/^#_FILTER_MONTHS$/', $result)) {
-         $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_month_scope($scope_count));
+         if (strstr($fields,'months'))
+            $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_month_scope($scope_count));
       } 
 
       $replacement = apply_filters('eme_general', $replacement);
