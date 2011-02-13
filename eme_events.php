@@ -37,6 +37,7 @@ function eme_new_event_page() {
       "event_single_event_format" => '',
       "event_contactperson_email_body" => '',
       "event_respondent_email_body" => '',
+      "event_url" => '',
       "recurrence_id" => 0,
       "recurrence_interval" => '',
       "recurrence_byweekno" => '',
@@ -195,11 +196,12 @@ function eme_events_subpanel() {
       //switched to WP TinyMCE field
       //$event ['event_notes'] = stripslashes ( $_POST ['event_notes'] );
       $event ['event_notes'] = isset($_POST ['content']) ? stripslashes($_POST ['content']) : '';
-      $event ['event_page_title_format'] = stripslashes ( $_POST ['event_page_title_format'] );
-      $event ['event_single_event_format'] = stripslashes ( $_POST ['event_single_event_format'] );
-      $event ['event_contactperson_email_body'] = stripslashes ( $_POST ['event_contactperson_email_body'] );
-      $event ['event_respondent_email_body'] = stripslashes ( $_POST ['event_respondent_email_body'] );
-                if (isset ($_POST['event_category_ids'])) {
+      $event ['event_page_title_format'] = isset($_POST ['event_page_title_format']) ? stripslashes ( $_POST ['event_page_title_format'] ) : '';
+      $event ['event_single_event_format'] = isset($_POST ['event_single_event_format']) ? stripslashes ( $_POST ['event_single_event_format'] ) : '';
+      $event ['event_contactperson_email_body'] = isset($_POST ['event_contactperson_email_body']) ? stripslashes ( $_POST ['event_contactperson_email_body'] ) : '';
+      $event ['event_respondent_email_body'] = isset($_POST ['event_respondent_email_body']) ? stripslashes ( $_POST ['event_respondent_email_body'] ) : '';
+      $event ['event_url'] = isset($_POST ['event_url']) ? stripslashes ( $_POST ['event_url'] ) : '';
+      if (isset ($_POST['event_category_ids'])) {
          // the category id's need to begin and end with a comma
          // this is needed so we can later search for a specific
          // cat using LIKE '%,$cat,%'
@@ -208,14 +210,13 @@ function eme_events_subpanel() {
             if (is_numeric($cat)) {
                if (empty($event ['event_category_ids'])) {
                   $event ['event_category_ids'] = "$cat";
-                              } else {
+               } else {
                   $event ['event_category_ids'] .= ",$cat";
-                              }
+               }
             }
          }
-                } else {
+      } else {
          $event ['event_category_ids']="";
-         
       }
       $validation_result = eme_validate_event ( $event );
       
@@ -1936,9 +1937,9 @@ function eme_event_form($event, $title, $element) {
                      </div>
                   </div>
                   <div id="div_event_page_title_format" class="postbox <?php if ($event['event_page_title_format']=="") echo "closed"; ?>">
-                                                        <div class="handlediv" title="Click to toggle">
+                     <div class="handlediv" title="Click to toggle">
                         <br />
-                                                        </div>
+                     </div>
                      <h3 class='hndle'><span>
                         <?php _e ( 'Single Event Title Format', 'eme' ); ?>
                         </span>
@@ -1970,9 +1971,9 @@ function eme_event_form($event, $title, $element) {
                      </div>
                   </div>
                   <div id="div_event_contactperson_email_body" class="postbox <?php if ($event['event_contactperson_email_body']=="") echo "closed"; ?>">
-                                                        <div class="handlediv" title="Click to toggle">
+                     <div class="handlediv" title="Click to toggle">
                         <br />
-                                                        </div>
+                     </div>
                      <h3 class='hndle'><span>
                         <?php _e ( 'Contact Person Email Format', 'eme' ); ?>
                         </span>
@@ -1987,9 +1988,9 @@ function eme_event_form($event, $title, $element) {
                      </div>
                   </div>
                   <div id="div_event_respondent_email_body" class="postbox <?php if ($event['event_respondent_email_body']=="") echo "closed"; ?>">
-                                                        <div class="handlediv" title="Click to toggle">
+                     <div class="handlediv" title="Click to toggle">
                         <br />
-                                                        </div>
+                     </div>
                      <h3 class='hndle'><span>
                         <?php _e ( 'Respondent Email Format', 'eme' ); ?>
                         </span>
@@ -2115,6 +2116,16 @@ function eme_event_form($event, $title, $element) {
                      </h3>
                      <div class="inside">
                         <?php eme_attributes_form($event) ?>
+                     </div>
+                  </div>
+                  <div id="urldiv" class="stuffbox">
+                     <h3>
+                        <?php _e ( 'External link', 'eme' ); ?>
+                     </h3>
+                     <div class="inside">
+                        <input type="text" id="event_url" name="event_url" value="<?php echo eme_sanitize_html($event ['event_url']); ?>" />
+                        <br />
+                        <?php _e ( 'If this is filled in, the single event URL will point to this url instead of the standard event page.', 'eme' )?>
                      </div>
                   </div>
                   <?php endif; ?>
@@ -2640,12 +2651,6 @@ function eme_rss() {
       header ( "Content-type: text/xml" );
       echo "<?xml version='1.0'?>\n";
       
-      $events_page_link = eme_get_events_page(true, false);
-      if (stristr ( $events_page_link, "?" ))
-         $joiner = "&amp;";
-      else
-         $joiner = "?";
-      
       ?>
 <rss version="2.0">
 <channel>
@@ -2653,6 +2658,7 @@ function eme_rss() {
       echo get_option('eme_rss_main_title' );
       ?></title>
 <link><?php
+      $events_page_link = eme_get_events_page(true, false);
       echo $events_page_link;
       ?></link>
 <description><?php
@@ -2671,9 +2677,10 @@ Weblog Editor 2.0
       foreach ( $events as $event ) {
          $title = eme_replace_placeholders ( $title_format, $event, "rss" );
          $description = eme_replace_placeholders ( $description_format, $event, "rss" );
+         $event_link = eme_event_url($event);
          echo "<item>";
          echo "<title>$title</title>\n";
-         echo "<link>$events_page_link" . $joiner . "event_id=" . $event ['event_id'] . "</link>\n ";
+         echo "<link>$event_link</link>\n ";
          echo "<description>$description</description>\n";
          if (get_option('eme_categories_enabled')) {
             $categories = eme_replace_placeholders ( "#_CATEGORIES", $event, "rss" );
@@ -2811,5 +2818,18 @@ function status_array() {
    $event_status_array[STATUS_PRIVATE] = __ ( 'Private', 'eme' );
    $event_status_array[STATUS_DRAFT] = __ ( 'Draft', 'eme' );
    return $event_status_array;
+}
+
+function eme_event_url($event) {
+   $events_page_link = eme_get_events_page(true, false);
+   if (stristr ( $events_page_link, "?" ))
+      $joiner = "&amp;";
+   else
+      $joiner = "?";
+   if ($event['event_url'] != '')
+      $event_link = $event['event_url'];
+   else
+      $event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
+   return $event_link;
 }
 ?>

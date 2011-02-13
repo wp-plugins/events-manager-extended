@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 /*************************************************/ 
 
 // Setting constants
-define('EME_DB_VERSION', 14);
+define('EME_DB_VERSION', 15);
 define('EME_PLUGIN_URL', plugins_url('',plugin_basename(__FILE__)).'/'); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -346,6 +346,7 @@ function eme_create_events_table($charset,$collate) {
          event_status mediumint(9) DEFAULT 1,
          event_author mediumint(9) DEFAULT 0,
          event_name text NOT NULL,
+         event_url text default NULL,
          event_start_time time NOT NULL,
          event_end_time time NOT NULL,
          event_start_date date NOT NULL,
@@ -411,6 +412,7 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'recurrence_id', "alter table $table_name add recurrence_id mediumint(9) DEFAULT 0;"); 
       maybe_add_column($table_name, 'event_contactperson_id', "alter table $table_name add event_contactperson_id mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'event_attributes', "alter table $table_name add event_attributes text NULL;"); 
+      maybe_add_column($table_name, 'event_url', "alter table $table_name add event_url text DEFAULT NULL;"); 
       maybe_add_column($table_name, 'event_page_title_format', "alter table $table_name add event_page_title_format text NULL;"); 
       maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
       maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
@@ -916,12 +918,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
          }
 
       } elseif (preg_match('/#_LINKEDNAME$/', $result)) {
-         $events_page_link = eme_get_events_page(true, false);
-         if (stristr($events_page_link, "?"))
-            $joiner = "&amp;";
-         else
-            $joiner = "?";
-         $replacement="<a href='".$events_page_link.$joiner."event_id=".$event['event_id']."' title='".eme_trans_sanitize_html($event['event_name'])."'>".eme_trans_sanitize_html($event['event_name'])."</a>";
+         $event_link = eme_event_url($event);
+         $replacement="<a href='$event_link' title='".eme_trans_sanitize_html($event['event_name'])."'>".eme_trans_sanitize_html($event['event_name'])."</a>";
 
       } elseif (preg_match('/#_ICALLINK$/', $result)) {
          $url = site_url ("/?eme_ical=public_single&amp;event_id=".$event['event_id']);
@@ -939,12 +937,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $replacement = $events_page_link.$joiner."event_id=".intval($matches[1]);
 
       } elseif (preg_match('/#_EVENTPAGEURL/', $result)) {
-         $events_page_link = eme_get_events_page(true, false);
-         if (stristr($events_page_link, "?"))
-            $joiner = "&amp;";
-         else
-            $joiner = "?";
-         $replacement = $events_page_link.$joiner."event_id=".$event['event_id'];
+         $replacement = eme_event_url($event);
 
       } elseif (preg_match('/#_(DETAILS|NOTES|EXCERPT)$/', $result)) {
          $field = "event_".ltrim(strtolower($result), "#_");

@@ -1,11 +1,6 @@
 <?php
 
-function eme_ical_single_event($event, $events_page_link, $title_format, $description_format) {
-   if (stristr ( $events_page_link, "?" ))
-      $joiner = "&amp;";
-   else
-      $joiner = "?";
-
+function eme_ical_single_event($event, $title_format, $description_format) {
    $title = eme_replace_placeholders ( $title_format, $event, "rss" );
    // no html tags allowed in ical
    $title = strip_tags($title);
@@ -15,7 +10,7 @@ function eme_ical_single_event($event, $events_page_link, $title_format, $descri
    // no html tags allowed in ical, but we can convert br to escaped newlines to maintain readable output
    $description = strip_tags(preg_replace('/<br(\s+)?\/?>/i', "\\n", $description));
    $location = eme_replace_placeholders ( "#_LOCATION, #_ADDRESS, #_TOWN", $event, "rss" );
-   $event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
+   $event_link = eme_event_url($event);
    $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
    $dtstartdate=date_i18n("Ymd",$startstring);
    $dtstarthour=date_i18n("His",$startstring);
@@ -92,8 +87,6 @@ function eme_ical() {
       return;
    }
 
-   $events_page_link = eme_get_events_page(true, false);
-
    echo "BEGIN:VCALENDAR\r\n";
    echo "METHOD:PUBLISH\r\n";
    echo "VERSION:2.0\r\n";
@@ -102,11 +95,11 @@ function eme_ical() {
    $description_format = get_option('eme_single_event_format');
    if (isset ( $_GET ['eme_ical'] ) && $_GET ['eme_ical'] == 'public_single' && isset ( $_GET ['event_id'] )) {
       $event=eme_get_event(intval($_GET ['event_id']));
-      echo eme_ical_single_event($event,$events_page_link,$title_format,$description_format);
+      echo eme_ical_single_event($event,$title_format,$description_format);
    } elseif (isset ( $_GET ['eme_ical'] ) && $_GET ['eme_ical'] == 'public') {
       $events = eme_get_events ( 0 );
       foreach ( $events as $event ) {
-         echo eme_ical_single_event($event,$events_page_link,$title_format,$description_format);
+         echo eme_ical_single_event($event,$title_format,$description_format);
       }
    }
    echo "END:VCALENDAR\r\n";
