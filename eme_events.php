@@ -572,7 +572,7 @@ function eme_events_page_content() {
          $single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
          $single_event_format_footer = get_option('eme_event_list_item_format_footer' );
          $single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
-         return $single_event_format_header .  eme_get_events_list ( 0, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
+         return $single_event_format_header .  eme_get_events_list ( 0, $scope, "ASC", $stored_format, 0 ) . $single_event_format_footer;
       } else {
          $events = eme_get_events ( 0, $scope);
          $event = $events [0];
@@ -582,7 +582,7 @@ function eme_events_page_content() {
       }
    } else {
       // Multiple events page
-      $_GET ['scope'] ? $scope = eme_sanitize_request($_GET ['scope']) : $scope = "future";
+      (isset($_GET ['scope'])) ? $scope = eme_sanitize_request($_GET ['scope']) : $scope = "future";
       $stored_format = get_option('eme_event_list_item_format' );
       if (get_option('eme_display_calendar_in_events_page' )){
          $events_body = eme_get_calendar ('full=1');
@@ -591,7 +591,7 @@ function eme_events_page_content() {
          $single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
          $single_event_format_footer = get_option('eme_event_list_item_format_footer' );
          $single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
-         $events_body = $single_event_format_header . eme_get_events_list ( 10, $scope, "ASC", $stored_format, $false ) . $single_event_format_footer;
+         $events_body = $single_event_format_header . eme_get_events_list ( 10, $scope, "ASC", $stored_format, 0 ) . $single_event_format_footer;
       }
       return $events_body;
    }

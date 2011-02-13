@@ -950,7 +950,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $field = "event_notes";
          }
 
-         $replacement = $event[$field];
+         if (isset($event[$field])) $replacement = $event[$field];
 
          if ($target == "html") {
             //If excerpt, we use more link text
@@ -982,7 +982,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_NAME$/', $result)) {
          $field = "event_name";
-         $replacement = $event[$field];
+         if (isset($event[$field])) $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -992,7 +992,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_(ADDRESS|TOWN)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
-         $replacement = $event[$field];
+         if (isset($event[$field])) $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -1010,7 +1010,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_EVENTID$/', $result)) {
          $field = "event_id";
-         $replacement = $event[$field];
+         if (isset($event[$field])) $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -1020,7 +1020,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
-         $replacement = $event[$field];
+         if (isset($event[$field])) $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -1030,7 +1030,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_LOCATION$/', $result)) {
          $field = "location_name";
-         $replacement = $event[$field];
+         if (isset($event[$field])) $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
