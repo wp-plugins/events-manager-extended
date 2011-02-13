@@ -31,19 +31,23 @@ function eme_is_events_page() {
 }
 
 function eme_is_single_event_page() {
-   return (eme_is_events_page () && (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != ''));
+   global $wp_query;
+   return (eme_is_events_page () && (isset ( $wp_query->query_vars ['event_id'] ) && $wp_query->query_vars ['event_id'] != ''));
 }
 
 function eme_is_multiple_events_page() {
-   return (eme_is_events_page () && ! (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != ''));
+   global $wp_query;
+   return (eme_is_events_page () && ! (isset ( $wp_query->query_vars ['event_id'] ) && $wp_query->query_vars ['event_id'] != ''));
 }
 
 function eme_is_single_location_page() {
-   return (eme_is_events_page () && (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] != ''));
+   global $wp_query;
+   return (eme_is_events_page () && (isset ( $wp_query->query_vars ['location_id'] ) && $wp_query->query_vars ['location_id'] != ''));
 }
 
 function eme_is_multiple_locations_page() {
-   return (eme_is_events_page () && ! (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] != ''));
+   global $wp_query;
+   return (eme_is_events_page () && ! (isset ( $wp_query->query_vars ['location_id'] ) && $wp_query->query_vars ['location_id'] != ''));
 }
 
 function eme_get_contact($event) {
@@ -66,5 +70,42 @@ function eme_ascii_encode($e) {
     for ($i = 0; $i < strlen($e); $i++) { $output .= '&#'.ord($e[$i]).';'; }
     return $output;
 }
+
+function eme_event_url($event) {
+   global $wp_rewrite;
+   $events_page_link = eme_get_events_page(true, false);
+   if (stristr ( $events_page_link, "?" ))
+      $joiner = "&amp;";
+   else
+      $joiner = "?";
+
+   if ($event['event_url'] != '')
+      $event_link = $event['event_url'];
+   else {
+      if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
+         $event_link = site_url()."/events/".$event['event_id']."/".rawurlencode($event['event_name']);
+      } else {
+         $event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
+      }
+   }
+   return $event_link;
+}
+
+function eme_location_url($location) {
+   global $wp_rewrite;
+   $events_page_link = eme_get_events_page(true, false);
+   if (stristr ( $events_page_link, "?" ))
+      $joiner = "&amp;";
+   else
+      $joiner = "?";
+
+   if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
+      $location_link = site_url()."/locations/".$location['location_id']."/".rawurlencode($location['location_name']);
+   } else {
+      $location_link = $events_page_link.$joiner."location_id=".$location['location_id'];
+   }
+   return $location_link;
+}
+
 
 ?>

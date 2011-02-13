@@ -444,6 +444,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: new placeholder for events: #_USER_RESERVEDSPACES (or #_USER_BOOKEDSEATS), gives the number of seats a users has registered for an event
 * Feature: new parameter for [events_list]: "user_registered_only". If value=1, it will only give a list of events the user has registered for
 * Feature: external link possible for an event, so when you click on the single event details, you go to that page
+* Feature: SEO/permalinks for single events and locations
 * Improvement: Czech language update (thanks to Alan Eckhardt)
 * Improvement: hour also taken into account for future/past events list
 * Bugfix: #_CATEGORIES should seperate categories by ", " and not just ","

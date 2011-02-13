@@ -546,9 +546,9 @@ function eme_options_subpanel() {
 
 //This is the content of the event page
 function eme_events_page_content() {
-   global $wpdb;
-   if (isset ( $_REQUEST ['location_id'] ) && $_REQUEST ['location_id'] |= '') {
-      $location = eme_get_location ( intval($_REQUEST ['location_id']));
+   global $wpdb,$wp_query;
+   if (isset ( $wp_query->query_vars ['location_id'] ) && $wp_query->query_vars ['location_id'] |= '') {
+      $location = eme_get_location ( intval($wp_query->query_vars ['location_id']));
       $single_location_format = get_option('eme_single_location_format' );
       $page_body = eme_replace_locations_placeholders ( $single_location_format, $location );
       return $page_body;
@@ -556,7 +556,7 @@ function eme_events_page_content() {
    //if (isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') {
    if (eme_is_single_event_page()) {
       // single event page
-      $event_ID = intval($_REQUEST ['event_id']);
+      $event_ID = intval($wp_query->query_vars ['event_id']);
       $event = eme_get_event ( $event_ID );
       $single_event_format = ( $event['event_single_event_format'] != '' ) ? $event['event_single_event_format'] : get_option('eme_single_event_format' );
       //$page_body = eme_replace_placeholders ( $single_event_format, $event, 'stop' );
@@ -630,6 +630,7 @@ function eme_filter_events_page($data) {
 add_filter ( 'the_content', 'eme_filter_events_page' );
 
 function eme_event_page_title($data) {
+   global $wp_query;
    $events_page_id = get_option('eme_events_page' );
    $events_page = get_page ( $events_page_id );
    $events_page_title = $events_page->post_title;
@@ -650,15 +651,15 @@ function eme_event_page_title($data) {
          }
       }
       
-      if (isset ( $_REQUEST['location_id'] ) && $_REQUEST['location_id'] |= '') {
-         $location = eme_get_location ( intval($_REQUEST['location_id']));
+      if (isset ( $wp_query->query_vars['location_id'] ) && $wp_query->query_vars['location_id'] |= '') {
+         $location = eme_get_location ( intval($wp_query->query_vars['location_id']));
          $stored_page_title_format = get_option('eme_location_page_title_format' );
          $page_title = eme_replace_locations_placeholders ( $stored_page_title_format, $location );
          return $page_title;
       }
       if (eme_is_single_event_page()) {
          // single event page
-         $event_ID = intval($_REQUEST['event_id']);
+         $event_ID = intval($wp_query->query_vars['event_id']);
          $event = eme_get_event ( $event_ID );
          $stored_page_title_format = ( $event['event_page_title_format'] != '' ) ? $event['event_page_title_format'] : get_option('eme_event_page_title_format' );
          $page_title = eme_replace_placeholders ( $stored_page_title_format, $event );
@@ -2698,12 +2699,6 @@ Weblog Editor 2.0
    }
 }
 add_action ( 'init', 'eme_rss' );
-function substitute_rss($data) {
-   if (isset ( $_REQUEST ['event_id'] ))
-      return site_url ("/?eme_rss=main");
-   else
-      return $data;
-}
 function eme_general_css() {
    echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
    $file_name= EME_PLUGIN_DIR."myown.css";
@@ -2724,7 +2719,6 @@ function eme_general_css() {
    }
 }
 add_action ( 'wp_head', 'eme_general_css' );
-//add_filter('feed_link','substitute_rss')
 
 function eme_general_footer() {
    global $eme_need_gmap_js;
@@ -2820,16 +2814,4 @@ function status_array() {
    return $event_status_array;
 }
 
-function eme_event_url($event) {
-   $events_page_link = eme_get_events_page(true, false);
-   if (stristr ( $events_page_link, "?" ))
-      $joiner = "&amp;";
-   else
-      $joiner = "?";
-   if ($event['event_url'] != '')
-      $event_link = $event['event_url'];
-   else
-      $event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
-   return $event_link;
-}
 ?>

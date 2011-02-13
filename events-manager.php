@@ -157,6 +157,33 @@ if (!is_admin() && get_option('eme_shortcodes_in_widgets')) {
    add_filter('widget_text', 'do_shortcode', 11);
 }
 
+add_filter('rewrite_rules_array','eme_insertMyRewriteRules');
+add_filter('query_vars','eme_insertMyRewriteQueryVars');
+// Remember to flush_rules() when adding rules
+function eme_flushRules(){
+	global $wp_rewrite;
+   	$wp_rewrite->flush_rules();
+}
+
+// Adding a new rule
+function eme_insertMyRewriteRules($rules)
+{
+	$events_page=get_page(get_option ( 'eme_events_page' ));
+	$page_name=$events_page->post_name;
+	$newrules = array();
+	$newrules['events/(\d*)'] = 'index.php?pagename='.$page_name.'&event_id=$matches[1]';
+	$newrules['locations/(\d*)'] = 'index.php?pagename='.$page_name.'&location_id=$matches[1]';
+	return $newrules + $rules;
+}
+
+// Adding the id var so that WP recognizes it
+function eme_insertMyRewriteQueryVars($vars)
+{
+    array_push($vars, 'event_id');
+    array_push($vars, 'location_id');
+    return $vars;
+}
+
 // INCLUDES
 // We let the includes happen at the end, so all init-code is done
 // (like eg. the load_textdomain). Some includes do stuff based on _GET
@@ -264,6 +291,9 @@ function _eme_install() {
       // wp-content must be chmodded 777. Maybe just wp-content.
       if(!file_exists(IMAGE_UPLOAD_DIR))
             mkdir(IMAGE_UPLOAD_DIR, 0777);
+
+    // SEO rewrite rules
+    eme_flushRules();
 }
 
 function eme_uninstall() {
@@ -300,6 +330,9 @@ function _eme_uninstall() {
       eme_delete_events_page();
       eme_options_delete();
    }
+
+    // SEO rewrite rules
+    eme_flushRules();
 }
 
 function eme_new_blog($blog_id, $user_id, $domain, $path, $site_id, $meta ) {
@@ -950,7 +983,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $field = "event_notes";
          }
 
-         if (isset($event[$field])) $replacement = $event[$field];
+         $replacement = $event[$field];
 
          if ($target == "html") {
             //If excerpt, we use more link text
@@ -982,7 +1015,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_NAME$/', $result)) {
          $field = "event_name";
-         if (isset($event[$field])) $replacement = $event[$field];
+         $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -992,7 +1025,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_(ADDRESS|TOWN)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
-         if (isset($event[$field])) $replacement = $event[$field];
+         if (isset($event[$field]))  $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -1010,7 +1043,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_EVENTID$/', $result)) {
          $field = "event_id";
-         if (isset($event[$field])) $replacement = $event[$field];
+         $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -1020,7 +1053,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
-         if (isset($event[$field])) $replacement = $event[$field];
+         $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -1030,7 +1063,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_LOCATION$/', $result)) {
          $field = "location_name";
-         if (isset($event[$field])) $replacement = $event[$field];
+         $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
