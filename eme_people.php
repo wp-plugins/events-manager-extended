@@ -232,6 +232,14 @@ function eme_get_person_by_wp_id($wp_id) {
    return $result;
 }
 
+function eme_get_person_id_by_wp_id($wp_id) {
+   global $wpdb; 
+   $people_table = $wpdb->prefix.PEOPLE_TBNAME;
+   $wp_id = eme_sanitize_request($wp_id);
+   $sql = "SELECT person_id FROM $people_table WHERE wp_id = '$wp_id';" ;
+   return($wpdb->get_var($sql));
+}
+
 function eme_delete_person($person_id) {
    global $wpdb; 
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;

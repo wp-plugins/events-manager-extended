@@ -443,7 +443,7 @@ function eme_options_subpanel() {
    eme_options_textarea ( __ ( 'Default event list format footer', 'eme' ), 'eme_event_list_item_format_footer', __ ( 'This content will appear just below your code for the default event list format. If you leave this empty, the value <code>&lt;/ul&gt;</code> will be used.', 'eme' ) );
 
    eme_options_input_text ( __ ( 'Single event page title format', 'eme' ), 'eme_event_page_title_format', __ ( 'The format of a single event page title. Follow the previous formatting instructions.', 'eme' ) );
-   eme_options_textarea ( __ ( 'Default single event format', 'eme' ), 'eme_single_event_format', __ ( 'The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings.', 'eme' ).__('<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask directions to the event.','eme').__('<br/> Use <code>#_CATEGORIES</code> to insert a comma-seperated list of categories an event is in.','eme').__('<br/> Use <code>#_ATTENDEES</code> to get a list of the names attending the event.','eme') );
+   eme_options_textarea ( __ ( 'Default single event format', 'eme' ), 'eme_single_event_format', __ ( 'The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings.', 'eme' ).__('<br/>Use <code>#_ADDBOOKINGFORM_IF_NOT_REGISTERED</code> to insert the booking form only if the user has not registered yet. Similar use <code>#_REMOVEBOOKINGFORM_IF_REGISTERED</code> to insert the booking removal form only if the user has already registered before. These two codes only work for WP users.','eme').__('<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask directions to the event.','eme').__('<br/> Use <code>#_CATEGORIES</code> to insert a comma-seperated list of categories an event is in.','eme').__('<br/> Use <code>#_ATTENDEES</code> to get a list of the names attending the event.','eme') );
    eme_options_input_text ( __ ( 'Monthly period date format', 'eme' ), 'eme_show_period_monthly_dateformat', __ ( 'The format of the date-string used when you use showperiod=monthly as an option to &#91;the events_list] shortcode, also used for monthly pagination. Use php date() compatible settings.', 'eme') . __( ' The default is: '). DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT );
    eme_options_input_text ( __ ( 'Events page title', 'eme' ), 'eme_events_page_title', __ ( 'The title on the multiple events page.', 'eme' ) );
    eme_options_input_text ( __ ( 'No events message', 'eme' ), 'eme_no_events_message', __ ( 'The message displayed when no events are available.', 'eme' ) );
@@ -706,7 +706,7 @@ add_filter ( 'get_pages', 'eme_filter_get_pages' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "") {
+function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "", $user_registered_only = 0) {
    global $post;
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
@@ -737,6 +737,20 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $offset=intval($_GET['eme_offset']);
    } else {
       $offset=0;
+   }
+
+   // for registered users: we'll add a list of event_id's for that user only
+   $extra_conditions = "";
+   if ($user_registered_only == 1 && is_user_logged_in()) {
+      $current_userid=get_current_user_id();
+      $person_id=eme_get_person_id_by_wp_id($current_userid);
+      $list_of_event_ids=join(",",eme_get_event_ids_by_booker_id($person_id));
+      if (!empty($list_of_event_ids)) {
+         $extra_conditions = " (event_id in ($list_of_event_ids))";
+      } else {
+         // user has no registered events, then make sure none are shown
+         $extra_conditions = " (event_id = 0)";
+      }
    }
 
    // for browsing: if limit=0,paging=1 and only for this_week,this_month or today
@@ -793,9 +807,9 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
    if ($limit==0) {
-      $events = eme_get_events ( 0, $scope, $order, $offset, $location_id, $category, $author, $contact_person );
+      $events = eme_get_events ( 0, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $extra_conditions );
    } else {
-      $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person );
+      $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $extra_conditions );
    }
    $events_count=count($events);
 
@@ -942,7 +956,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0 ), $atts ) );
+   extract ( shortcode_atts ( array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0, 'user_registered_only' => 0 ), $atts ) );
 
    // the filter list overrides the settings
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'filter') {
@@ -971,7 +985,7 @@ function eme_get_events_list_shortcode($atts) {
       }
    }
 
-   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person&paging=$paging&long_events=$long_events&location_id=$location_id" );
+   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person&paging=$paging&long_events=$long_events&location_id=$location_id&user_registered_only=$user_registered_only" );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -1029,7 +1043,7 @@ function eme_are_events_available($scope = "future",$order = "ASC", $location_id
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = '', $author = '', $contact_person = '') {
+function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = "", $author = "", $contact_person = "", $extra_conditions = "") {
    global $wpdb;
 
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
@@ -1055,6 +1069,12 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    $this_hour = date ("H:i:00");
    
    $conditions = array ();
+   // extra sql conditions we put in front, most of the time this is the most
+   // effective place
+   if ($extra_conditions != "") {
+      $conditions [] = $extra_conditions;
+   }
+
    // if we're not in the admin itf, we don't want draft events
    if (!is_admin()) {
       if (is_user_logged_in()) {
@@ -2166,7 +2186,7 @@ function eme_admin_general_script() {
    eme_admin_general_css();
    ?>
 <script src="<?php echo EME_PLUGIN_URL; ?>eme.js" type="text/javascript"></script>
-<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui/jquery-ui-1.8.9.custom.min.js" type="text/javascript"></script>
+<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.js" type="text/javascript"></script>
 <script src="<?php echo EME_PLUGIN_URL; ?>js/timeentry/jquery.timeentry.js" type="text/javascript"></script>
 <?php
    
@@ -2182,14 +2202,14 @@ function eme_admin_general_script() {
    // for english, no translation code is needed
    if ($locale_code != "en") {
       ?>
-<script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui/i18n/jquery.ui.datepicker-<?php echo $locale_code; ?>.js" type="text/javascript"></script>
+<script src="<?php echo $locale_file ?>.js" type="text/javascript"></script>
 <?php
    }
    ?>
 
 <style type='text/css' media='all'>
 @import
-   "<?php echo EME_PLUGIN_URL; ?>js/jquery-ui/jquery-ui-1.8.9.custom.css"
+   "<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.css"
    ;
 </style>
 <script type="text/javascript">

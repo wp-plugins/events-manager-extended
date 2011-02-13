@@ -742,7 +742,11 @@ function eme_create_events_submenu () {
 
 function eme_replace_placeholders($format, $event, $target="html") {
    global $eme_need_gmap_js;
-   global $current_user;
+
+   // some variables we'll use further down more than once
+   $current_userid=get_current_user_id();
+   $person_id=eme_get_person_id_by_wp_id($current_userid);
+   $rsvp_is_active = get_option('eme_rsvp_enabled'); 
 
    // first we do the custom attributes, since these can contain other placeholders
    preg_match_all("/#(ESC|URL)?_ATT\{.+?\}(\{.+?\})?/", $format, $results);
@@ -779,7 +783,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
    }
 
    // and now all the other placeholders
-   $rsvp_is_active = get_option('eme_rsvp_enabled'); 
    preg_match_all("/#(ESC|URL)?@?_?[A-Za-z0-9_\[\]]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
    // #_LOCATION, part of #_LOCATIONPAGEURL would get replaced as well ...
@@ -873,10 +876,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } elseif ($rsvp_is_active && $event['event_rsvp']
                    && is_user_logged_in()
                    && $event['registration_wp_users_only']) {
-            get_currentuserinfo();
-            $person_id=$current_user->ID;
             if (!eme_get_booking_by_person_event_id($person_id,$event['event_id']))
-
                $replacement = eme_add_booking_form($event['event_id']);
          } else {
             $replacement = "";
@@ -895,13 +895,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } elseif ($rsvp_is_active && $event['event_rsvp']
                    && is_user_logged_in()
                    && $event['registration_wp_users_only']) {
-            get_currentuserinfo();
-            $person_id=$current_user->ID;
             if (eme_get_booking_by_person_event_id($person_id,$event['event_id']))
-
                $replacement = eme_delete_booking_form($event['event_id']);
-         } else {
-            $replacement = "";
          }
 
       } elseif (preg_match('/#_(AVAILABLESPACES|AVAILABLESEATS)$/', $result)) {
@@ -912,6 +907,12 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_(RESERVEDSPACES|BOOKEDSEATS)$/', $result)) {
          if ($rsvp_is_active && $event['event_rsvp']) {
             $replacement = eme_get_booked_seats($event['event_id']);
+         }
+
+      } elseif (preg_match('/#_USER_(RESERVEDSPACES|BOOKEDSEATS)$/', $result)) {
+         if ($rsvp_is_active && $event['event_rsvp']
+             && is_user_logged_in()) {
+            $replacement = eme_get_booked_seats_by_person_event_id($person_id,$event['event_id']);
          }
 
       } elseif (preg_match('/#_LINKEDNAME$/', $result)) {

@@ -441,6 +441,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.3.2 =
 * Feature: filter form now also works for calendar concerning the scope (week or month)
 * Feature: [events_filter] has a new parameter "fields", can contain a comma seperated list of fields that should be shown (the filter format is general, and using this, you can hide certain fields in certain forms). For a calendar, you may want to block showing weeks, so you can use eg: [events_filter fields=categories,months] (and make sure the "filter form format" contains at least the filters for month and cats)
+* Feature: new placeholder for events: #_USER_RESERVEDSPACES (or #_USER_BOOKEDSEATS), gives the number of seats a users has registered for an event
+* Feature: new parameter for [events_list]: "user_registered_only". If value=1, it will only give a list of events the user has registered for
 * Improvement: Czech language update (thanks to Alan Eckhardt)
 * Improvement: hour also taken into account for future/past events list
 * Bugfix: #_CATEGORIES should seperate categories by ", " and not just ","
