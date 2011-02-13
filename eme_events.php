@@ -2611,7 +2611,7 @@ function eme_rss_link($justurl = 0, $echo = 1, $text = "RSS", $scope="future", $
 
 function eme_rss_link_shortcode($atts) {
    extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'RSS', 'scope' => 'future', 'order' => 'ASC', 'category' => '', 'author' => '', 'contact_person' => '', 'limit' => 5 ), $atts ) );
-   $result = eme_rss_link ( "justurl=$justurl&echo=0&text=$text&limit=$limit&scope=$scope&order=$order&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person" );
+   $result = eme_rss_link ( "justurl=$justurl&echo=0&text=$text&limit=$limit&scope=$scope&order=$order&category=$category&author=$author&contact_person=$contact_person" );
    return $result;
 }
 add_shortcode ( 'events_rss_link', 'eme_rss_link_shortcode' );

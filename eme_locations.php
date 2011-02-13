@@ -816,6 +816,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 }
 
 function eme_add_directions_form($location) {
+   $locale_code = substr ( get_locale (), 0, 2 );
    $res = '<form action="http://maps.google.com/maps" method="get" target="_blank" style="text-align:left;">';
    $res .= '<div><label for="saddr">'.__('Your Street Address','eme').'</label><br />';
    $res .= '<input type="text" name="saddr" id="saddr" value="" />';
