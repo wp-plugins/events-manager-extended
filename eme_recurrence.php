@@ -253,7 +253,7 @@ function eme_get_recurrence_desc($recurrence_id) {
          $freq_desc = sprintf (__("every %s days", 'eme'), $recurrence['recurrence_interval']);
       }
    }
-   if ($recurrence['recurrence_freq'] == 'weekly')  {
+   elseif ($recurrence['recurrence_freq'] == 'weekly')  {
       if (!$recurrence['recurrence_byday']) {
          # no weekdays given for the recurrence, so we use the
          # so we use the day of the week of the startdate as
@@ -269,11 +269,12 @@ function eme_get_recurrence_desc($recurrence_id) {
          array_push($natural_days, $weekdays_name[$day-1]);
       $and_string=__(" and ",'eme');
       $output .= implode($and_string, $natural_days);
+      $freq_desc =", ".__('every week', 'eme');
       if ($recurrence['recurrence_interval'] > 1 ) {
          $freq_desc = ", ".sprintf (__("every %s weeks", 'eme'), $recurrence['recurrence_interval']);
       }
    } 
-   if ($recurrence['recurrence_freq'] == 'monthly')  {
+   elseif ($recurrence['recurrence_freq'] == 'monthly')  {
       if (!$recurrence['recurrence_byday']) {
          # no monthday given for the recurrence, so we use the
          # so we use the day of the month of the startdate as
@@ -286,9 +287,12 @@ function eme_get_recurrence_desc($recurrence_id) {
          array_push($natural_days, $weekdays_name[$day-1]);
       $and_string=__(" and ",'eme');
       $freq_desc = sprintf (($monthweek_name[$recurrence['recurrence_byweekno']]), implode($and_string, $natural_days));
+      $freq_desc =", ".__('every month', 'eme');
       if ($recurrence['recurrence_interval'] > 1 ) {
          $freq_desc .= ", ".sprintf (__("every %s months",'eme'), $recurrence['recurrence_interval']);
       }
+   } else {
+      $freq_desc = "";
    }
    $output .= $freq_desc;
    return  $output;
