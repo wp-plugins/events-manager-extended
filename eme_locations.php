@@ -554,14 +554,14 @@ function eme_global_map($atts) {
             $day_offset=date('w');
             $start_day=time()-$day_offset*86400;
             $end_day=$start_day+6*86400;
-            $scope = date('Y-m-d',$start_day+$scope_offset*7*86400)."--".date('Y-m-d',$end_day+$scope_offset*7*86400);
-            //$prev_text = date_i18n (get_option('date_format'),$start_day+$prev_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$prev_offset*7*86400);
-            //$next_text = date_i18n (get_option('date_format'),$start_day+$next_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$next_offset*7*86400);
+            $limit_start = date('Y-m-d',$start_day+$scope_offset*7*86400);
+            $limit_end   = date('Y-m-d',$end_day+$scope_offset*7*86400);
+            $scope = "$limit_start--$limit_end";
             $scope_text = date_i18n (get_option('date_format'),$start_day+$scope_offset*7*86400)."--".date_i18n (get_option('date_format'),$end_day+$scope_offset*7*86400);
             $prev_text = __('Previous week','eme');
             $next_text = __('Next week','eme');
          }
-         if ($scope=="this_month") {
+         elseif ($scope=="this_month") {
             // "first day of this month, last day of this month" works for newer versions of php (5.3+), but for compatibility:
             // the year/month should be based on the first of the month, so if we are the 13th, we substract 12 days to get to day 1
             // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
@@ -579,30 +579,50 @@ function eme_global_map($atts) {
             $prev_text = __('Previous month','eme');
             $next_text = __('Next month','eme');
          }
-         if ($scope=="today") {
+         elseif ($scope=="today") {
             $scope = date('Y-m-d',strtotime("$scope_offset days"));
+            $limit_start = $scope;
+            $limit_end   = $scope;
             //$prev_text = date_i18n (get_option('date_format'), strtotime("$prev_offset days"));
             //$next_text = date_i18n (get_option('date_format'), strtotime("$next_offset days"));
             $scope_text = date_i18n (get_option('date_format'), strtotime("$scope_offset days"));
             $prev_text = __('Previous day','eme');
             $next_text = __('Next day','eme');
          }
+         elseif ($scope=="tomorrow") {
+            $scope_offset++;
+            $scope = date('Y-m-d',strtotime("$scope_offset days"));
+            $limit_start = $scope;
+            $limit_end   = $scope;
+            $scope_text = date_i18n (get_option('date_format'), strtotime("$scope_offset days"));
+            $prev_text = __('Previous day','eme');
+            $next_text = __('Next day','eme');
+         }
+
+         // to prevent going on indefinitely and thus allowing search bots to go on for ever,
+         // we stop providing links if there are no more events left
+         if (eme_count_events_older_than($limit_start) == 0)
+            $prev_text = "";
+         if (eme_count_events_newer_than($limit_end) == 0)
+            $next_text = "";
       }
 
       // get the paging output ready
       $pagination_top = "<div id='locations-pagination-top'> ";
-      if ($paging==1 && $limit==0) {
+      if ($paging==1) {
          $this_page_url=$_SERVER['REQUEST_URI'];
          // remove the offset info
-         $this_page_url= preg_replace("/\&eme_offset=\d+/","",$this_page_url);
-         $this_page_url= preg_replace("/\?eme_offset=\d+$/","",$this_page_url);
-         $this_page_url= preg_replace("/\?eme_offset=\d+\&(.*)/","?$1",$this_page_url);
+         $this_page_url= preg_replace("/\&eme_offset=-?\d+/","",$this_page_url);
+         $this_page_url= preg_replace("/\?eme_offset=-?\d+$/","",$this_page_url);
+         $this_page_url= preg_replace("/\?eme_offset=-?\d+\&(.*)/","?$1",$this_page_url);
          if (stristr($this_page_url, "?"))
             $joiner = "&amp;";
          else
             $joiner = "?";
-         $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
-         $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
+         if ($prev_text != "")
+            $pagination_top.= "<a class='eme_nav_left' href='" . $this_page_url.$joiner."eme_offset=$prev_offset'>&lt;&lt; $prev_text</a>";
+         if ($next_text != "")
+            $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
          $pagination_top.= "<span class='eme_nav_center'>$scope_text</span>";
       }
       $pagination_top.= "</div>";
