@@ -1500,7 +1500,10 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
          $localised_end_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_end_date']));
          $today = date ( "Y-m-d" );
          
-         $location_summary = "<b>" . eme_trans_sanitize_html($event ['location_name']) . "</b><br />" . eme_trans_sanitize_html($event ['location_address']) . " - " . eme_trans_sanitize_html($event ['location_town']);
+         if (isset($event ['location_name']))
+            $location_summary = "<b>" . eme_trans_sanitize_html($event ['location_name']) . "</b><br />" . eme_trans_sanitize_html($event ['location_address']) . " - " . eme_trans_sanitize_html($event ['location_town']);
+         else
+            $location_summary = "";
          
          $style = "";
          if ($event ['event_start_date'] < $today)
