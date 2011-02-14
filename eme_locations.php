@@ -652,11 +652,6 @@ function get_locations_shortcode($atts) {
    ), $atts));
    $class = $class ? "class=\"{$class}\"" : "";
    $locations = eme_get_locations($eventful, $scope, $category, $offset);
-   $events_page_link = eme_get_events_page(true, false);
-   if (stristr($this_page_url, "?"))
-      $joiner = "&amp;";
-   else
-      $joiner = "?";
 
    $out = "<ul id=\"eme_locations\" {$class}>";
    if (!$link)
@@ -664,7 +659,7 @@ function get_locations_shortcode($atts) {
    foreach ($locations as $location) {
       $location_name = $location['location_name'];
       if ($link) {
-         $location_page_link = $events_page_link.$joiner."location_id=".$location['location_id'];
+         $location_page_link = eme_location_url($location);
          $location_name = "<a href=\"{$location_page_link}\" title=\"{$location_name}\">{$location_name}</a>";  
       }
       $out .= "<li class=\"location-{$location['location_id']}\">{$location_name}</li>";
@@ -771,13 +766,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
             $replacement = "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
 
       } elseif (preg_match('/#_LOCATIONPAGEURL$/', $result)) {
-         $events_page_link = eme_get_events_page(true, false);
-         if (stristr($events_page_link, "?"))
-            $joiner = "&amp;";
-         else
-            $joiner = "?";
-
-         $replacement = $events_page_link.$joiner."location_id=".$location['location_id'];
+         $replacement = eme_location_url($location);
 
       } elseif (preg_match('/#_DIRECTIONS/', $result)) {
          $replacement = eme_add_directions_form($location);
