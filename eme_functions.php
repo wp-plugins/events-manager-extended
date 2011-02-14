@@ -90,8 +90,9 @@ function eme_event_url($event) {
       $event_link = $event['event_url'];
    } else {
       if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
-	 $name=eme_permalink_convert($event['event_name']);
-         $event_link = site_url()."/events/".$event['event_id']."/".$name;
+         $name=eme_permalink_convert($event['event_name']);
+         // trailing slash to avoid redirection and speed up browsing
+         $event_link = site_url()."/events/".$event['event_id']."/".$name."/";
       } else {
          $event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
       }
@@ -109,7 +110,8 @@ function eme_location_url($location) {
 
    if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
       $name=eme_permalink_convert($location['location_name']);
-      $location_link = site_url()."/locations/".$location['location_id']."/".$name;
+      // trailing slash to avoid redirection and speed up browsing
+      $location_link = site_url()."/locations/".$location['location_id']."/".$name."/";
    } else {
       $location_link = $events_page_link.$joiner."location_id=".$location['location_id'];
    }
