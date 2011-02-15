@@ -56,7 +56,7 @@ function eme_ajax_actions() {
    }
    
    if (isset($_GET['query']) && $_GET['query'] == 'GlobalMapData') { 
-      eme_global_map_json((bool) $_GET['eventful'],$_GET['scope'],$_GET['category'],$_GET['offset']);
+      eme_global_map_json((bool) $_GET['eventful'],$_GET['scope'],$_GET['category']);
       die();
    }
 }
