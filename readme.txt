@@ -451,4 +451,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: #_CATEGORIES should seperate categories by ", " and not just ","
 * Bugfix: the filter form was not performing the correct sql for multiple town filtering
 * Bugfix: the filter form was not correctly escaping the input
+* Bugfix: the calendar prev/next links are now javascripted per calendar div, important if you have more than one calendar on the page
 * JQuery lib updates for timeentry

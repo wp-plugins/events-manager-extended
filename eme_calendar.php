@@ -183,6 +183,9 @@ function eme_get_calendar($args="") {
 
    $random = (rand(100,200));
    $full ? $class = 'eme-calendar-full' : $class='eme-calendar';
+
+   // we put all values into divs inside the calendar div, so we can target the wanted value
+   // this is important if more than one calendar exists on the page
    $calendar="
       <div class='$class' id='eme-calendar-$random'>
       <div style='display:none' class='month_n'>$month</div>
@@ -253,6 +256,25 @@ function eme_get_calendar($args="") {
    } 
    
    $calendar .= " </table>\n</div>";
+   // we generate the onclick javascript per calendar div
+   // this is important if more than one calendar exists on the page
+   $calendar .= "<script type='text/javascript'>
+         \$j_eme_calendar=jQuery.noConflict();
+         \$j_eme_calendar('#eme-calendar-".$random." a.prev-month').click(function(e){
+            e.preventDefault();
+            (\$j_eme_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
+            (\$j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
+            tableDiv = \$j_eme_calendar('#eme-calendar-".$random."');
+            prevMonthCalendar(tableDiv, fullcalendar, long_events);
+         } );
+         \$j_eme_calendar('#eme-calendar-".$random." a.next-month').click(function(e){
+            e.preventDefault();
+            (\$j_eme_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
+            (\$j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
+            tableDiv = \$j_eme_calendar('#eme-calendar-".$random."');
+            nextMonthCalendar(tableDiv, fullcalendar, long_events);
+         } );
+         </script>";
    
    // query the database for events in this time span
    if ($month == 1) {
@@ -397,26 +419,6 @@ function eme_ajaxize_calendar() {
 ?>
    <script type='text/javascript'>
       $j_eme_calendar=jQuery.noConflict();
-      $j_eme_calendar(document).ready( function() {
-         initCalendar();
-      });
-      
-      function initCalendar() {
-         $j_eme_calendar('a.prev-month').click(function(e){
-            e.preventDefault();
-            tableDiv = $j_eme_calendar(this).closest('table').parent();
-            ($j_eme_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
-            ($j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
-            prevMonthCalendar(tableDiv, fullcalendar, long_events);
-         } );
-         $j_eme_calendar('a.next-month').click(function(e){
-            e.preventDefault();
-            tableDiv = $j_eme_calendar(this).closest('table').parent();
-            ($j_eme_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
-            ($j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
-            nextMonthCalendar(tableDiv, fullcalendar, long_events);
-         } );
-      }
 
       function prevMonthCalendar(tableDiv, fullcalendar, showlong_events) {
          if (fullcalendar === undefined) {
@@ -446,7 +448,6 @@ function eme_ajaxize_calendar() {
             location_id: location_chosen <?php echo $jquery_override_lang; ?>
          }, function(data){
             tableDiv.replaceWith(data);
-            initCalendar();
          });
       }
       function nextMonthCalendar(tableDiv, fullcalendar, showlong_events) {
@@ -477,7 +478,6 @@ function eme_ajaxize_calendar() {
             location_id: location_chosen <?php echo $jquery_override_lang; ?>
          }, function(data){
             tableDiv.replaceWith(data);
-            initCalendar();
          });
       }
       function reloadCalendar(tableDiv, fullcalendar, showlong_events) {
@@ -505,7 +505,6 @@ function eme_ajaxize_calendar() {
             location_id: location_chosen <?php echo $jquery_override_lang; ?>
          }, function(data){
             tableDiv.replaceWith(data);
-            initCalendar();
          });
       }
    </script>

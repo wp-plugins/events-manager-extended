@@ -543,6 +543,8 @@ function eme_global_map($atts) {
       else
          $joiner = "?";
 
+      $prev_text = "";
+      $next_text = "";
       // for browsing: if paging=1 and only for this_week,this_month or today
       if ($paging==1) {
          $scope_offset=0;
@@ -607,9 +609,10 @@ function eme_global_map($atts) {
             $next_text = "";
       }
 
+      $result = "<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
       // get the paging output ready
-      $pagination_top = "<div id='locations-pagination-top'> ";
       if ($paging==1) {
+         $pagination_top = "<div id='locations-pagination-top'> ";
          $this_page_url=$_SERVER['REQUEST_URI'];
          // remove the offset info
          $this_page_url= preg_replace("/\&eme_offset=-?\d+/","",$this_page_url);
@@ -624,19 +627,15 @@ function eme_global_map($atts) {
          if ($next_text != "")
             $pagination_top.= "<a class='eme_nav_right' href='" . $this_page_url.$joiner."eme_offset=$next_offset'>$next_text &gt;&gt;</a>";
          $pagination_top.= "<span class='eme_nav_center'>$scope_text</span>";
+         $pagination_top.= "</div>";
+         $pagination_bottom = str_replace("locations-pagination-top","locations-pagination-bottom",$pagination_top);
+         $result = $pagination_top.$result.$pagination_bottom;
       }
-      $pagination_top.= "</div>";
-      $pagination_bottom = str_replace("locations-pagination-top","locations-pagination-bottom",$pagination_top);
-      if ($paging==1)
-         $result = $pagination_top."<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>".$pagination_bottom;
-      else
-         $result = "<div id='eme_global_map' style='width: {$width}px; height: {$height}px'>map</div>";
 
       $result .= "<script type='text/javascript'>
          <!--// 
       eventful = '$eventful';
       scope = '$scope';
-      offset = '$offset';
       category = '$category';
       events_page_link = '$events_page_link';
       joiner = '$joiner'

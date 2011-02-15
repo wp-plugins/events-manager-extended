@@ -755,6 +755,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       }
    }
 
+   $prev_text = "";
+   $next_text = "";
    // for browsing: if limit=0,paging=1 and only for this_week,this_month or today
    if ($limit==0 && $paging==1) {
       $scope_offset=0;
