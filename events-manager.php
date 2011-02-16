@@ -1004,7 +1004,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             } else {
                if ($field == "event_excerpt"){
                   $matches = explode('<!--more-->', $event['event_notes']);
-                  $replacement = htmlentities($matches[0]);
+                  $replacement = eme_trans_sanitize_html($matches[0]);
                   $replacement = apply_filters('eme_notes_rss', $replacement);
                } else {
                   $replacement = apply_filters('eme_notes_rss', $replacement);
@@ -1231,7 +1231,7 @@ function eme_trans_sanitize_html( $value, $do_convert=1 ) {
 }
 
 function eme_sanitize_html( $value ) {
-   return htmlspecialchars($value,ENT_QUOTES);
+   return htmlentities($value,ENT_QUOTES,get_option('blog_charset'));
 }
 
 function eme_strip_tags ( $value ) {
