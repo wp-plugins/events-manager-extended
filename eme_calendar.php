@@ -175,25 +175,13 @@ function eme_get_calendar($args="") {
    // so we will array_chunk it into 7 days. 
    $weeks = array_chunk($new_count, 7); 
 
-   $full ? $link_extra_class = "full-link" : $link_extra_class = '';
-   $long_events ? $link_extra_class .= " long_events" : "";
    // the real links are created via jquery when clicking on the prev-month or next-month class-links
-   $previous_link = "<a class='prev-month $link_extra_class' href=\"#\">&lt;&lt;</a>"; 
-   $next_link = "<a class='next-month $link_extra_class' href=\"#\">&gt;&gt;</a>";
+   $previous_link = "<a class='prev-month' href=\"#\">&lt;&lt;</a>"; 
+   $next_link = "<a class='next-month' href=\"#\">&gt;&gt;</a>";
 
    $random = (rand(100,200));
    $full ? $class = 'eme-calendar-full' : $class='eme-calendar';
-
-   // we put all values into divs inside the calendar div, so we can target the wanted value
-   // this is important if more than one calendar exists on the page
-   $calendar="
-      <div class='$class' id='eme-calendar-$random'>
-      <div style='display:none' class='month_n'>$month</div>
-      <div class='year_n' style='display:none' >$year</div>
-      <div class='cat_chosen' style='display:none' >$category</div>
-      <div class='author_chosen' style='display:none' >$author</div>
-      <div class='contact_person_chosen' style='display:none' >$contact_person</div>
-      <div class='location_chosen' style='display:none' >$location_id</div>";
+   $calendar="<div class='$class' id='eme-calendar-$random'>";
    
    $weekdays = array(__('Sunday'),__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'));
    $n = 0 ;
@@ -256,27 +244,8 @@ function eme_get_calendar($args="") {
    } 
    
    $calendar .= " </table>\n</div>";
-   // we generate the onclick javascript per calendar div
-   // this is important if more than one calendar exists on the page
-   $calendar .= "<script type='text/javascript'>
-         \$j_eme_calendar=jQuery.noConflict();
-         \$j_eme_calendar('#eme-calendar-".$random." a.prev-month').click(function(e){
-            e.preventDefault();
-            (\$j_eme_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
-            (\$j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
-            tableDiv = \$j_eme_calendar('#eme-calendar-".$random."');
-            prevMonthCalendar(tableDiv, fullcalendar, long_events);
-         } );
-         \$j_eme_calendar('#eme-calendar-".$random." a.next-month').click(function(e){
-            e.preventDefault();
-            (\$j_eme_calendar(this).hasClass('full-link')) ? fullcalendar = 1 : fullcalendar = 0;
-            (\$j_eme_calendar(this).hasClass('long_events')) ? long_events = 1 : long_events = 0;
-            tableDiv = \$j_eme_calendar('#eme-calendar-".$random."');
-            nextMonthCalendar(tableDiv, fullcalendar, long_events);
-         } );
-         </script>";
-   
-   // query the database for events in this time span
+
+   // calc prev/next month/year
    if ($month == 1) {
       $month_pre=12;
       $month_post=2;
@@ -294,6 +263,22 @@ function eme_get_calendar($args="") {
       $year_post=$year;
    }
 
+   // we generate the onclick javascript per calendar div
+   // this is important if more than one calendar exists on the page
+   $calendar .= "<script type='text/javascript'>
+         \$j_eme_calendar=jQuery.noConflict();
+         \$j_eme_calendar('#eme-calendar-".$random." a.prev-month').click(function(e){
+            e.preventDefault();
+            tableDiv = \$j_eme_calendar('#eme-calendar-".$random."');
+            loadCalendar(tableDiv, $full, $long_events,$month_pre,$year_pre,'$category','$author','$contact_person','$location_id');
+         } );
+         \$j_eme_calendar('#eme-calendar-".$random." a.next-month').click(function(e){
+            e.preventDefault();
+            tableDiv = \$j_eme_calendar('#eme-calendar-".$random."');
+            loadCalendar(tableDiv, $full, $long_events,$month_post,$year_post,'$category','$author','$contact_person','$location_id');
+         } );
+         </script>";
+   
    // we'll look for events in the requested month and 7 days before and after
    $number_of_days_pre=eme_days_in_month($month_pre, $year_pre);
    $limit_pre=date("Y-m-d", mktime(0,0,0,$month_pre, $number_of_days_pre-7 , $year_pre));
@@ -420,83 +405,17 @@ function eme_ajaxize_calendar() {
    <script type='text/javascript'>
       $j_eme_calendar=jQuery.noConflict();
 
-      function prevMonthCalendar(tableDiv, fullcalendar, showlong_events) {
+      function loadCalendar(tableDiv, fullcalendar, showlong_events, month, year, cat_chosen, author_chosen, contact_person_chosen, location_chosen) {
          if (fullcalendar === undefined) {
              fullcalendar = 0;
          }
          if (showlong_events === undefined) {
              showlong_events = 0;
          }
-         month_n = tableDiv.children('div.month_n').text();
-         year_n = tableDiv.children('div.year_n').text();
-         cat_chosen = tableDiv.children('div.cat_chosen').text();
-         author_chosen = tableDiv.children('div.author_chosen').text();
-         contact_person_chosen = tableDiv.children('div.contact_person_chosen').text();
-         location_chosen = tableDiv.children('div.location_chosen').text();
-         parseInt(month_n) == 1 ? prevMonth = 12 : prevMonth = parseInt(month_n,10) - 1 ; 
-         if (parseInt(month_n,10) == 1)
-            year_n = parseInt(year_n,10) -1;
          $j_eme_calendar.get("<?php echo site_url(); ?>", {
             eme_ajaxCalendar: 'true',
-            calmonth: prevMonth,
-            calyear: year_n,
-            full: fullcalendar,
-            long_events: showlong_events,
-            category: cat_chosen,
-            author: author_chosen,
-            contact_person: contact_person_chosen,
-            location_id: location_chosen <?php echo $jquery_override_lang; ?>
-         }, function(data){
-            tableDiv.replaceWith(data);
-         });
-      }
-      function nextMonthCalendar(tableDiv, fullcalendar, showlong_events) {
-         if (fullcalendar === undefined) {
-             fullcalendar = 0;
-         }
-         if (showlong_events === undefined) {
-             showlong_events = 0;
-         }
-         month_n = tableDiv.children('div.month_n').text();
-         year_n = tableDiv.children('div.year_n').text();
-         cat_chosen = tableDiv.children('div.cat_chosen').text();
-         author_chosen = tableDiv.children('div.author_chosen').text();
-         contact_person_chosen = tableDiv.children('div.contact_person_chosen').text();
-         location_chosen = tableDiv.children('div.location_chosen').text();
-         parseInt(month_n,10) == 12 ? nextMonth = 1 : nextMonth = parseInt(month_n,10) + 1 ; 
-         if (parseInt(month_n,10) == 12)
-            year_n = parseInt(year_n,10) + 1;
-         $j_eme_calendar.get("<?php echo site_url(); ?>", {
-            eme_ajaxCalendar: 'true',
-            calmonth: nextMonth,
-            calyear: year_n,
-            full : fullcalendar,
-            long_events: showlong_events,
-            category: cat_chosen,
-            author: author_chosen,
-            contact_person: contact_person_chosen,
-            location_id: location_chosen <?php echo $jquery_override_lang; ?>
-         }, function(data){
-            tableDiv.replaceWith(data);
-         });
-      }
-      function reloadCalendar(tableDiv, fullcalendar, showlong_events) {
-         if (fullcalendar === undefined) {
-            fullcalendar = 0;
-         }
-         if (showlong_events === undefined) {
-            showlong_events = 0;
-         }
-         month_n = tableDiv.children('div.month_n').text();
-         year_n = tableDiv.children('div.year_n').text();
-         cat_chosen = tableDiv.children('div.cat_chosen').text();
-         author_chosen = tableDiv.children('div.author_chosen').text();
-         contact_person_chosen = tableDiv.children('div.contact_person_chosen').text();
-         location_chosen = tableDiv.children('div.location_chosen').text();
-         $j_eme_calendar.get("<?php echo site_url(); ?>", {
-            eme_ajaxCalendar: 'true',
-            calmonth: parseInt(month_n,10),
-            calyear: parseInt(year_n,10),
+            calmonth: parseInt(month,10),
+            calyear: parseInt(year,10),
             full : fullcalendar,
             long_events: showlong_events,
             category: cat_chosen,
