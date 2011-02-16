@@ -23,7 +23,7 @@ function eme_locations_page() {
       // location update required
       $location = array();
       $location['location_id'] = $_POST['location_ID'];
-      $location['location_name'] = stripslashes($_POST['location_name']);
+      $location['location_name'] = trim(stripslashes($_POST['location_name']));
       $location['location_address'] = stripslashes($_POST['location_address']); 
       $location['location_town'] = stripslashes($_POST['location_town']); 
       $location['location_latitude'] = $_POST['location_latitude'];
@@ -50,7 +50,7 @@ function eme_locations_page() {
       }
    } elseif(isset($_POST['action']) && $_POST['action'] == "addlocation") {
       $location = array();
-      $location['location_name'] = stripslashes($_POST['location_name']);
+      $location['location_name'] = trim(stripslashes($_POST['location_name']));
       $location['location_address'] = stripslashes($_POST['location_address']);
       $location['location_town'] = stripslashes($_POST['location_town']); 
       $location['location_latitude'] = $_POST['location_latitude'];

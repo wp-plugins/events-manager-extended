@@ -73,7 +73,7 @@ function eme_ascii_encode($e) {
 
 function eme_permalink_convert ($val) {
    // WP provides a function to convert accents to their ascii counterparts
-   $val=remove_accents($val);
+   $val=remove_accents(trim($val));
    $val=strtolower(strtr($val, " ","-"));
    return urlencode($val);
 }

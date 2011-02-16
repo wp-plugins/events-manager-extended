@@ -130,7 +130,7 @@ function eme_events_subpanel() {
    if ($action == 'update_event' || $action == 'update_recurrence') {
       $event = array ();
       $location = array ();
-      $event ['event_name'] = isset($_POST ['event_name']) ? stripslashes ( $_POST ['event_name'] ) : '';
+      $event ['event_name'] = isset($_POST ['event_name']) ? trim(stripslashes ( $_POST ['event_name'] )) : '';
       if (!current_user_can( AUTHOR_CAPABILITY)) {
          // user can create an event, but not approve it: status remains draft
          $event['event_status']=STATUS_DRAFT;   
@@ -186,7 +186,7 @@ function eme_events_subpanel() {
       //if (! _eme_is_time_valid ( $event_end_time ))
       // $event_end_time = $event_time;
       
-      $location ['location_name'] = isset($_POST ['location_name']) ? stripslashes($_POST ['location_name']) : '';
+      $location ['location_name'] = isset($_POST ['location_name']) ? trim(stripslashes($_POST ['location_name'])) : '';
       $location ['location_address'] = isset($_POST ['location_address']) ? stripslashes($_POST ['location_address']) : '';
       $location ['location_town'] = isset($_POST ['location_town']) ? stripslashes($_POST ['location_town']) : '';
       $location ['location_latitude'] = isset($_POST ['location_latitude']) ? $_POST ['location_latitude'] : '';
