@@ -581,6 +581,15 @@ function eme_global_map($atts) {
             $prev_text = __('Previous month','eme');
             $next_text = __('Next month','eme');
          }
+         elseif ($scope=="this_year") {
+            $year=date('Y', strtotime("$scope_offset year")-$day_offset*86400);
+            $limit_start = "$year-01-01";
+            $limit_end   = "$year-12-31";
+            $scope = "$limit_start--$limit_end";
+            $scope_text = date_i18n (get_option('eme_show_period_yearly_dateformat'), strtotime("$scope_offset year")-$day_offset*86400);
+            $prev_text = __('Previous year','eme');
+            $next_text = __('Next year','eme');
+         }
          elseif ($scope=="today") {
             $scope = date('Y-m-d',strtotime("$scope_offset days"));
             $limit_start = $scope;

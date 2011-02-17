@@ -45,6 +45,21 @@ function eme_create_month_scope($count) {
    return $scope;
 }
 
+function eme_create_year_scope($count) {
+   $day_offset=date('j')-1;
+   $scope=array();
+   $scope[0] = "";
+   for ( $i = 0; $i < $count; $i++) {
+      $year=date('Y', strtotime("$i year")-$day_offset*86400);
+      $limit_start = "$year-01-01";
+      $limit_end   = "$year-12-31";
+      $this_scope = "$limit_start--$limit_end";
+      $scope_text = date_i18n (get_option('eme_show_period_yearly_dateformat'), strtotime("$i year")-$day_offset*86400);
+      $scope[$this_scope] = $scope_text;
+   }
+   return $scope;
+}
+
 function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $scope_count, $fields) {
    if ($fields == "all")
       $fields="categories,locations,towns,weeks,months";
@@ -145,6 +160,9 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
       } elseif (preg_match('/^#_FILTER_MONTHS$/', $result)) {
          if (strstr($fields,'months'))
             $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_month_scope($scope_count));
+      } elseif (preg_match('/^#_FILTER_YEAR$/', $result)) {
+         if (strstr($fields,'years'))
+            $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_year_scope($scope_count));
       } 
 
       $replacement = apply_filters('eme_general', $replacement);

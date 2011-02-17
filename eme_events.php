@@ -446,6 +446,7 @@ function eme_options_subpanel() {
    eme_options_input_text ( __ ( 'Single event page title format', 'eme' ), 'eme_event_page_title_format', __ ( 'The format of a single event page title. Follow the previous formatting instructions.', 'eme' ) );
    eme_options_textarea ( __ ( 'Default single event format', 'eme' ), 'eme_single_event_format', __ ( 'The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings.', 'eme' ).__('<br/>Use <code>#_ADDBOOKINGFORM_IF_NOT_REGISTERED</code> to insert the booking form only if the user has not registered yet. Similar use <code>#_REMOVEBOOKINGFORM_IF_REGISTERED</code> to insert the booking removal form only if the user has already registered before. These two codes only work for WP users.','eme').__('<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask directions to the event.','eme').__('<br/> Use <code>#_CATEGORIES</code> to insert a comma-seperated list of categories an event is in.','eme').__('<br/> Use <code>#_ATTENDEES</code> to get a list of the names attending the event.','eme') );
    eme_options_input_text ( __ ( 'Monthly period date format', 'eme' ), 'eme_show_period_monthly_dateformat', __ ( 'The format of the date-string used when you use showperiod=monthly as an option to &#91;the events_list] shortcode, also used for monthly pagination. Use php date() compatible settings.', 'eme') . __( ' The default is: '). DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT );
+   eme_options_input_text ( __ ( 'Yearly period date format', 'eme' ), 'eme_show_period_yearly_dateformat', __ ( 'The format of the date-string used when you use showperiod=yearly as an option to &#91;the events_list] shortcode, also used for yearly pagination. Use php date() compatible settings.', 'eme') . __( ' The default is: '). DEFAULT_SHOW_PERIOD_MONTHLY_DATEFORMAT );
    eme_options_input_text ( __ ( 'Events page title', 'eme' ), 'eme_events_page_title', __ ( 'The title on the multiple events page.', 'eme' ) );
    eme_options_input_text ( __ ( 'No events message', 'eme' ), 'eme_no_events_message', __ ( 'The message displayed when no events are available.', 'eme' ) );
    ?>
@@ -795,6 +796,15 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $prev_text = __('Previous month','eme');
          $next_text = __('Next month','eme');
       }
+      elseif ($scope=="this_year") {
+         $year=date('Y', strtotime("$scope_offset year")-$day_offset*86400);
+         $limit_start = "$year-01-01";
+         $limit_end   = "$year-12-31";
+         $scope = "$limit_start--$limit_end";
+         $scope_text = date_i18n (get_option('eme_show_period_yearly_dateformat'), strtotime("$scope_offset year")-$day_offset*86400);
+         $prev_text = __('Previous year','eme');
+         $next_text = __('Next year','eme');
+      }
       elseif ($scope=="today") {
          $scope = date('Y-m-d',strtotime("$scope_offset days"));
          $limit_start = $scope;
@@ -923,22 +933,27 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          }
 
          # now that we now the days on which events occur, loop through them
+         $curyear="";
          $curmonth="";
          $curday="";
          foreach($eventful_days as $day_key => $day_events) {
+            $theyear = date ("Y", strtotime($day_key));
+            $themonth = date ("m", strtotime($day_key));
+            $theday = date ("d", strtotime($day_key));
+            if ($showperiod == "yearly" && $theyear != $curyear) {
+               $output .= "<li class='eme_period'>".date_i18n (get_option('eme_show_period_yearly_dateformat'), strtotime($day_key))."</li>";
+               $curyear=$theyear;
+            if ($showperiod == "monthly" && $themonth != $curmonth) {
+               $output .= "<li class='eme_period'>".date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($day_key))."</li>";
+               $curmonth=$themonth;
+            } elseif ($showperiod == "daily" && $theday != $curday) {
+               $output .= "<li class='eme_period'>".date_i18n (get_option('date_format'), strtotime($day_key))."</li>";
+               $curday=$theday;
+            }
             foreach($day_events as $event) {
-               $themonth = date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($day_key));
-               $theday = date_i18n (get_option('date_format'), strtotime($day_key));
-               if ($showperiod == "monthly" && $themonth != $curmonth) {
-                  $output .= "<li class='eme_period'>$themonth</li>";
-                  $curmonth=$themonth;
-               } elseif ($showperiod == "daily" && $theday != $curday) {
-                  $output .= "<li class='eme_period'>$theday</li>";
-                  $curday=$theday;
-               }
                $output .= eme_replace_placeholders ( $format, $event );
             }
-         }
+	 }
       } else {
          $i=1;
          foreach ( $events as $event ) {

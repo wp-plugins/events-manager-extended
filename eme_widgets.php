@@ -44,7 +44,7 @@ class WP_Widget_eme_list extends WP_Widget {
       } else {
          $instance['scope'] = 'future';
       }
-      if ( in_array( $new_instance['showperiod'], array( 'daily', 'monthly' ) ) ) {
+      if ( in_array( $new_instance['showperiod'], array( 'daily', 'monthly', 'yearly' ) ) ) {
          $instance['showperiod'] = $new_instance['showperiod'];
       } else {
          $instance['showperiod'] = '';
@@ -98,6 +98,7 @@ class WP_Widget_eme_list extends WP_Widget {
          <option value="" <?php selected( $showperiod, '' ); ?>><?php _e('Select...','eme'); ?></option>
          <option value="daily" <?php selected( $showperiod, 'daily' ); ?>><?php _e('Daily','eme'); ?></option>
          <option value="monthly" <?php selected( $showperiod, 'monthly' ); ?>><?php _e('Monthly','eme'); ?></option>
+         <option value="yearly" <?php selected( $showperiod, 'yearly' ); ?>><?php _e('Yearly','eme'); ?></option>
     </select>
   </p>
   <p>
@@ -180,6 +181,7 @@ class WP_Widget_eme_calendar extends WP_Widget {
           $options['year'] = date("Y", strtotime( $_REQUEST ['calendar_day']) );
       } else {
           $options['month'] = date("m");
+          $options['year'] = date("Y");
       }
       $options['author'] = $author;
       eme_get_calendar($options);
