@@ -73,9 +73,11 @@ function eme_ascii_encode($e) {
 
 function eme_permalink_convert ($val) {
    // WP provides a function to convert accents to their ascii counterparts
-   $val=trailingslashit(sanitize_title_with_dashes(remove_accents(trim($val))));
-   $val=strtolower($val);
-   return urlencode($val);
+   // called remove_accents, but we also want to replace spaces with "-"
+   // and trim the last space. sanitize_title_with_dashes does all that
+   // and then, add a trailing slash
+   $val=trailingslashit(sanitize_title_with_dashes($val));
+   return $val;
 }
 
 function eme_event_url($event) {
