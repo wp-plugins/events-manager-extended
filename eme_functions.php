@@ -73,8 +73,8 @@ function eme_ascii_encode($e) {
 
 function eme_permalink_convert ($val) {
    // WP provides a function to convert accents to their ascii counterparts
-   $val=remove_accents(trim($val));
-   $val=strtolower(strtr($val, " ","-"));
+   $val=trailingslashit(sanitize_title_with_dashes(remove_accents(trim($val))));
+   $val=strtolower($val);
    return urlencode($val);
 }
 
@@ -92,7 +92,7 @@ function eme_event_url($event) {
       if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
          $name=eme_permalink_convert($event['event_name']);
          // trailing slash to avoid redirection and speed up browsing
-         $event_link = site_url()."/events/".$event['event_id']."/".$name."/";
+         $event_link = site_url()."/events/".$event['event_id']."/".$name;
       } else {
          $event_link = $events_page_link.$joiner."event_id=".$event['event_id'];
       }
@@ -111,7 +111,7 @@ function eme_location_url($location) {
    if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
       $name=eme_permalink_convert($location['location_name']);
       // trailing slash to avoid redirection and speed up browsing
-      $location_link = site_url()."/locations/".$location['location_id']."/".$name."/";
+      $location_link = site_url()."/locations/".$location['location_id']."/".$name;
    } else {
       $location_link = $events_page_link.$joiner."location_id=".$location['location_id'];
    }
