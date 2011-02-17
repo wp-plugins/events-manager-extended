@@ -943,7 +943,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
             if ($showperiod == "yearly" && $theyear != $curyear) {
                $output .= "<li class='eme_period'>".date_i18n (get_option('eme_show_period_yearly_dateformat'), strtotime($day_key))."</li>";
                $curyear=$theyear;
-            if ($showperiod == "monthly" && $themonth != $curmonth) {
+            } elseif ($showperiod == "monthly" && $themonth != $curmonth) {
                $output .= "<li class='eme_period'>".date_i18n (get_option('eme_show_period_monthly_dateformat'), strtotime($day_key))."</li>";
                $curmonth=$themonth;
             } elseif ($showperiod == "daily" && $theday != $curday) {
