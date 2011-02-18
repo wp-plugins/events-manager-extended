@@ -1,5 +1,9 @@
 <?php
 require_once('../../../wp-load.php');
+
+// make sure we use the correct charset in the return
+header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
+
 if(isset($_GET['id']) && $_GET['id'] != "") {
    $location = eme_get_location($_GET['id']);
    echo '{"id":"'.$location['location_id'].'" , "name"  : "'.eme_trans_sanitize_html($location['location_name']).'","town" : "'.eme_trans_sanitize_html($location['location_town']).'","address" : "'.eme_trans_sanitize_html($location['location_address']).'" }';

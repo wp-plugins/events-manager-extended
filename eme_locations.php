@@ -915,6 +915,10 @@ function eme_locations_autocomplete() {
       jQuery.noConflict();
 
       jQuery(document).ready(function($) {
+        function htmlDecode(value){ 
+		return $('<div/>').html(value).text(); 
+	}
+
          var gmap_enabled = <?php echo get_option('eme_gmap_is_active'); ?>; 
 
          <?php if(!$use_select_for_locations) :?>
@@ -923,13 +927,12 @@ function eme_locations_autocomplete() {
             selectFirst: false,
             formatItem: function(row) {
                item = eval("(" + row + ")");
-               return item.name+'<br /><small>'+item.address+' - '+item.town+ '</small>';
+               return htmlDecode(item.name)+'<br /><small>'+htmlDecode(item.address)+' - '+htmlDecode(item.town)+ '</small>';
             },
             formatResult: function(row) {
                item = eval("(" + row + ")");
-               return item.name;
+               return htmlDecode(item.name);
             } 
-
          });
          $('input#location_name').result(function(event,data,formatted) {
             item = eval("(" + data + ")"); 
