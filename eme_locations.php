@@ -864,6 +864,7 @@ function eme_single_location_map($location) {
       $longitude_string="longitude_".$id_base;
       $map_text_string="map_text_".$id_base;
       $enable_zooming_string="enable_zooming_".$id_base;
+      $enable_zooming=get_option('eme_gmap_zooming') ? 'true' : 'false';
       #$latitude_string="latitude";
       #$longitude_string="longitude";
          //$map_div = "<div id='$id' style=' background: green; width: 400px; height: 300px'></div>" ;
@@ -873,7 +874,7 @@ function eme_single_location_map($location) {
       $latitude_string = parseFloat('".$location['location_latitude']."');
       $longitude_string = parseFloat('".$location['location_longitude']."');
       $map_text_string = '$map_text';
-      $enable_zooming_string = get_option('eme_gmap_zooming') ? true : false;
+      $enable_zooming_string = '$enable_zooming'
       //-->
       </script>";
       // $map_div .= "<script src='".EME_PLUGIN_URL."eme_single_location_map.js' type='text/javascript'></script>";
