@@ -774,7 +774,7 @@ function eme_create_events_submenu () {
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
          $plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-seats', "eme_registration_seats_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-         $plugin_page = add_submenu_page('events-manager', __('Cleanup', 'eme'), __('Cleanup', 'eme'), EDIT_CAPABILITY, 'events-manager-cleanup', "eme_cleanup_page");
+         $plugin_page = add_submenu_page('events-manager', __('Cleanup', 'eme'), __('Cleanup', 'eme'), SETTING_CAPABILITY, 'events-manager-cleanup', "eme_cleanup_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
       }
       $plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), SETTING_CAPABILITY, "events-manager-options", 'eme_options_subpanel');
