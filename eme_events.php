@@ -1825,7 +1825,7 @@ function eme_event_form($event, $title, $element) {
                               </select>
                               <?php _e ( 'Day of month', 'eme' )?>
                               <br />
-                              <?php _e ( 'If you use "Start day" as day of the month, the month day of the event start date will be used as a reference.', 'eme' )?>
+                              <?php _e ( 'If you use "Start day" as day of the month, the event start date will be used as a reference.', 'eme' )?>
                               &nbsp;</p>
                         </div>
                         <p id="recurrence-tip">
