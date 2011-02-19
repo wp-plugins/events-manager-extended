@@ -26,11 +26,18 @@ function loadGMap() {
 			var max_longitude = -500.1;
 			var min_longitude = 500.1;
 
+                        var enable_zooming=false;
+                        if (data.enable_zooming === 'true') {
+                            enable_zooming = true;
+                        }
+
 			var mapCenter = new google.maps.LatLng(45.4213477,10.952397);
+                        
 			var myOptions = {
 				zoom: 3,
 				center: mapCenter,
 				disableDoubleClickZoom: true,
+                                scrollwheel: enable_zooming,
 				mapTypeControlOptions: {
 					mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
 				},
@@ -158,11 +165,18 @@ function loadGMap() {
 			var lon_id = window['longitude_'+map_id]; 
 			var map_text_id = window['map_text_'+map_id]; 
 			var point = new google.maps.LatLng(lat_id, lon_id);
+
+                        var enable_zooming=false;
+                        if (window['enable_zooming_'+map_id] === 'true') {
+                            enable_zooming = true;
+                        }
+
 			var mapCenter= new google.maps.LatLng(point.lat()+0.005, point.lng()-0.003);
 			var myOptions = {
 				zoom: 14,
 				center: mapCenter,
 				disableDoubleClickZoom: true,
+                                scrollwheel: enable_zooming,
 				mapTypeControlOptions: {
 					mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
 				},

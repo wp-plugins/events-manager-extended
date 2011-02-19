@@ -79,7 +79,9 @@ function eme_global_map_json($eventful = false, $scope = "all", $category = '', 
       $json_locations[] = "{".implode(",",$json_location)."}";
    }
    $json .= implode(",", $json_locations); 
-   $json .= "]}" ;
+   $json .= '],"enable_zooming":"';
+   $json .= get_option('eme_gmap_zooming') ? 'true' : 'false';
+   $json .= '"}' ;
    echo $json;
 }
 

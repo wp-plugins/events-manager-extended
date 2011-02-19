@@ -15,9 +15,9 @@ function eme_cleanup_page() {
          if ( !in_array( $eme_period, array( 'day', 'week', 'month' ) ) ) 
             $eme_period = "month";
          $end_date=date('Y-m-d', strtotime("-$eme_number $eme_period"));
-         $wpdb->query("DELETE FROM $bookings_table where event_id in (SELECT event_id from $events_table where event_end_date<'$end_date')";
-         $wpdb->query"DELETE FROM $events_table where event_end_date<'$end_date'";
-         $wpdb->query"DELETE FROM $recurrence_table where recurrence_end_date<'$end_date'";
+         $wpdb->query("DELETE FROM $bookings_table where event_id in (SELECT event_id from $events_table where event_end_date<'$end_date')");
+         $wpdb->query("DELETE FROM $events_table where event_end_date<'$end_date'");
+         $wpdb->query("DELETE FROM $recurrence_table where recurrence_end_date<'$end_date'");
       }
    }
 
