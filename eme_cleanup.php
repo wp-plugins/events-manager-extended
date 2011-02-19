@@ -7,6 +7,7 @@ function eme_cleanup_page() {
    $events_table = $wpdb->prefix . EVENTS_TBNAME;
    $recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 
+   $message="";
    if (current_user_can( SETTING_CAPABILITY)) {
       // do the actions if required
       if (isset($_POST['eme_action']) && $_POST['eme_action'] == "eme_cleanup" && isset($_POST['eme_number']) && isset($_POST['eme_period'])) {
@@ -18,19 +19,26 @@ function eme_cleanup_page() {
          $wpdb->query("DELETE FROM $bookings_table where event_id in (SELECT event_id from $events_table where event_end_date<'$end_date')");
          $wpdb->query("DELETE FROM $events_table where event_end_date<'$end_date'");
          $wpdb->query("DELETE FROM $recurrence_table where recurrence_end_date<'$end_date'");
+         $message = sprintf ( __ ( "Cleanup done: events (and corresponding booking data) older than %d %s(s) have been removed."),$eme_number,$eme_period);
       }
    }
 
-   eme_cleanup_form();
+   eme_cleanup_form($message);
 }
 
-function eme_cleanup_form() {
+function eme_cleanup_form($message = "") {
 ?>
 <div class="wrap">
 <div id="icon-events" class="icon32"><br />
 </div>
 <?php admin_show_warnings();?>
 <h2><?php _e ('Cleanup: remove old events','eme'); ?></h2>
+<?php if($message != "") { ?>
+   <div id='message' class='updated fade below-h2' style='background-color: rgb(255, 251, 204);'>
+   <p><?php echo $message; ?></p>
+   </div>
+<?php } ?>
+
    <form id="posts-filter" action="" method="post">
 <?php _e('Remove events older than','eme'); ?>
    <input type='hidden' name='page' value='events-manager-cleanup' />
