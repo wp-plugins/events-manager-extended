@@ -874,7 +874,7 @@ function eme_single_location_map($location) {
       $latitude_string = parseFloat('".$location['location_latitude']."');
       $longitude_string = parseFloat('".$location['location_longitude']."');
       $map_text_string = '$map_text';
-      $enable_zooming_string = '$enable_zooming'
+      $enable_zooming_string = '$enable_zooming';
       //-->
       </script>";
       // $map_div .= "<script src='".EME_PLUGIN_URL."eme_single_location_map.js' type='text/javascript'></script>";

@@ -2539,7 +2539,7 @@ function eme_admin_map_script() {
             var myOptions = {
                zoom: 13,
                center: latlng,
-			   scrollwheel: <?php echo get_option('eme_gmap_zooming') ? 'true' : 'false'; ?>,
+               scrollwheel: <?php echo get_option('eme_gmap_zooming') ? 'true' : 'false'; ?>,
                disableDoubleClickZoom: true,
                mapTypeControlOptions: {
                   mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
