@@ -446,6 +446,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: new parameter for [events_list]: "user_registered_only". If value=1, it will only give a list of events the user has registered for (only works for WP registered users of course)
 * Feature: "showperiod=yearly" now also possible, also filtering per year
 * Feature: external link possible for an event, so when you click on the single event details, you go to that page
+* Feature: added the ability to clean up old events
 * Improvement: Czech language update (thanks to Alan Eckhardt)
 * Improvement: hour also taken into account for future/past events list
 * Improvement: to prevent going on indefinitely and thus allowing search bots to go on for ever, we stop providing links if there are no more events left

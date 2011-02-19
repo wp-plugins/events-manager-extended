@@ -203,6 +203,7 @@ include("eme_UI_helpers.php");
 include("eme_categories.php");
 include("eme_attributes.php");
 include("eme_ical.php");
+include("eme_cleanup.php");
 
 require_once("phpmailer/eme_phpmailer.php") ;
 //require_once("phpmailer/language/phpmailer.lang-en.php") ;
@@ -770,6 +771,8 @@ function eme_create_events_submenu () {
          $plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'eme'), __('Pending Approvals', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-approval', "eme_registration_approval_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
          $plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-seats', "eme_registration_seats_page");
+         add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
+         $plugin_page = add_submenu_page('events-manager', __('Cleanup', 'eme'), __('Cleanup', 'eme'), EDIT_CAPABILITY, 'events-manager-cleanup', "eme_cleanup_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
       }
       $plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), SETTING_CAPABILITY, "events-manager-options", 'eme_options_subpanel');

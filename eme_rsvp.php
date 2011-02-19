@@ -617,7 +617,7 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
 } 
 
 function eme_registration_seats_page() {
-        global $wpdb;
+   global $wpdb;
 
    if (current_user_can( EDIT_CAPABILITY)) {
       // do the actions if required
@@ -629,7 +629,7 @@ function eme_registration_seats_page() {
             }
          }
       } else {
-               $action = isset($_POST ['action']) ? $_POST ['action'] : '';
+         $action = isset($_POST ['action']) ? $_POST ['action'] : '';
          $bookings = isset($_POST ['bookings']) ? $_POST ['bookings'] : array();
          $selected_bookings = isset($_POST ['selected_bookings']) ? $_POST ['selected_bookings'] : array();
          $bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
