@@ -38,10 +38,13 @@ function eme_locations_page() {
       
       $validation_result = eme_validate_location($location);
       if ($validation_result == "OK") {
-         eme_update_location($location); 
-         if ($_FILES['location_image']['size'] > 0 )
-            eme_upload_location_picture($location);
-         $message = __('The location has been updated.', 'eme');
+         if (eme_update_location($location)) {
+            $message = __('The location has been updated.', 'eme');
+            if ($_FILES['location_image']['size'] > 0 )
+               eme_upload_location_picture($location);
+         } else {
+            $message = __('The location update failed.', 'eme');
+         }
          $locations = eme_get_locations();
          eme_locations_table_layout($locations, $location, $message);
       } else {
@@ -59,12 +62,14 @@ function eme_locations_page() {
       $validation_result = eme_validate_location($location);
       if ($validation_result == "OK") {
          $new_location = eme_insert_location($location);
-         // uploading the image
-         if ($_FILES['location_image']['size'] > 0 ) {
-            eme_upload_location_picture($new_location);
-         }
-               
-         //RESETME $message = __('The location has been added.', 'eme'); 
+         if ($new_location) {
+            $message = __('The location has been added.', 'eme'); 
+            // uploading the image
+            if ($_FILES['location_image']['size'] > 0 )
+               eme_upload_location_picture($new_location);
+         } else {
+            $message = __('There has been a problem adding the location.', 'eme'); 
+         }      
          $locations = eme_get_locations();
          eme_locations_table_layout($locations, null,$message);
       } else {
@@ -72,11 +77,11 @@ function eme_locations_page() {
          $locations = eme_get_locations();
          eme_locations_table_layout($locations, $location, $message);
       }
-      } else {
+   } else {
       // no action, just a locations list
       $locations = eme_get_locations();
       eme_locations_table_layout($locations, null, "");
-      }
+   }
 }
 
 function eme_locations_edit_layout($location, $message = "") {
@@ -446,9 +451,16 @@ function eme_update_location($location) {
    global $wpdb;
    $table_name = $wpdb->prefix.LOCATIONS_TBNAME;
    $location=eme_sanitize_request($location);
-   $where ['location_id'] = $location['location_id'];
+   $sql="UPDATE ".$table_name.
+   " SET location_name='".$location['location_name']."', ".
+      "location_address='".$location['location_address']."',".
+      "location_town='".$location['location_town']."', ".
+      "location_latitude=".$location['location_latitude'].",".
+      "location_longitude=".$location['location_longitude'].",".
+      "location_description='".$location['location_description']."' ".
+      "WHERE location_id='".$location['location_id']."';";
    $wpdb->show_errors(true);
-   if (!$wpdb->update ( $table_name, $location, $where )) {
+   if (!$wpdb->query($sql)) {
       $wpdb->print_error();
       return false;
    } else {
@@ -461,13 +473,14 @@ function eme_insert_location($location) {
    $table_name = $wpdb->prefix.LOCATIONS_TBNAME; 
    $location=eme_sanitize_request($location);
    // if GMap is off the hidden fields are empty, so I add a custom value to make the query work
-   if (empty($location['location_longitude'])) 
+   if (empty($location['location_longitude']))
       $location['location_longitude'] = 0;
-   if (empty($location['location_latitude'])) 
+   if (empty($location['location_latitude']))
       $location['location_latitude'] = 0;
-
+   $sql = "INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude, location_description)
+      VALUES ('".$location['location_name']."','".$location['location_address']."','".$location['location_town']."',".$location['location_latitude'].",".$location['location_longitude'].",'".$location['location_description']."')";
    $wpdb->show_errors(true);
-   if (!$wpdb->insert ( $table_name, $location )) {
+   if (!$wpdb->query($sql)) {
       $wpdb->print_error();
       return false;
    } else {
