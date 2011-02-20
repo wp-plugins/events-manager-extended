@@ -995,29 +995,29 @@ function eme_get_events_list_shortcode($atts) {
    extract ( shortcode_atts ( array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0, 'user_registered_only' => 0 ), $atts ) );
 
    // the filter list overrides the settings
-   if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'filter') {
-      if (isset($_POST['eme_scope_filter'])) {
-         $scope = eme_sanitize_request($_POST['eme_scope_filter']);
+   if (isset($_REQUEST['eme_eventAction']) && $_REQUEST['eme_eventAction'] == 'filter') {
+      if (isset($_REQUEST['eme_scope_filter'])) {
+         $scope = eme_sanitize_request($_REQUEST['eme_scope_filter']);
       }
 
-      if (isset($_POST['eme_loc_filter'])) {
-         if (is_array($_POST['eme_loc_filter']))
-            $location_id=join(',',eme_sanitize_request($_POST['eme_loc_filter']));
+      if (isset($_REQUEST['eme_loc_filter'])) {
+         if (is_array($_REQUEST['eme_loc_filter']))
+            $location_id=join(',',eme_sanitize_request($_REQUEST['eme_loc_filter']));
          else
-            $location_id=eme_sanitize_request($_POST['eme_loc_filter']);
+            $location_id=eme_sanitize_request($_REQUEST['eme_loc_filter']);
       }
-      if (isset($_POST['eme_town_filter'])) {
-         $towns=eme_sanitize_request($_POST['eme_town_filter']);
+      if (isset($_REQUEST['eme_town_filter'])) {
+         $towns=eme_sanitize_request($_REQUEST['eme_town_filter']);
          if (empty($location_id))
             $location_id = join(',',eme_get_town_location_ids($towns));
          else
             $location_id .= ",".join(',',eme_get_town_location_ids($towns));
       }
-      if (isset($_POST['eme_cat_filter'])) {
-         if (is_array($_POST['eme_cat_filter']))
-            $category=join(',',eme_sanitize_request($_POST['eme_cat_filter']));
+      if (isset($_REQUEST['eme_cat_filter'])) {
+         if (is_array($_REQUEST['eme_cat_filter']))
+            $category=join(',',eme_sanitize_request($_REQUEST['eme_cat_filter']));
          else
-            $category=eme_sanitize_request($_POST['eme_cat_filter']);
+            $category=eme_sanitize_request($_REQUEST['eme_cat_filter']);
       }
    }
 
