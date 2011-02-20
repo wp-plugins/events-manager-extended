@@ -450,17 +450,9 @@ function eme_validate_location($location) {
 function eme_update_location($location) {
    global $wpdb;
    $table_name = $wpdb->prefix.LOCATIONS_TBNAME;
-   $location=eme_sanitize_request($location);
-   $sql="UPDATE ".$table_name.
-   " SET location_name='".$location['location_name']."', ".
-      "location_address='".$location['location_address']."',".
-      "location_town='".$location['location_town']."', ".
-      "location_latitude=".$location['location_latitude'].",".
-      "location_longitude=".$location['location_longitude'].",".
-      "location_description='".$location['location_description']."' ".
-      "WHERE location_id='".$location['location_id']."';";
+   $where ['location_id'] = $location['location_id'];
    $wpdb->show_errors(true);
-   if (!$wpdb->query($sql)) {
+   if (!$wpdb->update ( $table_name, $location, $where )) {
       $wpdb->print_error();
       return false;
    } else {
@@ -471,16 +463,13 @@ function eme_update_location($location) {
 function eme_insert_location($location) {
    global $wpdb;  
    $table_name = $wpdb->prefix.LOCATIONS_TBNAME; 
-   $location=eme_sanitize_request($location);
    // if GMap is off the hidden fields are empty, so I add a custom value to make the query work
    if (empty($location['location_longitude']))
       $location['location_longitude'] = 0;
    if (empty($location['location_latitude']))
       $location['location_latitude'] = 0;
-   $sql = "INSERT INTO ".$table_name." (location_name, location_address, location_town, location_latitude, location_longitude, location_description)
-      VALUES ('".$location['location_name']."','".$location['location_address']."','".$location['location_town']."',".$location['location_latitude'].",".$location['location_longitude'].",'".$location['location_description']."')";
    $wpdb->show_errors(true);
-   if (!$wpdb->query($sql)) {
+   if (!$wpdb->insert($table_name,$location)) {
       $wpdb->print_error();
       return false;
    } else {
