@@ -868,6 +868,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $pagination_top.= "<span class='eme_nav_center'>".__('Page ','eme').$page_number."</span>";
       }
       if ($events_count <= $limit && $offset>0) {
+         $forward = 0;
          $backward = $offset - $limit;
          if ($backward < 0)
             $left_nav_hidden_class="style='visibility:hidden;'";
