@@ -954,7 +954,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
             foreach($day_events as $event) {
                $output .= eme_replace_placeholders ( $format, $event );
             }
-	 }
+         }
       } else {
          $i=1;
          foreach ( $events as $event ) {
