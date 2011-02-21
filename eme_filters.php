@@ -6,7 +6,7 @@ function eme_filter_form_shortcode($atts) {
    $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'),$multiple,$multisize,$scope_count,$fields);
    #$content=eme_replace_filter_form_placeholders("#_FILTER_CATS #_FILTER_LOCS #_FILTER_TOWNS",$multiple,$multisize,$scope_count);
    $this_page_url=$_SERVER['REQUEST_URI'];
-   $form = "<form action=$this_page_url method='POST'>";
+   $form = "<form action=$this_page_url method='GET'>";
    $form .= "<input type='hidden' name='eme_eventAction' value='filter' />";
    $form .= $content;
    $form .= "<input type='submit' value='$submit' /></form>";
@@ -71,28 +71,28 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
    $town_post_name="eme_town_filter";
    $scope_post_name="eme_scope_filter";
 
-   if (isset($_POST[$scope_post_name])) {
-      $selected_scope = $_POST[$scope_post_name];
+   if (isset($_REQUEST[$scope_post_name])) {
+      $selected_scope = $_REQUEST[$scope_post_name];
    } else {
-      $selected_scope = "";
+      $selected_scope = "---";
    }
 
-   if (isset($_POST[$loc_post_name])) {
-      $selected_location=eme_sanitize_request($_POST[$loc_post_name]);
+   if (isset($_REQUEST[$loc_post_name])) {
+      $selected_location=eme_sanitize_request($_REQUEST[$loc_post_name]);
    } else {
-      $selected_location="";
+      $selected_location="---";
    }
 
-   if (isset($_POST[$town_post_name])) {
-      $selected_town=eme_sanitize_request($_POST[$town_post_name]);
+   if (isset($_REQUEST[$town_post_name])) {
+      $selected_town=eme_sanitize_request($_REQUEST[$town_post_name]);
    } else {
-      $selected_town="";
+      $selected_town="---";
    }
 
-   if (isset($_POST[$cat_post_name])) {
-      $selected_category=eme_sanitize_request($_POST[$cat_post_name]);
+   if (isset($_REQUEST[$cat_post_name])) {
+      $selected_category=eme_sanitize_request($_REQUEST[$cat_post_name]);
    } else {
-      $selected_category="";
+      $selected_category="---";
    }
 
    foreach($placeholders[0] as $result) {
