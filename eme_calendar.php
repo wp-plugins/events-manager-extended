@@ -443,8 +443,17 @@ function eme_filter_calendar_ajax() {
       (isset($_GET['author'])) ? $author = eme_sanitize_request($_GET['author']) : $author = ''; 
       (isset($_GET['contact_person'])) ? $contact_person = eme_sanitize_request($_GET['contact_person']) : $contact_person = ''; 
       (isset($_GET['location_id'])) ? $location_id = eme_sanitize_request($_GET['location_id']) : $location_id = '';
+
       // make sure we use the correct charset in the return
       header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
+
+      // prevent caching
+      header("Expires: Wed, 1 Jan 1997 00:00:00 GMT");
+      header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+      header("Cache-Control: no-store, no-cache, must-revalidate");
+      header("Cache-Control: post-check=0, pre-check=0", false);
+      header("Pragma: no-cache");
+
       eme_get_calendar('echo=1&full='.$full.'&long_events='.$long_events.'&category='.$category.'&month='.$month.'&year='.$year.'&author='.$author.'&contact_person='.$contact_person.'&location_id='.$location_id);
       die();
    }

@@ -1,6 +1,13 @@
 <?php
 require_once('../../../wp-load.php');
 
+// prevent caching
+header("Expires: Wed, 1 Jan 1997 00:00:00 GMT");
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 // make sure we use the correct charset in the return
 header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
 
@@ -26,7 +33,6 @@ if(isset($_GET['id']) && $_GET['id'] != "") {
    if (!$q) return;
  
    foreach($return as $row) {
-
       if (strpos(strtolower($row['name']), $q) !== false) { 
          $location = array();
          $rows =array();
@@ -34,8 +40,6 @@ if(isset($_GET['id']) && $_GET['id'] != "") {
             $location[] = "'$key' : '".str_replace("'", "\'", $value)."'";
          echo ("{".implode(" , ", $location)." }\n");
        }
-      
    }
-
 }
 ?>
