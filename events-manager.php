@@ -172,8 +172,8 @@ function eme_insertMyRewriteRules($rules) {
    // the following causes an error with php 5.0.4
 	// $events_page=get_page(get_option ( 'eme_events_page' ));
    // so we need to split it in 2 lines:
-   $eme_events_page=get_option ( 'eme_events_page' );
-   $events_page=get_page($events_page);
+   $option_eme_events_page=get_option ( 'eme_events_page' );
+   $events_page=get_page($option_eme_events_page);
 	$page_name=$events_page->post_name;
 	$newrules = array();
 	$newrules['events/(\d*)'] = 'index.php?pagename='.$page_name.'&event_id=$matches[1]';
