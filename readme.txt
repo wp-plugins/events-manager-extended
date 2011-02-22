@@ -458,3 +458,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: the filter form was not correctly escaping the input
 * Bugfix: the calendar prev/next links are now javascripted per calendar div, important if you have more than one calendar on the page (otherwise it could cause an avalange of jquery requests)
 * Bugfix: the ajax code for the calendar and locations was not returning the data in the UTF-8 (or blog) charset
+* Bugfix: prevent ajax caching
