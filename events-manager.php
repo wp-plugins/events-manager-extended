@@ -1240,8 +1240,8 @@ function eme_trans_sanitize_html( $value, $do_convert=1 ) {
 }
 
 function eme_sanitize_html( $value ) {
-   //return htmlentities($value,ENT_QUOTES,get_option('blog_charset'));
-   return htmlspecialchars($value,ENT_QUOTES);
+   return htmlentities($value,ENT_QUOTES,get_option('blog_charset'));
+   //return htmlspecialchars($value,ENT_QUOTES);
 }
 
 function eme_strip_tags ( $value ) {
