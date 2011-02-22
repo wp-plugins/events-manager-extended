@@ -270,12 +270,12 @@ function eme_get_calendar($args="") {
          \$j_eme_calendar('#eme-calendar-".$random." a.prev-month').click(function(e){
             e.preventDefault();
             tableDiv = \$j_eme_calendar('#eme-calendar-".$random."');
-            loadCalendar(tableDiv, $full, $long_events,$month_pre,$year_pre,'$category','$author','$contact_person','$location_id');
+            loadCalendar(tableDiv, '$full', '$long_events','$month_pre','$year_pre','$category','$author','$contact_person','$location_id');
          } );
          \$j_eme_calendar('#eme-calendar-".$random." a.next-month').click(function(e){
             e.preventDefault();
             tableDiv = \$j_eme_calendar('#eme-calendar-".$random."');
-            loadCalendar(tableDiv, $full, $long_events,$month_post,$year_post,'$category','$author','$contact_person','$location_id');
+            loadCalendar(tableDiv, '$full', '$long_events','$month_post','$year_post','$category','$author','$contact_person','$location_id');
          } );
          </script>";
    
