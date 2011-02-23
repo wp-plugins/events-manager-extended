@@ -156,6 +156,7 @@ class WP_Widget_eme_calendar extends WP_Widget {
       $this->alt_option_name = 'widget_eme_calendar';
    }
    function widget( $args, $instance ) {
+      global $wp_query;
       extract($args);
       //$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Calendar','eme' ) : $instance['title'], $instance, $this->id_base);
       $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
@@ -176,9 +177,9 @@ class WP_Widget_eme_calendar extends WP_Widget {
       $options['long_events'] = $long_events;
       $options['category'] = $category;
       // the month shown depends on the calendar day clicked
-      if (isset ( $_REQUEST ['calendar_day'] ) && $_REQUEST ['calendar_day'] != '') {
-          $options['month'] = date("m", strtotime( $_REQUEST ['calendar_day']) );
-          $options['year'] = date("Y", strtotime( $_REQUEST ['calendar_day']) );
+      if (isset ( $wp_query->query_vars ['calendar_day'] ) && $wp_query->query_vars ['calendar_day'] != '') {
+          $options['month'] = date("m", strtotime( $wp_query->query_vars ['calendar_day']) );
+          $options['year'] = date("Y", strtotime( $wp_query->query_vars ['calendar_day']) );
       } else {
           $options['month'] = date("m");
           $options['year'] = date("Y");

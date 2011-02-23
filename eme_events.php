@@ -564,8 +564,8 @@ function eme_events_page_content() {
       //$page_body = eme_replace_placeholders ( $single_event_format, $event, 'stop' );
       $page_body = eme_replace_placeholders ( $single_event_format, $event );
       return $page_body;
-   } elseif (isset ( $_REQUEST ['calendar_day'] ) && $_REQUEST ['calendar_day'] != '') {
-      $scope = eme_sanitize_request($_REQUEST ['calendar_day']);
+   } elseif (isset ( $wp_query->query_vars ['calendar_day'] ) && $wp_query->query_vars ['calendar_day'] != '') {
+      $scope = eme_sanitize_request($wp_query->query_vars ['calendar_day']);
       $events_N = eme_events_count_for ( $scope );
       if ($events_N > 1) {
          $stored_format = get_option('eme_event_list_item_format' );
@@ -639,13 +639,13 @@ function eme_event_page_title($data) {
    
    //if (($data == $events_page_title) && (is_page ( $events_page_id ))) {
    if (($data == $events_page_title) && eme_is_events_page()) {
-      if (isset ( $_REQUEST['calendar_day'] ) && $_REQUEST['calendar_day'] != '') {
+      if (isset ( $wp_query->query_vars['calendar_day'] ) && $wp_query->query_vars['calendar_day'] != '') {
          
-         $date = eme_sanitize_request($_REQUEST['calendar_day']);
+         $date = eme_sanitize_request($wp_query->query_vars['calendar_day']);
          $events_N = eme_events_count_for ( $date );
          
          if ($events_N == 1) {
-            $events = eme_get_events ( 0, eme_sanitize_request($_REQUEST['calendar_day']));
+            $events = eme_get_events ( 0, eme_sanitize_request($wp_query->query_vars['calendar_day']));
             $event = $events [0];
             $stored_page_title_format = ( $event['event_page_title_format'] != '' ) ? $event['event_page_title_format'] : get_option('eme_event_page_title_format' );
             $page_title = eme_replace_placeholders ( $stored_page_title_format, $event );

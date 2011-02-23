@@ -170,21 +170,23 @@ function eme_flushRules() {
 // Adding a new rule
 function eme_insertMyRewriteRules($rules) {
    // the following causes an error with php 5.0.4
-	// $events_page=get_page(get_option ( 'eme_events_page' ));
+   // $events_page=get_page(get_option ( 'eme_events_page' ));
    // so we need to split it in 2 lines:
    $option_eme_events_page=get_option ( 'eme_events_page' );
    $events_page=get_page($option_eme_events_page);
-	$page_name=$events_page->post_name;
-	$newrules = array();
-	$newrules['events/(\d*)'] = 'index.php?pagename='.$page_name.'&event_id=$matches[1]';
-	$newrules['locations/(\d*)'] = 'index.php?pagename='.$page_name.'&location_id=$matches[1]';
-	return $newrules + $rules;
+   $page_name=$events_page->post_name;
+   $newrules = array();
+   $newrules['events/(\d{4})-(\d{2})-(\d{2})'] = 'index.php?pagename='.$page_name.'&calendar_day=$matches[1]-$matches[2]-$matches[3]';
+   $newrules['events/(\d*)/'] = 'index.php?pagename='.$page_name.'&event_id=$matches[1]';
+   $newrules['locations/(\d*)/'] = 'index.php?pagename='.$page_name.'&location_id=$matches[1]';
+   return $newrules + $rules;
 }
 
 // Adding the id var so that WP recognizes it
 function eme_insertMyRewriteQueryVars($vars) {
     array_push($vars, 'event_id');
     array_push($vars, 'location_id');
+    array_push($vars, 'calendar_day');
     return $vars;
 }
 
@@ -1240,8 +1242,8 @@ function eme_trans_sanitize_html( $value, $do_convert=1 ) {
 }
 
 function eme_sanitize_html( $value ) {
-   return htmlentities($value,ENT_QUOTES,get_option('blog_charset'));
-   //return htmlspecialchars($value,ENT_QUOTES);
+   //return htmlentities($value,ENT_QUOTES,get_option('blog_charset'));
+   return htmlspecialchars($value,ENT_QUOTES);
 }
 
 function eme_strip_tags ( $value ) {

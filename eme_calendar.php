@@ -348,14 +348,8 @@ function eme_get_calendar($args="") {
       }
       $link_title = implode($event_title_separator_format,$events_titles);
       
-      $event_page_link = eme_get_events_page(true, false);
-      if (stristr($event_page_link, "?"))
-         $joiner = "&amp;";
-      else
-         $joiner = "?";
-      
-      
-      $cells[$day_key]['cell'] = "<a title='$link_title' href='".$event_page_link.$joiner."calendar_day={$day_key}'>{$cells[$day_key]['day']}</a>";
+      $cal_day_link = eme_calendar_day_url($day_key);
+      $cells[$day_key]['cell'] = "<a title='$link_title' href='$cal_day_link'>{$cells[$day_key]['day']}</a>";
       if ($full) {
          $cells[$day_key]['cell'] .= "<ul>";
       

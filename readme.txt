@@ -439,7 +439,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: using scope in [events_list] resulted in other conditions to be mangled
 
 = 3.3.2 =
-* Feature: SEO/permalinks for single events and locations
+* Feature: SEO/permalinks for single events, locations and calendar days
 * Feature: filter form now also works for calendar concerning the scope (week or month)
 * Feature: [events_filter] has a new parameter "fields", can contain a comma seperated list of fields that should be shown (the filter format is general, and using this, you can hide certain fields in certain forms). For a calendar, you may want to block showing weeks, so you can use eg: [events_filter fields=categories,months] (and make sure the "filter form format" contains at least the filters for month and cats)
 * Feature: new placeholder for events: #_USER_RESERVEDSPACES (or #_USER_BOOKEDSEATS), gives the number of seats a users has registered for an event
