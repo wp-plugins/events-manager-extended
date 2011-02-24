@@ -88,7 +88,7 @@ function eme_event_url($event) {
    if ($event['event_url'] != '') {
       $the_link = $event['event_url'];
    } else {
-      if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
+      if (isset($wp_rewrite) && $wp_rewrite->using_permalinks() && get_option('eme_seo_permalink')) {
          $name=eme_permalink_convert(__("events",'eme')).$event['event_id']."/".eme_permalink_convert($event['event_name']);
          $the_link = trailingslashit(site_url()).$name;
       } else {
@@ -106,7 +106,7 @@ function eme_event_url($event) {
 function eme_location_url($location) {
    global $wp_rewrite;
 
-   if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
+   if (isset($wp_rewrite) && $wp_rewrite->using_permalinks() && get_option('eme_seo_permalink')) {
       $name=eme_permalink_convert(__("locations",'eme')).$location['location_id']."/".eme_permalink_convert($location['location_name']);
       $the_link = trailingslashit(site_url()).$name;
    } else {
@@ -123,7 +123,7 @@ function eme_location_url($location) {
 function eme_calendar_day_url($day) {
    global $wp_rewrite;
 
-   if (isset($wp_rewrite) && $wp_rewrite->using_permalinks()) {
+   if (isset($wp_rewrite) && $wp_rewrite->using_permalinks() && get_option('eme_seo_permalink')) {
       $name=eme_permalink_convert(__("events",'eme')).eme_permalink_convert($day);
       $the_link = trailingslashit(site_url()).$name;
    } else {
