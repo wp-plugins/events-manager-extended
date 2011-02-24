@@ -176,9 +176,9 @@ function eme_insertMyRewriteRules($rules) {
    $events_page=get_page($option_eme_events_page);
    $page_name=$events_page->post_name;
    $newrules = array();
-   $newrules['events/(\d{4})-(\d{2})-(\d{2})'] = 'index.php?pagename='.$page_name.'&calendar_day=$matches[1]-$matches[2]-$matches[3]';
-   $newrules['events/(\d*)/'] = 'index.php?pagename='.$page_name.'&event_id=$matches[1]';
-   $newrules['locations/(\d*)/'] = 'index.php?pagename='.$page_name.'&location_id=$matches[1]';
+   $newrules[eme_permalink_convert(__("events",'eme')).'(\d{4})-(\d{2})-(\d{2})'] = 'index.php?pagename='.$page_name.'&calendar_day=$matches[1]-$matches[2]-$matches[3]';
+   $newrules[eme_permalink_convert(__("events",'eme')).'(\d*)/'] = 'index.php?pagename='.$page_name.'&event_id=$matches[1]';
+   $newrules[eme_permalink_convert(__("locations",'eme')).'(\d*)/'] = 'index.php?pagename='.$page_name.'&location_id=$matches[1]';
    return $newrules + $rules;
 }
 
