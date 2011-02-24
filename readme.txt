@@ -6,7 +6,7 @@ Requires at least: 3.0.0
 Tested up to: 3.1.0
 Stable tag: 3.3.2
 
-Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. 
+Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. SEO compatible.
              
 == Description ==
 Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports public, private, draft and recurring events, locations management, RSVP (+ approval if wanted) and maps. With Events Manager Extended you can plan and publish your event, or let people reserve spaces for your weekly meetings. You can add events list, calendars and description to your blog using multiple sidebar widgets or shortcodes; if you are a web designer you can simply employ the template tags provided by Events Manager Extended. 
