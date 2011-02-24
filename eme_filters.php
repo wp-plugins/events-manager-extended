@@ -160,7 +160,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
       } elseif (preg_match('/^#_FILTER_MONTHS$/', $result)) {
          if (strstr($fields,'months'))
             $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_month_scope($scope_count));
-      } elseif (preg_match('/^#_FILTER_YEAR$/', $result)) {
+      } elseif (preg_match('/^#_FILTER_YEARS$/', $result)) {
          if (strstr($fields,'years'))
             $replacement = eme_ui_select($selected_scope,$scope_post_name,eme_create_year_scope($scope_count));
       } 
