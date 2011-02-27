@@ -464,6 +464,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.3.3 = 
 * Feature: you can disable EME SEO permalinks, if it doesn't work or you just don't want to use them ...
 * Feature: added #_LATITUDE and #_LONGITUDE placeholders
+* Feature: added #_IS_RSVP_ENABLED shortcode, returns 1 if RSVP is enabled and active for the event, 0 otherwise
 * Bugfix: #_LOCATIONPAGEURL didn't return a SEO permalink
 * Bugfix: #_PAST_FUTURE_CLASS didn't work as expected
 * Bugfix: rewrite rules should use home_url(), not site_url()

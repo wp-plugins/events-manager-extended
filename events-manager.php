@@ -1169,6 +1169,12 @@ function eme_replace_placeholders($format, $event, $target="html") {
          else
             $replacement = 0;
 
+      } elseif (preg_match('/#_IS_RSVP_ENABLED/', $result)) {
+         if ($rsvp_is_active && $event['event_rsvp']) {
+            $replacement = 1;
+         else
+            $replacement = 0;
+
       } else {
          $found = 0;
       }
