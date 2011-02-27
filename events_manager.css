@@ -45,7 +45,7 @@ a.bookingdelbutton:hover {
 }       
 /* Printable stuff */
 body#printable {
-	font-family: Gill Sans, Helvetica, Arial, sans-serif;  
+	font-family: Geneva, Helvetica, Arial, sans-serif;  
 	text-align: center;
 }  
 body#printable #container { 
