@@ -464,3 +464,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.3.3 = 
 * Feature: you can disable EME SEO permalinks, if it doesn't work or you just don't want to use them ...
 * Bugfix: #_LOCATIONPAGEURL didn't return a SEO permalink
+* Bugfix: #_PAST_FUTURE_CLASS didn't work as expected

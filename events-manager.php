@@ -861,7 +861,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $replacement = substr($event['event_end_time'], 0,5);
 
       } elseif (preg_match('/#_PAST_FUTURE_CLASS$/', $result)) { 
-         if (strtotime($event['event_start_time']) > time()) {
+         if (strtotime($event['event_start_date']." ".$event['event_start_time']) > time()) {
             $replacement="eme-future-event";
          } else {
             $replacement="eme-past-event";
