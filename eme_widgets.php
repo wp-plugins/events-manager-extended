@@ -65,14 +65,14 @@ class WP_Widget_eme_list extends WP_Widget {
       //Defaults
       $instance = wp_parse_args( (array) $instance, array( 'limit' => 5, 'scope' => 'future', 'order' => 'ASC', 'format' => DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT, 'authorid' => '' ) );
       $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
-      $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
-      $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
-      $showperiod = empty( $instance['showperiod'] ) ? '' : $instance['showperiod'];
-      $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
-      $header = empty( $instance['header'] ) ? '<ul>' : $instance['header'];
-      $footer = empty( $instance['footer'] ) ? '</ul>' : $instance['footer'];
-      $category = empty( $instance['category'] ) ? '' : $instance['category'];
-      $authorid = empty( $instance['authorid'] ) ? '' : $instance['authorid'];
+      $limit = empty( $instance['limit'] ) ? 5 : eme_sanitize_html($instance['limit']);
+      $scope = empty( $instance['scope'] ) ? 'future' : eme_sanitize_html($instance['scope']);
+      $showperiod = empty( $instance['showperiod'] ) ? '' : eme_sanitize_html($instance['showperiod']);
+      $order = empty( $instance['order'] ) ? 'ASC' : eme_sanitize_html($instance['order']);
+      $header = empty( $instance['header'] ) ? '<ul>' : eme_sanitize_html($instance['header']);
+      $footer = empty( $instance['footer'] ) ? '</ul>' : eme_sanitize_html($instance['footer']);
+      $category = empty( $instance['category'] ) ? '' : eme_sanitize_html($instance['category']);
+      $authorid = empty( $instance['authorid'] ) ? '' : eme_sanitize_html($instance['authorid']);
       $categories = eme_get_categories();
       $format = empty( $instance['format'] ) ? DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT : $instance['format'];
 ?>
@@ -202,9 +202,9 @@ class WP_Widget_eme_calendar extends WP_Widget {
       //Defaults
       $instance = wp_parse_args( (array) $instance, array( 'long_events' => 0 ) );
       $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
-      $category = empty( $instance['category'] ) ? '' : $instance['category'];
-      $long_events = isset( $instance['long_events'] ) ? $instance['long_events'] : false;
-      $authorid = isset( $instance['authorid'] ) ? $instance['authorid'] : '';
+      $category = empty( $instance['category'] ) ? '' : eme_sanitize_html($instance['category']);
+      $long_events = isset( $instance['long_events'] ) ? eme_sanitize_html($instance['long_events']) : false;
+      $authorid = isset( $instance['authorid'] ) ? eme_sanitize_html($instance['authorid']) : '';
       $categories = eme_get_categories();
 ?>
   <p>
