@@ -1047,12 +1047,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
          }
 
       } elseif (preg_match('/#_LOCATIONPAGEURL$/', $result)) { 
-         $events_page_link = eme_get_events_page(true, false);
-         if (stristr($events_page_link, "?"))
-            $joiner = "&amp;";
-         else
-            $joiner = "?";
-         $replacement = $events_page_link.$joiner."location_id=".$event['location_id'];
+         $replacement = eme_location_url($event);
 
       } elseif (preg_match('/#_EVENTID$/', $result)) {
          $field = "event_id";
