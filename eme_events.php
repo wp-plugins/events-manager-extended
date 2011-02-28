@@ -2787,10 +2787,20 @@ add_action('wp_footer', 'eme_general_footer');
 function eme_db_insert_event($event) {
    global $wpdb;
    $table_name = $wpdb->prefix . EVENTS_TBNAME;
+
    $event['creation_date']=current_time('mysql', false);
    $event['modif_date']=current_time('mysql', false);
    $event['creation_date_gmt']=current_time('mysql', true);
    $event['modif_date_gmt']=current_time('mysql', true);
+
+   // some sanity checks
+   $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
+   $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
+   if ($endstring<$startstring) {
+      $event['event_end_date']=$event['event_start_date'];
+      $event['event_end_time']=$event['event_start_time'];
+   }
+
    $wpdb->show_errors(true);
    if (!$wpdb->insert ( $table_name, $event )) {
       $wpdb->print_error();
@@ -2805,8 +2815,18 @@ function eme_db_insert_event($event) {
 function eme_db_update_event($event,$where) {
    global $wpdb;
    $table_name = $wpdb->prefix . EVENTS_TBNAME;
+
    $event['modif_date']=current_time('mysql', false);
    $event['modif_date_gmt']=current_time('mysql', true);
+
+   // some sanity checks
+   $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
+   $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
+   if ($endstring<$startstring) {
+      $event['event_end_date']=$event['event_start_date'];
+      $event['event_end_time']=$event['event_start_time'];
+   }
+
    $wpdb->show_errors(true);
    if (!$wpdb->update ( $table_name, $event, $where )) {
       $wpdb->print_error();

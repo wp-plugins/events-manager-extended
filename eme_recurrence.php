@@ -97,6 +97,13 @@ function eme_insert_recurrent_event($event, $recurrence ){
    if (isset($recurrence['recurrence_id']))
       unset ($recurrence['recurrence_id']);
 
+   // some sanity checks
+   $startstring=strtotime($recurrence['recurrence_start_date']);
+   $endstring=strtotime($recurrence['recurrence_end_date']);
+   if ($endstring<$startstring) {
+      $recurrence['recurrence_end_date']=$recurrence['recurrence_start_date'];
+   }
+
    //$wpdb->show_errors(true);
    $wpdb->insert($recurrence_table, $recurrence);
    //print_r($recurrence);
@@ -111,7 +118,7 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    global $wpdb;
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
    $matching_days = eme_get_recurrence_days($recurrence);
-   //print_r($matching_days);  
+   //print_r($matching_days);
    sort($matching_days);
 
    foreach($matching_days as $day) {
@@ -129,8 +136,17 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
 function eme_update_recurrence($event, $recurrence) {
    global $wpdb;
    $recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
+
    $recurrence['modif_date']=current_time('mysql', false);
    $recurrence['modif_date_gmt']=current_time('mysql', true);
+
+   // some sanity checks
+   $startstring=strtotime($recurrence['recurrence_start_date']);
+   $endstring=strtotime($recurrence['recurrence_end_date']);
+   if ($endstring<$startstring) {
+      $recurrence['recurrence_end_date']=$recurrence['recurrence_start_date'];
+   }
+
    $where = array('recurrence_id' => $recurrence['recurrence_id']);
    $wpdb->show_errors(true);
    $wpdb->update($recurrence_table, $recurrence, $where); 
