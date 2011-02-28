@@ -1799,7 +1799,7 @@ function eme_event_form($event, $title, $element) {
                            <p>
                               <?php _e ( 'Every', 'eme' )?>
                               <input id="recurrence-interval" name='recurrence_interval'
-                                size='2' value='<?php echo $event ['recurrence_interval']; ?>' />
+                                size='2' value='<?php if (isset ($event ['recurrence_interval'])) echo $event ['recurrence_interval']; ?>' />
                               <span class='interval-desc' id="interval-daily-singular">
                               <?php _e ( 'day', 'eme' )?>
                               </span> <span class='interval-desc' id="interval-daily-plural">
