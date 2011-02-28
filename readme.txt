@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 3.0.0
 Tested up to: 3.1.0
-Stable tag: 3.3.2
+Stable tag: 3.3.3
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. SEO compatible.
              
@@ -462,11 +462,11 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: prevent ajax caching
 
 = 3.3.3 = 
-* Feature: you can disable EME SEO permalinks, if it doesn't work or you just don't want to use them ...
 * Feature: added #_LATITUDE and #_LONGITUDE placeholders
 * Feature: added #_IS_RSVP_ENABLED shortcode, returns 1 if RSVP is enabled and active for the event, 0 otherwise
+* Feature: you can disable EME SEO permalinks, if it doesn't work or you just don't want to use them ...
+* Bugfix: rewrite rules (for permalinks) should use home_url(), not site_url()
 * Bugfix: #_LOCATIONPAGEURL didn't return a SEO permalink
 * Bugfix: #_PAST_FUTURE_CLASS didn't work as expected
-* Bugfix: rewrite rules should use home_url(), not site_url()
 * Bugfix: list widget was not escaping all characters correctly when editing its settings
 * Bugfix: filter form fix
