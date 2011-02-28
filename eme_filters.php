@@ -6,8 +6,11 @@ function eme_filter_form_shortcode($atts) {
    $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'),$multiple,$multisize,$scope_count,$fields);
    #$content=eme_replace_filter_form_placeholders("#_FILTER_CATS #_FILTER_LOCS #_FILTER_TOWNS",$multiple,$multisize,$scope_count);
    $this_page_url=$_SERVER['REQUEST_URI'];
-   $form = "<form action=$this_page_url method='GET'>";
+   $form = "<form action='$this_page_url' method='POST'>";
    $form .= "<input type='hidden' name='eme_eventAction' value='filter' />";
+   foreach ($_REQUEST as $el) {
+      $form .= "<input type='hidden' name='$el' value='.$_GET[$el].' />";
+   }
    $form .= $content;
    $form .= "<input type='submit' value='$submit' /></form>";
    return $form;
