@@ -469,3 +469,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: #_PAST_FUTURE_CLASS didn't work as expected
 * Bugfix: rewrite rules should use home_url(), not site_url()
 * Bugfix: list widget was not escaping all characters correctly when editing its settings
+* Bugfix: filter form fix
