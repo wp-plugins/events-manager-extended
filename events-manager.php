@@ -897,12 +897,10 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $replacement = "$hour:$minute $AMorPM";
 
       } elseif (preg_match('/#_MAP$/', $result)) {
-         $location = eme_get_location($event['location_id']);
-         $replacement = eme_single_location_map($location);
+         $replacement = eme_single_location_map($event);
 
       } elseif (preg_match('/#_DIRECTIONS$/', $result)) {
-         $location = eme_get_location($event['location_id']);
-         $replacement = eme_add_directions_form($location);
+         $replacement = eme_add_directions_form($event);
 
       } elseif (preg_match('/#_EVENTS_FILTERFORM$/', $result)) {
          if ($target == "rss" || eme_is_single_event_page()) {
