@@ -760,8 +760,9 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
       } elseif (preg_match('/#_(NAME|ADDRESS|TOWN|DESCRIPTION)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
-         $replacement = $location[$field];
-      
+         if (isset($location[$field]))
+            $replacement = $location[$field];
+
          if ($field == "location_description") {
             // no real sanitizing needed, but possible translation
             // this is the same as for an event in fact
