@@ -799,6 +799,26 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       } elseif (preg_match('/#_LOCATIONPAGEURL$/', $result)) {
          $replacement = eme_location_url($location);
 
+      } elseif (preg_match('/#_LATITUDE$/', $result)) {
+         $field = "location_latitude";
+         $replacement = $event[$field];
+         $replacement = eme_trans_sanitize_html($replacement);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement);
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
+
+      } elseif (preg_match('/#_LONGITUDE$/', $result)) {
+         $field = "location_longitude";
+         $replacement = $event[$field];
+         $replacement = eme_trans_sanitize_html($replacement);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement);
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
+
       } elseif (preg_match('/#_DIRECTIONS/', $result)) {
          $replacement = eme_add_directions_form($location);
 

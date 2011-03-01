@@ -470,3 +470,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: #_PAST_FUTURE_CLASS didn't work as expected
 * Bugfix: list widget was not escaping all characters correctly when editing its settings
 * Bugfix: filter form fix
+
+= 3.3.4 = 
+* Feature: added #_LATITUDE and #_LONGITUDE placeholders also for locations page
