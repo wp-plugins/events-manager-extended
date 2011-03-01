@@ -2266,7 +2266,7 @@ function eme_admin_general_script() {
    // for english, no translation code is needed
    if ($locale_code != "en") {
       ?>
-<script src="<?php echo $locale_file ?>.js" type="text/javascript"></script>
+<script src="<?php echo $locale_file ?>" type="text/javascript"></script>
 <?php
    }
    ?>
