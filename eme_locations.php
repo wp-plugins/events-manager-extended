@@ -188,6 +188,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
    ob_start();
    ?>
       <div class="wrap nosubsub">
+       <div id="poststuff">
          <div id="icon-edit" class="icon32">
             <br />
          </div>
@@ -312,7 +313,8 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                  </div>
                </div> 
             </div>  <!-- end col-left -->
-         </div> 
+         </div> <!-- end col-container -->
+      </div> 
    </div>
    <?php
    echo ob_get_clean();
