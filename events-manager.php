@@ -1126,6 +1126,10 @@ function eme_replace_placeholders($format, $event, $target="html") {
          if ($event['location_image_url'] != '')
               $replacement = "<img src='".$event['location_image_url']."' alt='".$event['location_name']."'/>";
 
+      } elseif (preg_match('/#_IMAGEURL$/', $result)) {
+         if($location['location_image_url'] != '')
+            $replacement = $location['location_image_url'];
+
       } elseif (preg_match('/^#[A-Za-z]$/', $result)) {
          // matches all PHP date placeholders for startdate-time
          $replacement=date_i18n( ltrim($result,"#"), strtotime( $event['event_start_date']." ".$event['event_start_time']));

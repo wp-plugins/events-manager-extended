@@ -796,6 +796,10 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
          if($location['location_image_url'] != '')
             $replacement = "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
 
+      } elseif (preg_match('/#_IMAGEURL$/', $result)) {
+         if($location['location_image_url'] != '')
+            $replacement = $location['location_image_url'];
+
       } elseif (preg_match('/#_LOCATIONPAGEURL$/', $result)) {
          $replacement = eme_location_url($location);
 
