@@ -8,8 +8,8 @@ function eme_filter_form_shortcode($atts) {
    $this_page_url=$_SERVER['REQUEST_URI'];
    $form = "<form action='$this_page_url' method='POST'>";
    $form .= "<input type='hidden' name='eme_eventAction' value='filter' />";
-   foreach ($_REQUEST as $el) {
-      $form .= "<input type='hidden' name='$el' value='.$_GET[$el].' />";
+   foreach ($_REQUEST as $key => $item) {
+      $form .= "<input type='hidden' name='$key' value='.$item.' />";
    }
    $form .= $content;
    $form .= "<input type='submit' value='$submit' /></form>";

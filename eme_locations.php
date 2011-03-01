@@ -381,6 +381,7 @@ function eme_get_location($location_id=0) {
 function eme_get_town_location_ids($towns) {
    global $wpdb;
    $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
+   $location_ids = array();
    if ( is_array($towns) ) {
       $town_conditions = array();
       foreach ($towns as $town) {
@@ -390,8 +391,10 @@ function eme_get_town_location_ids($towns) {
    } elseif (!empty($towns)) {
       $conditions = " location_town = '$towns'";
    }
-   $sql = "SELECT DISTINCT location_id FROM $locations_table WHERE ".$conditions;
-   $location_ids = $wpdb->get_col($sql); 
+   if (!empty($conditions)) {
+      $sql = "SELECT DISTINCT location_id FROM $locations_table WHERE ".$conditions;
+      $location_ids = $wpdb->get_col($sql); 
+   }
    return $location_ids;
 }
 

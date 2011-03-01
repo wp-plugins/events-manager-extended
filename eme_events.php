@@ -857,6 +857,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $joiner = "&amp;";
       else
          $joiner = "?";
+
       $left_nav_hidden_class="";
       $right_nav_hidden_class="";
       if ($events_count > $limit) {
