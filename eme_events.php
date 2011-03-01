@@ -270,6 +270,8 @@ function eme_events_subpanel() {
                    (current_user_can( MIN_CAPABILITY) && ($tmp_recurrence['event_author']==$current_userid || $tmp_recurrence['event_contactperson_id']==$current_userid))) {
                   // UPDATE old recurrence
                   $recurrence ['recurrence_id'] = $recurrence_ID;
+                  $recurrence ['creation_date'] = $tmp_recurrence ['creation_date'];
+                  $recurrence ['creation_date_gmt'] = $tmp_recurrence ['creation_date_gmt'];
                   //print_r($recurrence); 
                   if (eme_update_recurrence ($event, $recurrence )) {
                      $feedback_message = __ ( 'Recurrence updated!', 'eme' );
@@ -857,7 +859,6 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $joiner = "&amp;";
       else
          $joiner = "?";
-
       $left_nav_hidden_class="";
       $right_nav_hidden_class="";
       if ($events_count > $limit) {

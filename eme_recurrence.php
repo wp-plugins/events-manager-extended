@@ -185,6 +185,7 @@ function eme_update_events_for_recurrence($event,$recurrence) {
          $event['event_start_date'] = $existing_event['event_start_date'];
          $event['event_end_date'] = $event['event_start_date'];
          $event['modif_date']=$recurrence['modif_date'];
+	 $event['creation_date']=$recurrence['creation_date'];
 	 $event['creation_date_gmt']=$recurrence['creation_date_gmt'];
 	 $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
          $wpdb->update($events_table, $event, $where); 
