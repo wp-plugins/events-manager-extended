@@ -10,7 +10,7 @@ function eme_add_booking_form($event_id) {
    $event = eme_get_event($event_id);
    $registration_wp_users_only=$event['registration_wp_users_only'];
    if ($registration_wp_users_only) {
-      $readonly="disabled=\"disabled\"";
+      $readonly="disabled='disabled'";
       // we require a user to be WP registered to be able to book
       if (!is_user_logged_in()) {
          return;
@@ -99,7 +99,7 @@ function eme_delete_booking_form($event_id) {
    $event = eme_get_event($event_id);
    $registration_wp_users_only=$event['registration_wp_users_only'];
    if ($registration_wp_users_only) {
-      $readonly="disabled=\"disabled\"";
+      $readonly="disabled='disabled'";
       // we require a user to be WP registered to be able to book
       if (!is_user_logged_in()) {
          return;
