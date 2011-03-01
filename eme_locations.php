@@ -805,7 +805,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
       } elseif (preg_match('/#_LATITUDE$/', $result)) {
          $field = "location_latitude";
-         $replacement = $event[$field];
+         $replacement = $location[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement);
@@ -815,7 +815,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
       } elseif (preg_match('/#_LONGITUDE$/', $result)) {
          $field = "location_longitude";
-         $replacement = $event[$field];
+         $replacement = $location[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement);
