@@ -848,7 +848,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
       $prev_text=__('Previous page','eme');
       $next_text=__('Next page','eme');
       $page_number = floor($offset/$limit) + 1;
-      $this_page_url=$_SERVER['REQUEST_URI'];
+      $this_page_url=get_permalink($post->ID);
+      //$this_page_url=$_SERVER['REQUEST_URI'];
       // remove the offset info
       $this_page_url= preg_replace("/\&eme_offset=-?\d+/","",$this_page_url);
       $this_page_url= preg_replace("/\?eme_offset=-?\d+$/","",$this_page_url);
@@ -857,6 +858,20 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
          $joiner = "&amp;";
       else
          $joiner = "?";
+
+      // we add possible fields from the filter section
+      $eme_filters["eme_eventAction"]=1;
+      $eme_filters["eme_cat_filter"]=1;
+      $eme_filters["eme_loc_filter"]=1;
+      $eme_filters["eme_town_filter"]=1;
+      $eme_filters["eme_scope_filter"]=1;
+      foreach ($_REQUEST as $key => $item) {
+         if (isset($eme_filters[$key])) {
+            $this_page_url.=$joiner.rawurlencode($key)."=".rawurlencode($item);
+            $joiner = "&amp;";
+         }
+      }
+
       $left_nav_hidden_class="";
       $right_nav_hidden_class="";
       if ($events_count > $limit) {

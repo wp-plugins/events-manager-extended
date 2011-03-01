@@ -8,9 +8,9 @@ function eme_filter_form_shortcode($atts) {
    $this_page_url=$_SERVER['REQUEST_URI'];
    $form = "<form action='$this_page_url' method='POST'>";
    $form .= "<input type='hidden' name='eme_eventAction' value='filter' />";
-   foreach ($_REQUEST as $key => $item) {
-      $form .= "<input type='hidden' name='$key' value='.$item.' />";
-   }
+#   foreach ($_REQUEST as $key => $item) {
+#      $form .= "<input type='hidden' name='$key' value='$item' />";
+#   }
    $form .= $content;
    $form .= "<input type='submit' value='$submit' /></form>";
    return $form;
@@ -69,6 +69,8 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
 
    preg_match_all("/#_[A-Za-z0-9_\[\]]+/", $format, $placeholders);
    usort($placeholders[0],'sort_stringlenth');
+
+   // if one of these changes, also the eme_events.php needs changing for the "Next page" part
    $cat_post_name="eme_cat_filter";
    $loc_post_name="eme_loc_filter";
    $town_post_name="eme_town_filter";
