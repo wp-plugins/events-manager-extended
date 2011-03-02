@@ -2883,6 +2883,7 @@ function eme_tinymce(){
    global $plugin_page;
    if ( in_array( $plugin_page, array('events-manager-locations', 'events-manager-new_event', 'events-manager') ) ) {
       add_action( 'admin_print_footer_scripts', 'wp_tiny_mce', 25 );
+      add_action( 'admin_print_footer_scripts', 'wp_tiny_mce_preload_dialogs', 30 );
       wp_enqueue_script('post');
       if ( user_can_richedit() )
          wp_enqueue_script('editor');
