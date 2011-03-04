@@ -983,47 +983,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_EVENTPAGEURL/', $result)) {
          $replacement = eme_event_url($event);
 
-      } elseif (preg_match('/#_(DETAILS|NOTES|EXCERPT)$/', $result)) {
-         $field = "event_".ltrim(strtolower($result), "#_");
-         // DETAILS is an alternative for NOTES
-         if ($field == "event_details")
-            $field = "event_notes";
-         
-         // when on the single event page, never show just the excerpt
-         if ($field == "event_excerpt" && eme_is_single_event_page()) {
-            $field = "event_notes";
-         }
-
-         $replacement = $event[$field];
-
-         if ($target == "html") {
-            //If excerpt, we use more link text
-            if ($field == "event_excerpt") {
-               $matches = explode('<!--more-->', $event['event_notes']);
-               $replacement = $matches[0];
-               $replacement = apply_filters('eme_notes', $replacement);
-            } else {
-               $replacement = apply_filters('eme_notes', $replacement);
-            }
-            //$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
-            // we call the sanitize_html function so the qtranslate
-            // does it's thing anyway
-            $replacement = eme_trans_sanitize_html($replacement,0);
-         } else {
-            if ($target == "map") {
-               $replacement = apply_filters('eme_notes_map', $replacement);
-            } else {
-               if ($field == "event_excerpt"){
-                  $matches = explode('<!--more-->', $event['event_notes']);
-                  $replacement = eme_trans_sanitize_html($matches[0]);
-                  $replacement = apply_filters('eme_notes_rss', $replacement);
-               } else {
-                  $replacement = apply_filters('eme_notes_rss', $replacement);
-               }
-               $replacement = apply_filters('the_content_rss', $replacement);
-            }
-         }
-
       } elseif (preg_match('/#_NAME$/', $result)) {
          $field = "event_name";
          $replacement = $event[$field];
@@ -1181,6 +1140,69 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $found = 0;
       }
 
+      if ($need_escape) {
+         $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+      } elseif ($need_urlencode) {
+         $replacement = rawurlencode($replacement);
+      }
+      if ($found)
+         $format = str_replace($orig_result, $replacement ,$format );
+   }
+
+   # we handle NOTES the last, so no placeholder replacement happens accidentaly in the text of #_NOTES
+   if (preg_match('/#_(DETAILS|NOTES|EXCERPT)/', $format, $placeholders)) {
+      $result=$placeholders[0];
+      $need_escape = 0;
+      $need_urlencode = 0;
+      $orig_result = $result;
+      $found = 1;
+      if (strstr($result,'#ESC')) {
+         $result = str_replace("#ESC","#",$result);
+         $need_escape=1;
+      } elseif (strstr($result,'#URL')) {
+         $result = str_replace("#URL","#",$result);
+         $need_urlencode=1;
+      }
+      $replacement = "";
+      $field = "event_".ltrim(strtolower($result), "#_");
+      // DETAILS is an alternative for NOTES
+      if ($field == "event_details")
+         $field = "event_notes";
+
+      // when on the single event page, never show just the excerpt
+      if ($field == "event_excerpt" && eme_is_single_event_page()) {
+         $field = "event_notes";
+      }
+
+      $replacement = $event[$field];
+
+      if ($target == "html") {
+         //If excerpt, we use more link text
+         if ($field == "event_excerpt") {
+            $matches = explode('<!--more-->', $event['event_notes']);
+            $replacement = $matches[0];
+            $replacement = apply_filters('eme_notes', $replacement);
+         } else {
+            $replacement = apply_filters('eme_notes', $replacement);
+         }
+         //$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
+         // we call the sanitize_html function so the qtranslate
+         // does it's thing anyway
+         $replacement = eme_trans_sanitize_html($replacement,0);
+      } else {
+         if ($target == "map") {
+            $replacement = apply_filters('eme_notes_map', $replacement);
+         } else {
+            if ($field == "event_excerpt"){
+               $matches = explode('<!--more-->', $event['event_notes']);
+               $replacement = eme_trans_sanitize_html($matches[0]);
+               $replacement = apply_filters('eme_notes_rss', $replacement);
+            } else {
+               $replacement = apply_filters('eme_notes_rss', $replacement);
+            }
+            $replacement = apply_filters('the_content_rss', $replacement);
+         }
+      }
       if ($need_escape) {
          $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
       } elseif ($need_urlencode) {

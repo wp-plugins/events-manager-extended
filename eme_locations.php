@@ -763,29 +763,15 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       } elseif (preg_match('/#_ALLEVENTS$/', $result)) {
          $replacement = eme_events_in_location_list($location, "all");
 
-      } elseif (preg_match('/#_(NAME|ADDRESS|TOWN|DESCRIPTION)$/', $result)) {
+      } elseif (preg_match('/#_(NAME|ADDRESS|TOWN)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
          if (isset($location[$field]))
             $replacement = $location[$field];
-
-         if ($field == "location_description") {
-            // no real sanitizing needed, but possible translation
-            // this is the same as for an event in fact
-            $replacement = eme_trans_sanitize_html($replacement,0);
-            if ($target == "html")
-               $replacement = apply_filters('eme_notes', $replacement);
-            else
-              if ($target == "map")
-               $replacement = apply_filters('eme_notes_map', $replacement);
-              else
-               $replacement = apply_filters('eme_notes_rss', $replacement);
-         } else {
-            $replacement = eme_trans_sanitize_html($replacement);
-            if ($target == "html")
-               $replacement = apply_filters('eme_general', $replacement); 
-            else 
-               $replacement = apply_filters('eme_general_rss', $replacement); 
-         }
+         $replacement = eme_trans_sanitize_html($replacement);
+         if ($target == "html")
+            $replacement = apply_filters('eme_general', $replacement); 
+         else 
+            $replacement = apply_filters('eme_general_rss', $replacement); 
 
       } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
@@ -861,6 +847,44 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       if ($found)
          $format = str_replace($orig_result, $replacement ,$format );
    }
+
+   # we handle DESCRIPTION the last, so no placeholder replacement happens accidentaly in the text of #_DESCRIPTION
+   if (preg_match('/#_DESCRIPTION/', $format, $placeholders)) {
+      $result=$placeholders[0];
+      $need_escape = 0;
+      $need_urlencode = 0;
+      $orig_result = $result;
+      if (strstr($result,'#ESC')) {
+         $result = str_replace("#ESC","#",$result);
+         $need_escape=1;
+      } elseif (strstr($result,'#URL')) {
+         $result = str_replace("#URL","#",$result);
+         $need_urlencode=1;
+      }
+      $replacement = "";
+
+      $field = "location_description";
+      if (isset($location[$field]))
+         $replacement = $location[$field];
+
+      // no real sanitizing needed, but possible translation
+      // this is the same as for an event in fact
+      $replacement = eme_trans_sanitize_html($replacement,0);
+      if ($target == "html")
+         $replacement = apply_filters('eme_notes', $replacement);
+      else
+         if ($target == "map")
+            $replacement = apply_filters('eme_notes_map', $replacement);
+         else
+            $replacement = apply_filters('eme_notes_rss', $replacement);
+      if ($need_escape) {
+         $replacement = eme_sanitize_request(preg_replace('/\n|\r/','',$replacement));
+      } elseif ($need_urlencode) {
+         $replacement = rawurlencode($replacement);
+      }
+      $format = str_replace($orig_result, $replacement ,$format );
+   }
+
    return do_shortcode($format);   
 }
 
