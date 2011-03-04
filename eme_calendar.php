@@ -394,6 +394,11 @@ function eme_ajaxize_calendar() {
       $jquery_override_lang="";
    }
    $load_js_in_header = get_option('eme_load_js_in_header' );
+   # make sure we don't load the JS 2 times: if the option load_js_in_header
+   # is set, we always load in the header and don't care about eme_need_calendar_js
+   if ($load_js_in_header) {
+      $eme_need_calendar_js=0;
+   }
    if ($eme_need_calendar_js || $load_js_in_header) {
 ?>
    <script type='text/javascript'>
@@ -406,6 +411,14 @@ function eme_ajaxize_calendar() {
          if (showlong_events === undefined) {
              showlong_events = 0;
          }
+         fullcalendar = (typeof fullcalendar == 'undefined')? 0 : fullcalendar;
+         showlong_events = (typeof showlong_events == 'undefined')? 0 : showlong_events;
+         month = (typeof month == 'undefined')? 0 : month;
+         year = (typeof year == 'undefined')? 0 : year;
+         cat_chosen = (typeof cat_chosen == 'undefined')? '' : cat_chosen;
+         author_chosen = (typeof author_chosen == 'undefined')? '' : author_chosen;
+         contact_person_chosen = (typeof contact_person_chosen == 'undefined')? '' : contact_person_chosen;
+         location_chosen = (typeof location_chosen == 'undefined')? '' : location_chosen;
          $j_eme_calendar.get("<?php echo site_url(); ?>", {
             eme_ajaxCalendar: 'true',
             calmonth: parseInt(month,10),

@@ -475,3 +475,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added #_LATITUDE and #_LONGITUDE placeholders also for locations page
 * Feature: added #_IMAGEURL placeholder, returns just the url of the image
 * Bugfix: tinymce editor fix
+* Bugfix: some calendar js fixes

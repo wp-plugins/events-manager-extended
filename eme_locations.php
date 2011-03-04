@@ -716,7 +716,7 @@ function get_locations_shortcode($atts) {
                      fullcalendar = 1 : fullcalendar = 0;
                   ($(prev_month_link).hasClass('long_events')) ?
                      long_events = 1 : long_events = 0;
-                  reloadCalendar(tableDiv, fullcalendar, long_events);
+                  loadCalendar(tableDiv, fullcalendar, long_events);
                } );
          } );
       });   
