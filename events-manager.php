@@ -1174,17 +1174,17 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $field = "event_notes";
       }
 
-      $replacement = $event[$field];
-
       if ($target == "html") {
          //If excerpt, we use more link text
          if ($field == "event_excerpt") {
-            $matches = explode('<!--more-->', $event['event_notes']);
-            $replacement = $matches[0];
-            $replacement = apply_filters('eme_notes', $replacement);
+            if (isset($event['event_notes'])) {
+               $matches = explode('<!--more-->', $event['event_notes']);
+               $replacement = $matches[0];
+            }
          } else {
-            $replacement = apply_filters('eme_notes', $replacement);
+            if (isset($event[$field]))  $replacement = $event[$field];
          }
+         $replacement = apply_filters('eme_notes', $replacement);
          //$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
          // we call the sanitize_html function so the qtranslate
          // does it's thing anyway
@@ -1194,12 +1194,12 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = apply_filters('eme_notes_map', $replacement);
          } else {
             if ($field == "event_excerpt"){
-               $matches = explode('<!--more-->', $event['event_notes']);
-               $replacement = eme_trans_sanitize_html($matches[0]);
-               $replacement = apply_filters('eme_notes_rss', $replacement);
-            } else {
-               $replacement = apply_filters('eme_notes_rss', $replacement);
+               if (isset($event['event_notes'])) {
+                  $matches = explode('<!--more-->', $event['event_notes']);
+                  $replacement = eme_trans_sanitize_html($matches[0]);
+               }
             }
+            $replacement = apply_filters('eme_notes_rss', $replacement);
             $replacement = apply_filters('the_content_rss', $replacement);
          }
       }
