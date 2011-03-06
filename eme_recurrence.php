@@ -124,6 +124,13 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    foreach($matching_days as $day) {
       $event['event_start_date'] = date("Y-m-d", $day); 
       $event['event_end_date'] = $event['event_start_date']; 
+      // in case the end time crosses midnight (and as such is lower than the start time), the end day should be the next day
+      $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
+      $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
+      if ($endstring<$startstring) {
+         // one day = 86400 seconds
+         $event['event_end_date'] = date("Y-m-d", $day+86400);
+      }
       $event['creation_date']=$recurrence['creation_date'];
       $event['modif_date']=$recurrence['modif_date'];
       $event['creation_date_gmt']=$recurrence['creation_date_gmt'];
