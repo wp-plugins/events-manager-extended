@@ -1395,6 +1395,12 @@ function eme_get_event($event_id) {
    //$wpdb->show_errors(true);
    $event = $wpdb->get_row ( $sql, ARRAY_A );
    //$wpdb->print_error();
+   // no event_id? then redir to 404
+   if (!is_admin() && !isset($event['event_id'])) {
+      header('Location: '.home_url('404.php'));
+      exit;
+   }
+
    $location = eme_get_location ( $event ['location_id'] );
    $event ['location_name'] = $location ['location_name'];
    $event ['location_address'] = $location ['location_address'];

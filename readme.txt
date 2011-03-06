@@ -474,6 +474,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 3.3.4 = 
 * Feature: added #_LATITUDE and #_LONGITUDE placeholders also for locations page
 * Feature: added #_IMAGEURL placeholder, returns just the url of the image
+* Feature: no event_id? then redir to 404
 * Bugfix: tinymce editor fix
 * Bugfix: some calendar js fixes
 * Bugfix: event #_NOTES and location #_DESCRIPTION placeholders must be replaced after the other placeholders, otherwise unwanted replacement in their content can take place
