@@ -1397,7 +1397,8 @@ function eme_get_event($event_id) {
    //$wpdb->print_error();
    // no event_id? then redir to 404
    if (!is_admin() && !isset($event['event_id'])) {
-      header('Location: '.home_url('404.php'));
+      //header('Location: '.home_url('404.php'));
+      wp_redirect(home_url('404.php'),301);
       exit;
    }
 
