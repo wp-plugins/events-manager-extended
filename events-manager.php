@@ -170,16 +170,13 @@ function eme_flushRules() {
 
 // Adding a new rule
 function eme_insertMyRewriteRules($rules) {
-   // the following causes an error with php 5.0.4
-   // $events_page=get_page(get_option ( 'eme_events_page' ));
-   // so we need to split it in 2 lines:
-   $option_eme_events_page=get_option ( 'eme_events_page' );
-   $events_page=get_page($option_eme_events_page);
-   $page_name=$events_page->post_name;
+   // using pagename as param to index.php causes rewrite troubles if the page is a subpage of another
+   // luckily for us we have the page id, and this works ok
+   $page_id=get_option ( 'eme_events_page' );
    $newrules = array();
-   $newrules[eme_permalink_convert(__("events",'eme')).'(\d{4})-(\d{2})-(\d{2})'] = 'index.php?pagename='.$page_name.'&calendar_day=$matches[1]-$matches[2]-$matches[3]';
-   $newrules[eme_permalink_convert(__("events",'eme')).'(\d*)/'] = 'index.php?pagename='.$page_name.'&event_id=$matches[1]';
-   $newrules[eme_permalink_convert(__("locations",'eme')).'(\d*)/'] = 'index.php?pagename='.$page_name.'&location_id=$matches[1]';
+   $newrules[eme_permalink_convert(__("events",'eme')).'(\d{4})-(\d{2})-(\d{2})'] = 'index.php?page_id='.$page_id.'&calendar_day=$matches[1]-$matches[2]-$matches[3]';
+   $newrules[eme_permalink_convert(__("events",'eme')).'(\d*)/'] = 'index.php?page_id='.$page_id.'&event_id=$matches[1]';
+   $newrules[eme_permalink_convert(__("locations",'eme')).'(\d*)/'] = 'index.php?page_id='.$page_id.'&location_id=$matches[1]';
    return $newrules + $rules;
 }
 

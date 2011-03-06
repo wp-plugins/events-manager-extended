@@ -477,3 +477,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: tinymce editor fix
 * Bugfix: some calendar js fixes
 * Bugfix: event #_NOTES and location #_DESCRIPTION placeholders must be replaced after the other placeholders, otherwise unwanted replacement in their content can take place
+* Bugfix: the special events page can now be a subpage of another (although not recommended) and SEO will continue to work (workaround for WP weird behaviour when using pagename as param to index.php for rewriting rules)
