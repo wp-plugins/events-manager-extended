@@ -2823,6 +2823,10 @@ function eme_db_insert_event($event) {
    // some sanity checks
    $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
    $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
+   if (($event['event_end_date']==$event['event_start_date']) && ($endstring<$startstring)) {
+      // the start/end day are the same, but the end time is lower than the start time, then put
+      // the end day one day (86400 secs) ahead
+      $event['event_end_date']=date("Y-m-d",strtotime($event['event_start_date'])+86400);
    if ($endstring<$startstring) {
       $event['event_end_date']=$event['event_start_date'];
       $event['event_end_time']=$event['event_start_time'];
