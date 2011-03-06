@@ -761,7 +761,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    $prev_text = "";
    $next_text = "";
    // for browsing: if limit=0,paging=1 and only for this_week,this_month or today
-   if ($limit==0 && $paging==1) {
+   if ($paging==1 && $limit==0) {
       $scope_offset=0;
       if (isset($_GET['eme_offset']))
          $scope_offset=$_GET['eme_offset'];
@@ -845,6 +845,12 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    // get the paging output ready
    $pagination_top = "<div id='events-pagination-top'> ";
    if ($paging==1 && $limit>0) {
+      // for normal paging and there're no events, we go back to offset=0 and try again
+      if ($events_count==0) {
+         $offset=0;
+         $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $extra_conditions );
+         $events_count=count($events);
+      }
       $prev_text=__('Previous page','eme');
       $next_text=__('Next page','eme');
       $page_number = floor($offset/$limit) + 1;
@@ -914,7 +920,7 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
    $pagination_bottom = str_replace("events-pagination-top","events-pagination-bottom",$pagination_top);
 
    $output = "";
-   if (! empty ( $events )) {
+   if ($events_count>0) {
       # if we want to show events per period, we first need to determine on which days events occur
       # this code is identical to that in eme_calendar.php for "long events"
       if (! empty ( $showperiod )) {
