@@ -695,13 +695,17 @@ function eme_redir_nonexisting() {
    if (isset ( $wp_query->query_vars ['event_id'])) {
       $event_ID = intval($wp_query->query_vars ['event_id']);
       if (!eme_check_exists($event_ID)) {
-         header('Location: '.home_url('404.php'));
+//         header('Location: '.home_url('404.php'));
+         status_header(404);
+         nocache_headers();
+         include( get_404_template() );
          exit;
       }
    }
    return;
 }
-add_action( 'parse_query', 'eme_redir_nonexisting' );
+//add_action( 'parse_query', 'eme_redir_nonexisting' );
+add_action( 'template_redirect', 'eme_redir_nonexisting' );
 
 // filter out the events page in the get_pages call
 function eme_filter_get_pages($data) {
@@ -1132,7 +1136,7 @@ function eme_count_events_newer_than($scope) {
 
 // main function querying the database event table
 function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = "", $author = "", $contact_person = "", $extra_conditions = "") {
-   global $wpdb;
+   global $wpdb, $wp_query;
 
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
@@ -1232,8 +1236,8 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    }
    
    // when used inside a location description, you can use this_location to indicate the current location being viewed
-   if ($location_id == "this_location" && isset($_GET['location_id'])) {
-      $location_id = $_GET['location_id'];
+   if ($location_id == "this_location" && isset($wp_query->query_vars['location_id'])) {
+      $location_id = $wp_query->query_vars['location_id'];
    }
 
    if (is_numeric($location_id)) {
@@ -1411,12 +1415,6 @@ function eme_get_event($event_id) {
    //$wpdb->show_errors(true);
    $event = $wpdb->get_row ( $sql, ARRAY_A );
    //$wpdb->print_error();
-   // no event_id? then redir to 404
-   if (!is_admin() && !isset($event['event_id'])) {
-      //header('Location: '.home_url('404.php'));
-      //wp_redirect(home_url('404.php'),301);
-      //exit;
-   }
 
    $location = eme_get_location ( $event ['location_id'] );
    $event ['location_name'] = $location ['location_name'];
@@ -2549,7 +2547,8 @@ $j_eme_event(document).ready( function() {
 }
 
 function eme_admin_map_script() {
-   if ((isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
+   global $wp_query;
+   if ((isset ( $wp_query->query_vars['event_id'] ) && $wp_query->query_vars['event_id'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
       if (! (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'eme_delete')) {
          // single event page
 
