@@ -137,4 +137,11 @@ function eme_calendar_day_url($day) {
    return $the_link;
 }
 
+function eme_check_exists($event_id) {
+   global $wpdb;
+   $events_table = $wpdb->prefix.EVENTS_TBNAME;
+   $sql = "SELECT COUNT(*) from $events_table WHERE event_id='".$event_id."'";
+   return $wpdb->get_var($sql);
+}
+
 ?>

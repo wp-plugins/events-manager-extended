@@ -687,6 +687,22 @@ function eme_filter_the_title($data) {
 }
 add_filter ( 'the_title', 'eme_filter_the_title' );
 
+# We need to catch the request as early as possible, but
+# since it needs to be working for both permalinks and normal,
+# I can't use just any action hook. parse_query seems to do just fine
+function eme_redir_nonexisting() {
+   global $wp_query;
+   if (isset ( $wp_query->query_vars ['event_id'])) {
+      $event_ID = intval($wp_query->query_vars ['event_id']);
+      if (!eme_check_exists($event_ID)) {
+         header('Location: '.home_url('404.php'));
+         exit;
+      }
+   }
+   return;
+}
+add_action( 'parse_query', 'eme_redir_nonexisting' );
+
 // filter out the events page in the get_pages call
 function eme_filter_get_pages($data) {
    $output = array ();
@@ -1398,8 +1414,8 @@ function eme_get_event($event_id) {
    // no event_id? then redir to 404
    if (!is_admin() && !isset($event['event_id'])) {
       //header('Location: '.home_url('404.php'));
-      wp_redirect(home_url('404.php'),301);
-      exit;
+      //wp_redirect(home_url('404.php'),301);
+      //exit;
    }
 
    $location = eme_get_location ( $event ['location_id'] );
@@ -2901,7 +2917,9 @@ function eme_tinymce(){
    global $plugin_page;
    if ( in_array( $plugin_page, array('events-manager-locations', 'events-manager-new_event', 'events-manager') ) ) {
       add_action( 'admin_print_footer_scripts', 'wp_tiny_mce', 25 );
-      add_action( 'admin_print_footer_scripts', 'wp_tiny_mce_preload_dialogs', 30 );
+      if (function_exists('wp_tiny_mce_preload_dialogs')) {
+         add_action( 'admin_print_footer_scripts', 'wp_tiny_mce_preload_dialogs', 30 );
+      }
       wp_enqueue_script('post');
       if ( user_can_richedit() )
          wp_enqueue_script('editor');
