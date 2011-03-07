@@ -654,7 +654,7 @@ function eme_event_page_title($data) {
          }
       }
       
-      if (isset ( $wp_query->query_vars['location_id'] ) && $wp_query->query_vars['location_id'] |= '') {
+      if (isset ( $wp_query->query_vars['location_id'] ) && $wp_query->query_vars['location_id'] != '') {
          $location = eme_get_location ( intval($wp_query->query_vars['location_id']));
          $stored_page_title_format = get_option('eme_location_page_title_format' );
          $page_title = eme_replace_locations_placeholders ( $stored_page_title_format, $location );
@@ -664,7 +664,11 @@ function eme_event_page_title($data) {
          // single event page
          $event_ID = intval($wp_query->query_vars['event_id']);
          $event = eme_get_event ( $event_ID );
-         $stored_page_title_format = ( $event['event_page_title_format'] != '' ) ? $event['event_page_title_format'] : get_option('eme_event_page_title_format' );
+         if (isset( $event['event_page_title_format']) && ( $event['event_page_title_format'] != '' )) {
+            $stored_page_title_format = $event['event_page_title_format'];
+         } else {
+            $stored_page_title_format = get_option('eme_event_page_title_format' );
+         }
          $page_title = eme_replace_placeholders ( $stored_page_title_format, $event );
          return $page_title;
       } else {

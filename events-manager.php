@@ -982,7 +982,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_NAME$/', $result)) {
          $field = "event_name";
-         $replacement = $event[$field];
+         if (isset($event[$field]))  $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
