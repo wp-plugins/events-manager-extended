@@ -212,10 +212,10 @@ function eme_update_events_for_recurrence($event,$recurrence) {
          }
       }
       if ($insert_needed==1) {
-         $event['creation_date']=$recurrence['creation_date'];
+         $event['creation_date']=$recurrence['modif_date'];
          $event['modif_date']=$recurrence['modif_date'];
-	 $event['creation_date_gmt']=$recurrence['creation_date_gmt'];
-	 $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
+         $event['creation_date_gmt']=$recurrence['modif_date_gmt'];
+         $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
          $wpdb->insert($events_table, $event);        
       }
    }
