@@ -2799,16 +2799,7 @@ Weblog Editor 2.0
    }
 }
 add_action ( 'init', 'eme_rss' );
-function eme_general_css() {
-   echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
-   $file_name= EME_PLUGIN_DIR."myown.css";
-   if (file_exists($file_name)) {
-      echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."myown.css' type='text/css'/>\n";
-   }
-   $file_name= get_stylesheet_directory()."/eme.css";
-   if (file_exists($file_name)) {
-      echo "<link rel='stylesheet' href='".get_stylesheet_directory_uri()."/eme.css' type='text/css'/>\n";
-   }
+function eme_general_head() {
    $gmap_is_active = get_option('eme_gmap_is_active' );
    $load_js_in_header = get_option('eme_load_js_in_header' );
    if ($gmap_is_active && $load_js_in_header) {
@@ -2818,7 +2809,20 @@ function eme_general_css() {
       eme_ajaxize_calendar();
    }
 }
-add_action ( 'wp_head', 'eme_general_css' );
+add_action ( 'wp_head', 'eme_general_head' );
+
+function eme_general_css() {
+   $eme_css_url= EME_PLUGIN_URL."events_manager.css";
+   wp_register_style('eme_stylesheet',$eme_css_url);
+   wp_enqueue_style('eme_stylesheet'); 
+
+   $eme_css_name=get_stylesheet_directory()."/eme.css";
+   $eme_css_url=get_stylesheet_directory_uri()."/eme.css";
+   if (file_exists($eme_css_name))
+      wp_register_style('eme_stylesheet_extra',$eme_css_url,'eme_stylesheet');
+   wp_enqueue_style('eme_stylesheet_extra'); 
+}
+add_action('wp_print_styles','eme_general_css');
 
 function eme_general_footer() {
    global $eme_need_gmap_js;
