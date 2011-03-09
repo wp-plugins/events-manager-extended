@@ -848,8 +848,10 @@ function eme_replace_placeholders($format, $event, $target="html") {
       $replacement = "";
       // matches all fields placeholder
       if (preg_match('/#_EDITEVENTLINK$/', $result)) { 
-         if(is_user_logged_in())
+         if (current_user_can( EDIT_CAPABILITY) ||
+             (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
             $replacement = "<a href=' ".admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event['event_id'])."'>".__('Edit')."</a>";
+         }
 
       } elseif (preg_match('/#_24HSTARTTIME$/', $result)) { 
          $replacement = substr($event['event_start_time'], 0,5);
