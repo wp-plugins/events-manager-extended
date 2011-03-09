@@ -116,6 +116,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $id=$this_category['category_id'];
                $cat_list[$id]=eme_trans_sanitize_html($this_category['category_name']);
             }
+            asort($cat_list);
             if ($multiple)
                $replacement = eme_ui_multiselect($selected_category,$cat_post_name,$cat_list,$multisize);
             else
@@ -135,6 +136,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $id=$this_location['location_id'];
                $loc_list[$id]=eme_trans_sanitize_html($this_location['location_name']);
             }
+            asort($loc_list);
             if ($multiple)
                $replacement = eme_ui_multiselect($selected_location,$loc_post_name,$loc_list,$multisize);
             else
@@ -153,6 +155,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
                $id=eme_trans_sanitize_html($this_town['location_town']);
                $town_list[$id]=$id;
             }
+            asort($town_list);
             if ($multiple)
                $replacement = eme_ui_multiselect($selected_town,$town_post_name,$town_list,$multisize);
             else

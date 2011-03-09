@@ -144,4 +144,15 @@ function eme_check_exists($event_id) {
    return $wpdb->get_var($sql);
 }
 
+function eme_is_date_valid($date) {
+   $year = substr ( $date, 0, 4 );
+   $month = substr ( $date, 5, 2 );
+   $day = substr ( $date, 8, 2 );
+   return (checkdate ( $month, $day, $year ));
+}
+function eme_is_time_valid($time) {
+   $result = preg_match ( "/([01]\d|2[0-3])(:[0-5]\d)/", $time );
+   return ($result);
+}
+
 ?>

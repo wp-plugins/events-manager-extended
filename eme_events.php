@@ -691,11 +691,11 @@ function eme_filter_the_title($data) {
 }
 add_filter ( 'the_title', 'eme_filter_the_title' );
 
+function eme_template_redir() {
+   global $wp_query;
 # We need to catch the request as early as possible, but
 # since it needs to be working for both permalinks and normal,
 # I can't use just any action hook. parse_query seems to do just fine
-function eme_redir_nonexisting() {
-   global $wp_query;
    if (isset ( $wp_query->query_vars ['event_id'])) {
       $event_ID = intval($wp_query->query_vars ['event_id']);
       if (!eme_check_exists($event_ID)) {
@@ -706,10 +706,12 @@ function eme_redir_nonexisting() {
          exit;
       }
    }
-   return;
+
+   // Enqueing jQuery script to make sure it's loaded
+   wp_enqueue_script ( 'jquery' );
 }
 //add_action( 'parse_query', 'eme_redir_nonexisting' );
-add_action( 'template_redirect', 'eme_redir_nonexisting' );
+add_action( 'template_redirect', 'eme_template_redir' );
 
 // filter out the events page in the get_pages call
 function eme_filter_get_pages($data) {
@@ -2262,23 +2264,6 @@ function eme_validate_event($event) {
       return "OK";
 
 }
-
-function _eme_is_date_valid($date) {
-   $year = substr ( $date, 0, 4 );
-   $month = substr ( $date, 5, 2 );
-   $day = substr ( $date, 8, 2 );
-   return (checkdate ( $month, $day, $year ));
-}
-function _eme_is_time_valid($time) {
-   $result = preg_match ( "/([01]\d|2[0-3])(:[0-5]\d)/", $time );
-   
-   return ($result);
-}
-// Enqueing jQuery script to make sure it's loaded
-function eme_enqueue_scripts() {
-   wp_enqueue_script ( 'jquery' );
-}
-add_action ( 'template_redirect', 'eme_enqueue_scripts' );
 
 function eme_admin_general_css() {
    echo "<link rel='stylesheet' href='".EME_PLUGIN_URL."events_manager.css' type='text/css'/>\n";
