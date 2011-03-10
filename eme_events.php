@@ -2830,7 +2830,7 @@ function eme_db_insert_event($event) {
    $event['modif_date_gmt']=current_time('mysql', true);
 
    // some sanity checks
-   if (!isset($event['event_end_date']) || ($event['event_end_date'] == "")) {
+   if ($event['event_end_date']<$event['event_start_date']) {
       $event['event_end_date']=$event['event_start_date'];
    }
    $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
@@ -2860,7 +2860,7 @@ function eme_db_update_event($event,$where) {
    $event['modif_date_gmt']=current_time('mysql', true);
 
    // some sanity checks
-   if (!isset($event['event_end_date']) || ($event['event_end_date'] == "")) {
+   if ($event['event_end_date']<$event['event_start_date']) {
       $event['event_end_date']=$event['event_start_date'];
    }
    $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
