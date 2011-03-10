@@ -2830,16 +2830,15 @@ function eme_db_insert_event($event) {
    $event['modif_date_gmt']=current_time('mysql', true);
 
    // some sanity checks
+   if (!isset($event['event_end_date']) || ($event['event_end_date'] == "")) {
+      $event['event_end_date']=$event['event_start_date'];
+   }
    $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
    $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
-   if (($event['event_end_date']==$event['event_start_date']) && ($endstring<$startstring)) {
-      // the start/end day are the same, but the end time is lower than the start time, then put
+   if ($endstring<=$startstring) {
+      // the end day/time is lower than the start day/time, then put
       // the end day one day (86400 secs) ahead
       $event['event_end_date']=date("Y-m-d",strtotime($event['event_start_date'])+86400);
-   }
-   if ($endstring<$startstring) {
-      $event['event_end_date']=$event['event_start_date'];
-      $event['event_end_time']=$event['event_start_time'];
    }
 
    $wpdb->show_errors(true);
@@ -2861,11 +2860,15 @@ function eme_db_update_event($event,$where) {
    $event['modif_date_gmt']=current_time('mysql', true);
 
    // some sanity checks
+   if (!isset($event['event_end_date']) || ($event['event_end_date'] == "")) {
+      $event['event_end_date']=$event['event_start_date'];
+   }
    $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
    $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
-   if ($endstring<$startstring) {
-      $event['event_end_date']=$event['event_start_date'];
-      $event['event_end_time']=$event['event_start_time'];
+   if ($endstring<=$startstring) {
+      // the end day/time is lower than the start day/time, then put
+      // the end day one day (86400 secs) ahead
+      $event['event_end_date']=date("Y-m-d",strtotime($event['event_start_date'])+86400);
    }
 
    $wpdb->show_errors(true);
