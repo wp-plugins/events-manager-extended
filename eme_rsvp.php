@@ -536,9 +536,9 @@ function eme_get_bookings_list_for($event_id) {
    $sql = "SELECT DISTINCT person_id FROM $bookings_table WHERE event_id = $event_id";
    $person_ids = $wpdb->get_col($sql);
    if ($person_ids) {
+      $attendees=eme_get_persons($person_ids);
       $res="<ul class='eme_bookings_list_ul'>";
-      foreach ($person_ids as $person_id) {
-         $attendee=eme_get_person($person_id);
+      foreach ($attendees as $attendee) {
          $res.=eme_replace_attendees_placeholders(get_option('eme_attendees_list_format'),$attendee);
       }
       $res.="</ul>";

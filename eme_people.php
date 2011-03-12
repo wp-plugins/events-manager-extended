@@ -67,15 +67,22 @@ function eme_global_map_json($eventful = false, $scope = "all", $category = '', 
    $json_locations = array();
    foreach($locations as $location) {
       $json_location = array();
-      foreach($location as $key => $value) {
-         # no newlines allowed, otherwise no map is shown
-         $value=preg_replace("/\r\n|\n\r|\n/","<br />",eme_trans_sanitize_html($value));
-         $json_location[] = '"'.$key.'":"'.$value.'"';
-      }
+
+      # first we set the balloon info
       $tmp_loc=eme_replace_locations_placeholders(get_option('eme_location_baloon_format'), $location);
       # no newlines allowed, otherwise no map is shown
-      $tmp_loc=preg_replace("/\r\n|\n\r|\n/","<br />",$tmp_loc);
+      $tmp_loc=preg_replace("/\r\n|\n\r|\n/","&lt;br /&gt;",$tmp_loc);
       $json_location[] = '"location_balloon":"'.eme_trans_sanitize_html($tmp_loc).'"';
+
+      # second, we unset the description, it might interfere with the json result
+      unset($location['location_description']);
+
+      # third, we fill in the rest of the info
+      foreach($location as $key => $value) {
+         # no newlines allowed, otherwise no map is shown
+         $value=preg_replace("/\r\n|\n\r|\n/","&lt;br /&gt;",eme_trans_sanitize_html($value));
+         $json_location[] = '"'.$key.'":"'.$value.'"';
+      }
       $json_locations[] = "{".implode(",",$json_location)."}";
    }
    $json .= implode(",", $json_locations); 
@@ -262,6 +269,25 @@ function eme_get_person($person_id) {
    }
    return $result;
 }
+
+function eme_get_persons($person_ids) {
+   global $wpdb; 
+   $people_table = $wpdb->prefix.PEOPLE_TBNAME;
+   $tmp_ids=join(",",$person_ids);
+   $sql = "SELECT * FROM $people_table WHERE person_id IN '($tmp_ids)';" ;
+   $lines = $wpdb->get_results($sql, ARRAY_A);
+   foreach ($lines as $line) {
+      if (!is_null($line['wp_id']) && $line['wp_id']) {
+         $user_info = get_userdata($line['wp_id']);
+         $line['person_name']=$user_info->display_name;
+         $line['person_email']=$user_info->user_email;
+      }
+      $result[]=$line;
+   }
+   sort($result);
+   return $result;
+}
+
 
 function eme_get_people() {
    global $wpdb; 

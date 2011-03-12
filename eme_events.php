@@ -2536,8 +2536,7 @@ $j_eme_event(document).ready( function() {
 }
 
 function eme_admin_map_script() {
-   global $wp_query;
-   if ((isset ( $wp_query->query_vars['event_id'] ) && $wp_query->query_vars['event_id'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
+   if ((isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
       if (! (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'eme_delete')) {
          // single event page
 
