@@ -282,9 +282,14 @@ function eme_get_persons($person_ids) {
          $line['person_name']=$user_info->display_name;
          $line['person_email']=$user_info->user_email;
       }
-      $result[]=$line;
+      # to be able to sort on person names, we need a hash starting with the name
+      # but some people might have the same name (or register more than once),
+      # so we add the ID to it
+      $unique_id=$line['person_name']."_".$line['person_id'];
+      $result[$unique_id]=$line;
    }
-   sort($result);
+   # now do the sorting
+   ksort($result);
    return $result;
 }
 
