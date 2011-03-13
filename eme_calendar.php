@@ -90,9 +90,14 @@ function eme_get_calendar($args="") {
    // $year = date('Y', $date);
    // Get the first day of the month 
    $month_start = mktime(0,0,0,$month, 1, $year);
+
    // Get friendly month name
-   
-   $month_name = date_i18n('M', strtotime("$year-$month-$day"));
+   if ($full) {
+      $month_name = date_i18n('F', strtotime("$year-$month-$day"));
+   } else {
+      $month_name = date_i18n('M', strtotime("$year-$month-$day"));
+   }
+
    // Figure out which day of the week 
    // the month starts on. 
    $month_start_day = date('D', $month_start);

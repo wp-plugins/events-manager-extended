@@ -477,6 +477,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: no event_id? then redir to 404
 * Improvement: enqueue_style used for CSS in frontend. Styles enqueued: eme_stylesheet and (if eme.css is present in your theme) eme_stylesheet_extra
 * Improvement: the filters for locations, town and categories now return sorted values
+* Improvement: full calendar now also shows full month name
 * Bugfix: tinymce editor fix for 3.1
 * Bugfix: some calendar js fixes
 * Bugfix: event #_NOTES and location #_DESCRIPTION placeholders must be replaced after the other placeholders, otherwise unwanted replacement in their content can take place
