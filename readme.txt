@@ -485,3 +485,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: for recurrent events, in case the end time crosses midnight (and as such is lower than the start time), the end day should be the next day
 * Bugfix: for single events, if end day equals start day en end time is smaller than start time, put end day one day ahead
 * Bugfix: #_NOTES should be in RSS as well, not just the excerpt
+* Bugfix: the 'hide events when full' sql was wrong

@@ -1182,7 +1182,8 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       }
       if (get_option('eme_rsvp_hide_full_events')) {
          // COALESCE is used in case the SUM returns NULL
-         $conditions [] = "(event_rsvp=0 OR (event_rsvp=1 AND event_seats > (SELECT COALESCE(SUM(booking_seats),0) AS booked_seats FROM $bookings_table,$events_table WHERE $bookings_table.event_id = $events_table.event_id)))";
+         // this is a correlated subquery, so the FROM clause should specify events_table again, so it will search in the outer query for events_table.event_id
+         $conditions [] = "(event_rsvp=0 OR (event_rsvp=1 AND event_seats > (SELECT COALESCE(SUM(booking_seats),0) AS booked_seats FROM $bookings_table WHERE $bookings_table.event_id = $events_table.event_id)))";
       }
    }
    if (preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope )) {
