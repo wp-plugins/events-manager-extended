@@ -1,5 +1,6 @@
 <?php
 function eme_people_page() {
+   $message="";
    // Managing AJAX booking removal
    if (!current_user_can( SETTING_CAPABILITY) && isset($_REQUEST['action'])) {
       $message = __('You have no right to update people!','eme');
@@ -50,11 +51,14 @@ function eme_ajax_actions() {
          echo "[ {bookedSeats:".eme_get_booked_seats(intval($_GET['event_id'])).", availableSeats:".eme_get_available_seats(intval($_GET['event_id']))."}]"; 
       die();
    }
-   if (isset($_GET['action']) && $_GET['action'] == 'printable'){
-      if (isset($_GET['event_id']))
+   if (isset($_GET['action']) && $_GET['action'] == 'booking_printable') {
+      if (is_admin() && isset($_GET['event_id']))
          eme_printable_booking_report(intval($_GET['event_id']));
    }
-   
+   if (isset($_GET['action']) && $_GET['action'] == 'booking_csv') {
+      if (is_admin() && isset($_GET['event_id']))
+         eme_csv_booking_report(intval($_GET['event_id']));
+   }
    if (isset($_GET['query']) && $_GET['query'] == 'GlobalMapData') { 
       eme_global_map_json((bool) $_GET['eventful'],$_GET['scope'],$_GET['category']);
       die();
@@ -90,6 +94,61 @@ function eme_global_map_json($eventful = false, $scope = "all", $category = '', 
    $json .= get_option('eme_gmap_zooming') ? 'true' : 'false';
    $json .= '"}' ;
    echo $json;
+}
+
+function fputcsv2 ($fh, array $fields, $delimiter = ',', $enclosure = '"', $mysql_null = false) {
+    $delimiter_esc = preg_quote($delimiter, '/');
+    $enclosure_esc = preg_quote($enclosure, '/');
+
+    $output = array();
+    foreach ($fields as $field) {
+        if ($field === null && $mysql_null) {
+            $output[] = 'NULL';
+            continue;
+        }
+
+        $output[] = preg_match("/(?:${delimiter_esc}|${enclosure_esc}|\s|\r|\t|\n)/", $field) ? (
+            $enclosure . str_replace($enclosure, $enclosure . $enclosure, $field) . $enclosure
+        ) : $field;
+    }
+
+    fwrite($fh, join($delimiter, $output) . "\n");
+}
+function eme_csv_booking_report($event_id) {
+   $event = eme_get_event($event_id);
+   $current_userid=get_current_user_id();
+   if (!(current_user_can( EDIT_CAPABILITY) ||
+        (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
+        echo "No access";
+        die;
+   }
+
+   header("Content-type: application/octet-stream");
+   header("Content-Disposition: attachment; filename=\"export.csv\"");
+   $bookings =  eme_get_bookings_for($event_id);
+   $out = fopen('php://output', 'w');
+   $line=array();
+   $line[]='Name';
+   $line[]='Email';
+   $line[]='Phone';
+   $line[]='Seats';
+   $line[]='Comment';
+   fputcsv2($out,$line);
+   foreach($bookings as $booking) {
+      $line=array();
+      $pending_string="";
+      if (eme_event_needs_approval($event_id) && !$booking['booking_approved']) {
+         $booking['booking_seats'].=" ".__('(pending)','eme');
+      }
+      $line[]=$booking['person_name'];
+      $line[]=$booking['person_email'];
+      $line[]=$booking['person_phone'];
+      $line[]=$booking['booking_seats'];
+      $line[]=$booking['booking_comment'];
+      fputcsv2($out,$line);
+   }
+   fclose($out);
+   die();
 }
 
 function eme_printable_booking_report($event_id) {

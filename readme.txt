@@ -475,6 +475,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added #_LATITUDE and #_LONGITUDE placeholders also for locations page
 * Feature: added #_IMAGEURL placeholder, returns just the url of the image
 * Feature: no event_id? then redir to 404
+* Feature: CSV export of attendees is now possible
 * Improvement: enqueue_style used for CSS in frontend. Style ids enqueued: eme_stylesheet and eme_stylesheet_extra (if eme.css is present in your theme)
 * Improvement: the filters for locations, town and categories now return sorted values
 * Improvement: full calendar now also shows full month name

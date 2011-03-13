@@ -1592,11 +1592,15 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
                echo "<br /><span title='".__('Category','eme').": ".eme_trans_sanitize_html($category['category_name'])."'>".eme_trans_sanitize_html($category['category_name'])."</span>";
          }
          if ($event ['event_rsvp']) {
-            $printable_address = admin_url("/admin.php?page=events-manager-people&amp;action=printable&amp;event_id=".$event['event_id']);
+            $printable_address = admin_url("/admin.php?page=events-manager-people&amp;action=booking_printable&amp;event_id=".$event['event_id']);
+            $csv_address = admin_url("/admin.php?page=events-manager-people&amp;action=booking_csv&amp;event_id=".$event['event_id']);
             $available_seats = eme_get_available_seats($event['event_id']);
             $total_seats = $event ['event_seats'];
             echo "<br />".__('RSVP Info: ','eme').__('Free: ','eme' ).$available_seats.", ".__('Max: ','eme').$total_seats;
-            echo " (<a id='printable'  target='' href='$printable_address'>".__('Printable view','eme')."</a>)";
+            if ($total_seats!=$available_seats) {
+               echo " (<a id='booking_printable_".$event['event_id']."'  target='' href='$printable_address'>".__('Printable view','eme')."</a>)";
+               echo " (<a id='booking_csv_".$event['event_id']."'  target='' href='$csv_address'>".__('CSV export','eme')."</a>)";
+            }
          }
          ?> 
          </td>

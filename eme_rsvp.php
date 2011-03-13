@@ -447,7 +447,8 @@ function eme_bookings_compact_table($event_id) {
    $destination = admin_url("edit.php"); 
    $available_seats = eme_get_available_seats($event_id);
    $booked_seats = eme_get_booked_seats($event_id);
-   $printable_address = admin_url("/admin.php?page=events-manager-people&amp;action=printable&amp;event_id=$event_id");
+   $printable_address = admin_url("/admin.php?page=events-manager-people&amp;action=booking_printable&amp;event_id=$event_id");
+   $csv_address = admin_url("/admin.php?page=events-manager-people&amp;action=booking_csv&amp;event_id=$event_id");
    $count_respondents=count($bookings);
    if ($count_respondents>0) { 
       $table = 
@@ -489,6 +490,10 @@ function eme_bookings_compact_table($event_id) {
          <div id='major-publishing-actions'>
          <div id='publishing-action'> 
             <a id='printable'  target='' href='$printable_address'>".__('Printable view','eme')."</a>
+            <br class='clear'/>
+         </div>
+         <div id='publishing-action-csv'> 
+            <a id='printable'  target='' href='$csv_address'>".__('CSV export','eme')."</a>
             <br class='clear'/>
          </div>
          <br class='clear'/>
