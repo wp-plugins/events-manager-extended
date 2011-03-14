@@ -2285,7 +2285,7 @@ function eme_admin_general_css() {
 function eme_admin_general_script() {
    eme_admin_general_css();
    ?>
-<script src="<?php echo EME_PLUGIN_URL; ?>eme.js" type="text/javascript"></script>
+<script src="<?php echo EME_PLUGIN_URL; ?>js/eme.js" type="text/javascript"></script>
 <script src="<?php echo EME_PLUGIN_URL; ?>js/jquery-ui-datepicker/ui.datepicker.js" type="text/javascript"></script>
 <script src="<?php echo EME_PLUGIN_URL; ?>js/timeentry/jquery.timeentry.js" type="text/javascript"></script>
 <?php
@@ -2792,7 +2792,7 @@ function eme_general_head() {
    $gmap_is_active = get_option('eme_gmap_is_active' );
    $load_js_in_header = get_option('eme_load_js_in_header' );
    if ($gmap_is_active && $load_js_in_header) {
-      echo "<script type='text/javascript' src='".EME_PLUGIN_URL."eme_location_map.js'></script>\n";
+      echo "<script type='text/javascript' src='".EME_PLUGIN_URL."js/eme_location_map.js'></script>\n";
    }
    if ($load_js_in_header) {
       eme_ajaxize_calendar();
@@ -2819,7 +2819,7 @@ function eme_general_footer() {
    $load_js_in_header = get_option('eme_load_js_in_header' );
    // we only include the map js if wanted/needed
    if (!$load_js_in_header && $gmap_is_active && $eme_need_gmap_js) {
-      echo "<script type='text/javascript' src='".EME_PLUGIN_URL."eme_location_map.js'></script>\n";
+      echo "<script type='text/javascript' src='".EME_PLUGIN_URL."js/eme_location_map.js'></script>\n";
    }
 }
 add_action('wp_footer', 'eme_general_footer');
