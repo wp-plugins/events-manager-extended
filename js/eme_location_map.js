@@ -75,10 +75,11 @@ function loadGMap() {
 			//console.log(locationsBound);
 			map.fitBounds(locationsBound);
 			map.setCenter(new google.maps.LatLng(center_lat + vertical_compensation,center_lon)); 
-			var letters = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+			//var letters = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 
 			$j_eme_locations.each(locations, function(i, item) {
-				var letter = letters[i];
+				//var letter = letters[i];
+            var letter = String.fromCharCode("A".charCodeAt(0) + index);
 
 				var li_element = "<li id='location-"+item.location_id
 						 + "' style='list-style-type: upper-alpha'><a >"
