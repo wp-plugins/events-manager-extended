@@ -75,7 +75,7 @@ function eme_global_map_json($eventful = false, $scope = "all", $category = '', 
       # first we set the balloon info
       $tmp_loc=eme_replace_locations_placeholders(get_option('eme_location_baloon_format'), $location);
       # no newlines allowed, otherwise no map is shown
-      $tmp_loc=preg_replace("/\r\n|\n\r|\n/","&lt;br /&gt;",$tmp_loc);
+      $tmp_loc=preg_replace("/\r\n|\n\r|\n/","<br />",$tmp_loc);
       $json_location[] = '"location_balloon":"'.eme_trans_sanitize_html($tmp_loc).'"';
 
       # second, we unset the description, it might interfere with the json result
@@ -84,8 +84,8 @@ function eme_global_map_json($eventful = false, $scope = "all", $category = '', 
       # third, we fill in the rest of the info
       foreach($location as $key => $value) {
          # no newlines allowed, otherwise no map is shown
-         $value=preg_replace("/\r\n|\n\r|\n/","&lt;br /&gt;",eme_trans_sanitize_html($value));
-         $json_location[] = '"'.$key.'":"'.$value.'"';
+         $value=preg_replace("/\r\n|\n\r|\n/","<br />",$value);
+         $json_location[] = '"'.$key.'":"'.eme_trans_sanitize_html($value).'"';
       }
       $json_locations[] = "{".implode(",",$json_location)."}";
    }
