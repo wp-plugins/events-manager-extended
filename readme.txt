@@ -481,6 +481,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: full calendar now also shows full month name
 * Improvement: list of attendees is now sorted
 * Improvement: more than 26 location markers on the map are now supported
+* Improvement: added Polish translation (thanks to Michal)
 * Bugfix: tinymce editor fix for 3.1
 * Bugfix: some calendar js fixes
 * Bugfix: event #_NOTES and location #_DESCRIPTION placeholders must be replaced after the other placeholders, otherwise unwanted replacement in their content can take place
