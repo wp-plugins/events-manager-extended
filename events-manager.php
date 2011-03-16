@@ -30,6 +30,87 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 /*************************************************/ 
 
+// Client clock usage, if wanted
+if (get_option('eme_use_client_clock')) {
+   // If needed, add high priority action to enable session variables.
+   if (!session_id()) add_action('init', 'session_start', 1);
+   // Embed client-clock.js in webpage header.
+   wp_enqueue_script('client_clock_submit', plugin_dir_url( __FILE__ ) . 'js/client-clock.js', array('jquery'));  
+   // Declare URL to the file that receives AJAXed client clock data (wp-admin/admin-ajax.php).
+   wp_localize_script('client_clock_submit', 'eme_ajax', array('ajaxurl' => admin_url('admin-ajax.php')));
+   // Add high priority action to receive clock data from users who are not logged-in.
+   add_action('wp_ajax_nopriv_client_clock_submit', 'eme_client_clock_callback', 1);
+   // Add high priority action to receive clock data from logged-in users.
+   add_action('wp_ajax_client_clock_submit', 'eme_client_clock_callback', 1);
+}
+
+function eme_client_clock_callback() {
+   // Set php clock values in an array
+   $phptime = getdate();
+   // if clock data not set
+   if (!isset($_SESSION['eme_client_unixtime'])) {
+      // Preset php clock values in client session variables for fall-back if valid client clock data isn't received.
+      $_SESSION['eme_client_clock_valid'] = false; // Will be set true if all client clock data passes sanity tests
+      $_SESSION['eme_client_php_difference'] = 0; // Client-php clock difference integer seconds
+      $_SESSION['eme_client_unixtime'] = (int) $phptime['0']; // Integer seconds since 1/1/1970 @ 12:00 AM
+      $_SESSION['eme_client_seconds'] = (int) $phptime['seconds']; // Integer second this minute (0-59)
+      $_SESSION['eme_client_minutes'] = (int) $phptime['minutes']; // Integer minute this hour (0-59)
+      $_SESSION['eme_client_hours'] = (int) $phptime['hours']; // Integer hour this day (0-23)
+      $_SESSION['eme_client_wday'] = (int) $phptime['wday']; // Integer day this week (0-6), 0 = Sunday, ... , 6 = Saturday
+      $_SESSION['eme_client_mday'] = (int) $phptime['mday']; // Integer day this month 1-31)
+      $_SESSION['eme_client_month'] = (int) $phptime['mon']; // Integer month this year (1-12)
+      $_SESSION['eme_client_fullyear'] = (int) $phptime['year']; // Integer year (1970-9999)
+      $ret = '1'; // reload from server
+   } else {
+      $ret = '0';
+   }
+   
+   // Cast client clock values as integers to avoid mathematical errors and set in temporary local variables.
+   $client_unixtime = (int) $_POST['client_unixtime'];
+   $client_seconds = (int) $_POST['client_seconds'];
+   $client_minutes = (int) $_POST['client_minutes'];
+   $client_hours = (int) $_POST['client_hours'];
+   $client_wday = (int) $_POST['client_wday'];
+   $client_mday = (int) $_POST['client_mday'];
+   $client_month = (int) $_POST['client_month'];
+   $client_fullyear = (int) $_POST['client_fullyear'];
+   
+   // Client clock sanity tests
+   $valid = true;
+   if (abs($client_unixtime - $_SESSION['eme_client_unixtime']) > 300) $valid = false; // allow +/-5 min difference
+   if (abs($client_seconds - 30) > 30) $valid = false; // Seconds <0 or >60
+   if (abs($client_minutes - 30) > 30) $valid = false; // Minutes <0 or >60
+   if (abs($client_hours - 12) > 12) $valid = false; // Hours <0 or >24
+   if (abs($client_wday - 3) > 3) $valid = false; // Weekday <0 or >6
+   if (abs($client_mday - $_SESSION['eme_client_mday']) > 30) $valid = false; // >30 day difference
+   if (abs($client_month - $_SESSION['eme_client_month']) > 11) $valid = false; // >11 month difference
+   if (abs($client_fullyear - $_SESSION['eme_client_fullyear']) > 1) $valid = false; // >1 year difference
+
+   // To insure mutual consistency, don't use any client values unless they all passed the tests.
+   If ($valid) {
+      $_SESSION['eme_client_unixtime'] = $client_unixtime;
+      $_SESSION['eme_client_seconds'] = $client_seconds;
+      $_SESSION['eme_client_minutes'] = $client_minutes;
+      $_SESSION['eme_client_hours'] = $client_hours;
+      $_SESSION['eme_client_wday'] = $client_wday;
+      $_SESSION['eme_client_mday'] = $client_mday;
+      $_SESSION['eme_client_month'] = $client_month;
+      $_SESSION['eme_client_fullyear'] = $client_fullyear;
+      $_SESSION['eme_client_clock_valid'] = true;
+      // Set  date & time clock strings
+      $php_clock_str = $phptime['year'] . "-" . $phptime['mon'] . "-" . $phptime['mday'] . " ";
+      $php_clock_str .= $phptime['hours'] . ":" . $phptime['minutes'] . ":" . $phptime['seconds'];
+      $client_clock_str = $_SESSION['eme_client_fullyear'] . "-" . $_SESSION['eme_client_month'] . "-" . $_SESSION['eme_client_mday'] . " ";
+      $client_clock_str .= $_SESSION['eme_client_hours'] . ":" . $_SESSION['eme_client_minutes'] . ":" . $_SESSION['eme_client_seconds'];
+      $_SESSION['eme_client_php_difference'] = (int) (strtotime($client_clock_str) - strtotime($php_clock_str));
+   }
+   
+   // Echo text string return to jQuery's AJAX callback function.
+   header("Content-Type: text");
+   echo $ret;
+   exit; //  because this is an AJAX instance
+}
+
 // Setting constants
 define('EME_DB_VERSION', 15);
 define('EME_PLUGIN_URL', plugins_url('',plugin_basename(__FILE__)).'/'); //PLUGIN DIRECTORY
@@ -677,6 +758,7 @@ function eme_add_options($reset=0) {
    'eme_hello_to_user' => 1,
    'eme_shortcodes_in_widgets' => 0,
    'eme_load_js_in_header' => 0,
+   'eme_use_client_clock' => 0,
    'eme_donation_done' => 0,
    'eme_conversion_needed' => 0,
    'eme_events_admin_limit' => 20,
@@ -712,7 +794,7 @@ function eme_add_option($key, $value, $reset) {
 // WP options registration/deletion
 ////////////////////////////////////
 function eme_options_delete() {
-   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat','eme_show_period_yearly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_gmap_zooming', 'eme_seo_permalink', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_mail_receiver_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_tables','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_conversion_needed','eme_donation_done','eme_hello_to_user','eme_filter_form_format','eme_rsvp_addbooking_min_seats','eme_rsvp_addbooking_max_seats','eme_shortcodes_in_widgets','eme_load_js_in_header');
+   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat','eme_show_period_yearly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_gmap_zooming', 'eme_seo_permalink', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_mail_receiver_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_tables','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_conversion_needed','eme_donation_done','eme_hello_to_user','eme_filter_form_format','eme_rsvp_addbooking_min_seats','eme_rsvp_addbooking_max_seats','eme_shortcodes_in_widgets','eme_load_js_in_header','eme_use_client_clock');
    foreach ( $options as $opt ) {
       delete_option ( $opt );
       $old_opt=preg_replace("/eme_/","dbem_",$opt);
@@ -724,7 +806,7 @@ function eme_options_register() {
 
    // only the options you want changed in the Settings page, not eg. eme_hello_to_user, eme_donation_done,eme_conversion_needed
 
-   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat','eme_show_period_yearly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_gmap_zooming', 'eme_seo_permalink', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_filter_form_format','eme_rsvp_addbooking_min_spaces','eme_rsvp_addbooking_max_spaces','eme_shortcodes_in_widgets','eme_load_js_in_header');
+   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat','eme_show_period_yearly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_gmap_zooming', 'eme_seo_permalink', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_filter_form_format','eme_rsvp_addbooking_min_spaces','eme_rsvp_addbooking_max_spaces','eme_shortcodes_in_widgets','eme_load_js_in_header','eme_use_client_clock');
    foreach ( $options as $opt ) {
       register_setting ( 'eme-options', $opt, '' );
    }

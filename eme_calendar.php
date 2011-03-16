@@ -72,24 +72,21 @@ function eme_get_calendar($args="") {
    // this comes from global wordpress preferences
    $start_of_week = get_option('start_of_week');
 
-   //if(isset($_GET['calmonth']) && $_GET['calmonth'] != '')   {
-   // $month =  eme_sanitize_request($_GET['calmonth']) ;
-   //} else {
-      if ($month == '')
-         $month = date('m'); 
-   //}
-   //if(isset($_GET['calyear']) && $_GET['calyear'] != '')   {
-   // $year =  eme_sanitize_request($_GET['calyear']) ;
-   //} else {
-      if ($year == '')
-         $year = date('Y');
-   //}
-   $date = mktime(0,0,0,$month, date('d'), $year); 
+   if (get_option('eme_use_client_clock')) {
+      // these come from client unless their clock is wrong
+      $curr_day= (int) $_SESSION['eme_client_mday'];
+      $curr_month=$_SESSION['eme_client_month'];
+      $curr_year=$_SESSION['eme_client_fullyear'];
+   } else {
+      $curr_day=date('j');
+      $curr_month=date('m');
+      $curr_year=date('Y');
+   }
+   if ($month == '') $month = $curr_month;
+   if ($year == '') $year = $curr_year;
+   // let's get the day of the month, based on choosen month/year AND current day
+   $date = mktime(0,0,0,$month, $curr_day, $year); 
    $day = date('d', $date); 
-   // $month = date('m', $date); 
-   // $year = date('Y', $date);
-   // Get the first day of the month 
-   $month_start = mktime(0,0,0,$month, 1, $year);
 
    // Get friendly month name
    if ($full) {
@@ -98,8 +95,9 @@ function eme_get_calendar($args="") {
       $month_name = date_i18n('M', strtotime("$year-$month-$day"));
    }
 
-   // Figure out which day of the week 
-   // the month starts on. 
+   // Get the first day of the month 
+   $month_start = mktime(0,0,0,$month, 1, $year);
+   // Determine day of the week the month starts on.
    $month_start_day = date('D', $month_start);
 
    switch($month_start_day){ 
@@ -221,9 +219,6 @@ function eme_get_calendar($args="") {
    // week with the days of that week in the table data 
 
    $i = 0; 
-   $curr_day=date('j');
-   $curr_month=date('m');
-   $curr_year=date('Y');
    foreach ($weeks as $week) { 
       $calendar .= "<tr>\n"; 
       foreach ($week as $d) { 
