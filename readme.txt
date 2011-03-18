@@ -484,6 +484,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: list of attendees is now sorted
 * Improvement: more than 26 location markers on the map are now supported
 * Improvement: added Polish translation (thanks to Michal)
+* Improvement: generalize JS in eme_locations.php, so it works with newer jquery as well
 * Bugfix: tinymce editor fix for 3.1
 * Bugfix: some calendar js fixes
 * Bugfix: event #_NOTES and location #_DESCRIPTION placeholders must be replaced after the other placeholders, otherwise unwanted replacement in their content can take place

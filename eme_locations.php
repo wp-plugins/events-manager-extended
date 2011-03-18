@@ -703,18 +703,18 @@ function get_locations_shortcode($atts) {
    $out .= <<<EOD
       <script type="text/javascript">
       //<![CDATA[
-      jQuery.noConflict();
+      $j_eme_loc_cal=jQuery.noConflict();
 
-      jQuery(document).ready(function($) {
-         $('#eme_locations.calendar li').each(function(){
-               $(this).click(function(){
-                  location_id = $(this).attr('class').replace('location-','');
-                  $('.location_chosen').text(location_id);
-                  prev_month_link = $('.prev-month:first');
-                  tableDiv = $(prev_month_link).closest('table').parent();
-                  ($(prev_month_link).hasClass('full-link')) ?
+      $j_eme_loc_cal(document).ready(function() {
+         $j_eme_loc_cal('#eme_locations.calendar li').each(function(){
+               $j_eme_loc_cal(this).click(function(){
+                  location_id = $j_eme_loc_cal(this).attr('class').replace('location-','');
+                  $j_eme_loc_cal('.location_chosen').text(location_id);
+                  prev_month_link = $j_eme_loc_cal('.prev-month:first');
+                  tableDiv = $j_eme_loc_cal(prev_month_link).closest('table').parent();
+                  ($j_eme_loc_cal(prev_month_link).hasClass('full-link')) ?
                      fullcalendar = 1 : fullcalendar = 0;
-                  ($(prev_month_link).hasClass('long_events')) ?
+                  ($j_eme_loc_cal(prev_month_link).hasClass('long_events')) ?
                      long_events = 1 : long_events = 0;
                   loadCalendar(tableDiv, fullcalendar, long_events);
                } );
@@ -971,17 +971,17 @@ function eme_locations_autocomplete() {
 
       <script type="text/javascript">
       //<![CDATA[
-      jQuery.noConflict();
+      $j_eme_loc=jQuery.noConflict();
 
-      jQuery(document).ready(function($) {
+      $j_eme_loc(document).ready(function() {
          function htmlDecode(value){ 
-            return $('<div/>').html(value).text(); 
+            return $j_eme_loc('<div/>').html(value).text(); 
          }
 
          var gmap_enabled = <?php echo get_option('eme_gmap_is_active'); ?>; 
 
          <?php if(!$use_select_for_locations) :?>
-         $("input#location_name").autocomplete("<?php echo EME_PLUGIN_URL; ?>locations-search.php", {
+         $j_eme_loc("input#location_name").autocomplete("<?php echo EME_PLUGIN_URL; ?>locations-search.php", {
             width: 260,
             selectFirst: false,
             formatItem: function(row) {
@@ -993,26 +993,26 @@ function eme_locations_autocomplete() {
                return htmlDecode(item.name);
             } 
          });
-         $('input#location_name').result(function(event,data,formatted) {
+         $j_eme_loc('input#location_name').result(function(event,data,formatted) {
             item = eval("(" + data + ")"); 
-            $('input#location_address').val(item.address);
-            $('input#location_town').val(item.town);
+            $j_eme_loc('input#location_address').val(item.address);
+            $j_eme_loc('input#location_town').val(item.town);
             if(gmap_enabled) {
-               eventLocation = $("input#location_name").val(); 
-               eventTown = $("input#location_town").val(); 
-               eventAddress = $("input#location_address").val();
+               eventLocation = $j_eme_loc("input#location_name").val(); 
+               eventTown = $j_eme_loc("input#location_town").val(); 
+               eventAddress = $j_eme_loc("input#location_address").val();
                loadMap(eventLocation, eventTown, eventAddress)
             } 
          });
          <?php else : ?>
-         $('#location-select-id').change(function() {
-            $.getJSON("<?php echo EME_PLUGIN_URL; ?>locations-search.php",{id: $(this).val()}, function(data){
+         $j_eme_loc('#location-select-id').change(function() {
+            $j_eme_loc.getJSON("<?php echo EME_PLUGIN_URL; ?>locations-search.php",{id: $j_eme_loc(this).val()}, function(data){
                eventLocation = data.name;
                eventAddress = data.address;
                eventTown = data.town;
-               $("input[name='location-select-name']").val(eventLocation);
-               $("input[name='location-select-address']").val(eventAddress); 
-               $("input[name='location-select-town']").val(eventTown); 
+               $j_eme_loc("input[name='location-select-name']").val(eventLocation);
+               $j_eme_loc("input[name='location-select-address']").val(eventAddress); 
+               $j_eme_loc("input[name='location-select-town']").val(eventTown); 
                loadMap(eventLocation, eventTown, eventAddress)
                })
          });
