@@ -6,1530 +6,1780 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Events Manager Extended\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/tag/events-manager-extended\n"
-"POT-Creation-Date: 2010-09-07 21:37+0000\n"
-"PO-Revision-Date: 2010-09-07 23:47+0100\n"
-"Last-Translator: Franky Van Liedekerke <liedekef@telenet.be>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-03-18 17:44+1100\n"
+"PO-Revision-Date: 2011-03-18 19:07+1000\n"
+"Last-Translator: Marcus Weiner <melodie124@gmail.com>\n"
 "Language-Team: EME <sebastian@maier-hallard.com>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: Germany\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Language: de_DE\n"
+"X-Source-Language: C\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: captcha_check.php:4
 msgid "You entered an incorrect code. Please fill in the correct code."
 msgstr "Du hast den falschen Code eingegeben. Bitte gib den korrekten Code ein."
 
-#: dbem_UI_helpers.php:69
-msgid "Yes"
-msgstr "Ja"
-
-#: dbem_UI_helpers.php:70
-msgid "No"
-msgstr "Nein"
-
-#: dbem_attributes.php:30
-#: dbem_events.php:1632
-msgid "Attributes"
-msgstr "Attribute"
-
-#: dbem_attributes.php:31
-msgid "Add attributes here"
-msgstr "Füge hier Attribute hinzu"
-
-#: dbem_attributes.php:35
-msgid "Attribute Name"
-msgstr "Attribut-Name"
-
-#: dbem_attributes.php:36
-msgid "Value"
-msgstr "Wert"
-
-#: dbem_attributes.php:41
-msgid "Add new tag"
-msgstr "Füge neuen Tag hinzu"
-
-#: dbem_attributes.php:55
+#: eme_attributes.php:58
 msgid "Not defined in templates"
 msgstr "Dies ist in den Vorlagen nicht definiert"
 
-#: dbem_attributes.php:66
-#: dbem_attributes.php:87
-msgid "Remove"
-msgstr "Entfernen"
+#: eme_calendar.php:186
+#: eme_recurrence.php:263
+msgid "Sunday"
+msgstr "Sonntag"
 
-#: dbem_attributes.php:98
-msgid "In order to use attributes, you must define some in your templates, otherwise they'll never show. Go to Events > Settings to add attribute placeholders."
-msgstr "Um Attribute nutzen zu können, musst Du diese für Deine Templates zunächst definieren, ansonsten können sie nicht angezeigt werden. Gehe dafür zu Veranstaltungen > Einstellungen, dann kannst Du Platzhalter für Attribute hinzufügen."
+#: eme_calendar.php:186
+#: eme_recurrence.php:263
+msgid "Monday"
+msgstr "Montag"
 
-#: dbem_categories.php:83
-#: events-manager.php:525
+#: eme_calendar.php:186
+#: eme_recurrence.php:263
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: eme_calendar.php:186
+#: eme_recurrence.php:263
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: eme_calendar.php:186
+#: eme_recurrence.php:263
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: eme_calendar.php:186
+#: eme_recurrence.php:263
+msgid "Friday"
+msgstr "Freitag"
+
+#: eme_calendar.php:186
+#: eme_recurrence.php:263
+msgid "Saturday"
+msgstr "Samstag"
+
+#: eme_categories.php:7
+msgid "You have no right to update categories!"
+msgstr "Du hast keine Berechtigung um Kategorien zu bearbeiten!"
+
+#: eme_categories.php:41
+msgid "Couldn't delete the categories. Incorrect category IDs supplied. Please try again."
+msgstr "Kategories konnten nicht entfernt werden. Falsche 'category ID's angegeben. Bitte versuche es erneut."
+
+#: eme_categories.php:67
+#: events-manager.php:773
 msgid "Categories"
 msgstr "Kategorien"
 
-#: dbem_categories.php:105
-#: dbem_categories.php:112
+#: eme_categories.php:89
+#: eme_categories.php:96
 msgid "ID"
 msgstr "ID"
 
-#: dbem_categories.php:106
-#: dbem_categories.php:113
-#: dbem_events.php:1043
-#: dbem_events.php:1398
-#: dbem_events.php:1558
-#: dbem_events.php:1915
-#: dbem_locations.php:203
-#: dbem_locations.php:211
-#: dbem_people.php:84
-#: dbem_rsvp.php:32
-#: dbem_rsvp.php:74
-#: dbem_rsvp.php:510
-#: dbem_rsvp.php:641
+#: eme_categories.php:90
+#: eme_categories.php:97
+#: eme_rsvp.php:61
+#: eme_rsvp.php:131
 msgid "Name"
 msgstr "Name"
 
-#: dbem_categories.php:138
+#: eme_categories.php:122
 msgid "No categories have been inserted yet!"
 msgstr "Bisher sind noch keine Kategorien eingefügt worden!"
 
-#: dbem_categories.php:151
-#: dbem_categories.php:159
+#: eme_categories.php:135
+#: eme_categories.php:143
 msgid "Add category"
 msgstr "Kategorie hinzufügen"
 
-#: dbem_categories.php:155
-#: dbem_categories.php:197
+#: eme_categories.php:139
+#: eme_categories.php:181
 msgid "Category name"
 msgstr "Kategorie-Name"
 
-#: dbem_categories.php:157
-#: dbem_categories.php:199
+#: eme_categories.php:141
+#: eme_categories.php:183
 msgid "The name of the category"
 msgstr "Der Name der Kategorie"
 
-#: dbem_categories.php:179
+#: eme_categories.php:163
 msgid "Edit category"
 msgstr "Kategorie bearbeiten"
 
-#: dbem_categories.php:202
+#: eme_categories.php:186
 msgid "Update category"
 msgstr "Kategorie aktualisieren"
 
-#: dbem_events.php:4
-#: dbem_events.php:249
+#: eme_cleanup.php:22
+#, php-format
+msgid "Cleanup done: events (and corresponding booking data) older than %d %s(s) have been removed."
+msgstr "Aufräumen abgeschlossen: Veranstaltungen (und zugehörige Reservierungsdaten) älter als %d %s(s) wurden entfernt."
+
+#: eme_events.php:9
+#: eme_events.php:325
 msgid "Insert New Event"
 msgstr "Neue Veranstaltung einfügen"
 
-#: dbem_events.php:207
-msgid "New recurrent event inserted!"
-msgstr "Eine neue Veranstaltungreihe wurde eingefügt!"
-
-#: dbem_events.php:211
-msgid "New event successfully inserted!"
-msgstr "Eine neue Veranstaltung wurde erfolgreich eingefügt!"
-
-#: dbem_events.php:220
-msgid "Recurrence updated!"
-msgstr "Die Veranstaltungsperiode wurde aktualisiert!"
-
-#: dbem_events.php:222
-msgid "Something went wrong with the recurrence update..."
-msgstr "Da ist was mit der Veranstaltungsperiode schief gelaufen!"
-
-#: dbem_events.php:231
-msgid "updated"
-msgstr "aktualisiert"
-
-#: dbem_events.php:242
-msgid "Ach, there's a problem here:"
-msgstr "Ups, hier ist ein Problem:"
-
-#: dbem_events.php:252
-#: dbem_events.php:935
-msgid "Edit Event"
-msgstr "Veranstaltung bearbeiten"
-
-#: dbem_events.php:268
-#: dbem_events.php:1095
-#: dbem_events.php:1303
-msgid "Reschedule"
-msgstr "Termin verlegen"
-
-#: dbem_events.php:282
-msgid "Past Events"
-msgstr "Vergangene Veranstaltungen"
-
-#: dbem_events.php:285
-msgid "All Events"
-msgstr "Alle Veranstaltungen"
-
-#: dbem_events.php:288
-msgid "Future Events"
-msgstr "Künftige Veranstaltungen"
-
-#: dbem_events.php:306
-msgid "Please select a page"
-msgstr "Bitte wähle eine Seite"
-
-#: dbem_events.php:322
-msgid "Event Manager Options"
-msgstr "Event Manager Optionen"
-
-#: dbem_events.php:324
-msgid "General options"
-msgstr "Allgemeine Optionen"
-
-#: dbem_events.php:327
-msgid "Use dropdown for locations?"
-msgstr "Dropdown-Menu für Locations verwenden?"
-
-#: dbem_events.php:327
-msgid "Select yes to select location from a drop-down menu; location selection will be faster, but you will lose the ability to insert locations with events."
-msgstr "Mit 'Ja' kannst Du den Veranstaltungsort in der Konfiguration einer Veranstaltung per Dropdown-Menu auszuwählen. Dann geht die Auswahl schneller, aber Du kannst keine neue Ortsangaben innerhalb der Veranstaltung hinzuzufügen."
-
-#: dbem_events.php:327
-msgid "When the qtranslate plugin is installed and activated, this setting will be ignored and always considered 'Yes'."
-msgstr "Solltest Du qtranslate aktiviert haben, wird diese Einstellung ignoriert und steht automatisch auf 'Ja'."
-
-#: dbem_events.php:328
-msgid "Use recurrence?"
-msgstr "Veranstaltungsreihen aktivieren?"
-
-#: dbem_events.php:328
-msgid "Select yes to enable the possibility to create recurrent events."
-msgstr "Wenn Du Ja wählst, kannst Du Veranstaltungsreihen kreieren."
-
-#: dbem_events.php:329
-msgid "Use RSVP?"
-msgstr "RSVP anwenden?"
-
-#: dbem_events.php:329
-msgid "Select yes to enable the RSVP feature so people can register for an event and book places."
-msgstr "Wähle 'Ja', um das RSVP-Feature zu aktivieren. Dann können sich Gäste für die Veranstaltung registrieren und Plätze buchen."
-
-#: dbem_events.php:330
-msgid "Use categories?"
-msgstr "Kategorien anwenden?"
-
-#: dbem_events.php:330
-msgid "Select yes to enable the category features."
-msgstr "Wähle Ja, um Veranstaltungs-Kategorien zu aktivieren."
-
-#: dbem_events.php:331
-msgid "Use attributes?"
-msgstr "Attribute benutzen?"
-
-#: dbem_events.php:331
-msgid "Select yes to enable the attributes feature."
-msgstr "Wähle Ja, um Veranstaltungs-Attribute zu aktivieren."
-
-#: dbem_events.php:332
-msgid "Enable Google Maps integration?"
-msgstr "Google Maps Integrierung aktivieren?"
-
-#: dbem_events.php:332
-msgid "Check this option to enable Goggle Map integration."
-msgstr "Aktiviere diese Option, um Google Maps zu integrieren."
-
-#: dbem_events.php:335
-#: dbem_events.php:338
-msgid "Events page"
-msgstr "Veranstaltungsseite"
-
-#: dbem_events.php:338
-msgid "This option allows you to select which page to use as an events page."
-msgstr "Mit dieser Option kannst Du auswählen, welche Seite als Event-Seite genutzt werden soll."
-
-#: dbem_events.php:338
-msgid "The content of this pagea (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data."
-msgstr "Der Inhalt dieser Seite (inkl. Shortcodes jeglicher Art) werden vollständig ignoriert und durch dynamische Event-Daten ersetzt."
-
-#: dbem_events.php:339
-msgid "Show events page in lists?"
-msgstr "Soll die Veranstaltungsseite in den Seitendarstellungen angezeigt werden?"
-
-#: dbem_events.php:339
-msgid "Check this option if you want the events page to appear together with other pages in pages lists."
-msgstr "Wähle diese Option, wenn Du möchtest, dass die Veranstaltungsseite gemeinsam mit anderen statischen Seiten gelistet werden soll."
-
-#: dbem_events.php:339
-msgid "This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended."
-msgstr "Die Option sollte nicht weiter genutzt werden, sie wird abgelehnt. Wir empfehlen den Shortcode [events_list] in einer selbst erstellen Seite zu erstellen."
-
-#: dbem_events.php:340
-msgid "Display calendar in events page?"
-msgstr "Soll der Kalender auf der Veranstaltungsseite angezeigt werden?"
-
-#: dbem_events.php:340
-msgid "This option allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page."
-msgstr "Mit dieser Option kannst Du den Kalender anstelle der Standardliste auf der Veranstaltungsseite anzeigen. Du solltest nicht das Kalender-Widget und den Seitenkalender gleichzeitig anzeigen."
-
-#: dbem_events.php:343
-msgid "Events format"
-msgstr "Optionen für das Veransttaltungsformat"
-
-#: dbem_events.php:347
-msgid "Default event list format header"
-msgstr "Header für das Standard-Listenformat"
-
-#: dbem_events.php:347
-msgid "This content will appear just above your code for the default event list format. Default is blank"
-msgstr "Dieser Inhalt erscheint direkt über Deinem Code für das standardmäßige Listenformat. Der Standard ist leer."
-
-#: dbem_events.php:348
-msgid "Default event list format"
-msgstr "Standard-Listenformat für Veranstaltungen"
-
-#: dbem_events.php:348
-msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a &lt;!&ndash;&ndash; more &ndash;&ndash;&gt; marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, e.g. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, ie. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM start-time/end-time notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event."
-msgstr "Dies ist das Format für alle Veranstaltungen innerhalb einer Liste<br/>Füge einen oder mehrere der folgenden Platzhalter ein: <code>#_NAME</code> für Veranstaltungsname, <code>#_LOCATION</code> für Veranstaltungsort, <code>#_ADDRESS</code>für die Adresse, <code>#_TOWN</code> für die Stadt, <code>#_NOTES</code> für Erläuterungen.<br/> Nutze <code>#_EXCERPT</code>, um <code>#_NOTES</code> bis zu der Stelle zu zeigen, an dem Du eine &lt;!&ndash;&ndash; more &ndash;&ndash;&gt;-tag setzt.<br/> Nutze <code>#_LINKEDNAME</code> für den Veranstaltungsnamen, falls Du ihn mit der dazugehörigen Veranstaltungsseite verknüpfen willst.<br/> Nutze <code>#_EVENTPAGEURL</code>, um die URL der Veranstaltungsseite abzubilden und Deine eigenen maßgeschneiderten Links zu gestalten.<br/> Nutze <code>#_LOCATIONPAGEURL</code>, um die URL für den Veranstaltungsort abzubilden und Deine eigenen maßgeschneiderten Links zu gestalten.<br/>Nutze <code>#_EDITEVENTLINK</code>, um einen Link zu platzieren, der auf die Bearbeitungsseite der Veranstalung führt. Dieser erscheint nur, wenn der User eingeloggt ist.<br/>Um das Datum und die Uhrzeit einzufügen, benutze <a href=\"http://www.php.net/manual/en/function.date.php\">PHP-Zeitformate</a>  mit einem <code>#</code>-Symbol davor, zum Beispiel: <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> Für das Veranstaltungsende, schreibe <code>#@</code> vor jedes Zeitformat, z.B. <code>#@h</code>, <code>#@i</code>, etc.<br/> Du kannst auch Datumsangaben machen, ohne jedes Mal ein<code>#</code> davor zu setzen, indem Du es wie folgt verpackst: #_{} oder #@_{} (z.B. <code>#_{d/m/Y}</code>). Wenn es kein Enddatum gibt, wird der Wert nicht angezeigt. <br/>Nutze <code>#_12HSTARTTIME</code> und <code>#_12HENDTIME</code> für das angelsächsicher Zeitformat für Veranstaltungsbeginn und -ende, genauso funktioniert <code>#_24HSTARTTIME</code> und <code>#_24HENDTIME</code> für das 24-Stunden-Format.<br/>Du kannst ausserdem HTML-Tags nutzen, wie z.B. <code>li</code>, <code>br</code> etc.<br/>Für besondere Attribute, nutze <code>#_ATT{key}{alternative text}</code>. Die zweite Schwungklammer ist optional und erscheint dann, wenn keine Attribute für die Veranstaltung definitert sind, oder diese leer sind. Dieser Schlüssel erscheint als Option, wenn Du Attribute für deine Veranstaltung hinzufügstThis key will appear as an option when adding attributes to your event."
-
-#: dbem_events.php:349
-msgid "Default event list format footer"
-msgstr "Footer für das Standard-Listenformat"
-
-#: dbem_events.php:349
-msgid "This content will appear just below your code for the default event list format. Default is blank"
-msgstr "Dieser Inhalt erscheint direkt unter Deinem Code für das standardmäßige Listenformat. Standard ist leer."
-
-#: dbem_events.php:352
-msgid "Single event page title format"
-msgstr "Titelformat für eine Veranstaltungsseite"
-
-#: dbem_events.php:352
-msgid "The format of a single event page title. Follow the previous formatting instructions."
-msgstr "Format für den Veranstaltungsnamen auf einer einzelnen Veranstaltungsseite"
-
-#: dbem_events.php:353
-msgid "Default single event format"
-msgstr "Standardformat für eine Einzelveranstaltung"
-
-#: dbem_events.php:353
-msgid "The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings."
-msgstr "Format für die Seite einer Einzelveranstaltung<br/> Befolge die vorher angezeigten Formatierungsanweisungen. <br/> Nutze <code>#_MAP</code> um eine Landkarte einzufügen.<br/>Nutze <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code> und <code>#_CONTACTPHONE</code>, um entsprechend den Namen, die Email-Adresse und die Telefonnummer des Ansprechpartners einzufügen. <br/>Nutze <code>#_ADDBOOKINGFORM</code>, um ein Formular einzufügen, das es dem Besucher erlaubt, für eine Veranstaltung einen oder mehrere Plätze zu reservieren (RSVP).<br/> Nutze <code>#_REMOVEBOOKINGFORM</code>, um ein Formular einzufügen, in dem ein Besucher eine Reservierung stornieren kann, indem er seinen Namen und seine Emailadresse angibt."
-
-#: dbem_events.php:354
-msgid "Events page title"
-msgstr "Titel der Veranstaltungsseite"
-
-#: dbem_events.php:354
-msgid "The title on the multiple events page."
-msgstr "Titel auf der Seite für mehrere Veranstaltungen"
-
-#: dbem_events.php:355
-msgid "No events message"
-msgstr "Meldung für keine Veranstaltungen"
-
-#: dbem_events.php:355
-msgid "The message displayed when no events are available."
-msgstr "Die Meldung, die angezeigt wird, wenn es keine Veranstaltungen gibt"
-
-#: dbem_events.php:358
-msgid "Calendar format"
-msgstr "Kalenderformat"
-
-#: dbem_events.php:361
-msgid "Small calendar title"
-msgstr "Titel für den kleinen Kalender"
-
-#: dbem_events.php:361
-msgid "The format of the title, corresponding to the text that appears when hovering on an eventful calendar day."
-msgstr "Das Titelformat, der erscheint, wenn man mit der Maus über einen sehr vollen Kalender geht."
-
-#: dbem_events.php:362
-msgid "Small calendar title separator"
-msgstr "Titeltrenner für kleinen Kalender"
-
-#: dbem_events.php:362
-msgid "The separator appearing on the above title when more than one event is taking place on the same day."
-msgstr "Trenner erscheint, wenn mehr als eine Veranstaltung am selben Tag stattfindet."
-
-#: dbem_events.php:363
-msgid "Full calendar events format"
-msgstr "Format für den großen Kalender"
-
-#: dbem_events.php:363
-msgid "The format of each event when displayed in the full calendar. Remember to include <code>li</code> tags before and after the event."
-msgstr "Format für die Darstellung der Veranstaltung im größen Kalender. Vergiss nicht, <code>li</code>-Tags vor und nach der Veranstaltung einzufügen."
-
-#: dbem_events.php:367
-msgid "Locations format"
-msgstr "Format für Veranstaltungsorte"
-
-#: dbem_events.php:370
-msgid "Single location page title format"
-msgstr "Titelformat für Veranstaltungsorte"
-
-#: dbem_events.php:370
-msgid "The format of a single location page title.<br/>Follow the previous formatting instructions."
-msgstr "Das Titelformat für die Seite für einzelne Veranstaltungsorte.<br/> Schau Dir die folgenden Anforderungen für die Formatierung an."
-
-#: dbem_events.php:371
-msgid "Default single location page format"
-msgstr "Standardseite für Veranstaltungsort"
-
-#: dbem_events.php:371
-msgid "The format of a single location page.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>.<br/> Use <code>#_MAP</code> to display a map of the event location, and <code>#_IMAGE</code> to display an image of the location.<br/> Use <code>#_NEXTEVENTS</code> to insert a list of the upcoming events, <code>#_PASTEVENTS</code> for a list of past events, <code>#_ALLEVENTS</code> for a list of all events taking place in this location."
-msgstr "Das Format für die Seite für einzelne Veranstaltungsorte.>br/>Füge einen oder mehrere der folgenden Platzhalter ein: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>.<br/> Benutze <code>#_MAP</code>, um den Veranstaltungsort in google maps anzuzeigen und <code>#_IMAGE</code>, um eine Grafik des Veranstaltunsortes anzuzeigen.<br/> Nutze <code>#_NEXTEVENTS</code>, um eine Liste kommender Veranstaltungen anzuzeigen, <code>#_PASTEVENTS</code> für die Liste vergangener Veranstaltungen, <code>#_ALLEVENTS</code> für eine Liste aller Veranstaltungen in diesem Veranstaltungsort."
-
-#: dbem_events.php:372
-msgid "Default location balloon format"
-msgstr "Standardformat der Maps-Sprechblase"
-
-#: dbem_events.php:372
-msgid "The format of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
-msgstr "Textformat für die maps-Sprechblase. Hier wird der Veranstaltungsort auf der Karte beschrieben.<br/>Füge einen oder mehrere der folgenden Platzhalter ein: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
-
-#: dbem_events.php:373
-msgid "Default location event list format"
-msgstr "Standard-Format für eine Veranstaltungsliste auf der Seite der Veranstaltungsorte"
-
-#: dbem_events.php:373
-msgid "The format of the events the list inserted in the location page through the <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> element. <br/> Follow the events formatting instructions"
-msgstr "Das Format der Veranstaltungsliste, die durch<code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> oder <code>#_ALLEVENTS</code> in die Seite des Veranstaltungsortes eingebunden wird. <br/> Nutze die oben angezeigten Formatierungshinweise."
-
-#: dbem_events.php:374
-msgid "Default no events message"
-msgstr "Standardnachricht, falls keine Veranstaltungen vorhanden sind"
-
-#: dbem_events.php:374
-msgid "The message to be displayed in the list generated by <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> when no events are available."
-msgstr "Diese Nachricht wird angezeigt, wenn in der Veranstaltungsliste, die durch <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> oder <code>#_ALLEVENTS</code> generiert wird, aber keine aktuellen Termine vorhanden sind."
-
-#: dbem_events.php:378
-msgid "RSS feed format"
-msgstr "RSS-Feeds"
-
-#: dbem_events.php:381
-msgid "RSS main title"
-msgstr "RSS Haupttitel"
-
-#: dbem_events.php:381
-msgid "The main title of your RSS events feed."
-msgstr "Der Haupttitel Deines RSS-Veranstaltungs-Feeds."
-
-#: dbem_events.php:382
-msgid "RSS main description"
-msgstr "RSS Hauptbeschreibung"
-
-#: dbem_events.php:382
-msgid "The main description of your RSS events feed."
-msgstr "Hier kommt die Hauptbeschreibung Deines Feeds rein."
-
-#: dbem_events.php:383
-msgid "RSS title format"
-msgstr "RSS Titel"
-
-#: dbem_events.php:383
-msgid "The format of the title of each item in the events RSS feed."
-msgstr "Titelformat für die Einträge des Veranstaltungs-RSS-Feeds"
-
-#: dbem_events.php:384
-msgid "RSS description format"
-msgstr "RSS Beschreibung"
-
-#: dbem_events.php:384
-msgid "The format of the description of each item in the events RSS feed. Follow the previous formatting instructions."
-msgstr "Das Format für die Beschreibung für jeden Eintrag im RSS-Feed. Nutze die oben angezeigten Formatierungshinweise."
-
-#: dbem_events.php:388
-msgid "RSVP: registrations and bookings"
-msgstr "RSVP: Reservierungen und Buchungen"
-
-#: dbem_events.php:391
-msgid "Default contact person"
-msgstr "Standard-Ansprechpartner"
-
-#: dbem_events.php:391
-msgid "Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event"
-msgstr "Wähle einen Hauptansprechpartner. Diese Person wird immer dann eingesetzt, wenn es keinen definierten Ansprechpartner für Einzelveranstaltungen gibt."
-
-#: dbem_events.php:392
-msgid "Use captcha for booking form?"
-msgstr "Captcha für das Buchungsformular nutzen?"
-
-#: dbem_events.php:392
-msgid "Check this option if you want to use a captcha on the booking form, to thwart spammers a bit."
-msgstr "Wähle diese Option, wenn Du Captcha für das Buchungsformular nutzen möchtest. Ist gut gegen Spammer."
-
-#: dbem_events.php:393
-msgid "Enable the RSVP e-mail notifications?"
-msgstr "RSVP-Email-Benachrichtigungen"
-
-#: dbem_events.php:393
-msgid "Check this option if you want to receive an email when someone books places for your events."
-msgstr "Aktiviere diese Option, wenn Du immer eine Emails erhalten willst, wenn ein Besteller Plätze für eine Veranstaltung reservieren möchte."
-
-#: dbem_events.php:394
-msgid "Contact person email format"
-msgstr "Email-Format für den Ansprechpartner"
-
-#: dbem_events.php:394
-msgid "The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent's comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats."
-msgstr "Emails für den Ansprechpartner werden ihm im folgenden Format zugeschickt. Folge den Formatanweisungen für Veranstaltungen. <br/>Nutze <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> um jeweils den Namen, Email, Adresse and Telefon des Bestellers anzuzeigen.<br/>Nutze <code>#_SPACES</code>, um die Anzahl der reservierten Plätze anzuzeigen. Nutze <code>#_COMMENT</code>, um eventuelle Anmerkungen des Bestellers anzuzeigen. <br/> Nutze <code>#_RESERVEDSPACES</code> und <code>#_AVAILABLESPACES</code> um anzuzeigen, wieviele Plätze bereits reserviert und verfügbar sind"
-
-#: dbem_events.php:395
-msgid "Respondent email format"
-msgstr "Email Format für den Besteller"
-
-#: dbem_events.php:395
-msgid "The format of the email which will be sent to the respondent. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code> to display the name of the respondent.<br/>Use <code>#_CONTACTNAME</code> and <code>#_PLAIN_CONTACTEMAIL</code> to display respectively the name and e-mail of the contact person.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent's comment."
-msgstr "Emails für den Besteller werden ihm im folgenden Format zugeschickt. Folge den Formatanweisungen für Veranstaltungen.. Folge den Formatanweisungen für Veranstaltungen. <br/>Nutze <code>#_RESPNAME</code> ,um den Namen des Bestellers anzuzeigen.<br/>Nutze <code>#_CONTACTNAME</code> und <code>#_PLAIN_CONTACTEMAIL</code> , um jewils den Namen und die Emailadresse der Kontaktperson anzuzeigen.<br/>Nutze <code>#_SPACES</code>, um dem Besteller die Anzahl der reservierten Plätze anzuzeigen. Nutze <code>#_COMMENT</code> , um den Kommentar des Bestellers nochmal anzuzeigen."
-
-#: dbem_events.php:396
-msgid "Registration pending email format"
-msgstr "Email-Format für noch nicht bearbeitete Reservierungen"
-
-#: dbem_events.php:396
-msgid "The format of the email which will be sent to the respondent when the event requires registration approval."
-msgstr "Format für Emails auf Reservierungsanfragen, wenn eine Bestätigung der Reservierung erfolgen muss."
-
-#: dbem_events.php:397
-msgid "Registration denied email format"
-msgstr "Email-Format für abgelehnte Reservierungen"
-
-#: dbem_events.php:397
-msgid "The format of the email which will be sent to the respondent when the admin denies the registration request if the event requires registration approval."
-msgstr "Das Format für die Email, die dann versandt wird, wenn der Admin die Reservierung ablehnt, sofern die Veranstaltung eine Reservierungsbestätigung vorsieht."
-
-#: dbem_events.php:398
-msgid "Notification sender name"
-msgstr "Namen des Absenders der Benachrichtigung"
-
-#: dbem_events.php:398
-msgid "Insert the display name of the notification sender."
-msgstr "Füge hier den Namen des Absenders ein"
-
-#: dbem_events.php:399
-msgid "Notification sender address"
-msgstr "Adresse des Absenders"
-
-#: dbem_events.php:399
-msgid "Insert the address of the notification sender. It must corresponds with your Gmail account user"
-msgstr "Füge hier den Namen des Absenders der Benachrichtigung ein"
-
-#: dbem_events.php:400
-msgid "Default notification receiver address"
-msgstr "Standardmäßiger Empfänger"
-
-#: dbem_events.php:400
-msgid "Insert the address of the receiver of your notifications"
-msgstr "Füge hier die standardmäßige Adresse des Empfängers von Benachrichtigungen ein"
-
-#: dbem_events.php:401
-msgid "Mail sending method"
-msgstr "Versandmethode für Emails"
-
-#: dbem_events.php:401
-msgid "PHP mail function"
-msgstr "PHP Mailfunktion"
-
-#: dbem_events.php:401
-msgid "Select the method to send email notification."
-msgstr "Wähle die Methode, mit der Emailbenachrichtigungen verschickt werden."
-
-#: dbem_events.php:402
-msgid "The port through which you e-mail notifications will be sent. Make sure the firewall doesn't block this port"
-msgstr "Der Port, über den Emailbenachrichtigungen verschickt werden. Gehe vorher sicher, dass die Firewall diesen Port nicht blockiert."
-
-#: dbem_events.php:403
-msgid "Use SMTP authentication?"
-msgstr "SMTP-Authentifizierung nutzen?"
-
-#: dbem_events.php:403
-msgid "SMTP authentication is often needed. If you use Gmail, make sure to set this parameter to Yes"
-msgstr "Eine SMTP-Authentifizierung wird häufig benögtigt. Falls DU Gmail bebutzt, gehe sicher, dass Du den Parameter auf JA setzt"
-
-#: dbem_events.php:404
-msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use Gmail, set this value to 'ssl://smtp.Gmail.com:465'."
-msgstr "Der SMTP-Host. Normalerweise korrespondiert es mit 'localhost'. Falls Du Gmail benutzt, setze den Wert auf 'ssl://smtp.Gmail.com:465'."
-
-#: dbem_events.php:405
-msgid "SMTP username"
-msgstr "SMTP Benutzername"
-
-#: dbem_events.php:405
-msgid "Insert the username to be used to access your SMTP server."
-msgstr "Füge hier den Benutzernamen für SMTP-Authentifizierung ein"
-
-#: dbem_events.php:406
-msgid "SMTP password"
-msgstr "SMTP Passwort"
-
-#: dbem_events.php:406
-msgid "Insert the password to be used to access your SMTP server"
-msgstr "Füge hier das SMTP-Passwort ein"
-
-#: dbem_events.php:410
-msgid "Images size"
-msgstr "Bildgröße"
-
-#: dbem_events.php:413
-msgid "Maximum width (px)"
-msgstr "Maximale Breite (px)"
-
-#: dbem_events.php:413
-msgid "The maximum allowed width for images uploaded, in pixels"
-msgstr "Die maximal erlaubte Breite für Bilduploads"
-
-#: dbem_events.php:414
-msgid "Maximum height (px)"
-msgstr "Maximale Höhe (px)"
-
-#: dbem_events.php:414
-msgid "The maximum allowed height for images uploaded, in pixels"
-msgstr "Die maximal erlaubte Höhe für Bilduploads"
-
-#: dbem_events.php:415
-msgid "Maximum size (bytes)"
-msgstr "Maximale Größe (bytes)"
-
-#: dbem_events.php:415
-msgid "The maximum allowed size for images uploaded, in bytes"
-msgstr "Die maximal erlaubte Größe für Bilduploads, in Pixeln"
-
-#: dbem_events.php:419
-msgid "Save Changes"
-msgstr "Speichern"
-
-#: dbem_events.php:955
-#, php-format
-msgid ""
-"<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> \n"
-"\t<p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>\n"
-"\t<p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>\n"
-"\t<p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>"
-msgstr ""
-"<p>Hallo, <strong>%s</strong> ,willkommen bei <strong>Events Manager Extended </strong>! Wir hoffen, es gefällt Dir hier.</p> \n"
-"\t<p>Jetzt ist es Zeit, Veranstaltungslisten über  <a href=\"%s\" title=\"Widgets page\">Widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">Template-Tags</a> oder <a href=\"%s\" title=\"Shortcodes documentation\">Shortcodes</a> einzufügen.</p>\n"
-"\t<p>Übrigens, hast Du Dir schon mal die Seite für <a href=\"%s\" title=\"Change settings\">Einstellungen</a> angeschaut? Hier kannst Du Dir die Ansicht für Veranstaltungen und Veranstaltungsorte bearbeiten.</p>\n"
-"\t<p>Was? Keine Lust mehr, diese Tipps zu sehen? Klar, einfach <a href=\"%s\" title=\"Don't show this advice again\"> hier</a> klicken, und Du siehst sie künftig nicht mehr!</p>"
-
-#: dbem_events.php:989
-msgid "New Event ..."
-msgstr "Neue Veranstaltung..."
-
-#: dbem_events.php:994
-#: dbem_events.php:999
-#: dbem_widgets.php:68
-msgid "Past events"
-msgstr "Vergangene Veranstaltungen"
-
-#: dbem_events.php:995
-#: dbem_events.php:1000
-#: dbem_rsvp.php:487
-#: dbem_rsvp.php:618
-#: dbem_widgets.php:67
-msgid "All events"
-msgstr "Alle Veranstaltungen"
-
-#: dbem_events.php:996
-#: dbem_events.php:1001
-#: dbem_widgets.php:66
+#: eme_events.php:96
+msgid "Conversion done, please check your events and restore from backup if you see any sign of troubles."
+msgstr "Konvertierung komplett, bitte überprüfe deine Veranstaltungen und stelle dein Backup wieder her, wenn es Probleme gibt."
+
+#: eme_events.php:126
+#: eme_events.php:314
+#: eme_events.php:338
+#: eme_events.php:354
+#: eme_events.php:368
+#: eme_events.php:1447
 msgid "Future events"
 msgstr "Künftige Veranstaltungen"
 
-#: dbem_events.php:1008
-msgid "Total"
-msgstr "Summe"
+#: eme_events.php:255
+#: eme_events.php:291
+msgid "New recurrent event inserted!"
+msgstr "Eine neue Veranstaltungreihe wurde eingefügt!"
 
-#: dbem_events.php:1008
-#: dbem_widgets.php:11
-#: events-manager.php:47
-#: events-manager.php:457
-#: events-manager.php:458
-#: events-manager.php:517
+#: eme_events.php:260
+msgid "Database insert failed!"
+msgstr "Einfügen in die Datenbank fehlgeschlagen!"
+
+#: eme_events.php:262
+msgid "New event successfully inserted!"
+msgstr "Eine neue Veranstaltung wurde erfolgreich eingefügt!"
+
+#: eme_events.php:275
+msgid "Recurrence updated!"
+msgstr "Die Veranstaltungsperiode wurde aktualisiert!"
+
+#: eme_events.php:278
+msgid "Something went wrong with the recurrence update..."
+msgstr "Da ist was mit der Veranstaltungsperiode schief gelaufen!"
+
+#: eme_events.php:281
+#: eme_events.php:306
+#: eme_events.php:335
+#: eme_events.php:351
+#: eme_events.php:365
+msgid "You have no right to update"
+msgstr "Du hast keine Berechtigung um dies zu ändern"
+
+#: eme_events.php:299
+msgid "updated"
+msgstr "aktualisiert"
+
+#: eme_events.php:301
+msgid "Failed to update"
+msgstr "Ändern fehlgeschlagen"
+
+#: eme_events.php:318
+msgid "Ach, there's a problem here:"
+msgstr "Ups, hier ist ein Problem:"
+
+#: eme_events.php:332
+#: eme_events.php:1410
+msgid "Edit Event"
+msgstr "Veranstaltung bearbeiten"
+
+#: eme_events.php:362
+msgid "Reschedule"
+msgstr "Termin verlegen"
+
+#: eme_events.php:376
+msgid "Past Events"
+msgstr "Vergangene Veranstaltungen"
+
+#: eme_events.php:379
+msgid "All Events"
+msgstr "Alle Veranstaltungen"
+
+#: eme_events.php:382
+msgid "Future Events"
+msgstr "Künftige Veranstaltungen"
+
+#: eme_events.php:398
+msgid "Please select a page"
+msgstr "Bitte wähle eine Seite"
+
+#: eme_events.php:418
+msgid "Use dropdown for locations?"
+msgstr "Dropdown-Menu für Locations verwenden?"
+
+#: eme_events.php:418
+msgid "Select yes to select location from a drop-down menu; location selection will be faster, but you will lose the ability to insert locations with events."
+msgstr "Mit 'Ja' kannst Du den Veranstaltungsort in der Konfiguration einer Veranstaltung per Dropdown-Menu auszuwählen. Dann geht die Auswahl schneller, aber Du kannst keine neue Ortsangaben innerhalb der Veranstaltung hinzuzufügen."
+
+#: eme_events.php:418
+msgid "When the qtranslate plugin is installed and activated, this setting will be ignored and always considered 'Yes'."
+msgstr "Solltest Du qtranslate aktiviert haben, wird diese Einstellung ignoriert und steht automatisch auf 'Ja'."
+
+#: eme_events.php:419
+msgid "Use recurrence?"
+msgstr "Veranstaltungsreihen aktivieren?"
+
+#: eme_events.php:419
+msgid "Select yes to enable the possibility to create recurrent events."
+msgstr "Wenn Du Ja wählst, kannst Du Veranstaltungsreihen kreieren."
+
+#: eme_events.php:420
+msgid "Use RSVP?"
+msgstr "Teilnahmebestätigung anwenden?"
+
+#: eme_events.php:420
+msgid "Select yes to enable the RSVP feature so people can register for an event and book places."
+msgstr "Wähle 'Ja', um das Teilnahmebestätigungsfeature zu aktivieren. Dann können sich Gäste für die Veranstaltung registrieren und Plätze reservieren."
+
+#: eme_events.php:421
+msgid "Use categories?"
+msgstr "Kategorien anwenden?"
+
+#: eme_events.php:421
+msgid "Select yes to enable the category features."
+msgstr "Wähle Ja, um Veranstaltungs-Kategorien zu aktivieren."
+
+#: eme_events.php:422
+msgid "Use attributes?"
+msgstr "Attribute benutzen?"
+
+#: eme_events.php:422
+msgid "Select yes to enable the attributes feature."
+msgstr "Wähle Ja, um Veranstaltungs-Attribute zu aktivieren."
+
+#: eme_events.php:423
+msgid "Enable Google Maps integration?"
+msgstr "Google Maps Integrierung aktivieren?"
+
+#: eme_events.php:423
+msgid "Check this option to enable Google Map integration."
+msgstr "Aktiviere diese Option, um Google Maps zu integrieren."
+
+#: eme_events.php:424
+msgid "Enable map scroll-wheel zooming?"
+msgstr "Scrollrad-Zoom für die Karte aktivieren?"
+
+#: eme_events.php:424
+msgid "Yes, enables map scroll-wheel zooming. No, enables scroll-wheel page scrolling over maps. (It will be necessary to refresh your web browser on a map page to see the effect of this change.)"
+msgstr "\"Ja\", aktiviert Scroll-Zoom für die Karte. \"Nein\", lässt den Benutzer über die Karte hinweg scrollen. (Die Seite mit der Karte muss neu geladen werden, damit dies in Kraft tritt.)"
+
+#: eme_events.php:425
+msgid "Enable event permalinks if possible?"
+msgstr "Permalinks für Veranstaltungen?"
+
+#: eme_events.php:425
+msgid "If Yes, EME will render SEO permalinks if permalinks are activated."
+msgstr "Bei \"Ja\" erzeugt EME SEO Permalinks (wenn Permalinks in den WP Einstellungen aktiviert sind)."
+
+#: eme_events.php:426
+msgid "Always include JS in header?"
+msgstr "Immer Javascript im Header einfügen?"
+
+#: eme_events.php:426
+msgid "Some themes are badely designed and can have issues showing the google maps or advancing in the calendar. If so, try activating this option which will cause the javascript to always be included in the header of every page (off by default)."
+msgstr "Manche Themen sind schlecht erstellt und es können Fehler mit der Google Maps-Karte oder dem Kalender auftreten. Wenn dies auftritt, versuche diese Option zu aktivieren, die bewirkt, dass Javascript immer im Header eingefügt wird (normalerweise deaktiviert)."
+
+#: eme_events.php:427
+msgid "Delete all EME data when upgrading or deactivating?"
+msgstr "Gesamte EME Daten entfernen, wenn das Plugin aktualisiert oder deaktiviert wird?"
+
+#: eme_events.php:427
+msgid "Check this option if you want to delete all EME data (database tables and options) when upgrading or deactivating the plugin."
+msgstr "Diese Option aktivieren, wenn du willst, dass die gesamten EME Daten entfernt werden, wenn das Plugin aktualisiert oder deaktiviert wird."
+
+#: eme_events.php:428
+msgid "Enable shortcodes in widgets"
+msgstr "Aktiviert Shortcodes für Widgets"
+
+#: eme_events.php:428
+msgid "Check this option if you want to enable the use of shortcodes in widgets (affects shortcodes of any plugin used in widgets, so use with care)."
+msgstr "Aktiviere diese Option, wenn du die Benutzung von Shortcodes in Widgets ermöglichen willst (beeinflusst Shortcodes von allen Plugins in Widgets, sei also vorsichtig)."
+
+#: eme_events.php:434
+msgid "Events page"
+msgstr "Veranstaltungsseite"
+
+#: eme_events.php:434
+msgid "This option allows you to select which page to use as an events page."
+msgstr "Mit dieser Option kannst Du auswählen, welche Seite als Event-Seite genutzt werden soll."
+
+#: eme_events.php:434
+msgid "The content of this page (including shortcodes of any kind) will be ignored completely and dynamically replaced by events data."
+msgstr "Der Inhalt dieser Seite (inkl. Shortcodes jeglicher Art) werden vollständig ignoriert und durch dynamische Event-Daten ersetzt."
+
+#: eme_events.php:435
+msgid "Show events page in lists?"
+msgstr "Soll die Veranstaltungsseite in den Seitendarstellungen angezeigt werden?"
+
+#: eme_events.php:435
+msgid "Check this option if you want the events page to appear together with other pages in pages lists."
+msgstr "Wähle diese Option, wenn Du möchtest, dass die Veranstaltungsseite gemeinsam mit anderen statischen Seiten gelistet werden soll."
+
+#: eme_events.php:435
+msgid "This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended."
+msgstr "Die Option sollte nicht weiter genutzt werden, sie wird abgelehnt. Wir empfehlen den Shortcode [events_list] in einer selbst erstellen Seite zu erstellen."
+
+#: eme_events.php:436
+msgid "Display calendar in events page?"
+msgstr "Soll der Kalender auf der Veranstaltungsseite angezeigt werden?"
+
+#: eme_events.php:436
+msgid "This option allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page."
+msgstr "Mit dieser Option kannst Du den Kalender anstelle der Standardliste auf der Veranstaltungsseite anzeigen. Du solltest nicht das Kalender-Widget und den Seitenkalender gleichzeitig anzeigen."
+
+#: eme_events.php:437
+msgid "Number of events to show per page in admin interface"
+msgstr "Anzahl von Veranstaltungen, die pro Seite auf der Administrationsoberfläche angezeigt werden sollen"
+
+#: eme_events.php:437
+msgid "Indicates the number of events shown on one page in the admin interface (min. 5, max. 200)"
+msgstr "Die Anzahl von Veranstaltungen, die pro Seite auf der Administrationsoberfläche angezeigt werden sollen (min. 5, max. 200)"
+
+#: eme_events.php:443
+msgid "Remove leading zeros from minutes?"
+msgstr "Führende Nullen von der Minutenangabe entfernen?"
+
+#: eme_events.php:443
+msgid "PHP date/time functions have no notation to show minutes without leading zeros. Checking this option will return e.g. 9 for 09 and empty for 00."
+msgstr "Die PHP date/time Funktionen haben keine Angabe, um Minuten ohne führende Nullen anzuzeigen. Wenn dies aktiviert ist, wird z.B. 9 für 09 und nichts für 00 angezeigt."
+
+#: eme_events.php:444
+msgid "Default event list format header"
+msgstr "Header für das Standard-Listenformat"
+
+#: eme_events.php:444
+msgid "This content will appear just above your code for the default event list format. If you leave this empty, the value <code>&lt;ul class='eme_events_list'&gt;</code> will be used."
+msgstr "Dieser Inhalt erscheint direkt über Deinem Code für das standardmäßige Listenformat. Wenn du dies leer lässt, wird <code>&lt;ul class='eme_events_list'&gt;</code> benutzt."
+
+#: eme_events.php:445
+msgid "Default event list format"
+msgstr "Standard-Listenformat für Veranstaltungen"
+
+#: eme_events.php:445
+msgid "The format of any events in a list.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_LOCATION</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_NOTES</code>.<br/> Use <code>#_EXCERPT</code> to show <code>#_NOTES</code> until you place a <code>&lt;!&ndash;&ndash;more&ndash;&ndash;&gt;</code> marker.<br/> Use <code>#_LINKEDNAME</code> for the event name with a link to the given event page.<br/> Use <code>#_EVENTPAGEURL</code> to print the event page URL and make your own customised links.<br/> Use <code>#_LOCATIONPAGEURL</code> to print the location page URL and make your own customised links.<br/>Use <code>#_EDITEVENTLINK</code> to add a link to edit page for the event, which will appear only when a user is logged in.<br/>To insert date and time values, use <a href=\"http://www.php.net/manual/en/function.date.php\">PHP time format characters</a>  with a <code>#</code> symbol before them, i.e. <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> For the end time, put <code>#@</code> in front of the character, e.g. <code>#@h</code>, <code>#@i</code>, etc.<br/> You can also create a date format without prepending <code>#</code> by wrapping it in #_{} or #@_{} (e.g. <code>#_{d/m/Y}</code>). If there is no end date, the value is not shown.<br/>Use <code>#_12HSTARTTIME</code> and <code>#_12HENDTIME</code> for AM/PM start-time/end-time notation, idem <code>#_24HSTARTTIME</code> and <code>#_24HENDTIME</code>.<br/>Feel free to use HTML tags as <code>li</code>, <code>br</code> and so on.<br/>For custom attributes, you use <code>#_ATT{key}{alternative text}</code>, the second braces are optional and will appear if the attribute is not defined or left blank for that event. This key will appear as an option when adding attributes to your event."
+msgstr "Dies ist das Format für alle Veranstaltungen innerhalb einer Liste<br/>Füge einen oder mehrere der folgenden Platzhalter ein: <code>#_NAME</code> für Veranstaltungsname, <code>#_LOCATION</code> für Veranstaltungsort, <code>#_ADDRESS</code> für die Adresse, <code>#_TOWN</code> für die Stadt, <code>#_NOTES</code> für Erläuterungen.<br/>Nutze <code>#_EXCERPT</code>, um <code>#_NOTES</code> bis zu der Stelle zu zeigen, an dem Du eine &lt;!&ndash;&ndash; more &ndash;&ndash;&gt;-tag setzt.<br/>Nutze <code>#_LINKEDNAME</code> für den Veranstaltungsnamen, falls Du ihn mit der dazugehörigen Veranstaltungsseite verknüpfen willst.<br/>Nutze <code>#_EVENTPAGEURL</code>, um die URL der Veranstaltungsseite abzubilden und Deine eigenen maßgeschneiderten Links zu gestalten.<br/>Nutze <code>#_LOCATIONPAGEURL</code>, um die URL für den Veranstaltungsort abzubilden und Deine eigenen maßgeschneiderten Links zu gestalten.<br/>Nutze <code>#_EDITEVENTLINK</code>, um einen Link zu platzieren, der auf die Bearbeitungsseite der Veranstalung führt. Dieser erscheint nur, wenn der User eingeloggt ist.<br/>Um das Datum und die Uhrzeit einzufügen, benutze <a href=\"http://www.php.net/manual/en/function.date.php\">PHP-Zeitformate</a>  mit einem <code>#</code>-Symbol davor, zum Beispiel: <code>#m</code>, <code>#M</code>, <code>#j</code>, etc.<br/> Für das Veranstaltungsende, schreibe <code>#@</code> vor jedes Zeitformat, z.B. <code>#@h</code>, <code>#@i</code>, etc.<br/>Du kannst auch Datumsangaben machen, ohne jedes Mal ein<code>#</code> davor zu setzen, indem Du es wie folgt verpackst: #_{} oder #@_{} (z.B. <code>#_{d/m/Y}</code>). Wenn es kein Enddatum gibt, wird der Wert nicht angezeigt.<br/>Nutze <code>#_12HSTARTTIME</code> und <code>#_12HENDTIME</code> für das 12-Stunden-Format für Veranstaltungsbeginn und -ende, genauso funktioniert <code>#_24HSTARTTIME</code> und <code>#_24HENDTIME</code> für das 24-Stunden-Format.<br/>Du kannst ausserdem HTML-Tags nutzen, wie z.B. <code>li</code>, <code>br</code> etc.<br/>Für besondere Attribute, nutze <code>#_ATT{key}{alternative text}</code>. Die zweite Schwungklammer ist optional und erscheint dann, wenn keine Attribute für die Veranstaltung definitert sind, oder diese leer sind. Dieser Schlüssel erscheint als Option, wenn Du Attribute für deine Veranstaltung hinzufügst."
+
+#: eme_events.php:445
+msgid "Use <code>#_PAST_FUTURE_CLASS</code> to return a class name indicating this event is future or past (<code>eme-future-event</code> or <code>eme-past-event</code>), use the returned value in e.g. the li-statement for each event in the list of events"
+msgstr "Benutze <code>#_PAST_FUTURE_CLASS</code> um einen Klassennamen zu erhalten, der angibt ob die Veranstaltung in der Vergangenheit oder Zukunft liegt (<code>eme-future-event</code> oder <code>eme-past-event</code>). Der Wert kann z.B. im li-Abschnitt für eine Veranstaltung in der Veranstaltungsliste verwendet werden."
+
+#: eme_events.php:446
+msgid "Default event list format footer"
+msgstr "Footer für das Standard-Listenformat"
+
+#: eme_events.php:446
+msgid "This content will appear just below your code for the default event list format. If you leave this empty, the value <code>&lt;/ul&gt;</code> will be used."
+msgstr "Dieser Inhalt erscheint direkt unter Deinem Code für das standardmäßige Listenformat. Wenn du dies leer lässt, wird <code>&lt;/ul&gt;</code> benutzt."
+
+#: eme_events.php:448
+msgid "Single event page title format"
+msgstr "Titelformat für eine Veranstaltungsseite"
+
+#: eme_events.php:448
+msgid "The format of a single event page title. Follow the previous formatting instructions."
+msgstr "Format für den Veranstaltungsnamen auf einer einzelnen Veranstaltungsseite"
+
+#: eme_events.php:449
+msgid "Default single event format"
+msgstr "Standardformat für eine Einzelveranstaltung"
+
+#: eme_events.php:449
+msgid "The format of a single event page.<br/>Follow the previous formatting instructions. <br/>Use <code>#_MAP</code> to insert a map.<br/>Use <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code>, <code>#_CONTACTPHONE</code> to insert respectively the name, e-mail address and phone number of the designated contact person. <br/>Use <code>#_ADDBOOKINGFORM</code> to insert a form to allow the user to respond to your events reserving one or more places (RSVP).<br/> Use <code>#_REMOVEBOOKINGFORM</code> to insert a form where users, inserting their name and e-mail address, can remove their bookings."
+msgstr "Format für die Seite einer Einzelveranstaltung<br/> Befolge die vorher angezeigten Formatierungsanweisungen. <br/> Nutze <code>#_MAP</code> um eine Landkarte einzufügen.<br/>Nutze <code>#_CONTACTNAME</code>, <code>#_CONTACTEMAIL</code> und <code>#_CONTACTPHONE</code>, um entsprechend den Namen, die E-Mail-Adresse und die Telefonnummer des Ansprechpartners einzufügen. <br/>Nutze <code>#_ADDBOOKINGFORM</code>, um ein Formular einzufügen, das es dem Besucher erlaubt, für eine Veranstaltung einen oder mehrere Plätze zu reservieren (RSVP).<br/> Nutze <code>#_REMOVEBOOKINGFORM</code>, um ein Formular einzufügen, in dem ein Besucher eine Reservierung stornieren kann, indem er seinen Namen und seine Emailadresse angibt."
+
+#: eme_events.php:449
+msgid "<br/>Use <code>#_ADDBOOKINGFORM_IF_NOT_REGISTERED</code> to insert the booking form only if the user has not registered yet. Similar use <code>#_REMOVEBOOKINGFORM_IF_REGISTERED</code> to insert the booking removal form only if the user has already registered before. These two codes only work for WP users."
+msgstr "<br/>Benutze <code>#_ADDBOOKINGFORM_IF_NOT_REGISTERED</code>, um das Reservierungformular einzufügen, falls der Benutzer noch nicht reserviert hat. Andernfalls benutze <code>#_REMOVEBOOKINGFORM_IF_REGISTERED</code>, um das Formular zum Zurückziehen der Reservierung einzufügen, falls der Benutzer bereits reserviert hat. Die beiden Shortcodes funktionieren nur für WP-Benutzer."
+
+#: eme_events.php:449
+msgid "<br/> Use <code>#_DIRECTIONS</code> to insert a form so people can ask directions to the event."
+msgstr "<br/>Benutze <code>#_DIRECTIONS</code> um ein Formular einzufügen, das ermöglicht, nach der Wegbeschreibung für die Veranstaltung zu fragen."
+
+#: eme_events.php:449
+msgid "<br/> Use <code>#_CATEGORIES</code> to insert a comma-seperated list of categories an event is in."
+msgstr "<br/>Benutze <code>#_CATEGORIES</code> um eine kommagetrennte Liste der Kategorien einer Veranstaltung anzuzeigen."
+
+#: eme_events.php:449
+msgid "<br/> Use <code>#_ATTENDEES</code> to get a list of the names attending the event."
+msgstr "<br/>Benutze <code>#_ATTENDEES</code> um eine Liste der Teilnehmer der Veranstaltung anzuzeigen."
+
+#: eme_events.php:450
+msgid "Monthly period date format"
+msgstr "Datumsformat für monatliche Wiederholungen"
+
+#: eme_events.php:450
+msgid "The format of the date-string used when you use showperiod=monthly as an option to &#91;the events_list] shortcode, also used for monthly pagination. Use php date() compatible settings."
+msgstr "Das Format des Datums, das benutzt wird, wenn du 'showperiod=monthly' als Option für den &#91;the events_list] shortcode, was auch für die monatliche Nummerierung benutzt wird. Benutze Einstellungen, die kompatibel zu php date() sind."
+
+#: eme_events.php:450
+#: eme_events.php:451
+msgid " The default is: "
+msgstr " Die Standardeinstellung ist:"
+
+#: eme_events.php:451
+msgid "Yearly period date format"
+msgstr "Datumsformat für jährliche Wiederholungen"
+
+#: eme_events.php:451
+msgid "The format of the date-string used when you use showperiod=yearly as an option to &#91;the events_list] shortcode, also used for yearly pagination. Use php date() compatible settings."
+msgstr "Das Format des Datums, das benutzt wird, wenn du 'showperiod=yearly' als Option für den &#91;the events_list] Shortcode, was auch für die jährliche Nummerierung benutzt wird. Benutze Einstellungen, die kompatibel zu php date() sind."
+
+#: eme_events.php:452
+msgid "Events page title"
+msgstr "Titel der Veranstaltungsseite"
+
+#: eme_events.php:452
+msgid "The title on the multiple events page."
+msgstr "Titel auf der Seite für mehrere Veranstaltungen"
+
+#: eme_events.php:453
+msgid "No events message"
+msgstr "Meldung für keine Veranstaltungen"
+
+#: eme_events.php:453
+msgid "The message displayed when no events are available."
+msgstr "Die Meldung, die angezeigt wird, wenn es keine Veranstaltungen gibt"
+
+#: eme_events.php:459
+msgid "Default event list filtering format"
+msgstr "Standard-Filterformat für Veranstaltungslisten"
+
+#: eme_events.php:459
+msgid "This defines the layout of the event list filtering form when using the shortcode <code>[events_filterform]</code>. Use <code>#_FILTER_CATS</code>, <code>#_FILTER_LOCS</code>, <code>#_FILTER_TOWNS</code>, <code>#_FILTER_WEEKS</code>, <code>#_FILTER_MONTHS</code>."
+msgstr "Dies definiert das Layout des Filterformulars der Veranstaltungsliste, wenn der Shortcode <code>[events_filterform]</code> benutzt wird..<br/>Füge einen oder mehrere der folgenden Platzhalter ein: <code>#_FILTER_CATS</code> für Kategorie-Filter, <code>#_FILTER_LOCS</code> für Ortsfilter, <code>#_FILTER_TOWNS</code> für Stadtfilter, <code>#_FILTER_WEEKS</code> für Wochenfilter, <code>#_FILTER_MONTHS</code> für Monatsfilter."
+
+#: eme_events.php:465
+msgid "Small calendar title"
+msgstr "Titel für den kleinen Kalender"
+
+#: eme_events.php:465
+msgid "The format of the title, corresponding to the text that appears when hovering on an eventful calendar day."
+msgstr "Das Titelformat, der erscheint, wenn man mit der Maus über einen sehr vollen Kalender geht."
+
+#: eme_events.php:466
+msgid "Small calendar title separator"
+msgstr "Titeltrenner für kleinen Kalender"
+
+#: eme_events.php:466
+msgid "The separator appearing on the above title when more than one event is taking place on the same day."
+msgstr "Trenner erscheint, wenn mehr als eine Veranstaltung am selben Tag stattfindet."
+
+#: eme_events.php:467
+msgid "Full calendar events format"
+msgstr "Format für den großen Kalender"
+
+#: eme_events.php:467
+msgid "The format of each event when displayed in the full calendar. Remember to include <code>li</code> tags before and after the event."
+msgstr "Format für die Darstellung der Veranstaltung im größen Kalender. Vergiss nicht, <code>li</code>-Tags vor und nach der Veranstaltung einzufügen."
+
+#: eme_events.php:474
+msgid "Single location page title format"
+msgstr "Titelformat für Veranstaltungsorte"
+
+#: eme_events.php:474
+msgid "The format of a single location page title.<br/>Follow the previous formatting instructions."
+msgstr "Das Titelformat für die Seite für einzelne Veranstaltungsorte.<br/> Schau Dir die folgenden Anforderungen für die Formatierung an."
+
+#: eme_events.php:475
+msgid "Default single location page format"
+msgstr "Standardseite für Veranstaltungsort"
+
+#: eme_events.php:475
+msgid "The format of a single location page.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>.<br/> Use <code>#_MAP</code> to display a map of the event location, and <code>#_IMAGE</code> to display an image of the location.<br/> Use <code>#_NEXTEVENTS</code> to insert a list of the upcoming events, <code>#_PASTEVENTS</code> for a list of past events, <code>#_ALLEVENTS</code> for a list of all events taking place in this location."
+msgstr "Das Format für die Seite für einzelne Veranstaltungsorte.>br/>Füge einen oder mehrere der folgenden Platzhalter ein: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>.<br/> Benutze <code>#_MAP</code>, um den Veranstaltungsort in google maps anzuzeigen und <code>#_IMAGE</code>, um eine Grafik des Veranstaltunsortes anzuzeigen.<br/> Nutze <code>#_NEXTEVENTS</code>, um eine Liste kommender Veranstaltungen anzuzeigen, <code>#_PASTEVENTS</code> für die Liste vergangener Veranstaltungen, <code>#_ALLEVENTS</code> für eine Liste aller Veranstaltungen in diesem Veranstaltungsort."
+
+#: eme_events.php:476
+msgid "Default location balloon format"
+msgstr "Standardformat der Maps-Sprechblase"
+
+#: eme_events.php:476
+msgid "The format of the text appearing in the balloon describing the location in the map.<br/>Insert one or more of the following placeholders: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code>,<code>#_IMAGE</code>, <code>#_LOCATIONPAGEURL</code> or <code>#_DIRECTIONS</code>."
+msgstr "Textformat für die maps-Sprechblase. Hier wird der Veranstaltungsort auf der Karte beschrieben.<br/>Füge einen oder mehrere der folgenden Platzhalter ein: <code>#_NAME</code>, <code>#_ADDRESS</code>, <code>#_TOWN</code>, <code>#_DESCRIPTION</code> or <code>#_IMAGE</code>."
+
+#: eme_events.php:477
+msgid "Default location event list format"
+msgstr "Standard-Format für eine Veranstaltungsliste auf der Seite der Veranstaltungsorte"
+
+#: eme_events.php:477
+msgid "The format of the events list inserted in the location page through the <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> element. <br/> Follow the events formatting instructions"
+msgstr "Das Format der Veranstaltungsliste, die durch<code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> oder <code>#_ALLEVENTS</code> in die Seite des Veranstaltungsortes eingebunden wird. <br/> Nutze die oben angezeigten Formatierungshinweise."
+
+#: eme_events.php:478
+msgid "Default no events message"
+msgstr "Standardnachricht, falls keine Veranstaltungen vorhanden sind"
+
+#: eme_events.php:478
+msgid "The message to be displayed in the list generated by <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> and <code>#_ALLEVENTS</code> when no events are available."
+msgstr "Diese Nachricht wird angezeigt, wenn in der Veranstaltungsliste, die durch <code>#_NEXTEVENTS</code>, <code>#_PASTEVENTS</code> oder <code>#_ALLEVENTS</code> generiert wird, aber keine aktuellen Termine vorhanden sind."
+
+#: eme_events.php:485
+msgid "RSS main title"
+msgstr "RSS Haupttitel"
+
+#: eme_events.php:485
+msgid "The main title of your RSS events feed."
+msgstr "Der Haupttitel Deines RSS-Veranstaltungs-Feeds."
+
+#: eme_events.php:486
+msgid "RSS main description"
+msgstr "RSS Hauptbeschreibung"
+
+#: eme_events.php:486
+msgid "The main description of your RSS events feed."
+msgstr "Hier kommt die Hauptbeschreibung Deines Feeds rein."
+
+#: eme_events.php:487
+msgid "RSS title format"
+msgstr "RSS Titel"
+
+#: eme_events.php:487
+msgid "The format of the title of each item in the events RSS feed."
+msgstr "Titelformat für die Einträge des Veranstaltungs-RSS-Feeds"
+
+#: eme_events.php:488
+msgid "RSS description format"
+msgstr "RSS Beschreibung"
+
+#: eme_events.php:488
+msgid "The format of the description of each item in the events RSS feed. Follow the previous formatting instructions."
+msgstr "Das Format für die Beschreibung für jeden Eintrag im RSS-Feed. Nutze die oben angezeigten Formatierungshinweise."
+
+#: eme_events.php:495
+#: eme_events.php:1868
+msgid "Event author"
+msgstr "Veranstaltungsautor"
+
+#: eme_events.php:497
+msgid "Default contact person"
+msgstr "Standard-Ansprechpartner"
+
+#: eme_events.php:497
+msgid "Select the default contact person. This user will be employed whenever a contact person is not explicitly specified for an event"
+msgstr "Wähle einen Hauptansprechpartner. Diese Person wird immer dann eingesetzt, wenn es keinen definierten Ansprechpartner für Einzelveranstaltungen gibt."
+
+#: eme_events.php:498
+msgid "By default require WP membership to be able to register?"
+msgstr "Standardmäßig WP-Mitgliedschaft für Reservierungen erfordern?"
+
+#: eme_events.php:498
+msgid "Check this option if you want by default that only WP registered users can book for an event."
+msgstr "Aktiviere diese Option, wenn du möchtest, dass nur WP-Mitglieder Plätze für Veranstaltungen buchen können."
+
+#: eme_events.php:499
+msgid "By default enable registrations for new events?"
+msgstr "Teilnahmebestätigen für neue Veranstaltungen standardmäßig aktivieren?"
+
+#: eme_events.php:499
+msgid "Check this option if you want to enable registrations by default for new events."
+msgstr "Aktiviere diese Option, wenn du Teilnahmebestätigungen für Veranstaltungen standardmäßig aktivieren willst."
+
+#: eme_events.php:500
+msgid "Default number of spaces"
+msgstr "Standardmäßige Anzahl von Plätzen"
+
+#: eme_events.php:500
+msgid "The default number of spaces an event has."
+msgstr "Die standardmäßige Anzahl von Plätzen eine Veranstaltung hat."
+
+#: eme_events.php:501
+msgid "Min number of spaces to book"
+msgstr "Minimale Anzahl an zu buchenden Plätzen"
+
+#: eme_events.php:501
+msgid "The minimum number of spaces a person can book in one go (it can be 0, for e.g. just an attendee list)."
+msgstr "Die minimale Anzahl an Plätzen, die eine Person auf einmal buchen muss (kann 0 sein, für nur eine Teilnehmerliste)."
+
+#: eme_events.php:502
+msgid "Max number of spaces to book"
+msgstr "Maximale Anzahl an buchbaren Plätzen"
+
+#: eme_events.php:502
+msgid "The maximum number of spaces a person can book in one go."
+msgstr "Die maximale Anzahl an Plätzen, die eine Person auf einmal buchen kann."
+
+#: eme_events.php:503
+msgid "Use captcha for booking form?"
+msgstr "Captcha für das Reservierungsformular nutzen?"
+
+#: eme_events.php:503
+msgid "Check this option if you want to use a captcha on the booking form, to thwart spammers a bit."
+msgstr "Wähle diese Option, wenn Du Captcha für das Reservierungsformular nutzen möchtest. Ist gut gegen Spammer."
+
+#: eme_events.php:504
+msgid "Hide fully booked events?"
+msgstr "Ausgebuchte Veranstaltungen verstecken?"
+
+#: eme_events.php:504
+msgid "Check this option if you want to hide events that are fully booked from the calendar and events listing in the front."
+msgstr "Wähle diese Option, wenn Du möchtest, dass ausgebuchte Veranstaltungen nicht auf dem Kalender und der Veranstaltungsliste angezeigt werden sollen."
+
+#: eme_events.php:505
+msgid "Add booking form submit text"
+msgstr "'Reservierung hinzufügen' Absende-Text"
+
+#: eme_events.php:505
+msgid "The string of the submit button on the add booking form"
+msgstr "Der Text des Absende-Buttons auf dem 'Reservierung hinzufügen'-Formular"
+
+#: eme_events.php:506
+msgid "Delete booking form submit text"
+msgstr "'Reservierung entfernen' Absende-Text"
+
+#: eme_events.php:506
+msgid "The string of the submit button on the delete booking form"
+msgstr "Der Text des Absende-Buttons auf dem 'Reservierung entfernen'-Formular"
+
+#: eme_events.php:507
+msgid "Attendees list format"
+msgstr "Format der Teilnehmerliste"
+
+#: eme_events.php:507
+msgid "The format for the attendees list when using the <code>#_ATTENDEES</code> placeholder. Use <code>#_NAME</code>, <code>#_EMAIL</code>, <code>#_PHONE</code>, <code>#_ID</code>."
+msgstr "Textformat für die Teilnehmerliste, wenn der <code>#_ATTENDEES</code> Platzhalter benutzt wird. Füge einen oder mehrere der folgenden Platzhalter ein: <code>#_NAME</code>, <code>#_EMAIL</code>, <code>#_PHONE</code>, <code>#_ID</code>."
+
+#: eme_events.php:514
+msgid "Enable the RSVP e-mail notifications?"
+msgstr "Teilnahme-E-Mail-Benachrichtigungen?"
+
+#: eme_events.php:514
+msgid "Check this option if you want to receive an email when someone books places for your events."
+msgstr "Aktiviere diese Option, wenn Du immer eine Emails erhalten willst, wenn ein Besteller Plätze für eine Veranstaltung reservieren möchte."
+
+#: eme_events.php:515
+msgid "Contact person email format"
+msgstr "E-Mail-Format für den Ansprechpartner"
+
+#: eme_events.php:515
+msgid "The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent's comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats."
+msgstr "Emails für den Ansprechpartner werden ihm im folgenden Format zugeschickt. Folge den Formatanweisungen für Veranstaltungen. <br/>Nutze <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> um jeweils den Namen, Email, Adresse and Telefon des Bestellers anzuzeigen.<br/>Nutze <code>#_SPACES</code>, um die Anzahl der reservierten Plätze anzuzeigen. Nutze <code>#_COMMENT</code>, um eventuelle Anmerkungen des Bestellers anzuzeigen. <br/> Nutze <code>#_RESERVEDSPACES</code> und <code>#_AVAILABLESPACES</code> um anzuzeigen, wieviele Plätze bereits reserviert und verfügbar sind"
+
+#: eme_events.php:516
+msgid "Respondent email format"
+msgstr "E-Mail-Format für den Besteller"
+
+#: eme_events.php:516
+msgid "The format of the email which will be sent to the respondent. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code> to display the name of the respondent.<br/>Use <code>#_CONTACTNAME</code> and <code>#_PLAIN_CONTACTEMAIL</code> to display respectively the name and e-mail of the contact person.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent's comment."
+msgstr "Emails für den Besteller werden ihm im folgenden Format zugeschickt. Folge den Formatanweisungen für Veranstaltungen.. Folge den Formatanweisungen für Veranstaltungen. <br/>Nutze <code>#_RESPNAME</code> ,um den Namen des Bestellers anzuzeigen.<br/>Nutze <code>#_CONTACTNAME</code> und <code>#_PLAIN_CONTACTEMAIL</code> , um jewils den Namen und die Emailadresse der Kontaktperson anzuzeigen.<br/>Nutze <code>#_SPACES</code>, um dem Besteller die Anzahl der reservierten Plätze anzuzeigen. Nutze <code>#_COMMENT</code> , um den Kommentar des Bestellers nochmal anzuzeigen."
+
+#: eme_events.php:517
+msgid "Registration pending email format"
+msgstr "E-Mail-Format für noch nicht bearbeitete Reservierungen"
+
+#: eme_events.php:517
+msgid "The format of the email which will be sent to the respondent when the event requires registration approval."
+msgstr "Format für Emails auf Reservierungsanfragen, wenn eine Bestätigung der Reservierung erfolgen muss."
+
+#: eme_events.php:518
+msgid "Registration cancelled email format"
+msgstr "E-Mail-Format für zurückgezogene Reservierungen"
+
+#: eme_events.php:518
+msgid "The format of the email which will be sent to the respondent when the respondent cancels the registrations for an event."
+msgstr "Format für E-Mails auf Reservierungsanfragen, wenn der Besteller die Reservierung zurückgezogen hat."
+
+#: eme_events.php:519
+msgid "Registration denied email format"
+msgstr "E-Mail-Format für abgelehnte Reservierungen"
+
+#: eme_events.php:519
+msgid "The format of the email which will be sent to the respondent when the admin denies the registration request if the event requires registration approval."
+msgstr "Das Format für die E-Mail, die dann versandt wird, wenn der Administrator die Reservierung ablehnt, sofern die Veranstaltung eine Reservierungsbestätigung vorsieht."
+
+#: eme_events.php:520
+msgid "Notification sender name"
+msgstr "Namen des Absenders der Benachrichtigung"
+
+#: eme_events.php:520
+msgid "Insert the display name of the notification sender."
+msgstr "Füge hier den Namen des Absenders ein"
+
+#: eme_events.php:521
+msgid "Notification sender address"
+msgstr "Adresse des Absenders"
+
+#: eme_events.php:521
+msgid "Insert the address of the notification sender. It must correspond with your Gmail account user"
+msgstr "Füge hier den Namen des Absenders der Benachrichtigung ein. (Für GoogleMail: Muss mit deinem GoogleMail Benutzer übereinstimmen)"
+
+#: eme_events.php:522
+msgid "Mail sending method"
+msgstr "Versandmethode für Emails"
+
+#: eme_events.php:522
+msgid "PHP mail function"
+msgstr "PHP Mailfunktion"
+
+#: eme_events.php:522
+msgid "Select the method to send email notification."
+msgstr "Wähle die Methode, mit der Emailbenachrichtigungen verschickt werden."
+
+#: eme_events.php:523
+msgid "The SMTP host. Usually it corresponds to 'localhost'. If you use Gmail, set this value to 'ssl://smtp.gmail.com:465'."
+msgstr "Der SMTP-Host. Normalerweise stimmt 'localhost'. (Falls Du GoogleMail benutzt, setze den Wert auf 'ssl://smtp.Gmail.com:465')."
+
+#: eme_events.php:524
+msgid "The port through which you e-mail notifications will be sent. Make sure the firewall doesn't block this port"
+msgstr "Der Port, über den Emailbenachrichtigungen verschickt werden. Gehe vorher sicher, dass die Firewall diesen Port nicht blockiert."
+
+#: eme_events.php:525
+msgid "Use SMTP authentication?"
+msgstr "SMTP-Authentifizierung nutzen?"
+
+#: eme_events.php:525
+msgid "SMTP authentication is often needed. If you use Gmail, make sure to set this parameter to Yes"
+msgstr "Eine SMTP-Authentifizierung wird häufig benögtigt. Falls DU Gmail bebutzt, gehe sicher, dass Du den Parameter auf JA setzt"
+
+#: eme_events.php:526
+msgid "SMTP username"
+msgstr "SMTP Benutzername"
+
+#: eme_events.php:526
+msgid "Insert the username to be used to access your SMTP server."
+msgstr "Füge hier den Benutzernamen für SMTP-Authentifizierung ein"
+
+#: eme_events.php:527
+msgid "SMTP password"
+msgstr "SMTP Passwort"
+
+#: eme_events.php:527
+msgid "Insert the password to be used to access your SMTP server"
+msgstr "Füge hier das SMTP-Passwort ein"
+
+#: eme_events.php:534
+msgid "Maximum width (px)"
+msgstr "Maximale Breite (px)"
+
+#: eme_events.php:534
+msgid "The maximum allowed width for images uploaded, in pixels"
+msgstr "Die maximal erlaubte Breite für Bilduploads"
+
+#: eme_events.php:535
+msgid "Maximum height (px)"
+msgstr "Maximale Höhe (px)"
+
+#: eme_events.php:535
+msgid "The maximum allowed height for images uploaded, in pixels"
+msgstr "Die maximal erlaubte Höhe für Bilduploads"
+
+#: eme_events.php:536
+msgid "Maximum size (bytes)"
+msgstr "Maximale Größe (bytes)"
+
+#: eme_events.php:536
+msgid "The maximum allowed size for images uploaded, in bytes"
+msgstr "Die maximal erlaubte Größe für Bilduploads, in Pixeln"
+
+#: eme_events.php:780
+#: eme_locations.php:565
+msgid "Previous week"
+msgstr "Vorherige Woche"
+
+#: eme_events.php:781
+#: eme_locations.php:566
+msgid "Next week"
+msgstr "Nächste Woche"
+
+#: eme_events.php:798
+#: eme_locations.php:583
+msgid "Previous month"
+msgstr "Vorheriger Monat"
+
+#: eme_events.php:799
+#: eme_locations.php:584
+msgid "Next month"
+msgstr "Nächster Monat"
+
+#: eme_events.php:807
+#: eme_locations.php:592
+msgid "Previous year"
+msgstr "Vorheriges Jahr"
+
+#: eme_events.php:808
+#: eme_locations.php:593
+msgid "Next year"
+msgstr "Nächstes Jahr"
+
+#: eme_events.php:817
+#: eme_events.php:826
+#: eme_locations.php:602
+#: eme_locations.php:611
+msgid "Previous day"
+msgstr "Vorheriger Tag"
+
+#: eme_events.php:818
+#: eme_events.php:827
+#: eme_locations.php:603
+#: eme_locations.php:612
+msgid "Next day"
+msgstr "Nächster Tag"
+
+#: eme_events.php:848
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+#: eme_events.php:849
+msgid "Next page"
+msgstr "Nächste Seite"
+
+#: eme_events.php:869
+#: eme_events.php:879
+msgid "Page "
+msgstr "Seite"
+
+#: eme_events.php:1445
+msgid "Past events"
+msgstr "Vergangene Veranstaltungen"
+
+#: eme_events.php:1446
+msgid "All events"
+msgstr "Alle Veranstaltungen"
+
+#: eme_events.php:1455
+#: events-manager.php:51
+#: events-manager.php:652
+#: events-manager.php:653
+#: events-manager.php:764
 msgid "Events"
-msgstr "Events"
+msgstr "Ereignisse"
 
-#: dbem_events.php:1015
-#: dbem_rsvp.php:481
-#: dbem_rsvp.php:612
-msgid "Bulk Actions"
-msgstr "Aktionen"
-
-#: dbem_events.php:1016
-msgid "Delete selected"
-msgstr "Markierte löschen"
-
-#: dbem_events.php:1018
-#: dbem_rsvp.php:485
-#: dbem_rsvp.php:616
-msgid "Apply"
-msgstr "Anwenden"
-
-#: dbem_events.php:1029
-#: dbem_rsvp.php:502
-#: dbem_rsvp.php:633
-msgid "Filter"
-msgstr "Filter"
-
-#: dbem_events.php:1034
-#: dbem_widgets.php:21
-#: events-manager.php:53
-#: events-manager.php:451
-msgid "No events"
-msgstr "Keine Veranstaltungen"
-
-#: dbem_events.php:1045
-#: dbem_events.php:1525
-#: dbem_events.php:1533
-msgid "Location"
-msgstr "Veranstaltungsort"
-
-#: dbem_events.php:1046
-#: dbem_rsvp.php:511
-#: dbem_rsvp.php:642
-msgid "Date and time"
-msgstr "Datum und Uhrzeit"
-
-#: dbem_events.php:1055
-#: dbem_events.php:1056
-#: dbem_rsvp.php:528
-#: dbem_rsvp.php:529
-#: dbem_rsvp.php:659
-#: dbem_rsvp.php:660
+#: eme_events.php:1519
+#: eme_events.php:1520
+#: eme_rsvp.php:722
+#: eme_rsvp.php:723
+#: eme_rsvp.php:860
+#: eme_rsvp.php:861
 msgid "D d M Y"
 msgstr "D d M Y"
 
-#: dbem_events.php:1073
-#: dbem_events.php:1362
-#: dbem_widgets.php:82
-#: dbem_widgets.php:157
+#: eme_events.php:1543
 msgid "Category"
 msgstr "Kategorie"
 
-#: dbem_events.php:1078
-msgid "Duplicate this event"
-msgstr "Kopie der Veranstaltung erstellen"
+#: eme_events.php:1549
+msgid "RSVP Info: "
+msgstr "Teilnahmeinformation:"
 
-#: dbem_events.php:1191
+#: eme_events.php:1549
+msgid "Free: "
+msgstr "Frei:"
+
+#: eme_events.php:1549
+msgid "Max: "
+msgstr "Maximal:"
+
+#: eme_events.php:1550
+#: eme_rsvp.php:491
+msgid "Printable view"
+msgstr "Druckansicht"
+
+#: eme_events.php:1695
 msgid "Daily"
 msgstr "Täglich"
 
-#: dbem_events.php:1191
+#: eme_events.php:1695
 msgid "Weekly"
 msgstr "Wöchentlich"
 
-#: dbem_events.php:1191
+#: eme_events.php:1695
 msgid "Monthly"
 msgstr "Monatlich"
 
-#: dbem_events.php:1192
+#: eme_events.php:1696
 msgid "Mon"
 msgstr "Mo"
 
-#: dbem_events.php:1192
+#: eme_events.php:1696
 msgid "Tue"
 msgstr "Di"
 
-#: dbem_events.php:1192
+#: eme_events.php:1696
 msgid "Wed"
 msgstr "Mi"
 
-#: dbem_events.php:1192
+#: eme_events.php:1696
 msgid "Thu"
 msgstr "Do"
 
-#: dbem_events.php:1192
+#: eme_events.php:1696
 msgid "Fri"
 msgstr "Fr"
 
-#: dbem_events.php:1192
+#: eme_events.php:1696
 msgid "Sat"
-msgstr "Sat"
+msgstr "Sa"
 
-#: dbem_events.php:1192
+#: eme_events.php:1696
 msgid "Sun"
-msgstr "Sun"
+msgstr "So"
 
-#: dbem_events.php:1193
+#: eme_events.php:1697
 msgid "first"
 msgstr "erster"
 
-#: dbem_events.php:1193
+#: eme_events.php:1697
 msgid "second"
 msgstr "zweiter"
 
-#: dbem_events.php:1193
+#: eme_events.php:1697
 msgid "third"
-msgstr "derdedritter"
+msgstr "dritter"
 
-#: dbem_events.php:1193
+#: eme_events.php:1697
 msgid "fourth"
 msgstr "vierter"
 
-#: dbem_events.php:1193
+#: eme_events.php:1697
+msgid "fifth"
+msgstr "fünfte"
+
+#: eme_events.php:1697
 msgid "last"
 msgstr "letzter"
 
-#: dbem_events.php:1193
+#: eme_events.php:1697
 msgid "Start day"
 msgstr "Startdatum"
 
-#: dbem_events.php:1209
-msgid "WARNING: This is a recurrence."
-msgstr "WARNUNG: Dies ist eine Veranstaltungsreihe."
-
-#: dbem_events.php:1212
-msgid "Modifying these data all the events linked to this recurrence will be rescheduled"
-msgstr "Wenn Du diese Daten bearbeitest, werden alle verknüpften Veranstaltungen neu terminiert."
-
-#: dbem_events.php:1215
-msgid "WARNING: This is a recurring event."
-msgstr "ACHTUNG: Das ist eine Veranstaltungsreihe!"
-
-#: dbem_events.php:1216
-msgid "If you change these data and save, this will become an independent event."
-msgstr "Wenn Du diese Daten änderst und speicherst, wird dies eine unabhängige Veranstaltung."
-
-#: dbem_events.php:1233
-msgid "Recurrence"
-msgstr "Veranstaltungsserie"
-
-#: dbem_events.php:1245
-msgid "Repeated event"
-msgstr "Veranstaltungsreihe"
-
-#: dbem_events.php:1254
-#: dbem_events.php:1276
-msgid "Every"
-msgstr "Jeden"
-
-#: dbem_events.php:1258
-msgid "day"
-msgstr "Tag"
-
-#: dbem_events.php:1260
-msgid "days"
-msgstr "Tage"
-
-#: dbem_events.php:1262
-msgid "week"
-msgstr "Woche"
-
-#: dbem_events.php:1264
-msgid "weeks"
-msgstr "Wochen"
-
-#: dbem_events.php:1266
-msgid "month"
-msgstr "Monat"
-
-#: dbem_events.php:1268
-msgid "months"
-msgstr "Monate"
-
-#: dbem_events.php:1273
-msgid "If you leave this empty, the event start date will be used as a reference."
-msgstr "Wenn Du dieses Feld leer lässt, wird der Veranstaltungsbeginn als Referenz für die anderen benutzt."
-
-#: dbem_events.php:1283
-msgid "Day of month"
-msgstr "Tag des Monats"
-
-#: dbem_events.php:1285
-msgid "If you use \"Start day\" as day of the month, the month day of the event start date will be used as a reference."
-msgstr "Wenn Du als \"Starttag\" einen Tag im Monat wählst, wird dieser bestimmte Tag im Monat als Referenz für die weiteren Termine genutzt."
-
-#: dbem_events.php:1289
-msgid "Check if your event happens more than once according to a regular pattern"
-msgstr "Wähle aus, nach welchem Muster sich diese Veranstaltungsreihe wiederholt"
-
-#: dbem_events.php:1294
-msgid "This isn't a recurrent event"
-msgstr "Dies ist keine Veranstaltungsreihe!"
-
-#: dbem_events.php:1319
-msgid "Contact Person"
-msgstr "Ansprechpartner"
-
-#: dbem_events.php:1322
-msgid "Contact"
-msgstr "Kontakt"
-
-#: dbem_events.php:1324
-#: dbem_events.php:1370
-#: dbem_widgets.php:84
-#: dbem_widgets.php:159
-msgid "Select..."
-msgstr "Auswählen..."
-
-#: dbem_events.php:1332
-msgid "RSVP"
-msgstr "RSVP"
-
-#: dbem_events.php:1336
-msgid "Enable registration for this event"
-msgstr "Reservierungen für diese Veranstaltung aktivieren"
-
-#: dbem_events.php:1341
-msgid "Require approval for registration"
-msgstr "Benötigt Reservierungsbestätigung"
-
-#: dbem_events.php:1343
-#: dbem_rsvp.php:304
-msgid "Spaces"
-msgstr "Orte"
-
-#: dbem_events.php:1365
-msgid "Category:"
-msgstr "Kategorie:"
-
-#: dbem_events.php:1405
-msgid "The event name. Example: Birthday party"
-msgstr "Name der Veranstaltung. Beispiel: Geburtstagsparty"
-
-#: dbem_events.php:1410
-msgid "Event date"
-msgstr "Datum der Veranstaltung"
-
-#: dbem_events.php:1413
-msgid "Recurrence dates"
-msgstr "Wiederkehrende Termine"
-
-#: dbem_events.php:1423
-msgid "The event date."
-msgstr "Datum der Veranstaltung."
-
-#: dbem_events.php:1426
-msgid "When not recurring, this event spans between the beginning and end date."
-msgstr "Wenn dies keine Veranstaltungsreihe ist, dauert sie sich vom Anfangs- bis zum Enddatum."
-
-#: dbem_events.php:1430
-msgid "The recurrence beginning and end date."
-msgstr "Erster und letzter Veranstaltunstag"
-
-#: dbem_events.php:1435
-msgid "Event time"
-msgstr "Uhrzeit der Veranstaltung"
-
-#: dbem_events.php:1442
-msgid "The time of the event beginning and end"
-msgstr "Die Uhrzeit für Beginn und Ende der Veranstaltung."
-
-#: dbem_events.php:1447
-msgid "Coordinates"
-msgstr "Koordinaten"
-
-#: dbem_events.php:1460
-msgid "Single Event Title Format"
-msgstr "Titelformat für die Veranstaltung"
-
-#: dbem_events.php:1466
-msgid "The format of the single event title."
-msgstr "Format für den Titel der Einzelveranstaltung"
-
-#: dbem_events.php:1468
-#: dbem_events.php:1485
-#: dbem_events.php:1502
-#: dbem_events.php:1519
-msgid "Only fill this in if you want to override the default settings."
-msgstr "Bitte nur ausfüllen, wenn Du die Standardeinstellungen überschreiben willst"
-
-#: dbem_events.php:1477
-msgid "Single Event Format"
-msgstr "Format der Veranstaltung"
-
-#: dbem_events.php:1483
-msgid "The format of the single event page."
-msgstr "Formatierung für die Seitendarstellung einer Veranstaltung"
-
-#: dbem_events.php:1494
-msgid "Contact Person Email Format"
-msgstr "Email-Format des Ansprechpartners"
-
-#: dbem_events.php:1500
-msgid "The format of the email which will be sent to the contact person."
-msgstr "Format der Email, welche dem Ansprechpartner zugesandt werden soll."
-
-#: dbem_events.php:1511
-msgid "Respondent Email Format"
-msgstr "Email-Format für den Besteller"
-
-#: dbem_events.php:1517
-msgid "The format of the email which will be sent to the respondent."
-msgstr "Format der Email, welche dem Besteller zugesandt werden soll."
-
-#: dbem_events.php:1569
-#: dbem_locations.php:145
-#: dbem_locations.php:288
-msgid "Map not found"
-msgstr "Karte nicht gefunden"
-
-#: dbem_events.php:1580
-msgid "The name of the location where the event takes place. You can use the name of a venue, a square, etc"
-msgstr "Name des Veranstaltungsortes. Hier kannst du den Namen einer Halle, eines Platzes usw. einsetzen."
-
-#: dbem_events.php:1582
-msgid "If you leave this empty, the map will NOT be shown for this event"
-msgstr "Wenn Du dieses Feld leer lässt, wird die Karte für diese Veranstaltung NICHT angezeigt"
-
-#: dbem_events.php:1588
-msgid "Select a location for your event"
-msgstr "Wähle einen Veranstaltungsort"
-
-#: dbem_events.php:1594
-msgid "Address:"
-msgstr "Adresse:"
-
-#: dbem_events.php:1599
-msgid "The address of the location where the event takes place. Example: 21, Dominick Street"
-msgstr "Die Adresse des Veranstaltungsortes, z.B. Hauptstrasse 123"
-
-#: dbem_events.php:1603
-msgid "Town:"
-msgstr "Stadt:"
-
-#: dbem_events.php:1608
-msgid "The town where the location is located. If you're using the Google Map integration and want to avoid geotagging ambiguities include the country in the town field. Example: Verona, Italy."
-msgstr "Die Stadt des Veranstaltungsortes. Falls Du Google Maps integriert hast und Unklarheiten im Geotagging verhindern möchtest, binde das Land in dieses Feld mit ein, z.B. Berlin, Germany. "
-
-#: dbem_events.php:1617
-msgid "Details"
-msgstr "Details"
-
-#: dbem_events.php:1626
-msgid "Details about the event"
-msgstr "Details zur Veranstaltung"
-
-#: dbem_events.php:1641
-msgid "Submit Event"
-msgstr "Speichern"
-
-#: dbem_events.php:1662
+#: eme_events.php:2210
 msgid "Missing fields: "
 msgstr "Fehlende Felder:"
 
-#: dbem_events.php:1664
+#: eme_events.php:2212
 msgid "Since the event is repeated, you must specify an event date."
 msgstr "Da dies eine Veranstaltungsreihe ist, musst Du einen Termin angeben."
 
-#: dbem_events.php:1916
-msgid "Date"
-msgstr "Datum"
-
-#: dbem_events.php:1931
-msgid "Some required fields are missing:"
-msgstr "Es fehlen ein paar wichtige Felder:"
-
-#: dbem_events.php:1934
-msgid "Since the event is repeated, you must specify an end date"
-msgstr "Da dies eine Veranstaltungsreihe ist, musst Du ein Enddatum angeben."
-
-#: dbem_events.php:2215
+#: eme_events.php:2852
 msgid "Add an event"
 msgstr "Veranstaltung hinzufügen"
 
-#: dbem_events.php:2234
+#: eme_events.php:2859
 #, php-format
 msgid "This page corresponds to <strong>Events Manager Extended</strong> events page. Its content will be overriden by <strong>Events Manager Extended</strong>. If you want to display your content, you can can assign another page to <strong>Events Manager Extended</strong> in the the <a href='%s'>Settings</a>. "
 msgstr "Diese Seite kommuniziert mit dem <strong>Events Manager Extended</strong>. Der Inhalt wird von <strong>Events Manager Extended</strong> überschrieben! Wenn du deinen Inhalt anzeigen willst, kannst Du dem <strong>Events Manager Extended</strong> in den <a href='%s'>Einstellungen</a> eine andere Seite zuweisen. "
 
-#: dbem_locations.php:44
+#: eme_events.php:2884
+msgid "Public"
+msgstr "Öffentlich"
+
+#: eme_events.php:2885
+msgid "Private"
+msgstr "Privat"
+
+#: eme_events.php:2886
+msgid "Draft"
+msgstr "Entwurf"
+
+#: eme_functions.php:92
+#: eme_functions.php:127
+#: events-manager.php:180
+#: events-manager.php:181
+#: events-manager.php:741
+msgid "events"
+msgstr "Events"
+
+#: eme_functions.php:110
+#: events-manager.php:182
+msgid "locations"
+msgstr "Veranstaltungsorte"
+
+#: eme_locations.php:7
+msgid "You have no right to update locations!"
+msgstr "Du hast keine Berechtigung um Veranstaltungsorte zu bearbeiten!"
+
+#: eme_locations.php:42
 msgid "The location has been updated."
 msgstr "Der Veranstaltungsort wurde aktualisiert."
 
-#: dbem_locations.php:90
-msgid "Edit location"
-msgstr "Veranstaltungsort bearbeiten"
+#: eme_locations.php:46
+msgid "The location update failed."
+msgstr "Die Aktualisierung des Veranstaltungsorts ist fehlgeschlagen."
 
-#: dbem_locations.php:105
-#: dbem_locations.php:252
-msgid "Location name"
-msgstr "Name"
+#: eme_locations.php:66
+msgid "The location has been added."
+msgstr "Der Veranstaltungsort wurde hinzugefügt."
 
-#: dbem_locations.php:108
-#: dbem_locations.php:255
-msgid "The name of the location"
-msgstr "Name des Veranstaltungsortes"
+#: eme_locations.php:71
+msgid "There has been a problem adding the location."
+msgstr "Es gab ein Problem beim Hinzufügen des Veranstaltungsorts."
 
-#: dbem_locations.php:111
-#: dbem_locations.php:259
-msgid "Location address"
-msgstr "Adresse"
-
-#: dbem_locations.php:113
-#: dbem_locations.php:261
-msgid "The address of the location"
-msgstr "Adresse des Veranstaltungsortes"
-
-#: dbem_locations.php:117
-#: dbem_locations.php:265
-msgid "Location town"
-msgstr "Stadt"
-
-#: dbem_locations.php:119
-#: dbem_locations.php:267
-msgid "The town of the location"
-msgstr "Stadt des Veranstaltungsortes"
-
-#: dbem_locations.php:131
-#: dbem_locations.php:280
-msgid "Location image"
-msgstr "Bild des Veranstaltungsortes"
-
-#: dbem_locations.php:133
-#: dbem_locations.php:282
-msgid "Select an image to upload"
-msgstr "Wähle ein Bild, um es hochzuladen"
-
-#: dbem_locations.php:141
-msgid "Because qtranslate is active, the title of the location will not update automatically in the balloon, so don't panic there."
-msgstr "Weil qtranslate aktiviert ist, wird der Titel der Location nicht automatisch in der Sprechblase aktualisiert, aber keine Panik."
-
-#: dbem_locations.php:150
-#: dbem_locations.php:293
-msgid "Location description"
-msgstr "Beschreibung"
-
-#: dbem_locations.php:155
-#: dbem_locations.php:298
-msgid "A description of the Location. You may include any kind of info here."
-msgstr "Beschreibung des Veranstaltungsortes"
-
-#: dbem_locations.php:158
-msgid "Update location"
-msgstr "Speichern"
-
-#: dbem_locations.php:184
-#: events-manager.php:523
-msgid "Locations"
-msgstr "Veranstaltungsorte"
-
-#: dbem_locations.php:204
-#: dbem_locations.php:212
-msgid "Address"
-msgstr "Adresse"
-
-#: dbem_locations.php:205
-#: dbem_locations.php:213
-msgid "Town"
-msgstr "Stadt"
-
-#: dbem_locations.php:238
-msgid "No venues have been inserted yet!"
-msgstr "Es wurden bis jetzt keine Veranstaltungsorte eingefügt!"
-
-#: dbem_locations.php:248
-#: dbem_locations.php:301
-msgid "Add location"
-msgstr "Veranstaltungsort hinzufügen"
-
-#: dbem_locations.php:402
+#: eme_locations.php:423
 msgid " is missing!"
 msgstr "fehlt!"
 
-#: dbem_locations.php:410
+#: eme_locations.php:431
 msgid "The image file is too big! Maximum size:"
 msgstr "Die Grafikdatei ist zu groß! Maximale Größe:"
 
-#: dbem_locations.php:415
+#: eme_locations.php:436
 msgid "The image is too big! Maximum size allowed:"
-msgstr "Das Grafikdatei ist zu groß! Maximal erlaubte Größe:"
+msgstr "Die Grafik ist zu groß! Maximal erlaubte Größe:"
 
-#: dbem_locations.php:417
+#: eme_locations.php:438
 msgid "The image is in a wrong format!"
 msgstr "Die Grafikdatei hat ein falsches Format!"
 
-#: dbem_locations.php:424
+#: eme_locations.php:445
 msgid "Ach, some problems here:"
 msgstr "Ups, hier gibt es ein Problem:"
 
-#: dbem_locations.php:484
+#: eme_locations.php:514
 msgid "The image could not be loaded"
 msgstr "Die Grafikdatei konnte nicht geladen werden"
 
-#: dbem_people.php:81
-msgid "Bookings data"
-msgstr "Buchungsdaten"
+#: eme_locations.php:841
+msgid "Your Street Address"
+msgstr "Straßenname"
 
-#: dbem_people.php:85
-msgid "E-mail"
-msgstr "Email"
+#: eme_locations.php:845
+msgid "Get Directions"
+msgstr "Wegbeschreibung anzeigen"
 
-#: dbem_people.php:86
-#: dbem_people.php:200
-#: dbem_people.php:203
-#: dbem_rsvp.php:34
-msgid "Phone number"
-msgstr "Telefonnummer"
+#: eme_people.php:5
+msgid "You have no right to update people!"
+msgstr "Du hast keine Berechtigung um Personen zu bearbeiten!"
 
-#: dbem_people.php:87
-#: dbem_rsvp.php:35
-#: dbem_rsvp.php:513
-#: dbem_rsvp.php:644
-msgid "Seats"
-msgstr "Plätze"
+#: eme_people.php:19
+msgid "Deleted all bookings made by '"
+msgstr "Alle Reservierungen entfernt von '"
 
-#: dbem_people.php:88
-#: dbem_rsvp.php:40
-msgid "Comment"
-msgstr "Kommentar"
+#: eme_people.php:25
+msgid "Deleted '"
+msgstr "Entfernt '"
 
-#: dbem_people.php:93
-#: dbem_rsvp.php:318
+#: eme_people.php:32
+msgid "Couldn't delete the people. Please try again."
+msgstr "Die Personen konnten nicht entfernt werden."
+
+#: eme_people.php:128
+#: eme_rsvp.php:475
 msgid "(pending)"
-msgstr "(unerledigt)"
+msgstr "(ausstehend)"
 
-#: dbem_people.php:106
-msgid "Booked"
-msgstr "Gebucht"
-
-#: dbem_people.php:111
-msgid "Available"
-msgstr "Verfügbar"
-
-#: dbem_people.php:126
-msgid "No people have responded to your events yet!"
-msgstr "Bis jetzt hat noch niemand auf die Veranstaltung geantwortet!"
-
-#: dbem_people.php:128
-msgid "This table collects the data about the people who responded to your events"
+#: eme_people.php:164
+msgid "This table shows the data about the people who responded to your events"
 msgstr "Diese Tabelle sammelt die Daten über die Personen, die auf deine Veranstaltung geantwortet haben"
 
-#: dbem_people.php:205
-msgid "The phone number used by Events Manager when the user is indicated as the contact person for an event."
-msgstr "Die Telefonnummer, die von Events Manager genutzt wird, wenn ein Nutzer als Ansprechpartner für die Veranstaltung angezeigt wird."
+#: eme_people.php:202
+msgid "Also delete associated bookings"
+msgstr "Auch zugehörige Reservierungen entfernen"
 
-#: dbem_recurrence.php:268
-msgid "Monday"
-msgstr "Montag"
-
-#: dbem_recurrence.php:268
-msgid "Tuesday"
-msgstr "Dienstag"
-
-#: dbem_recurrence.php:268
-msgid "Wednesday"
-msgstr "Mittwoch"
-
-#: dbem_recurrence.php:268
-msgid "Thursday"
-msgstr "Donnerstag"
-
-#: dbem_recurrence.php:268
-msgid "Friday"
-msgstr "Freitag"
-
-#: dbem_recurrence.php:268
-msgid "Saturday"
-msgstr "Samstag"
-
-#: dbem_recurrence.php:268
-msgid "Sunday"
-msgstr "Sonntag"
-
-#: dbem_recurrence.php:269
+#: eme_recurrence.php:264
 #, php-format
 msgid "the first %s of the month"
 msgstr "der erste %s des Monats"
 
-#: dbem_recurrence.php:269
+#: eme_recurrence.php:264
 #, php-format
 msgid "the second %s of the month"
 msgstr "der zweite %s des Monats"
 
-#: dbem_recurrence.php:269
+#: eme_recurrence.php:264
 #, php-format
 msgid "the third %s of the month"
 msgstr "der dritte %s des Monats"
 
-#: dbem_recurrence.php:269
+#: eme_recurrence.php:264
 #, php-format
 msgid "the fourth %s of the month"
 msgstr "der vierte %s des Monats"
 
-#: dbem_recurrence.php:269
+#: eme_recurrence.php:264
+#, php-format
+msgid "the fifth %s of the month"
+msgstr "der fünfte %s des Monats"
+
+#: eme_recurrence.php:264
 #, php-format
 msgid "the last %s of the month"
 msgstr "der letzte %s des Monats"
 
-#: dbem_recurrence.php:270
+#: eme_recurrence.php:265
 #, php-format
 msgid "From %1$s to %2$s"
 msgstr "Von %1$s bis %2$s"
 
-#: dbem_recurrence.php:273
+#: eme_recurrence.php:267
 msgid "everyday"
 msgstr "täglich"
 
-#: dbem_recurrence.php:275
+#: eme_recurrence.php:269
 #, php-format
 msgid "every %s days"
 msgstr "alle %s Tage"
 
-#: dbem_recurrence.php:285
+#: eme_recurrence.php:286
+#: eme_recurrence.php:304
+msgid " and "
+msgstr " und "
+
+#: eme_recurrence.php:288
+msgid "every week"
+msgstr "jede Woche"
+
+#: eme_recurrence.php:290
 #, php-format
 msgid "every %s weeks"
 msgstr "alle %s Wochen"
 
-#: dbem_recurrence.php:296
+#: eme_recurrence.php:306
+msgid "every month"
+msgstr "jeden Monat"
+
+#: eme_recurrence.php:308
 #, php-format
 msgid "every %s months"
 msgstr "alle %s Monate"
 
-#: dbem_rsvp.php:20
+#: eme_rsvp.php:34
+#: eme_rsvp.php:123
+msgid "Bookings no longer allowed on this date."
+msgstr "Die Veranstaltung ist leider ausgebucht. Es sind keine Plätze mehr verfügbar."
+
+#: eme_rsvp.php:49
 msgid "Bookings no longer possible: no seats available anymore"
 msgstr "Die Veranstaltung ist leider ausgebucht. Es sind keine Plätze mehr verfügbar"
 
-#: dbem_rsvp.php:23
-msgid "Book now!"
-msgstr "Jetzt buchen!"
-
-#: dbem_rsvp.php:33
-#: dbem_rsvp.php:75
+#: eme_rsvp.php:62
+#: eme_rsvp.php:132
 msgid "E-Mail"
-msgstr "Email"
+msgstr "E-Mail-Adresse"
 
-#: dbem_rsvp.php:43
+#: eme_rsvp.php:63
+msgid "Phone number"
+msgstr "Telefonnummer"
+
+#: eme_rsvp.php:64
+msgid "Seats"
+msgstr "Plätze"
+
+#: eme_rsvp.php:69
+msgid "Comment"
+msgstr "Kommentar"
+
+#: eme_rsvp.php:72
 msgid "Please fill in the code displayed here"
 msgstr "Bitte füge den angezeigten Code ein"
 
-#: dbem_rsvp.php:49
+#: eme_rsvp.php:81
 msgid "(* marks a required field)"
 msgstr "(*Pflichtfelder)"
 
-#: dbem_rsvp.php:50
-msgid "Send your booking"
-msgstr "Buchung absenden"
+#: eme_rsvp.php:200
+msgid "Booking delete failed"
+msgstr "Löschen der Reservierung fehlgeschlagen"
 
-#: dbem_rsvp.php:67
-#: dbem_rsvp.php:78
-msgid "Cancel your booking"
-msgstr "Buchung stornieren"
+#: eme_rsvp.php:202
+#: eme_rsvp.php:367
+msgid "Booking deleted"
+msgstr "Reservierung gelöscht"
 
-#: dbem_rsvp.php:111
+#: eme_rsvp.php:208
 msgid "There are no bookings associated to this name and e-mail"
-msgstr "Es liegen keine Buchungen mit diesem Namen und dieser Emailadresse vor"
+msgstr "Es liegen keine Reservierungen mit diesem Namen und dieser E-Mail-Adresse vor"
 
-#: dbem_rsvp.php:134
+#: eme_rsvp.php:243
 msgid "You entered an incorrect code"
 msgstr "Der Code ist nicht korrekt"
 
-#: dbem_rsvp.php:137
+#: eme_rsvp.php:247
+msgid "You are a bad boy"
+msgstr "Du bist ein schlimmer Junge"
+
+#: eme_rsvp.php:250
+#: eme_rsvp.php:256
 msgid "Please fill in all the required fields"
 msgstr "Bitte die Pflichtfelder ausfüllen"
 
-#: dbem_rsvp.php:145
+#: eme_rsvp.php:253
+msgid "Please fill in a correct number of spaces to reserve"
+msgstr "Bitte gebe eine korrekte Anzahl an zu buchenden Plätzen an"
+
+#: eme_rsvp.php:264
 msgid "Your booking has been recorded"
-msgstr "Die Buchung wurde aufgenommen"
+msgstr "Die Reservierung wurde aufgenommen"
 
-#: dbem_rsvp.php:151
+#: eme_rsvp.php:270
 msgid "Booking cannot be made: not enough seats available!"
-msgstr "Die Buchung kann nicht durchgeführt werden: es gibt nicht mehr genügend freie Plätze!"
+msgstr "Die Reservierung kann nicht durchgeführt werden: Es gibt nicht mehr genügend freie Plätze!"
 
-#: dbem_rsvp.php:200
-#: dbem_rsvp.php:207
-msgid "Booking deleted"
-msgstr "Buchung gelöscht"
-
-#: dbem_rsvp.php:214
-#: dbem_rsvp.php:221
+#: eme_rsvp.php:374
+#: eme_rsvp.php:381
 msgid "Booking approved"
-msgstr "Buchung bestätigt"
+msgstr "Reservierung bestätigt"
 
-#: dbem_rsvp.php:297
-msgid "respondents so far"
-msgstr "Bisherige Reservierungen"
-
-#: dbem_rsvp.php:303
-msgid "Respondent"
-msgstr "Besteller"
-
-#: dbem_rsvp.php:309
+#: eme_rsvp.php:431
+#: eme_rsvp.php:466
 msgid "Booked spaces"
 msgstr "Gebuchte Plätze"
 
-#: dbem_rsvp.php:310
+#: eme_rsvp.php:432
+#: eme_rsvp.php:467
 msgid "Available spaces"
 msgstr "Verfügbare Plätze"
 
-#: dbem_rsvp.php:315
+#: eme_rsvp.php:455
+msgid "respondents so far"
+msgstr "Bisherige Reservierungen"
+
+#: eme_rsvp.php:460
+msgid "Respondent"
+msgstr "Besteller"
+
+#: eme_rsvp.php:461
+msgid "Spaces"
+msgstr "Orte"
+
+#: eme_rsvp.php:472
 msgid "Comment:"
 msgstr "Kommentar:"
 
-#: dbem_rsvp.php:336
-msgid "Printable view"
-msgstr "Druckansicht:"
-
-#: dbem_rsvp.php:344
+#: eme_rsvp.php:497
+#: eme_rsvp.php:546
 msgid "No responses yet!"
-msgstr "Bislang keine Antworten"
+msgstr "Bislang keine Antworten!"
 
-#: dbem_rsvp.php:426
-#: dbem_rsvp.php:437
+#: eme_rsvp.php:600
+#: eme_rsvp.php:614
 msgid "Reservation confirmed"
 msgstr "Reservierung bestätigt"
 
-#: dbem_rsvp.php:428
+#: eme_rsvp.php:602
 msgid "Reservation denied"
 msgstr "Reservierung abgelehnt"
 
-#: dbem_rsvp.php:433
-msgid "Approval required for new booking"
-msgstr "Zustimmung für neue Buchung benötigt"
+#: eme_rsvp.php:604
+msgid "Reservation cancelled"
+msgstr "Reservierung zurückgezogen"
 
-#: dbem_rsvp.php:434
+#: eme_rsvp.php:605
+msgid "A reservation has been cancelled"
+msgstr "Die Reservierung wurde zurückgezogen"
+
+#: eme_rsvp.php:610
+msgid "Approval required for new booking"
+msgstr "Bestätigung für neue Reservierung benötigt"
+
+#: eme_rsvp.php:611
 msgid "Reservation pending"
 msgstr "Reservierung noch nicht bearbeitet"
 
-#: dbem_rsvp.php:436
+#: eme_rsvp.php:613
 msgid "New booking"
-msgstr "Neue Buchungen"
+msgstr "Neue Reservierung"
 
-#: dbem_rsvp.php:474
-msgid "Change reserved spaces or cancel registrations"
-msgstr "Ändere reservierte Plätze oder sage Reservierungen ab"
-
-#: dbem_rsvp.php:482
-msgid "Update registration"
-msgstr "Reservierung aktualisieren"
-
-#: dbem_rsvp.php:483
-#: dbem_rsvp.php:614
-msgid "Deny registration"
-msgstr "Registrierungen absagen"
-
-#: dbem_rsvp.php:512
-#: dbem_rsvp.php:643
-msgid "Booker"
-msgstr "Booker"
-
-#: dbem_rsvp.php:605
-#: events-manager.php:529
-msgid "Pending Approvals"
-msgstr "Vakante Reservierungen"
-
-#: dbem_rsvp.php:613
-msgid "Approve registration"
-msgstr "Registrierungen bestätigen"
-
-#: dbem_widgets.php:5
-#: dbem_widgets.php:6
+#: eme_widgets.php:5
+#: eme_widgets.php:6
 msgid "Events List"
 msgstr "Veranstaltungsliste"
 
-#: dbem_widgets.php:56
-#: dbem_widgets.php:146
-msgid "Title:"
-msgstr "Titel:"
+#: eme_widgets.php:32
+#: events-manager.php:57
+#: events-manager.php:646
+msgid "No events"
+msgstr "Keine Veranstaltungen"
 
-#: dbem_widgets.php:60
-msgid "Number of events"
-msgstr "Anzahl der Veranstaltungen:"
+#: eme_widgets.php:133
+#: eme_widgets.php:240
+msgid "Select..."
+msgstr "Auswählen..."
 
-#: dbem_widgets.php:64
-msgid "Scope of the events"
-msgstr "Veranstaltungsbereich"
-
-#: dbem_widgets.php:72
-msgid "Order of the events"
-msgstr "Reihenfolge der Veranstaltungen"
-
-#: dbem_widgets.php:74
-msgid "Ascendant"
-msgstr "Aufsteigend"
-
-#: dbem_widgets.php:75
-msgid "Descendant"
-msgstr "Absteigend"
-
-#: dbem_widgets.php:98
-msgid "List item format"
-msgstr "Listenformat"
-
-#: dbem_widgets.php:107
-#: dbem_widgets.php:108
+#: eme_widgets.php:154
+#: eme_widgets.php:155
 msgid "Events Calendar"
 msgstr "Veranstaltungskalender"
 
-#: dbem_widgets.php:113
-msgid "Calendar"
-msgstr "Kalender"
-
-#: dbem_widgets.php:150
-msgid "Show Long Events?"
-msgstr "Lange Veranstaltungen anzeigen?"
-
-#: events-manager.php:58
+#: events-manager.php:62
 msgid "<li>No events in this location</li>"
 msgstr "<li>Hier sind zur Zeit keine Veranstaltungen geplant</li>"
 
-#: events-manager.php:106
+#: events-manager.php:73
+msgid "Send your booking"
+msgstr "Reservierung absenden"
+
+#: events-manager.php:74
+msgid "Cancel your booking"
+msgstr "Reservierung stornieren"
+
+#: events-manager.php:114
 msgid "The location name"
 msgstr "Ort der Veranstaltung"
 
-#: events-manager.php:106
+#: events-manager.php:114
 msgid "The location address"
 msgstr "Adresse der Veranstaltung"
 
-#: events-manager.php:106
+#: events-manager.php:114
 msgid "The location town"
 msgstr "Stadt der Veranstaltung"
 
-#: events-manager.php:440
+#: events-manager.php:631
 msgid "#_RESPNAME (#_RESPEMAIL) will attend #_NAME on #m #d, #Y. He wants to reserve #_SPACES space(s).<br/>Now there are #_RESERVEDSPACES space(s) reserved, #_AVAILABLESPACES are still available.<br/><br/>Yours faithfully,<br/>Events Manager"
-msgstr "#_RESPNAME (#_RESPEMAIL) wird #_NAME am #m #d, #Y besuchen. Die Reservierung beträgt: #_SPACES Platz/Plätze.<br/>Jetzt sind #_RESERVEDSPACES Plätze reserviert, #_AVAILABLESPACES sind noch verfügbar.<br/><br/>Mit freundlichen Grüßen,<br/>Events Manager"
+msgstr "#_RESPNAME (#_RESPEMAIL) wird #_NAME am #d.#m.#Y besuchen. Die Reservierung beträgt: #_SPACES Platz/Plätze.<br/>Jetzt sind #_RESERVEDSPACES Plätze reserviert, #_AVAILABLESPACES sind noch verfügbar.<br/><br/>Mit freundlichen Grüßen,<br/>Events Manager"
 
-#: events-manager.php:441
+#: events-manager.php:632
 msgid "Dear #_RESPNAME,<br/><br/>you have successfully reserved #_SPACES space(s) for #_NAME.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON"
 msgstr "Liebe/r #_RESPNAME, <br/><br/>Es wurden #_SPACES Platz/Pl&auml;tze auf den Namen #_NAME reserviert.<br/><br/>Mit freundlichen Grüßeb,<br/> #_CONTACTPERSON"
 
-#: events-manager.php:442
+#: events-manager.php:633
 msgid "Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON"
 msgstr "Liebe/r #_RESPNAME,<br/><br/>die Reservierungsbestätigung für #_SPACES Platz/Plätze #_NAME steht noch aus.<br/><br/>Mit freundlichen Grüßen,<br/>#_CONTACTPERSON"
 
-#: events-manager.php:443
+#: events-manager.php:634
+msgid "Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME has been cancelled.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON"
+msgstr "Liebe/r #_RESPNAME,<br/><br/>die Reservierungsanfrage für #_SPACES Plätze auf den Namen #_NAME wurde zurückgezogen.<br/><br/>Mit freundlichen Grüßen,<br/>#_CONTACTPERSON"
+
+#: events-manager.php:635
 msgid "Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME has been denied.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON"
 msgstr "Liebe/r #_RESPNAME,<br/><br/>die Reservierungsanfrage für #_SPACES Plätze auf den Namen #_NAME wurde leider abgelehnt.<br/><br/>Mit freundlichen Grüßen,<br/>#_CONTACTPERSON"
 
-#: events-manager.php:505
-msgid "events"
-msgstr "Events"
-
-#: events-manager.php:519
-#: events-manager.php:573
+#: events-manager.php:766
+#: events-manager.php:855
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: events-manager.php:521
+#: events-manager.php:768
 msgid "Add new"
 msgstr "Neue Veranstaltung"
 
-#: events-manager.php:525
+#: events-manager.php:770
+msgid "Locations"
+msgstr "Veranstaltungsorte"
+
+#: events-manager.php:773
 msgid "Event Categories"
 msgstr "Veranstaltungskategorien"
 
-#: events-manager.php:527
+#: events-manager.php:777
 msgid "People"
 msgstr "Personen"
 
-#: events-manager.php:531
+#: events-manager.php:779
+msgid "Pending Approvals"
+msgstr "Ausstehende Reservierungen"
+
+#: events-manager.php:781
 msgid "Change Registration"
 msgstr "Reservierungen ändern"
 
-#: events-manager.php:534
+#: events-manager.php:783
+msgid "Cleanup"
+msgstr "Aufräumen"
+
+#: events-manager.php:786
 msgid "Events Manager Settings"
 msgstr "Events Manager Einstellungen"
 
-#: events-manager.php:534
+#: events-manager.php:786
 msgid "Settings"
 msgstr "Einstellungen"
 
+#: events-manager.php:1285
+msgid "You have installed the new version of Events Manager Extended. This version has among other things switched from 'dbem' to 'eme' for API calls (used in templates) and for CSS. So if you use these, please replace the string 'dbem' by 'eme' in your custom templates and/or CSS. After that, please deacticate/reactivate the plugin to adjust for the new version."
+msgstr "Du hast die neue Version von \"Events Manager Extended\" installiert. In dieser Version wurden unter anderem die Präfixe für API-Aufrufe (in Templates) und CSS von 'dbem' auf 'eme' geändert. Wenn du diese benutzt, ersetze bitte die Zeichenkette 'dbem' mit 'eme' in deinen Templates und/oder CSS-Stylesheets. Danach deaktiviere und reaktiviere das Plugin um die neuen Einstellungen zu übernehmen."
+
+#: events-manager.php:1292
+msgid "You have installed the new version of Events Manager Extended. This version has among other things switched from 'dbem' to 'eme' for API calls (used in templates) and for CSS. So if you use these, please replace the string 'dbem' by 'eme' in your custom templates and/or CSS."
+msgstr "Du hast die neue Version von \"Events Manager Extended\" installiert. In dieser Version wurden unter anderem die Präfixe für API-Aufrufe (in Templates) und CSS von 'dbem' auf 'eme' geändert. Wenn du diese benutzt, ersetze bitte die Zeichenkette 'dbem' mit 'eme' in deinen Templates und/oder CSS-Stylesheets."
+
+#: events-manager.php:1315
+msgid "It seems you upgraded Events Manager Extended but your events database hasn't been updated accordingly yet. Please deactivate/activate the plugin for this to happen."
+msgstr "Es scheint, dass du \"Events Manager Extended\" aktualisiert hast, aber die Datenbank noch nicht aktualisiert wurde. Bitte deaktiviere und reaktiviere das Plugin um dies passieren zu lassen."
+
+#: events-manager.php:1315
+msgid "<strong>Warning:</strong> make sure the option 'Delete all EME data when upgrading or deactivating' is not activated if you don't want to lose all existing event data!"
+msgstr "<strong>Warnung:</strong> Gehe sicher, dass \"Gesamte EME Daten entfernen, wenn das Plugin aktualisiert oder deaktiviert wird\" ist nicht aktiviert, wenn du nicht deine gesamten Daten verlieren willst!"
+
+#: events-manager.php:1322
+#, php-format
+msgid "It seems your Events Database is not yet converted to the correct characterset used by Wordpress, if you want this done: <strong>TAKE A BACKUP OF YOUR DB</strong> and then click <a href=\"%s\" title=\"Conversion link\">here</a>."
+msgstr "Es scheint, dass deine Veranstaltungsdatenbank noch nicht in den richtigen Zeichensatz von Wordpress konvertiert wurde. Wenn dass jetzt gemacht werden soll, <strong>Mache ein Datenbankbackup!</strong> und klicke <a href=\"%s\" title=\"Konvertierungslink\">hier</a>."
+
+#: events-manager.php:1332
+msgid "Donate"
+msgstr "Spenden"
+
+#: events-manager.php:1343
+#, php-format
+msgid "<a href=\"%s\" title=\"I already donated\">I already donated.</a>"
+msgstr "<a href=\"%s\" title=\"Ich habe schon gespendet\">Ich habe schon gespendet.</a>"
+
+#: events-manager.php:1357
+#, php-format
+msgid ""
+"<p>Hey, <strong>%s</strong>, welcome to <strong>Events Manager Extended</strong>! We hope you like it around here.</p> \n"
+"   <p>Now it's time to insert events lists through  <a href=\"%s\" title=\"Widgets page\">widgets</a>, <a href=\"%s\" title=\"Template tags documentation\">template tags</a> or <a href=\"%s\" title=\"Shortcodes documentation\">shortcodes</a>.</p>\n"
+"   <p>By the way, have you taken a look at the <a href=\"%s\" title=\"Change settings\">Settings page</a>? That's where you customize the way events and locations are displayed.</p>\n"
+"   <p>What? Tired of seeing this advice? I hear you, <a href=\"%s\" title=\"Don't show this advice again\">click here</a> and you won't see this again!</p>"
+msgstr ""
+"<p>Hallo, <strong>%s</strong>, willkommen bei <strong>Events Manager Extended</strong>! Wir hoffen, es gefällt Dir hier.</p> \n"
+"\t<p>Jetzt ist es Zeit, Veranstaltungslisten über <a href=\"%s\" title=\"Widgets\">Widgets</a>, <a href=\"%s\" title=\"Template tags-Dokumentation\">Template-Tags</a> oder <a href=\"%s\" title=\"Shortcodes-Dokumentation\">Shortcodes</a> einzufügen.</p>\n"
+"\t<p>Übrigens, hast Du Dir schon mal die Seite für <a href=\"%s\" title=\"Einstellungen\">Einstellungen</a> angeschaut? Hier kannst Du die Ansicht für Veranstaltungen und Veranstaltungsorte bearbeiten.</p>\n"
+"\t<p>Was? Keine Lust mehr, diese Tipps zu sehen? Klar, einfach <a href=\"%s\" title=\"Die Meldung nicht mehr anzeigen\"> hier</a> klicken, und Du siehst sie künftig nicht mehr!</p>"
+
+#~ msgid "Bookings data"
+#~ msgstr "Reservierungsdaten"
+#~ msgid "E-mail"
+#~ msgstr "E-Mail-Adresse"
+#~ msgid "Booked"
+#~ msgstr "Gebucht"
+#~ msgid "Available"
+#~ msgstr "Verfügbar"
+#~ msgid "No people have responded to your events yet!"
+#~ msgstr "Bis jetzt hat noch niemand auf die Veranstaltung geantwortet!"
+#~ msgid ""
+#~ "The phone number used by Events Manager Extended when the user is "
+#~ "indicated as the contact person for an event."
+#~ msgstr ""
+#~ "Die Telefonnummer, die von Events Manager genutzt wird, wenn ein Nutzer "
+#~ "als Ansprechpartner für die Veranstaltung angezeigt wird."
+#~ msgid "Attributes"
+#~ msgstr "Attribute"
+#~ msgid "Add attributes here"
+#~ msgstr "Füge hier Attribute hinzu"
+#~ msgid "Attribute Name"
+#~ msgstr "Attribut-Name"
+#~ msgid "Value"
+#~ msgstr "Wert"
+#~ msgid "Add new tag"
+#~ msgstr "Füge neuen Tag hinzu"
+#~ msgid "Remove"
+#~ msgstr "Entfernen"
+#~ msgid ""
+#~ "In order to use attributes, you must define some in your templates, "
+#~ "otherwise they'll never show. Go to Events > Settings to add attribute "
+#~ "placeholders."
+#~ msgstr ""
+#~ "Um Attribute nutzen zu können, musst Du diese für Deine Templates "
+#~ "zunächst definieren, ansonsten können sie nicht angezeigt werden. Gehe "
+#~ "dafür zu Veranstaltungen > Einstellungen, dann kannst Du Platzhalter für "
+#~ "Attribute hinzufügen."
+#~ msgid ""
+#~ "No attributes defined yet. If you want attributes, you first need to "
+#~ "define/use some in the Settings page. See the section about custom "
+#~ "attributes on the documention site for more info."
+#~ msgstr ""
+#~ "Noch keine Attribute definiert. Wenn du Attribute hinzufügen willst, "
+#~ "musst du erst einige auf der Einstellungsseite definieren. Im Abschnitt "
+#~ "über benutzerdefinierte Attribute auf der Dokumentationsseite findest du "
+#~ "weitere Informationen."
+#~ msgid "Edit location"
+#~ msgstr "Veranstaltungsort bearbeiten"
+#~ msgid "Location name"
+#~ msgstr "Name"
+#~ msgid "Location address"
+#~ msgstr "Adresse"
+#~ msgid "The address of the location"
+#~ msgstr "Adresse des Veranstaltungsortes"
+#~ msgid "Location town"
+#~ msgstr "Stadt"
+#~ msgid "The town of the location"
+#~ msgstr "Stadt des Veranstaltungsortes"
+#~ msgid "Location image"
+#~ msgstr "Bild des Veranstaltungsortes"
+#~ msgid "Select an image to upload"
+#~ msgstr "Wähle ein Bild, um es hochzuladen"
+#~ msgid "Current image:"
+#~ msgstr "Aktuelles Bild:"
+#~ msgid ""
+#~ "Because qtranslate is active, the title of the location will not update "
+#~ "automatically in the balloon, so don't panic there."
+#~ msgstr ""
+#~ "Weil qtranslate aktiviert ist, wird der Titel der Location nicht "
+#~ "automatisch in der Sprechblase aktualisiert, aber keine Panik."
+#~ msgid "Map not found"
+#~ msgstr "Karte nicht gefunden"
+#~ msgid "Location description"
+#~ msgstr "Beschreibung"
+#~ msgid ""
+#~ "A description of the Location. You may include any kind of info here."
+#~ msgstr "Beschreibung des Veranstaltungsortes"
+#~ msgid "Update location"
+#~ msgstr "Speichern"
+#~ msgid "Address"
+#~ msgstr "Adresse"
+#~ msgid "Town"
+#~ msgstr "Stadt"
+#~ msgid "No venues have been inserted yet!"
+#~ msgstr "Es wurden bis jetzt keine Veranstaltungsorte eingefügt!"
+#~ msgid "Add location"
+#~ msgstr "Veranstaltungsort hinzufügen"
+#~ msgid ""
+#~ "If you find this plugin useful to you, please consider making a small "
+#~ "donation to help contribute to my time invested and to further "
+#~ "development. Thanks for your kind support!"
+#~ msgstr ""
+#~ "Wenn das Plugin nützlich für dich ist, überlege doch mal, eine kleine "
+#~ "Spende zu machen, um dem Entwickler etwas für seine investierte Zeit "
+#~ "zurückzugeben und um die Weiterentwicklung zu ermöglichen. Danke für "
+#~ "deine Unterstützung!"
+#~ msgid "Event Manager Options"
+#~ msgstr "Event Manager Optionen"
+#~ msgid "General options"
+#~ msgstr "Allgemeine Optionen"
+#~ msgid "Events format"
+#~ msgstr "Optionen für das Veransttaltungsformat"
+#~ msgid "Events filtering format"
+#~ msgstr "Filterformat"
+#~ msgid "Calendar format"
+#~ msgstr "Kalenderformat"
+#~ msgid "Locations format"
+#~ msgstr "Format für Veranstaltungsorte"
+#~ msgid "RSS feed format"
+#~ msgstr "RSS-Feeds"
+#~ msgid "RSVP: registrations and bookings"
+#~ msgstr "Teilnahmebestätigungen: Reservierungen"
+#~ msgid "RSVP: mail options"
+#~ msgstr "E-Mail Optionen für Teilnahmebestätigungen"
+#~ msgid "Images size"
+#~ msgstr "Bildgröße"
+#~ msgid "Save Changes"
+#~ msgstr "Speichern"
+#~ msgid "New Event ..."
+#~ msgstr "Neue Veranstaltung..."
+#~ msgid "Total"
+#~ msgstr "Gesamt"
+#~ msgid "Bulk Actions"
+#~ msgstr "Aktionen"
+#~ msgid "Delete selected"
+#~ msgstr "Markierte löschen"
+#~ msgid "Apply"
+#~ msgstr "Anwenden"
+#~ msgid "All categories"
+#~ msgstr "Alle Kategorien"
+#~ msgid "Filter"
+#~ msgstr "Filter"
+#~ msgid "Status"
+#~ msgstr "Status"
+#~ msgid "Location"
+#~ msgstr "Veranstaltungsort"
+#~ msgid "Date and time"
+#~ msgstr "Datum und Uhrzeit"
+#~ msgid "Duplicate this event"
+#~ msgstr "Kopie der Veranstaltung erstellen"
+#~ msgid "WARNING: This is a recurrence."
+#~ msgstr "WARNUNG: Dies ist eine Veranstaltungsreihe."
+#~ msgid ""
+#~ "Modifying these data all the events linked to this recurrence will be "
+#~ "rescheduled"
+#~ msgstr ""
+#~ "Wenn Du diese Daten bearbeitest, werden alle verknüpften Veranstaltungen "
+#~ "neu terminiert."
+#~ msgid "WARNING: This is a recurring event."
+#~ msgstr "ACHTUNG: Das ist eine Veranstaltungsreihe!"
+#~ msgid ""
+#~ "If you change these data and save, this will become an independent event."
+#~ msgstr ""
+#~ "Wenn Du diese Daten änderst und speicherst, wird dies eine unabhängige "
+#~ "Veranstaltung."
+#~ msgid "Event Status"
+#~ msgstr "Veranstaltungsstatus"
+#~ msgid ""
+#~ "Private events are only visible for logged in users, draft events are not "
+#~ "visible from the front end."
+#~ msgstr ""
+#~ "Private Veranstaltungen sind nur für eingeloggte Benutzer sichtbar, "
+#~ "Veranstaltungsentwürfe sind nicht sichtbar von der Benutzeroberfläche."
+#~ msgid "Recurrence"
+#~ msgstr "Veranstaltungsserie"
+#~ msgid "Every"
+#~ msgstr "Jeden"
+#~ msgid "day"
+#~ msgstr "Tag"
+#~ msgid "days"
+#~ msgstr "Tage"
+#~ msgid "week"
+#~ msgstr "Woche"
+#~ msgid "weeks"
+#~ msgstr "Wochen"
+#~ msgid "month"
+#~ msgstr "Monat"
+#~ msgid "months"
+#~ msgstr "Monate"
+#~ msgid ""
+#~ "If you leave this empty, the event start date will be used as a reference."
+#~ msgstr ""
+#~ "Wenn Du dieses Feld leer lässt, wird der Veranstaltungsbeginn als "
+#~ "Referenz für die anderen benutzt."
+#~ msgid "Day of month"
+#~ msgstr "Tag des Monats"
+#~ msgid ""
+#~ "If you use \"Start day\" as day of the month, the month day of the event "
+#~ "start date will be used as a reference."
+#~ msgstr ""
+#~ "Wenn Du als \"Starttag\" einen Tag im Monat wählst, wird dieser bestimmte "
+#~ "Tag im Monat als Referenz für die weiteren Termine genutzt."
+#~ msgid ""
+#~ "Check if your event happens more than once according to a regular pattern"
+#~ msgstr ""
+#~ "Wähle aus, nach welchem Muster sich diese Veranstaltungsreihe wiederholt"
+#~ msgid "Author"
+#~ msgstr "Autor"
+#~ msgid "Author of this event: "
+#~ msgstr "Autor der Veranstaltung:"
+#~ msgid "Contact Person"
+#~ msgstr "Ansprechpartner"
+#~ msgid "Contact"
+#~ msgstr "Kontakt"
+#~ msgid "RSVP"
+#~ msgstr "Teilnahmebestätigung"
+#~ msgid "Enable registration for this event"
+#~ msgstr "Reservierungen für diese Veranstaltung aktivieren"
+#~ msgid "Require approval for registration"
+#~ msgstr "Benötigt Reservierungsbestätigung"
+#~ msgid "Require WP membership for registration"
+#~ msgstr "Benötige WP-Mitgliedschaft zum buchen"
+#~ msgid "Allow RSVP until "
+#~ msgstr "Teilnahmebestätigung möglich bis"
+#~ msgid " days before the event starts."
+#~ msgstr " Tage bevor die Veranstaltung beginnt."
+#~ msgid "The event name. Example: Birthday party"
+#~ msgstr "Name der Veranstaltung. Beispiel: Geburtstagsparty"
+#~ msgid "Event date"
+#~ msgstr "Datum der Veranstaltung"
+#~ msgid "Recurrence dates"
+#~ msgstr "Wiederkehrende Termine"
+#~ msgid "The event date."
+#~ msgstr "Datum der Veranstaltung."
+#~ msgid ""
+#~ "When not recurring, this event spans between the beginning and end date."
+#~ msgstr ""
+#~ "Wenn dies keine Veranstaltungsreihe ist, dauert sie vom Anfangs- bis zum "
+#~ "Enddatum."
+#~ msgid "The recurrence beginning and end date."
+#~ msgstr "Erster und letzter Veranstaltunstag"
+#~ msgid "Event time"
+#~ msgstr "Uhrzeit der Veranstaltung"
+#~ msgid "The time of the event beginning and end"
+#~ msgstr "Die Uhrzeit für Beginn und Ende der Veranstaltung."
+#~ msgid "Coordinates"
+#~ msgstr "Koordinaten"
+#~ msgid "Single Event Title Format"
+#~ msgstr "Titelformat für die Veranstaltung"
+#~ msgid "The format of the single event title."
+#~ msgstr "Format für den Titel der Einzelveranstaltung"
+#~ msgid "Only fill this in if you want to override the default settings."
+#~ msgstr ""
+#~ "Bitte nur ausfüllen, wenn Du die Standardeinstellungen überschreiben "
+#~ "willst"
+#~ msgid "Single Event Format"
+#~ msgstr "Format der Veranstaltung"
+#~ msgid "The format of the single event page."
+#~ msgstr "Formatierung für die Seitendarstellung einer Veranstaltung"
+#~ msgid "Contact Person Email Format"
+#~ msgstr "E-Mail-Format des Ansprechpartners"
+#~ msgid "The format of the email which will be sent to the contact person."
+#~ msgstr ""
+#~ "Format der E-Mail, welche dem Ansprechpartner zugesandt werden soll."
+#~ msgid "Respondent Email Format"
+#~ msgstr "E-Mail-Format für den Besteller"
+#~ msgid "The format of the email which will be sent to the respondent."
+#~ msgstr "Format der E-Mail, welche dem Besteller zugesandt werden soll."
+#~ msgid ""
+#~ "The name of the location where the event takes place. You can use the "
+#~ "name of a venue, a square, etc"
+#~ msgstr ""
+#~ "Name des Veranstaltungsortes. Hier kannst du den Namen einer Halle, eines "
+#~ "Platzes usw. einsetzen."
+#~ msgid "If you leave this empty, the map will NOT be shown for this event"
+#~ msgstr ""
+#~ "Wenn Du dieses Feld leer lässt, wird die Karte für diese Veranstaltung "
+#~ "NICHT angezeigt"
+#~ msgid "Select a location for your event"
+#~ msgstr "Wähle einen Veranstaltungsort"
+#~ msgid "Address:"
+#~ msgstr "Adresse:"
+#~ msgid ""
+#~ "The address of the location where the event takes place. Example: 21, "
+#~ "Dominick Street"
+#~ msgstr "Die Adresse des Veranstaltungsortes, z.B. Hauptstrasse 123"
+#~ msgid "Town:"
+#~ msgstr "Stadt:"
+#~ msgid ""
+#~ "The town where the location is located. If you're using the Google Map "
+#~ "integration and want to avoid geotagging ambiguities include the country "
+#~ "in the town field. Example: Verona, Italy."
+#~ msgstr ""
+#~ "Die Stadt des Veranstaltungsortes. Falls Du Google Maps integriert hast "
+#~ "und Unklarheiten im Geotagging verhindern möchtest, binde das Land in "
+#~ "dieses Feld mit ein, z.B. Berlin, Germany. "
+#~ msgid "Details"
+#~ msgstr "Details"
+#~ msgid "Details about the event"
+#~ msgstr "Details zur Veranstaltung"
+#~ msgid "Submit Event"
+#~ msgstr "Speichern"
+#~ msgid "Date"
+#~ msgstr "Datum"
+#~ msgid "Some required fields are missing:"
+#~ msgstr "Es fehlen ein paar wichtige Felder:"
+#~ msgid "Since the event is repeated, you must specify an end date"
+#~ msgstr ""
+#~ "Da dies eine Veranstaltungsreihe ist, musst Du ein Enddatum angeben."
+#~ msgid "Change reserved spaces or cancel registrations"
+#~ msgstr "Ändere reservierte Plätze oder sage Reservierungen ab"
+#~ msgid "Update registration"
+#~ msgstr "Reservierung aktualisieren"
+#~ msgid "Deny registration"
+#~ msgstr "Registrierungen absagen"
+#~ msgid "Booker"
+#~ msgstr "Booker"
+#~ msgid "Approve registration"
+#~ msgstr "Registrierungen bestätigen"
+#~ msgid "Yes"
+#~ msgstr "Ja"
+#~ msgid "No"
+#~ msgstr "Nein"
+#~ msgid "Title:"
+#~ msgstr "Titel:"
+#~ msgid "Number of events"
+#~ msgstr "Anzahl der Veranstaltungen"
+#~ msgid "Scope of the events"
+#~ msgstr "Veranstaltungsbereich"
+#~ msgid "Show events per period"
+#~ msgstr "Veranstaltungen je Wiederholung anzeigen"
+#~ msgid "Order of the events"
+#~ msgstr "Reihenfolge der Veranstaltungen"
+#~ msgid "Ascendant"
+#~ msgstr "Aufsteigend"
+#~ msgid "Descendant"
+#~ msgstr "Absteigend"
+#~ msgid "List header format<br />(if empty &lt;ul&gt; is used)"
+#~ msgstr "Kopfteil-Format der Liste<br />(&lt;ul&gt; wenn leer)"
+#~ msgid "List item format"
+#~ msgstr "Listenformat"
+#~ msgid "List footer format<br />(if empty &lt;/ul&gt; is used)"
+#~ msgstr "Fußteil-Format der Liste<br />(&lt;/ul&gt; wenn leer)"
+#~ msgid "Show Long Events?"
+#~ msgstr "Lange Veranstaltungen anzeigen?"
+#~ msgid "Default notification receiver address"
+#~ msgstr "Standardmäßiger Empfänger"
+#~ msgid "Insert the address of the receiver of your notifications"
+#~ msgstr ""
+#~ "Füge hier die standardmäßige Adresse des Empfängers von "
+#~ "Benachrichtigungen ein"
+#~ msgid "Repeated event"
+#~ msgstr "Veranstaltungsreihe"
+#~ msgid "This isn't a recurrent event"
+#~ msgstr "Dies ist keine Veranstaltungsreihe!"
+#~ msgid "Category:"
+#~ msgstr "Kategorie:"
+#~ msgid "Book now!"
+#~ msgstr "Jetzt buchen!"
+#~ msgid "Calendar"
+#~ msgstr "Kalender"
 #~ msgid "Select yes to enable the recurrence features feature"
 #~ msgstr ""
 #~ "Wähle Ja, um Merkmale für wiederkehrende Veranstaltungen editieren zu "
 #~ "können."
-
 #~ msgid "Maps and geotagging"
 #~ msgstr "Karten und Geotagging"
-
 #~ msgid "Google Maps API Key"
 #~ msgstr "Google Maps API-Key"
-
 #~ msgid ""
 #~ "To display Google Maps you need a Google Maps API key. Don't worry, it's "
 #~ "free, you can get one <a href='%s'>here</a>."
@@ -1537,38 +1787,30 @@ msgstr "Einstellungen"
 #~ "Um Google Maps darstellen zu können, brauchst Du einen Google Maps API-"
 #~ "Key. Keine Sorge, der kostet nichts und Du bekommst ihn <a href='%s'> "
 #~ "hier </a>"
-
 #~ msgid "Map text format"
 #~ msgstr "Kartentext-Format"
-
 #~ msgid ""
 #~ "The format the text appearing in the event page map cloud.<br/>Follow the "
 #~ "previous formatting instructions."
 #~ msgstr ""
 #~ "Das Format, in dem die Texte auf der Sprechblase in der Karte erscheinen "
 #~ "sollen <br/> Befolge die vorher beschriebenen Formatinstruktionen."
-
 #~ msgid "Location:"
 #~ msgstr "Veranstaltungsort:"
-
 #~ msgid "Name:"
 #~ msgstr "Name:"
-
 #~ msgid ""
 #~ "You cannot enable Google Maps integration without setting an appropriate "
 #~ "API key."
 #~ msgstr ""
 #~ "Du kannst Google Maps nicht integrieren, ohne einen entsprechenden API-"
 #~ "Schlüssel anzugeben."
-
 #~ msgid "The town where the location is located"
 #~ msgstr "Stadt des Veranstaltungsortes"
-
 #~ msgid "Location map"
 #~ msgstr "Karte des Veranstaltungsortes"
-
 #~ msgid "No image uploaded for this location yet"
 #~ msgstr "Es wurde bisher kein Bild des Veranstaltungsortes hochgeladen."
-
 #~ msgid "Upload/change picture"
 #~ msgstr "Bild hochladen/ändern"
+
