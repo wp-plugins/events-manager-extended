@@ -105,9 +105,11 @@ function eme_client_clock_callback() {
       $_SESSION['eme_client_php_difference'] = (int) (strtotime($client_clock_str) - strtotime($php_clock_str));
    }
    
-   // Echo text string return to jQuery's AJAX callback function.
-   header("Content-Type: text");
-   echo $ret;
+   if ($ret == "1") {
+      // Echo text string return to jQuery's AJAX callback function.
+      header("Content-Type: text");
+      echo $ret;
+   }
    exit; //  because this is an AJAX instance
 }
 
