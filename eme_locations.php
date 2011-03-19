@@ -658,7 +658,14 @@ function eme_global_map($atts) {
          //-->
          </script>";
       //$result .= "<script src='".EME_PLUGIN_URL."eme_global_map.js' type='text/javascript'></script>";
-      $result .= "<ol id='eme_locations_list'></ol>"; 
+      $locations = eme_get_locations((bool) $eventful,$scope,$category,0);
+      $result .= "<ol id='eme_locations_list'>"; 
+      foreach($locations as $location) {
+         $result.="<li id='location-". $location['location_id'].
+                              "' style='list-style-type: upper-alpha'><a >".
+                              $location['location_name']."</a></li>";
+      }
+      $result .= "</ol>"; 
 
    } else {
       $result = "";

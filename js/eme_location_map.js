@@ -76,8 +76,6 @@ function loadGMap() {
 			map.fitBounds(locationsBound);
 			map.setCenter(new google.maps.LatLng(center_lat + vertical_compensation,center_lon)); 
 
-         // we fill in the eme_locations_list first, the loop below acts upon it with links
-			document.getElementById("eme_locations_list").innerHTML = htmlDecode(data.locations_htmllist);
 			$j_eme_locations.each(locations, function(index, item) {
 				var letter;
 				if (index>25) {

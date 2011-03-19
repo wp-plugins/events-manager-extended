@@ -68,9 +68,6 @@ function eme_ajax_actions() {
 function eme_global_map_json($eventful = false, $scope = "all", $category = '', $offset = 0) {
    $locations = eme_get_locations((bool) $eventful,$scope,$category,$offset);
    $json_locations = array();
-   // we build the html of the location list here as well, since the <div> where it ends up in needs to know all this at once, otherwise
-   // the height is not correct in IE
-   $json_locations_htmllist="<ol>";
    foreach($locations as $location) {
       $json_location = array();
 
@@ -90,16 +87,11 @@ function eme_global_map_json($eventful = false, $scope = "all", $category = '', 
          $json_location[] = '"'.$key.'":"'.eme_trans_sanitize_html($value).'"';
       }
       $json_locations[] = "{".implode(",",$json_location)."}";
-      $json_locations_htmllist.="<li id='location-". $location['location_id'].
-                   "' style='list-style-type: upper-alpha'><a >".
-                   $location['location_name']."</a></li>";
    }
-   $json_locations_htmllist.="</ol>";
    $json = '{"locations":[';
    $json .= implode(",", $json_locations); 
    $json .= '],"enable_zooming":"';
    $json .= get_option('eme_gmap_zooming') ? 'true' : 'false';
-   $json .= '","locations_htmllist":"'.eme_trans_sanitize_html($json_locations_htmllist);
    $json .= '"}' ;
    echo $json;
 }
