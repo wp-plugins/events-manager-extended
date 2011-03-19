@@ -26,10 +26,10 @@ function loadGMap() {
 			var max_longitude = -500.1;
 			var min_longitude = 500.1;
 
-                        var enable_zooming=false;
-                        if (data.enable_zooming === 'true') {
-                           enable_zooming = true;
-                        }
+			var enable_zooming=false;
+			if (data.enable_zooming === 'true') {
+				enable_zooming = true;
+			}
 
 			var mapCenter = new google.maps.LatLng(45.4213477,10.952397);
                         
@@ -37,7 +37,7 @@ function loadGMap() {
 				zoom: 3,
 				center: mapCenter,
 				disableDoubleClickZoom: true,
-                                scrollwheel: enable_zooming,
+				scrollwheel: enable_zooming,
 				mapTypeControlOptions: {
 					mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
 				},
@@ -76,6 +76,8 @@ function loadGMap() {
 			map.fitBounds(locationsBound);
 			map.setCenter(new google.maps.LatLng(center_lat + vertical_compensation,center_lon)); 
 
+         // we fill in the eme_locations_list first, the loop below acts upon it with links
+			document.getElementById("eme_locations_list").innerHTML = htmlDecode(data.locations_htmllist);
 			$j_eme_locations.each(locations, function(index, item) {
 				var letter;
 				if (index>25) {
@@ -86,9 +88,9 @@ function loadGMap() {
 					letter = String.fromCharCode("A".charCodeAt(0) + index);
 				}
 
-				var li_element = "<li id='location-"+item.location_id
-						 + "' style='list-style-type: upper-alpha'><a >"
-						 + item.location_name+"</a></li>";
+				//var li_element = "<li id='location-"+item.location_id
+				//		 + "' style='list-style-type: upper-alpha'><a >"
+				//		 + item.location_name+"</a></li>";
 				var location_info = "<div class=\"eme-location-balloon\"><strong>"+ item.location_name
 						    + "</strong><br />" + item.location_address + ", "
 						    + item.location_town + "<br /><small><a href='" + events_page_link
@@ -96,7 +98,6 @@ function loadGMap() {
 				customIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+letter+"|FF0000|000000";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
 				var balloon_id = "eme-location-balloon-id";
-				//var balloon_content = "<div id=\""+balloon_id+"\" class=\"eme-location-balloon\">"+location_info+"</div>";
 				var balloon_content = "<div id=\""+balloon_id+"\" class=\"eme-location-balloon\">"+htmlDecode(item.location_balloon)+"</div>";
 				infowindow.balloon_id = balloon_id;
 				var marker = new google.maps.Marker({
@@ -106,17 +107,11 @@ function loadGMap() {
 					infowindow: infowindow,
 					infowindowcontent: balloon_content
 				});
-				//var pixoff = new google.maps.Size(0,-32);
-				//infowindow = new google.maps.InfoWindow();
-				//var infowindow = new google.maps.InfoWindow({
-				//		content: location_info,
-				//		pixelOffset: pixoff
-				//});
-				$j_eme_locations('ol#eme_locations_list').append(li_element);
+				//$j_eme_locations('ol#eme_locations_list').append(li_element);
 				$j_eme_locations('li#location-'+item.location_id+' a').click(function() {
 					infowindow.setContent(balloon_content);
 					infowindow.open(map,marker);
-               $j_eme_locations(window).scrollTop($j_eme_locations('#eme_global_map').position().top);
+					$j_eme_locations(window).scrollTop($j_eme_locations('#eme_global_map').position().top);
 				});
 				google.maps.event.addListener(marker, "click", function() {
 					// This also works, but relies on global variables:
