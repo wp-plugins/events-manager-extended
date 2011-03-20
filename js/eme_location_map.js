@@ -49,14 +49,18 @@ function loadGMap() {
 			$j_eme_locations.each(locations, function(i, item) {
 				latitudes.push(item.location_latitude);
 				longitudes.push(item.location_longitude);
-				if (parseFloat(item.location_latitude) > max_latitude)
+				if (parseFloat(item.location_latitude) > max_latitude) {
 					max_latitude = parseFloat(item.location_latitude);
-				if (parseFloat(item.location_latitude) < min_latitude)
+            }
+				if (parseFloat(item.location_latitude) < min_latitude) {
 					min_latitude = parseFloat(item.location_latitude);
-				if (parseFloat(item.location_longitude) > max_longitude)
+            }
+				if (parseFloat(item.location_longitude) > max_longitude) {
 					max_longitude = parseFloat(item.location_longitude);
-				if (parseFloat(item.location_longitude) < min_longitude)
+            }
+				if (parseFloat(item.location_longitude) < min_longitude) {
 					min_longitude = parseFloat(item.location_longitude); 
+            }
 			});
 
 			//console.log("Latitudes: " + latitudes + " MAX: " + max_latitude + " MIN: " + min_latitude);
@@ -86,10 +90,6 @@ function loadGMap() {
 					letter = String.fromCharCode("A".charCodeAt(0) + index);
 				}
 
-				var location_info = "<div class=\"eme-location-balloon\"><strong>"+ item.location_name
-						    + "</strong><br />" + item.location_address + ", "
-						    + item.location_town + "<br /><small><a href='" + events_page_link
-						    + joiner + "location_id=" + item.location_id + "'>Details<a></div>";
 				customIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+letter+"|FF0000|000000";
 				//shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
@@ -112,7 +112,7 @@ function loadGMap() {
             }
 				google.maps.event.addListener(marker, "click", function() {
 					// This also works, but relies on global variables:
-					// infowindow.setContent(location_info);
+					// infowindow.setContent(balloon_content);
 					// infowindow.open(map,marker);
 					// the content of marker is available via "this"
 					this.infowindow.setContent(this.infowindowcontent);
@@ -137,12 +137,12 @@ function loadGMap() {
 			map.initialZoom = true;
 			google.maps.event.addListener(map, 'zoom_changed', function() {
 				zoomChangeBoundsListener = google.maps.event.addListener(map, 'bounds_changed', function(event) {
-					if (this.getZoom() > 14 && this.initialZoom == true) {
+					if (this.getZoom() > 14 && this.initialZoom === true) {
 					// Change max/min zoom here
 						this.setZoom(14);
 						this.initialZoom = false;
 					}
-					if (this.getZoom() < 1 && this.initialZoom == true) {
+					if (this.getZoom() < 1 && this.initialZoom === true) {
 						// Change max/min zoom here
 						this.setZoom(1);
 						this.initialZoom = false;
@@ -164,22 +164,22 @@ function loadGMap() {
 			var map_text_id = window['map_text_'+map_id]; 
 			var point = new google.maps.LatLng(lat_id, lon_id);
 
-                        var enable_zooming=false;
-                        if (window['enable_zooming_'+map_id] === 'true') {
-                           enable_zooming = true;
-                        }
+         var enable_zooming=false;
+         if (window['enable_zooming_'+map_id] === 'true') {
+            enable_zooming = true;
+         }
 
 			var mapCenter= new google.maps.LatLng(point.lat()+0.005, point.lng()-0.003);
 			var myOptions = {
-                                       zoom: 14,
-                                       center: mapCenter,
-                                       disableDoubleClickZoom: true,
-                                       scrollwheel: enable_zooming,
-                                       mapTypeControlOptions: {
-                                          mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
-                                       },
-                                       mapTypeId: google.maps.MapTypeId.ROADMAP
-			}
+            zoom: 14,
+            center: mapCenter,
+            disableDoubleClickZoom: true,
+            scrollwheel: enable_zooming,
+            mapTypeControlOptions: {
+               mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
+            },
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+			};
 			var s_map = new google.maps.Map(divs[i], myOptions);
 			var s_balloon_id= "eme-location-balloon-"+map_id;
 			var s_infowindow = new google.maps.InfoWindow({

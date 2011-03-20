@@ -688,14 +688,18 @@ InfoBox.prototype.close = function () {
 			$j_eme_locations.each(locations, function(i, item) {
 				latitudes.push(item.location_latitude);
 				longitudes.push(item.location_longitude);
-				if (parseFloat(item.location_latitude) > max_latitude)
+				if (parseFloat(item.location_latitude) > max_latitude) {
 					max_latitude = parseFloat(item.location_latitude);
-				if (parseFloat(item.location_latitude) < min_latitude)
+            }
+				if (parseFloat(item.location_latitude) < min_latitude) {
 					min_latitude = parseFloat(item.location_latitude);
-				if (parseFloat(item.location_longitude) > max_longitude)
+            }
+				if (parseFloat(item.location_longitude) > max_longitude) {
 					max_longitude = parseFloat(item.location_longitude);
-				if (parseFloat(item.location_longitude) < min_longitude)
+            }
+				if (parseFloat(item.location_longitude) < min_longitude) {
 					min_longitude = parseFloat(item.location_longitude); 
+            }
 			});
 
 			//console.log("Latitudes: " + latitudes + " MAX: " + max_latitude + " MIN: " + min_latitude);
@@ -730,7 +734,7 @@ InfoBox.prototype.close = function () {
             location_info.innerHTML = htmlDecode(item.location_balloon);
 				
 				customIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+letter+"|FF0000|000000";
-            			//shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
+            //shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
 				var marker = new google.maps.Marker({
 					position: point,
@@ -772,12 +776,12 @@ InfoBox.prototype.close = function () {
 			map.initialZoom = true;
 			google.maps.event.addListener(map, 'zoom_changed', function() {
 				zoomChangeBoundsListener = google.maps.event.addListener(map, 'bounds_changed', function(event) {
-					if (this.getZoom() > 14 && this.initialZoom == true) {
+					if (this.getZoom() > 14 && this.initialZoom === true) {
 					// Change max/min zoom here
 						this.setZoom(14);
 						this.initialZoom = false;
 					}
-					if (this.getZoom() < 1 && this.initialZoom == true) {
+					if (this.getZoom() < 1 && this.initialZoom === true) {
 						// Change max/min zoom here
 						this.setZoom(1);
 						this.initialZoom = false;
@@ -839,7 +843,7 @@ InfoBox.prototype.close = function () {
 				this.infowindow.setContent(this.infowindowcontent);
 				this.infowindow.open(this.map,this);
 			});
-      		}
+     	}
 	}
 }
 
