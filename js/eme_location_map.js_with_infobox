@@ -730,17 +730,16 @@ InfoBox.prototype.close = function () {
             location_info.innerHTML = htmlDecode(item.location_balloon);
 				
 				customIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+letter+"|FF0000|000000";
-            shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
+            			//shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
 				var marker = new google.maps.Marker({
 					position: point,
 					map: map,
 					icon: customIcon,
-               shadow: shadow,
 					infowindow: infowindow,
 					infowindowcontent: location_info
 				});
-            if (document.getElementById('location-'+item.location_id')) {
+            if (document.getElementById('location-'+item.location_id)) {
                $j_eme_locations('li#location-'+item.location_id+' a').click(function() {
 					   infowindow.close();
 					   infowindow.setContent(location_info);

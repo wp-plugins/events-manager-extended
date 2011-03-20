@@ -673,7 +673,7 @@ function eme_global_map($atts) {
          $result = $loc_list.$result;
       } elseif ($list_location=="after") {
          $locations = eme_get_locations((bool) $eventful,$scope,$category,0);
-         $loc_list .= "<ol id='eme_locations_list'>"; 
+         $loc_list = "<ol id='eme_locations_list'>"; 
          foreach($locations as $location) {
             $loc_list.="<li id='location-". $location['location_id'].
                               "' style='list-style-type: upper-alpha'><a >".

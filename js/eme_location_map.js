@@ -91,7 +91,7 @@ function loadGMap() {
 						    + item.location_town + "<br /><small><a href='" + events_page_link
 						    + joiner + "location_id=" + item.location_id + "'>Details<a></div>";
 				customIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+letter+"|FF0000|000000";
-				shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
+				//shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
 				var balloon_id = "eme-location-balloon-id";
 				var balloon_content = "<div id=\""+balloon_id+"\" class=\"eme-location-balloon\">"+htmlDecode(item.location_balloon)+"</div>";
@@ -100,11 +100,10 @@ function loadGMap() {
 					position: point,
 					map: map,
 					icon: customIcon,
-               shadow: shadow,
 					infowindow: infowindow,
 					infowindowcontent: balloon_content
 				});
-            if (document.getElementById('location-'+item.location_id')) {
+            if (document.getElementById('location-'+item.location_id)) {
 				   $j_eme_locations('li#location-'+item.location_id+' a').click(function() {
 				   	infowindow.setContent(balloon_content);
 				   	infowindow.open(map,marker);
