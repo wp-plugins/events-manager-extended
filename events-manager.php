@@ -106,9 +106,9 @@ function eme_client_clock_callback() {
    }
    
    if ($ret == "1") {
-      // Echo text string return to jQuery's AJAX callback function.
+      // Echo empty string to jQuery's AJAX callback function.
       header("Content-Type: text");
-      echo $ret;
+      echo '';
    }
    exit; //  because this is an AJAX instance
 }
