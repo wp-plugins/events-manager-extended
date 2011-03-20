@@ -478,6 +478,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: CSV export of attendees is now possible
 * Feature: the calendar can now be based on the client date/time if configured so (using php sessions for that, thanks to admintiger)
 * Feature: #_PAST_FUTURE_CLASS also generates a new class for ongoing events (class 'eme-ongoing-event')
+* Feature: new parameter for the shortcode [locations_map]: list_location. Specifies the place where the location list will be shown: before the map, after the map, or not (values: 'before','after','none')
 * Improvement: enqueue_style used for CSS in frontend. Style ids enqueued: eme_stylesheet and eme_stylesheet_extra (if eme.css is present in your theme)
 * Improvement: the filters for locations, town and categories now return sorted values
 * Improvement: full calendar now also shows full month name
