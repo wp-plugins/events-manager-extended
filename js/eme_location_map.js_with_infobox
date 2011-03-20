@@ -644,13 +644,13 @@ InfoBox.prototype.close = function () {
   this.setMap(null);
 };
 	var myBalloonOptions = {
-		pixelOffset: new google.maps.Size(-140, 0)
-		,boxStyle: { 
-			background: "url('http://www.garylittle.ca/map/artwork/tipbox.gif') no-repeat"
-			,opacity: 0.75
-			,width: "280px"
-		}
-		,closeBoxMargin: "10px 2px 2px 2px"
+		pixelOffset: new google.maps.Size(-140, 0),
+		boxStyle: { 
+			background: "url('http://www.garylittle.ca/map/artwork/tipbox.gif') no-repeat",
+			opacity: 0.75,
+			width: "280px"
+		},
+		closeBoxMargin: "10px 2px 2px 2px"
 	};
 	// first the global map (if present)
 	if (document.getElementById("eme_global_map")) {
