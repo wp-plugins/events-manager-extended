@@ -714,45 +714,40 @@ InfoBox.prototype.close = function () {
 			//console.log(locationsBound);
 			map.fitBounds(locationsBound);
 			map.setCenter(new google.maps.LatLng(center_lat + vertical_compensation,center_lon)); 
-			var letters = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
 
 			$j_eme_locations.each(locations, function(i, item) {
-				var letter = letters[i];
+            var letter;
+            if (index>25) {
+               var rest=index%26;
+               var firstindex=Math.floor(index/26)-1;
+               letter = String.fromCharCode("A".charCodeAt(0) + firstindex)+String.fromCharCode("A".charCodeAt(0) + rest);
+            } else {
+               letter = String.fromCharCode("A".charCodeAt(0) + index);
+            }
 
-				var li_element = "<li id='location-"+item.location_id
-						 + "' style='list-style-type: upper-alpha'><a >"
-						 + item.location_name+"</a></li>";
-				//var location_info = "<div class=\"eme-location-balloon\"><strong>"+ item.location_name
-				//		    + "</strong><br />" + item.location_address + ", "
-				//		    + item.location_town + "<br /><small><a href='" + events_page_link
-				//		    + joiner + "location_id=" + item.location_id + "'>Details<a></div>";
 				var location_info = document.createElement("div");
 				location_info.style.cssText = "border: 1px solid black; margin-top: 8px; background: yellow; padding: 5px;";
-				//location_info.innerHTML = "<strong>"+ item.location_name+ "</strong><br />" + item.location_address + ", "+ item.location_town + "<br /><small><a href='" + events_page_link + joiner + "location_id=" + item.location_id + "'>Details<a>";
             location_info.innerHTML = htmlDecode(item.location_balloon);
 				
-				customIcon = "http://www.google.com/mapfiles/marker" + letter + ".png";
+				customIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+letter+"|FF0000|000000";
+            shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
 				var marker = new google.maps.Marker({
 					position: point,
 					map: map,
 					icon: customIcon,
+               shadow: shadow,
 					infowindow: infowindow,
 					infowindowcontent: location_info
 				});
-				//var pixoff = new google.maps.Size(0,-32);
-				//infowindow = new google.maps.InfoWindow();
-				//var infowindow = new google.maps.InfoWindow({
-				//		content: location_info,
-				//		pixelOffset: pixoff
-				//});
-				$j_eme_locations('ol#eme_locations_list').append(li_element);
-				$j_eme_locations('li#location-'+item.location_id+' a').click(function() {
-					infowindow.close();
-					infowindow.setContent(location_info);
-					infowindow.open(map,marker);
-					$j_eme_locations(window).scrollTop($j_eme_locations('#eme_global_map').position().top)
-				});
+            if (document.getElementById('location-'+item.location_id')) {
+               $j_eme_locations('li#location-'+item.location_id+' a').click(function() {
+					   infowindow.close();
+					   infowindow.setContent(location_info);
+					   infowindow.open(map,marker);
+                  $j_eme_locations(window).scrollTop($j_eme_locations('#eme_global_map').position().top);
+               });
+            }
 				google.maps.event.addListener(map, "click", function() {
 					infowindow.close();
 				});

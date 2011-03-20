@@ -86,14 +86,12 @@ function loadGMap() {
 					letter = String.fromCharCode("A".charCodeAt(0) + index);
 				}
 
-				//var li_element = "<li id='location-"+item.location_id
-				//		 + "' style='list-style-type: upper-alpha'><a >"
-				//		 + item.location_name+"</a></li>";
 				var location_info = "<div class=\"eme-location-balloon\"><strong>"+ item.location_name
 						    + "</strong><br />" + item.location_address + ", "
 						    + item.location_town + "<br /><small><a href='" + events_page_link
 						    + joiner + "location_id=" + item.location_id + "'>Details<a></div>";
 				customIcon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+letter+"|FF0000|000000";
+				shadow = "http://chart.apis.google.com/chart?chst=d_map_pin_shadow";
 				var point = new google.maps.LatLng(parseFloat(item.location_latitude), parseFloat(item.location_longitude));
 				var balloon_id = "eme-location-balloon-id";
 				var balloon_content = "<div id=\""+balloon_id+"\" class=\"eme-location-balloon\">"+htmlDecode(item.location_balloon)+"</div>";
@@ -102,15 +100,17 @@ function loadGMap() {
 					position: point,
 					map: map,
 					icon: customIcon,
+               shadow: shadow,
 					infowindow: infowindow,
 					infowindowcontent: balloon_content
 				});
-				//$j_eme_locations('ol#eme_locations_list').append(li_element);
-				$j_eme_locations('li#location-'+item.location_id+' a').click(function() {
-					infowindow.setContent(balloon_content);
-					infowindow.open(map,marker);
-					$j_eme_locations(window).scrollTop($j_eme_locations('#eme_global_map').position().top);
-				});
+            if (document.getElementById('location-'+item.location_id')) {
+				   $j_eme_locations('li#location-'+item.location_id+' a').click(function() {
+				   	infowindow.setContent(balloon_content);
+				   	infowindow.open(map,marker);
+				   	$j_eme_locations(window).scrollTop($j_eme_locations('#eme_global_map').position().top);
+				   });
+            }
 				google.maps.event.addListener(marker, "click", function() {
 					// This also works, but relies on global variables:
 					// infowindow.setContent(location_info);
