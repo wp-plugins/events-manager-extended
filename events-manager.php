@@ -38,6 +38,8 @@ if (get_option('eme_use_client_clock')) {
    wp_enqueue_script('client_clock_submit', plugin_dir_url( __FILE__ ) . 'js/client-clock.js', array('jquery'));  
    // Declare URL to the file that receives AJAXed client clock data (wp-admin/admin-ajax.php).
    wp_localize_script('client_clock_submit', 'eme_ajax', array('ajaxurl' => admin_url('admin-ajax.php')));
+
+   // the next 2 actions are executed by the ajax JS call "client_clock_submit"
    // Add high priority action to receive clock data from users who are not logged-in.
    add_action('wp_ajax_nopriv_client_clock_submit', 'eme_client_clock_callback', 1);
    // Add high priority action to receive clock data from logged-in users.
@@ -105,12 +107,8 @@ function eme_client_clock_callback() {
       $_SESSION['eme_client_php_difference'] = (int) (strtotime($client_clock_str) - strtotime($php_clock_str));
    }
    
-   if ($ret == "1") {
-      // Echo empty string to jQuery's AJAX callback function.
-      header("Content-Type: text");
-      echo '';
-   }
-   exit; //  because this is an AJAX instance
+   echo $ret;
+   die(); //  because this is an AJAX instance
 }
 
 // Setting constants
