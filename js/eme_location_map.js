@@ -1,4 +1,4 @@
-$j_eme_locations=jQuery.noConflict();
+var $j_eme_locations=jQuery.noConflict();
 // console.log("eventful: " + eventful + " scope " + scope);
 
 $j_eme_locations(document.body).unload(function() {
@@ -156,7 +156,7 @@ function loadGMap() {
 	// and now for the normal maps (if any)
 	var divs = document.getElementsByTagName('div');
 	for (var i = 0; i < divs.length; i++) {
-		divname = divs[i].id; 
+		var divname = divs[i].id; 
 		if(divname.indexOf("eme-location-map_") === 0) { 
 			var map_id = divname.replace("eme-location-map_","");
 			var lat_id = window['latitude_'+map_id]; 
@@ -164,21 +164,21 @@ function loadGMap() {
 			var map_text_id = window['map_text_'+map_id]; 
 			var point = new google.maps.LatLng(lat_id, lon_id);
 
-         var enable_zooming=false;
-         if (window['enable_zooming_'+map_id] === 'true') {
-            enable_zooming = true;
-         }
+                        var enable_zooming=false;
+                        if (window['enable_zooming_'+map_id] === 'true') {
+                           enable_zooming = true;
+                        }
 
 			var mapCenter= new google.maps.LatLng(point.lat()+0.005, point.lng()-0.003);
 			var myOptions = {
-            zoom: 14,
-            center: mapCenter,
-            disableDoubleClickZoom: true,
-            scrollwheel: enable_zooming,
-            mapTypeControlOptions: {
-               mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
-            },
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+                           zoom: 14,
+                           center: mapCenter,
+                           disableDoubleClickZoom: true,
+                           scrollwheel: enable_zooming,
+                           mapTypeControlOptions: {
+                                 mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE]
+                           },
+                           mapTypeId: google.maps.MapTypeId.ROADMAP
 			};
 			var s_map = new google.maps.Map(divs[i], myOptions);
 			var s_balloon_id= "eme-location-balloon-"+map_id;

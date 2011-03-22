@@ -725,7 +725,7 @@ function get_locations_shortcode($atts) {
    $out .= <<<EOD
       <script type="text/javascript">
       //<![CDATA[
-      $j_eme_loc_cal=jQuery.noConflict();
+      var $j_eme_loc_cal=jQuery.noConflict();
 
       $j_eme_loc_cal(document).ready(function() {
          $j_eme_loc_cal('#eme_locations.calendar li').each(function(){
