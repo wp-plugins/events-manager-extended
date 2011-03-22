@@ -333,7 +333,7 @@ function eme_get_persons($person_ids) {
    global $wpdb; 
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;
    $tmp_ids=join(",",$person_ids);
-   $sql = "SELECT * FROM $people_table WHERE person_id IN '($tmp_ids)';" ;
+   $sql = "SELECT * FROM $people_table WHERE person_id IN ($tmp_ids);" ;
    $lines = $wpdb->get_results($sql, ARRAY_A);
    foreach ($lines as $line) {
       if (!is_null($line['wp_id']) && $line['wp_id']) {
