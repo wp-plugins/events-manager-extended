@@ -292,7 +292,7 @@ function eme_get_bookings_by_person_id($person_id) {
 function eme_get_booking_by_person_event_id($person_id,$event_id) {
    global $wpdb;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
-   $sql = "SELECT * FROM $bookings_table WHERE person_id = $person_id AND event_id= $event_id";
+   $sql = "SELECT * FROM $bookings_table WHERE person_id = '$person_id' AND event_id = '$event_id'";
    $result = $wpdb->get_row($sql, ARRAY_A);
    return $result;
 }
@@ -300,7 +300,7 @@ function eme_get_booking_by_person_event_id($person_id,$event_id) {
 function eme_get_booked_seats_by_person_event_id($person_id,$event_id) {
    global $wpdb;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
-   $sql = "SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE person_id = $person_id AND event_id = $event_id";
+   $sql = "SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE person_id = '$person_id' AND event_id = '$event_id'";
    return $wpdb->get_var($sql);
 }
 

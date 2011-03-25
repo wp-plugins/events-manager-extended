@@ -494,3 +494,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: for single events, if end day equals start day en end time is smaller than start time, put end day one day ahead
 * Bugfix: #_NOTES should be in RSS as well, not just the excerpt
 * Bugfix: the 'hide events when full' sql was wrong
+
+= 3.3.5 =
+* Bugfix: quote the person id in the SQL query for bookings to account for empty variables
