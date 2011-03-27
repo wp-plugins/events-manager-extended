@@ -78,8 +78,8 @@ function eme_permalink_convert ($val) {
    // called remove_accents, but we also want to replace spaces with "-"
    // and trim the last space. sanitize_title_with_dashes does all that
    // and then, add a trailing slash
-   $val=trailingslashit(sanitize_title_with_dashes($val));
-   return $val;
+   $val = sanitize_title_with_dashes(remove_accents($val));
+   return trailingslashit($val);
 }
 
 function eme_event_url($event) {
