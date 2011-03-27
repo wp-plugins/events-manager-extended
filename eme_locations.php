@@ -921,7 +921,7 @@ function eme_add_directions_form($location) {
    $res .= '</form>';
 
    # some people might want to change the form to their liking
-   if (has_filter('eme_directions_filter')) $res=apply_filters('eme_directions_filter',$res);
+   if (has_filter('eme_directions_form_filter')) $res=apply_filters('eme_directions_form_filter',$res);
 
    return $res;
 }
