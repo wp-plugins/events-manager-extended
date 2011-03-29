@@ -106,16 +106,20 @@ function eme_event_url($event) {
 function eme_location_url($location) {
    global $wp_rewrite;
 
-   if (isset($wp_rewrite) && $wp_rewrite->using_permalinks() && get_option('eme_seo_permalink')) {
-      $name=eme_permalink_convert(__("locations",'eme')).$location['location_id']."/".eme_permalink_convert($location['location_name']);
-      $the_link = trailingslashit(home_url()).user_trailingslashit($name);
-   } else {
-      $events_page_link = eme_get_events_page(true, false);
-      if (stristr ( $events_page_link, "?" ))
-         $joiner = "&amp;";
-      else
-         $joiner = "?";
-      $the_link = $events_page_link.$joiner."location_id=".$location['location_id'];
+   $the_link = "";
+   if (isset($location['location_id']) && isset($location['location_name'])) {
+      if (isset($wp_rewrite) && $wp_rewrite->using_permalinks() && get_option('eme_seo_permalink')) {
+         $name=eme_permalink_convert(__("locations",'eme')).$location['location_id']."/".eme_permalink_convert($location['location_name']);
+         $the_link = trailingslashit(home_url()).user_trailingslashit($name);
+      } else {
+         $events_page_link = eme_get_events_page(true, false);
+         if (stristr ( $events_page_link, "?" )) {
+           $joiner = "&amp;";
+         } else {
+            $joiner = "?";
+         }
+         $the_link = $events_page_link.$joiner."location_id=".$location['location_id'];
+      }
    }
    return $the_link;
 }
