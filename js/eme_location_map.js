@@ -164,10 +164,10 @@ function loadGMap() {
 			var map_text_id = window['map_text_'+map_id]; 
 			var point = new google.maps.LatLng(lat_id, lon_id);
 
-                        var enable_zooming=false;
-                        if (window['enable_zooming_'+map_id] === 'true') {
-                           enable_zooming = true;
-                        }
+         var enable_zooming=false;
+         if (window['enable_zooming_'+map_id] === 'true') {
+            enable_zooming = true;
+         }
 
 			var mapCenter= new google.maps.LatLng(point.lat()+0.005, point.lng()-0.003);
 			var myOptions = {
@@ -205,7 +205,7 @@ function loadGMap() {
 				document.getElementById(this.balloon_id).parentNode.style.overflow='';
 				document.getElementById(this.balloon_id).parentNode.parentNode.style.overflow='';
 			});
-      		}
+      }
 	}
 }
 
