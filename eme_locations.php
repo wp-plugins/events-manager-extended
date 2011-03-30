@@ -940,10 +940,14 @@ function eme_single_location_map($location) {
    if ($gmap_is_active && !empty($location['location_name']) && !empty($location['location_address']) && !empty($location['location_town'])) {
       $eme_need_gmap_js=1;
       //$id_base = $location['location_id'];
-      // we can't create a unique <div>-id based on location id, because you can have multiple maps on the sampe page for
+      // we can't create a unique <div>-id based on location id alone, because you can have multiple maps on the sampe page for
       // different events but they can go to the same location...
-      // So we use the microtime for this, and replace all non digits by underscore (otherwise the generated javascript will error)
+      // So we also use the event_id (if present) and the microtime for this, and replace all non digits by underscore (otherwise the generated javascript will error)
       $id_base = preg_replace("/\D/","_",microtime(1));
+      // the next is only possible when called from within an event (events-manager.php)
+      if (isset($location['event_id'])) {
+         $id_base = $location['event_id']."_".$id_base;
+      }
       $id="eme-location-map_".$id_base;
       $latitude_string="latitude_".$id_base;
       $longitude_string="longitude_".$id_base;

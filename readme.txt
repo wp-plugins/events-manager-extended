@@ -500,4 +500,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: fix some php notices
 * Bugfix: WP changed the function sanitize_title_with_dashes in 3.1, so it didn't replace accented characters anymore. Workaround has been put in place
 * Bugfix: quote the person id in the SQL query for bookings to account for empty variables
-
+* Bugfix: better avoidance of duplicate div-id's for location maps when called in the event list
