@@ -12,6 +12,14 @@ function eme_get_calendar_shortcode($atts) {
          'location_id' => ''
       ), $atts)); 
 
+   // this allows people to use specific months/years to show the calendar on
+   if(isset($_GET['calmonth']) && $_GET['calmonth'] != '')   {
+      $month =  eme_sanitize_request($_GET['calmonth']) ;
+   }
+   if(isset($_GET['calyear']) && $_GET['calyear'] != '')   {
+      $year =  eme_sanitize_request($_GET['calyear']) ;
+   }
+
    // the filter list overrides the settings
    if (isset($_REQUEST['eme_eventAction']) && $_REQUEST['eme_eventAction'] == 'filter') {
       if (isset($_REQUEST['eme_scope_filter'])) {
