@@ -497,9 +497,9 @@ function eme_location_has_events($location_id) {
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
    if (!is_admin()) {
       if (is_user_logged_in()) {
-         $condition = "AND event_status IN (1,2)";
+         $condition = "AND event_status IN (".STATUS_PUBLIC.",".STATUS_PRIVATE.")";
       } else {
-         $condition = "AND event_status=1";
+         $condition = "AND event_status=".STATUS_PUBLIC;
       }
    }
 

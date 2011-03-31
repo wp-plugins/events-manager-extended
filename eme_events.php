@@ -10,7 +10,7 @@ function eme_new_event_page() {
    $event = array (
       "event_id" => '',
       "event_name" => '',
-      "event_status" => 3,
+      "event_status" => STATUS_DRAFT,
       "event_date" => '',
       "event_day" => '',
       "event_month" => '',
@@ -607,9 +607,9 @@ function eme_events_count_for($date) {
    $conditions = array ();
    if (!is_admin()) {
       if (is_user_logged_in()) {
-         $conditions [] = "event_status IN (1,2)";
+         $conditions [] = "event_status IN (".STATUS_PUBLIC.",".STATUS_PRIVATE.")";
       } else {
-         $conditions [] = "event_status=1";
+         $conditions [] = "event_status=".STATUS_PUBLIC;
       }
    }
    $conditions [] = "((event_start_date  like '$date') OR (event_start_date <= '$date' AND event_end_date >= '$date'))";
@@ -1177,9 +1177,9 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
    // if we're not in the admin itf, we don't want draft events
    if (!is_admin()) {
       if (is_user_logged_in()) {
-         $conditions [] = "event_status IN (1,2)";
+         $conditions [] = "event_status IN (".STATUS_PUBLIC.",".STATUS_PRIVATE.")";
       } else {
-         $conditions [] = "event_status=1";
+         $conditions [] = "event_status=".STATUS_PUBLIC;
       }
       if (get_option('eme_rsvp_hide_full_events')) {
          // COALESCE is used in case the SUM returns NULL
@@ -1392,9 +1392,9 @@ function eme_get_event($event_id) {
    // if we're not in the admin itf, we don't want draft events
    if (!is_admin()) {
       if (is_user_logged_in()) {
-         $conditions [] = "event_status IN (1,2)";
+         $conditions [] = "event_status IN (".STATUS_PUBLIC.",".STATUS_PRIVATE.")";
       } else {
-         $conditions [] = "event_status=1";
+         $conditions [] = "event_status=".STATUS_PUBLIC;
       }
    }
    $where = implode ( " AND ", $conditions );

@@ -303,7 +303,7 @@ function eme_get_calendar($args="") {
    if($events){   
       //Go through the events and slot them into the right d-m index
       foreach($events as $event) {
-         if ($event ['event_status'] == 2 && !is_user_logged_in()) {
+         if ($event ['event_status'] == STATUS_PRIVATE && !is_user_logged_in()) {
             continue;
          }
          if ($event ['location_id'] ) {
