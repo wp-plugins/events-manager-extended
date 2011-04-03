@@ -19,7 +19,7 @@ function eme_cleanup_page() {
          $wpdb->query("DELETE FROM $bookings_table where event_id in (SELECT event_id from $events_table where event_end_date<'$end_date')");
          $wpdb->query("DELETE FROM $events_table where event_end_date<'$end_date'");
          $wpdb->query("DELETE FROM $recurrence_table where recurrence_end_date<'$end_date'");
-         $message = sprintf ( __ ( "Cleanup done: events (and corresponding booking data) older than %d %s(s) have been removed."),$eme_number,$eme_period);
+         $message = sprintf ( __ ( "Cleanup done: events (and corresponding booking data) older than %d %s(s) have been removed.","eme"),$eme_number,$eme_period);
       }
    }
 
