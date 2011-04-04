@@ -55,6 +55,7 @@ function eme_new_event_page() {
 function eme_events_subpanel() {
    global $wpdb;
 
+   $extra_conditions = array();
    $action = isset($_GET ['action']) ? $_GET ['action'] : '';
    $event_ID = isset($_GET ['event_id']) ? intval($_GET ['event_id']) : '';
    $recurrence_ID = isset($_GET ['recurrence_id']) ? intval($_GET ['recurrence_id']) : '';
@@ -63,6 +64,11 @@ function eme_events_subpanel() {
    $category = isset($_GET ['category']) ? intval($_GET ['category']) : 0;
    $order = isset($_GET ['order']) ? $_GET ['order'] : '';
    $selectedEvents = isset($_GET ['events']) ? $_GET ['events'] : '';
+   $status = isset($_GET ['event_status']) ? intval($_GET ['event_status']) : '';
+   if(!empty($status)) {
+      $extra_conditions[] = 'event_status = '.$status;
+   }
+
    
    // check the user is allowed to do anything
    if ( !current_user_can( MIN_CAPABILITY ) ) {
@@ -382,7 +388,14 @@ function eme_events_subpanel() {
             $title = __ ( 'Future Events', 'eme' );
             $scope = "future";
       }
-      $events = eme_get_events ( $list_limit+1, $scope, $order, $offset, "", $category );
+
+      if (count($extra_conditions) > 0) {
+         $extra_conditions = implode(' AND ', $extra_conditions);
+      } else {
+         $extra_conditions = '';
+      }
+ 
+      $events = eme_get_events ( $list_limit+1, $scope, $order, $offset, "", $category, '', '', $extra_conditions);
       eme_events_table ( $events, $list_limit, $title, $scope, $offset, $category );
    }
 }
@@ -1522,6 +1535,12 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
       echo "<option value='$key' $selected>$value</option>  ";
    }
    ?>
+   </select>
+   <select id="event_status" name="event_status">
+      <option value="0"><?php _e('Event Status','eme'); ?></option>
+      <?php foreach($event_status_array as $event_status_key => $event_status_value): ?>
+         <option value="<?php echo $event_status_key; ?>" <?php if($_GET['event_status'] == $event_status_key) echo 'selected="selected"'; ?>><?php echo $event_status_value; ?></option>
+      <?php endforeach; ?>
    </select>
    <select name="category">
    <option value='0'><?php _e('All categories','eme'); ?></option>
