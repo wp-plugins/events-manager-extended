@@ -557,6 +557,7 @@ function eme_replace_attendees_placeholders($format, $attendee, $event_id, $targ
    preg_match_all("/#_?[A-Za-z0)9_]+/", $format, $placeholders);
    foreach($placeholders[0] as $result) {
       $replacement='';
+      $found = 1;
       if (preg_match('/#_(NAME|PHONE|ID|EMAIL)$/', $result)) {
          $field = "person_".ltrim(strtolower($result), "#_");
          $replacement = $attendee[$field];
@@ -566,9 +567,13 @@ function eme_replace_attendees_placeholders($format, $attendee, $event_id, $targ
          else 
             $replacement = apply_filters('eme_general_rss', $replacement); 
 
-	 $format = str_replace($result, $replacement ,$format );
       } elseif (preg_match('/#_USER_(RESERVEDSPACES|BOOKEDSEATS)$/', $result)) {
          $replacement = eme_get_booked_seats_by_person_event_id($attendee['person_id'],$event['event_id']);
+      } else {
+         $found = 0;
+      }
+      if ($found) {
+         $format = str_replace($result, $replacement ,$format );
       }
    }
    return do_shortcode($format);   
