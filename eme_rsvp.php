@@ -544,7 +544,7 @@ function eme_get_bookings_list_for($event_id) {
       $attendees=eme_get_persons($person_ids);
       $res="<ul class='eme_bookings_list_ul'>";
       foreach ($attendees as $attendee) {
-         $res.=eme_replace_attendees_placeholders(get_option('eme_attendees_list_format'),$attendee);
+         $res.=eme_replace_attendees_placeholders(get_option('eme_attendees_list_format'),$attendee,$event_id);
       }
       $res.="</ul>";
    } else {
@@ -553,7 +553,7 @@ function eme_get_bookings_list_for($event_id) {
    return $res;
 }
 
-function eme_replace_attendees_placeholders($format, $attendee, $target="html") {
+function eme_replace_attendees_placeholders($format, $attendee, $event_id, $target="html") {
    preg_match_all("/#_?[A-Za-z0)9_]+/", $format, $placeholders);
    foreach($placeholders[0] as $result) {
       $replacement='';
@@ -567,6 +567,8 @@ function eme_replace_attendees_placeholders($format, $attendee, $target="html") 
             $replacement = apply_filters('eme_general_rss', $replacement); 
 
 	 $format = str_replace($result, $replacement ,$format );
+      } elseif (preg_match('/#_USER_(RESERVEDSPACES|BOOKEDSEATS)$/', $result)) {
+         $replacement = eme_get_booked_seats_by_person_event_id($attendee['person_id'],$event['event_id']);
       }
    }
    return do_shortcode($format);   
