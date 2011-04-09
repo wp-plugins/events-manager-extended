@@ -1178,7 +1178,7 @@ function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_off
       $order = "ASC";
    
    $today = date("Y-m-d");
-   $this_hour = date ("H:i:00");
+   $this_time = date ("H:i:00");
    
    $conditions = array ();
    // extra sql conditions we put in front, most of the time this is the most
