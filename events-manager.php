@@ -1112,32 +1112,38 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_LOCATION$/', $result)) {
          $field = "location_name";
-         $replacement = $event[$field];
-         $replacement = eme_trans_sanitize_html($replacement);
-         if ($target == "html") {
-            $replacement = apply_filters('eme_general', $replacement); 
-         } else {
-            $replacement = apply_filters('eme_general_rss', $replacement); 
+         if (isset($event[$field])) {
+            $replacement = $event[$field];
+            $replacement = eme_trans_sanitize_html($replacement);
+            if ($target == "html") {
+               $replacement = apply_filters('eme_general', $replacement); 
+            } else {
+               $replacement = apply_filters('eme_general_rss', $replacement); 
+            }
          }
 
       } elseif (preg_match('/#_LATITUDE$/', $result)) {
          $field = "location_latitude";
-         $replacement = $event[$field];
-         $replacement = eme_trans_sanitize_html($replacement);
-         if ($target == "html") {
-            $replacement = apply_filters('eme_general', $replacement); 
-         } else {
-            $replacement = apply_filters('eme_general_rss', $replacement); 
+         if (isset($event[$field])) {
+            $replacement = $event[$field];
+            $replacement = eme_trans_sanitize_html($replacement);
+            if ($target == "html") {
+               $replacement = apply_filters('eme_general', $replacement); 
+            } else {
+               $replacement = apply_filters('eme_general_rss', $replacement); 
+            }
          }
 
       } elseif (preg_match('/#_LONGITUDE$/', $result)) {
          $field = "location_longitude";
-         $replacement = $event[$field];
-         $replacement = eme_trans_sanitize_html($replacement);
-         if ($target == "html") {
-            $replacement = apply_filters('eme_general', $replacement); 
-         } else {
-            $replacement = apply_filters('eme_general_rss', $replacement); 
+         if (isset($event[$field])) {
+            $replacement = $event[$field];
+            $replacement = eme_trans_sanitize_html($replacement);
+            if ($target == "html") {
+               $replacement = apply_filters('eme_general', $replacement); 
+            } else {
+               $replacement = apply_filters('eme_general_rss', $replacement); 
+            }
          }
 
       } elseif (preg_match('/#_ATTENDEES$/', $result)) {
