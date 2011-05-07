@@ -491,7 +491,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: event #_NOTES and location #_DESCRIPTION placeholders must be replaced after the other placeholders, otherwise unwanted replacement in their content can take place
 * Bugfix: the special events page can now be a subpage of another (although not recommended) and SEO will continue to work (workaround for WP weird behaviour when using pagename as param to index.php for rewriting rules: page_id is more reliable)
 * Bugfix: for recurrent events, in case the end time crosses midnight (and as such is lower than the start time), the end day should be the next day
-* Bugfix: for single events, if end day equals start day en end time is smaller than start time, put end day one day ahead
+* Bugfix: for single events, if end day equals start day and end time is smaller than start time, put end day one day ahead
 * Bugfix: #_NOTES should be in RSS as well, not just the excerpt
 * Bugfix: the 'hide events when full' sql was wrong
 
@@ -508,3 +508,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: better avoidance of duplicate div-id's for location maps when called in the event list
 * Bugfix: when no bookings are made, 0 is now returned for RESERVEDSPACES and other shortcodes alike, and no longer an empty string 
 * Bugfix: removed some old code that was checking for magic_quotes_gpc, no longer needed
+* Bugfix: for single events, if end day equals start day and end time is smaller than start time, put end day one day ahead but only if the end time has a value (if not: keep the end day intact)

@@ -2857,12 +2857,16 @@ function eme_db_insert_event($event) {
    if ($event['event_end_date']<$event['event_start_date']) {
       $event['event_end_date']=$event['event_start_date'];
    }
-   $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
-   $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
-   if ($endstring<=$startstring) {
-      // the end day/time is lower than the start day/time, then put
-      // the end day one day (86400 secs) ahead
-      $event['event_end_date']=date("Y-m-d",strtotime($event['event_start_date'])+86400);
+   // if the end day/time is lower than the start day/time, then put
+   // the end day one day (86400 secs) ahead, but only if
+   // the end time has been filled in, if it is empty then we keep
+   // the end date as it is
+   if ($event['event_end_time']) {
+      $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
+      $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
+      if ($endstring<=$startstring) {
+         $event['event_end_date']=date("Y-m-d",strtotime($event['event_start_date'])+86400);
+      }
    }
 
    $wpdb->show_errors(true);
