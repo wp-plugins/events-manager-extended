@@ -148,14 +148,18 @@ function eme_events_subpanel() {
       //    $event['event_end_date'] = $event['event-date'];
       $event ['event_start_date'] = isset($_POST ['event_date']) ? $_POST ['event_date'] : '';
       $event ['event_end_date'] = isset($_POST ['event_end_date']) ? $_POST ['event_end_date'] : '';
-      // Trying to fix Alex's trouble
       if ($event ['event_end_date'] == '') 
          $event['event_end_date'] = $event['event_start_date'];
-      // End of Alex's fix
-      //$event['event_start_time'] = $_POST[event_hh].":".$_POST[event_mm].":00";
-      //$event['event_end_time'] = $_POST[event_end_hh].":".$_POST[event_end_mm].":00";
-      $event ['event_start_time'] = isset($_POST ['event_start_time']) ? date ("H:i:00", strtotime ($_POST ['event_start_time'])) : '00:00:00';
-      $event ['event_end_time'] = isset($_POST ['event_end_time']) ? date ("H:i:00", strtotime ($_POST ['event_end_time'])) : '00:00:00';
+      if (isset($_POST ['event_start_time']) && !empty($_POST ['event_start_time'])) {
+         $event ['event_start_time'] = date ("H:i:00", strtotime ($_POST ['event_start_time']));
+      } else {
+         $event ['event_start_time'] = "00:00:00";
+      }
+      if (isset($_POST ['event_end_time']) && !empty($_POST ['event_end_time'])) {
+         $event ['event_end_time'] = date ("H:i:00", strtotime ($_POST ['event_end_time']));
+      } else {
+         $event ['event_end_time'] = "00:00:00";
+      }
       $recurrence ['recurrence_start_date'] = $event ['event_start_date'];
       $recurrence ['recurrence_end_date'] = $event ['event_end_date'];
       $recurrence ['recurrence_freq'] = isset($_POST['recurrence_freq']) ? $_POST['recurrence_freq'] : '';
@@ -2861,7 +2865,7 @@ function eme_db_insert_event($event) {
    // the end day one day (86400 secs) ahead, but only if
    // the end time has been filled in, if it is empty then we keep
    // the end date as it is
-   if ($event['event_end_time']) {
+   if ($event['event_end_time'] != "00:00:00") {
       $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
       $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
       if ($endstring<=$startstring) {
@@ -2891,12 +2895,16 @@ function eme_db_update_event($event,$where) {
    if ($event['event_end_date']<$event['event_start_date']) {
       $event['event_end_date']=$event['event_start_date'];
    }
-   $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
-   $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
-   if ($endstring<=$startstring) {
-      // the end day/time is lower than the start day/time, then put
-      // the end day one day (86400 secs) ahead
-      $event['event_end_date']=date("Y-m-d",strtotime($event['event_start_date'])+86400);
+   // if the end day/time is lower than the start day/time, then put
+   // the end day one day (86400 secs) ahead, but only if
+   // the end time has been filled in, if it is empty then we keep
+   // the end date as it is
+   if ($event['event_end_time'] != "00:00:00") {
+      $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
+      $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
+      if ($endstring<=$startstring) {
+         $event['event_end_date']=date("Y-m-d",strtotime($event['event_start_date'])+86400);
+      }
    }
 
    $wpdb->show_errors(true);
