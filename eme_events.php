@@ -453,6 +453,7 @@ function eme_options_subpanel() {
    eme_options_radio_binary ( __ ( 'Show events page in lists?', 'eme' ), 'eme_list_events_page', __ ( 'Check this option if you want the events page to appear together with other pages in pages lists.', 'eme' )."<br /><strong>".__ ( 'This option should no longer be used, it will be deprecated. Using the [events_list] shortcode in a self created page is recommended.', 'eme' )."</strong>" ); 
    eme_options_radio_binary ( __ ( 'Display calendar in events page?', 'eme' ), 'eme_display_calendar_in_events_page', __ ( 'This option allows to display the calendar in the events page, instead of the default list. It is recommended not to display both the calendar widget and a calendar page.','eme' ) );
    eme_options_input_text ( __('Number of events to show per page in admin interface', 'eme' ), 'eme_events_admin_limit', __( 'Indicates the number of events shown on one page in the admin interface (min. 5, max. 200)','eme') );
+   eme_options_input_text ( __('Number of events to show in lists', 'eme' ), 'eme_event_list_number_items', __( 'The number of events to show in a list if no specific limit is specified (used in the shortcode events_list, RSS feed, the placeholders #_NEXTEVENTS and #_PASTEVENTS, ...).','eme') );
    ?>
 </table>
 <h3><?php _e ( 'Events format', 'eme' ); ?></h3>
@@ -612,7 +613,7 @@ function eme_events_page_content() {
          $single_event_format_header = ( $single_event_format_header != '' ) ? $single_event_format_header : "<ul class='eme_events_list'>";
          $single_event_format_footer = get_option('eme_event_list_item_format_footer' );
          $single_event_format_footer = ( $single_event_format_footer != '' ) ? $single_event_format_footer : "</ul>";
-         $events_body = $single_event_format_header . eme_get_events_list ( 10, $scope, "ASC", $stored_format, 0 ) . $single_event_format_footer;
+         $events_body = $single_event_format_header . eme_get_events_list ( get_option('eme_event_list_number_items' ), $scope, "ASC", $stored_format, 0 ) . $single_event_format_footer;
       }
       return $events_body;
    }
@@ -755,11 +756,15 @@ add_filter ( 'get_pages', 'eme_filter_get_pages' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "", $user_registered_only = 0) {
+function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "", $user_registered_only = 0) {
    global $post;
+   if ($limit === "") {
+      $limit = get_option('eme_event_list_number_items' );
+   }
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', 'paging'=>0, 'long_events' => 0, 'location_id' => 0);
+      $eme_event_list_number_events=get_option('eme_event_list_number_items' );
+      $defaults = array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', 'paging'=>0, 'long_events' => 0, 'location_id' => 0);
       
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
@@ -1058,7 +1063,8 @@ function eme_get_events_list($limit = 10, $scope = "future", $order = "ASC", $fo
 }
 
 function eme_get_events_list_shortcode($atts) {
-   extract ( shortcode_atts ( array ('limit' => 10, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0, 'user_registered_only' => 0 ), $atts ) );
+   $eme_event_list_number_events=get_option('eme_event_list_number_items' );
+   extract ( shortcode_atts ( array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0, 'user_registered_only' => 0 ), $atts ) );
 
    // the filter list overrides the settings
    if (isset($_REQUEST['eme_eventAction']) && $_REQUEST['eme_eventAction'] == 'filter') {
@@ -1159,11 +1165,14 @@ function eme_count_events_newer_than($scope) {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit = 10, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = "", $author = "", $contact_person = "", $extra_conditions = "") {
+function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = "", $author = "", $contact_person = "", $extra_conditions = "") {
    global $wpdb, $wp_query;
 
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
+   if ($o_limit === "") {
+      $o_limit = get_option('eme_event_list_number_items' );
+   }
    if ($o_limit > 0) {
       $limit = "LIMIT ".intval($o_limit);
    } else {
@@ -2735,7 +2744,7 @@ function eme_rss() {
       if (isset($_GET['limit'])) {
          $limit=intval($_GET['limit']);
       } else {
-         $limit=5;
+         $limit=get_option('eme_event_list_number_items' );
       }
       if (isset($_GET['author'])) {
          $author=$_GET['author'];

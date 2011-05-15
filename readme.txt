@@ -362,6 +362,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: new shortcode [display_single_location], accepts 'id' as parameter with value the location ID you want to show
 * Feature: new placeholder #_LOCATIONID that just gives you the location ID
 * Feature: you change now change the number of events shown in the admin interface settings
+* Feature: you can now specify the default number of events to show in a list if no specific limit is specified (used in the shortcode events_list, RSS feed, the placeholders #_NEXTEVENTS and #_PASTEVENTS, ...)
 * Improvement: the google map javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
 * Improvement: the calendar jquery javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
 * Improvement: show the database error if event inserting fails
