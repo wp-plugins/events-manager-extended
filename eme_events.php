@@ -582,7 +582,8 @@ function eme_events_page_content() {
       $event = eme_get_event ( $event_ID );
       $single_event_format = ( $event['event_single_event_format'] != '' ) ? $event['event_single_event_format'] : get_option('eme_single_event_format' );
       //$page_body = eme_replace_placeholders ( $single_event_format, $event, 'stop' );
-      $page_body = eme_replace_placeholders ( $single_event_format, $event );
+      if (count($event) > 0 && ($event['event_status'] == STATUS_PRIVATE && is_user_logged_in() || $event['event_status'] != STATUS_PRIVATE))
+         $page_body = eme_replace_placeholders ( $single_event_format, $event );
       return $page_body;
    } elseif (isset ( $wp_query->query_vars ['calendar_day'] ) && $wp_query->query_vars ['calendar_day'] != '') {
       $scope = eme_sanitize_request($wp_query->query_vars ['calendar_day']);
@@ -1450,16 +1451,18 @@ function eme_get_event($event_id) {
    $event = $wpdb->get_row ( $sql, ARRAY_A );
    //$wpdb->print_error();
 
-   $location = eme_get_location ( $event ['location_id'] );
-   $event ['location_name'] = $location ['location_name'];
-   $event ['location_address'] = $location ['location_address'];
-   $event ['location_town'] = $location ['location_town'];
-   $event ['location_latitude'] = $location ['location_latitude'];
-   $event ['location_longitude'] = $location ['location_longitude'];
-   $event ['location_image_url'] = $location ['location_image_url'];
+   if ($event && count($event>0)) {
+      $location = eme_get_location ( $event ['location_id'] );
+      $event ['location_name'] = $location ['location_name'];
+      $event ['location_address'] = $location ['location_address'];
+      $event ['location_town'] = $location ['location_town'];
+      $event ['location_latitude'] = $location ['location_latitude'];
+      $event ['location_longitude'] = $location ['location_longitude'];
+      $event ['location_image_url'] = $location ['location_image_url'];
 
-   $event ['event_attributes'] = @unserialize($event ['event_attributes']);
-   $event ['event_attributes'] = (!is_array($event ['event_attributes'])) ?  array() : $event ['event_attributes'] ;
+      $event ['event_attributes'] = @unserialize($event ['event_attributes']);
+      $event ['event_attributes'] = (!is_array($event ['event_attributes'])) ?  array() : $event ['event_attributes'] ;
+   }
    if (has_filter('eme_event_filter')) $event=apply_filters('eme_event_filter',$event);
    return $event;
 }
@@ -2617,6 +2620,7 @@ function eme_admin_map_script() {
                },
                mapTypeId: google.maps.MapTypeId.ROADMAP
             }
+            $j_eme_admin("#event-map).show();
             var map = new google.maps.Map(document.getElementById("event-map"), myOptions);
             var geocoder = new google.maps.Geocoder();
             if (address !="") {
