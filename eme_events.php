@@ -1238,6 +1238,10 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       $limit_start = "$year-$month-01";
       $limit_end   = "$year-$month-$number_of_days_month";
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif ($scope == "this_year") {
+      $limit_start = "$year-01-01";
+      $limit_end = "$year-12-31";
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif ($scope == "next_month") {
       // the year/month should be based on the first of the month, so if we are the 13th, we substract 12 days to get to day 1
       // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
@@ -1255,6 +1259,42 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$today') OR (event_end_date BETWEEN '$matches[1]' AND '$today'))";
    } elseif (preg_match ( "/^today--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
       $conditions [] = " ((event_start_date BETWEEN '$today' AND '$matches[1]') OR (event_end_date BETWEEN '$today' AND '$matches[1]'))";
+   } elseif (preg_match ( "/^today--this_week)$/", $scope, $matches )) {
+      $day_offset=date('w');
+      $start_day=time()-$day_offset*86400;
+      $end_day=$start_day+6*86400;
+      $limit_start = $today;
+      $limit_end   = date('Y-m-d',$end_day);
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif (preg_match ( "/^today--this_month)$/", $scope, $matches )) {
+      $year=date('Y');
+      $month=date('m');
+      $number_of_days_month=eme_days_in_month($month,$year);
+      $limit_start = $today;
+      $limit_end   = "$year-$month-$number_of_days_month";
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif (preg_match ( "/^today--this_year)$/", $scope, $matches )) {
+      $limit_start = $today;
+      $limit_end = "$year-12-31";
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif (preg_match ( "/^this_week--today)$/", $scope, $matches )) {
+      $day_offset=date('w');
+      $start_day=time()-$day_offset*86400;
+      $end_day=$start_day+6*86400;
+      $limit_start = date('Y-m-d',$start_day);
+      $limit_end = $today;
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif (preg_match ( "/^this_month--today)$/", $scope, $matches )) {
+      $year=date('Y');
+      $month=date('m');
+      $number_of_days_month=eme_days_in_month($month,$year);
+      $limit_start = "$year-$month-01";
+      $limit_end   = $today;
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+   } elseif (preg_match ( "/^this_year--today)$/", $scope, $matches )) {
+      $limit_start = "$year-01-01";
+      $limit_end = $today;
+      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } else {
       if (($scope != "past") && ($scope != "all") && ($scope != "today") && ($scope != "tomorrow"))
          $scope = "future";
