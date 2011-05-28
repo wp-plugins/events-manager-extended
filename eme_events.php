@@ -2901,7 +2901,7 @@ Weblog Editor 2.0
             $categories = eme_replace_placeholders ( "#_CATEGORIES", $event, "rss" );
             echo "<categories>$categories</categories>\n";
          }
-         echo "</item>";
+         echo "</item>\n";
       }
       ?>
 

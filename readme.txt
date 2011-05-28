@@ -518,3 +518,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: for single events, if end day equals start day and end time is smaller than start time, put end day one day ahead but only if the end time has a value (if not: keep the end day intact)
 * Bugfix: Hack to make the google maps window size correct before the map is shown, so it's not cut off the first time
 * Bugfix: Fixed private events to be totally hidden
+* Bugfix: for correct RSS validation, <item> should start on a newline
