@@ -1891,6 +1891,7 @@ function eme_event_form($event, $title, $element) {
    }
    $event ['registration_requires_approval'] ? $registration_requires_approval = "checked='checked'" : $registration_requires_approval = '';
    
+   ob_start();
    ?>
    <form id="eventForm" method="post"  action="<?php echo $form_destination; ?>">
       <div class="wrap">
@@ -2370,6 +2371,7 @@ function eme_event_form($event, $title, $element) {
       </div>
    </form>
 <?php
+   echo ob_get_clean();
 }
 
 function eme_validate_event($event) {
