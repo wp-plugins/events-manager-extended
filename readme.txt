@@ -505,6 +505,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: scopes "this_year" and "next_week" are now possible for shortcode events_list
 * Feature: scope="YYYY-MM-DD--today" and "today--YYYY-MM-DD" are now possible, to show events from a certain day in the past till now or from now till some day in the future, also "this_week--today", "this_month--today", "this_year--today", "today--this_week", "today--this_month", "today--this_year"
 * Feature: scope=+Xd, scope=-Xd, scope=+Xm, scope=-Xm, with "X" being a number, so you can now go X days/months in the past/future.
+* Feature: for conditional tags, I added a new shortcode:
+  #_IS_PRIVATE_EVENT ('1' if event is private, '0' otherwise)
 * Improvement: Updated pt_BR language (thanks to  Gustavo Sousa)
 * Improvement: fix some php notices
 * Improvement: you can use calmonth and calyear as url parameters to influence the year/month of the calendar being shown

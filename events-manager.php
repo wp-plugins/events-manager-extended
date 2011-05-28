@@ -1219,6 +1219,12 @@ function eme_replace_placeholders($format, $event, $target="html") {
          else
             $replacement = 0;
 
+      } elseif (preg_match('/#_IS_PRIVATE_EVENT/', $result)) {
+         if ($event ['event_status'] == STATUS_PRIVATE)
+            $replacement = 1;
+         else
+            $replacement = 0;
+
       } else {
          $found = 0;
       }
