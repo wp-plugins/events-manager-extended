@@ -1094,7 +1094,7 @@ function eme_get_events_list_shortcode($atts) {
       }
    }
 
-   $result = eme_get_events_list ( "limit=$limit&scope=$scope&order=$order&format=$format&echo=0&category=$category&showperiod=$showperiod&author=$author&contact_person=$contact_person&paging=$paging&long_events=$long_events&location_id=$location_id&user_registered_only=$user_registered_only" );
+   $result = eme_get_events_list ( $limit,$scope,$order,$format,0,$category,$showperiod,$long_events,$author,$contact_person,$paging,$location_id,$user_registered_only );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
