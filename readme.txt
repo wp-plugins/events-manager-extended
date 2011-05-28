@@ -502,8 +502,9 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: filter on status now possible in admin events screen
 * Feature: the attendee list can now also show the number of reserved spaces per person
 * Feature: the conditional tags now also can check if a tag is empty by adding "is_empty=1" as extra condition
-* Feature: scope="this_year" is possible for shortcode events_list
+* Feature: scopes "this_year" and "next_week" are now possible for shortcode events_list
 * Feature: scope="YYYY-MM-DD--today" and "today--YYYY-MM-DD" are now possible, to show events from a certain day in the past till now or from now till some day in the future, also "this_week--today", "this_month--today", "this_year--today", "today--this_week", "today--this_month", "today--this_year"
+* Feature: scope=+Xd, scope=-Xd, scope=+Xm, scope=-Xm, with "X" being a number, so you can now go X days/months in the past/future.
 * Improvement: Updated pt_BR language (thanks to  Gustavo Sousa)
 * Improvement: fix some php notices
 * Improvement: you can use calmonth and calyear as url parameters to influence the year/month of the calendar being shown
