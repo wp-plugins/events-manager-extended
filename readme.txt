@@ -504,7 +504,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: the conditional tags now also can check if a tag is empty by adding "is_empty=1" as extra condition
 * Feature: scopes "this_year" and "next_week" are now possible for shortcode events_list
 * Feature: scope="YYYY-MM-DD--today" and "today--YYYY-MM-DD" are now possible, to show events from a certain day in the past till now or from now till some day in the future, also "this_week--today", "this_month--today", "this_year--today", "today--this_week", "today--this_month", "today--this_year"
-* Feature: scope=+Xd, scope=-Xd, scope=+Xm, scope=-Xm, with "X" being a number, so you can now go X days/months in the past/future.
+* Feature: scope=+Nd, scope=-Nd, scope=+Nm, scope=-Nm, with "N" being a number, so you can now go N days/months in the past/future.
+* Feature: scope=Nm--Mm, to get the events from month N in the past/future till month M in the past future (eg. scope=-3m--2m , scope=0m--3m)
 * Feature: for conditional tags, I added a new shortcode:
   #_IS_PRIVATE_EVENT ('1' if event is private, '0' otherwise)
 * Improvement: Updated pt_BR language (thanks to  Gustavo Sousa)
