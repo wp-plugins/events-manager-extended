@@ -1270,11 +1270,11 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$today') OR (event_end_date BETWEEN '$matches[1]' AND '$today'))";
    } elseif (preg_match ( "/^\+(\d+)d$/", $scope, $matches )) {
       $limit_start = $today;
-      $limit_end=$limit_start+$matches[1]*86400;
+      $limit_end=date('Y-m-d',time()+$matches[1]*86400);
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif (preg_match ( "/^\-(\d+)d$/", $scope, $matches )) {
       $limit_end = $today;
-      $limit_start=$limit_end-$matches[1]*86400;
+      $limit_start=date('Y-m-d',time()-$matches[1]*86400);
       $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
    } elseif (preg_match ( "/^\+(\d+)m$/", $scope, $matches )) {
       // the year/month should be based on the first of the month, so if we are the 13th, we substract 12 days to get to day 1
