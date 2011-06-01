@@ -2882,14 +2882,14 @@ function eme_rss() {
 <rss version="2.0">
 <channel>
 <title><?php
-      echo get_option('eme_rss_main_title' );
+      echo eme_sanitize_html(get_option('eme_rss_main_title' ));
       ?></title>
 <link><?php
       $events_page_link = eme_get_events_page(true, false);
       echo $events_page_link;
       ?></link>
 <description><?php
-      echo get_option('eme_rss_main_description' );
+      echo eme_sanitize_html(get_option('eme_rss_main_description' ));
       ?></description>
 <docs>
 http://blogs.law.harvard.edu/tech/rss

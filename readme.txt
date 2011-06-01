@@ -520,3 +520,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: Hack to make the google maps window size correct before the map is shown, so it's not cut off the first time
 * Bugfix: Fixed private events to be totally hidden
 * Bugfix: for correct RSS validation, <item> should start on a newline
+* Bugfix: escape some chars for RSS feeds
