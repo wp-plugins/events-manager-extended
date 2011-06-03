@@ -2720,7 +2720,7 @@ function eme_admin_map_script() {
                },
                mapTypeId: google.maps.MapTypeId.ROADMAP
             }
-            $j_eme_admin("#event-map).show();
+            $j_eme_admin("#event-map").show();
             var map = new google.maps.Map(document.getElementById("event-map"), myOptions);
             var geocoder = new google.maps.Geocoder();
             if (address !="") {
