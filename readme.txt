@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 3.0.0
 Tested up to: 3.1.0
-Stable tag: 3.3.4
+Stable tag: 3.3.5
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. SEO compatible.
              
@@ -362,6 +362,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: new shortcode [display_single_location], accepts 'id' as parameter with value the location ID you want to show
 * Feature: new placeholder #_LOCATIONID that just gives you the location ID
 * Feature: you change now change the number of events shown in the admin interface settings
+* Feature: you can now specify the default number of events to show in a list if no specific limit is specified (used in the shortcode events_list, RSS feed, the placeholders #_NEXTEVENTS and #_PASTEVENTS, ...)
 * Improvement: the google map javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
 * Improvement: the calendar jquery javascript code will now only get loaded if/when needed at the bottom of pages, and no longer always at the top
 * Improvement: show the database error if event inserting fails
@@ -491,7 +492,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: event #_NOTES and location #_DESCRIPTION placeholders must be replaced after the other placeholders, otherwise unwanted replacement in their content can take place
 * Bugfix: the special events page can now be a subpage of another (although not recommended) and SEO will continue to work (workaround for WP weird behaviour when using pagename as param to index.php for rewriting rules: page_id is more reliable)
 * Bugfix: for recurrent events, in case the end time crosses midnight (and as such is lower than the start time), the end day should be the next day
-* Bugfix: for single events, if end day equals start day en end time is smaller than start time, put end day one day ahead
+* Bugfix: for single events, if end day equals start day and end time is smaller than start time, put end day one day ahead
 * Bugfix: #_NOTES should be in RSS as well, not just the excerpt
 * Bugfix: the 'hide events when full' sql was wrong
 
@@ -500,8 +501,23 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: Hebrew translation (thanks to Edna)
 * Feature: filter on status now possible in admin events screen
 * Feature: the attendee list can now also show the number of reserved spaces per person
+* Feature: the conditional tags now also can check if a tag is empty by adding "is_empty=1" as extra condition
+* Feature: scopes "this_year" and "next_week" are now possible for shortcode events_list
+* Feature: scope="YYYY-MM-DD--today" and "today--YYYY-MM-DD" are now possible, to show events from a certain day in the past till now or from now till some day in the future, also "this_week--today", "this_month--today", "this_year--today", "today--this_week", "today--this_month", "today--this_year"
+* Feature: scope=+Nd, scope=-Nd, scope=+Nm, scope=-Nm, with "N" being a number, so you can now go N days/months in the past/future.
+* Feature: scope=Nm--Mm, to get the events from month N in the past/future till month M in the past future (eg. scope=-3m--2m , scope=0m--3m)
+* Feature: for conditional tags, I added a new shortcode:
+  #_IS_PRIVATE_EVENT ('1' if event is private, '0' otherwise)
+* Improvement: Updated pt_BR language (thanks to  Gustavo Sousa)
 * Improvement: fix some php notices
 * Improvement: you can use calmonth and calyear as url parameters to influence the year/month of the calendar being shown
 * Bugfix: WP changed the function sanitize_title_with_dashes in 3.1, so it didn't replace accented characters anymore. Workaround has been put in place
 * Bugfix: quote the person id in the SQL query for bookings to account for empty variables
 * Bugfix: better avoidance of duplicate div-id's for location maps when called in the event list
+* Bugfix: when no bookings are made, 0 is now returned for RESERVEDSPACES and other shortcodes alike, and no longer an empty string 
+* Bugfix: removed some old code that was checking for magic_quotes_gpc, no longer needed
+* Bugfix: for single events, if end day equals start day and end time is smaller than start time, put end day one day ahead but only if the end time has a value (if not: keep the end day intact)
+* Bugfix: Hack to make the google maps window size correct before the map is shown, so it's not cut off the first time
+* Bugfix: Fixed private events to be totally hidden
+* Bugfix: for correct RSS validation, <item> should start on a newline
+* Bugfix: escape some chars for RSS feeds

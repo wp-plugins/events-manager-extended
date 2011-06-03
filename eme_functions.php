@@ -1,8 +1,10 @@
 <?php
 
 function eme_if_shortcode($atts,$content) {
-   extract ( shortcode_atts ( array ('tag' => '', 'value' => '', 'notvalue' => '', 'lt' => '', 'gt' => '', 'contains'=>'', 'notcontains'=>'' ), $atts ) );
-   if (is_numeric($value) || !empty($value)) {
+   extract ( shortcode_atts ( array ('tag' => '', 'value' => '', 'notvalue' => '', 'lt' => '', 'gt' => '', 'contains'=>'', 'notcontains'=>'', 'is_empty'=>0 ), $atts ) );
+   if ($is_empty) {
+      if (empty($tag)) return do_shortcode($content);
+   } elseif (is_numeric($value) || !empty($value)) {
       if ($tag==$value) return do_shortcode($content);
    } elseif (is_numeric($notvalue) || !empty($notvalue)) {
       if ($tag!=$notvalue) return do_shortcode($content);

@@ -300,7 +300,7 @@ function eme_get_booking_by_person_event_id($person_id,$event_id) {
 function eme_get_booked_seats_by_person_event_id($person_id,$event_id) {
    global $wpdb;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
-   $sql = "SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE person_id = '$person_id' AND event_id = '$event_id'";
+   $sql = "SELECT COALESCE(SUM(booking_seats),0) AS booked_seats FROM $bookings_table WHERE person_id = '$person_id' AND event_id = '$event_id'";
    return $wpdb->get_var($sql);
 }
 
@@ -382,22 +382,15 @@ function eme_update_booking_seats($booking_id,$seats) {
 }
 
 function eme_get_available_seats($event_id) {
-   global $wpdb; 
-   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
-   $sql = "SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE event_id = $event_id"; 
-   $seats_row = $wpdb->get_row($sql, ARRAY_A);
-   $booked_seats = $seats_row['booked_seats'];
    $event = eme_get_event($event_id);
-   $available_seats = $event['event_seats'] - $booked_seats;
+   $available_seats = $event['event_seats'] - eme_get_booked_seats($event_id);
    return ($available_seats);
 }
 function eme_get_booked_seats($event_id) {
    global $wpdb; 
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
-   $sql = "SELECT SUM(booking_seats) AS booked_seats FROM $bookings_table WHERE event_id = $event_id"; 
-   $seats_row = $wpdb->get_row($sql, ARRAY_A);
-   $booked_seats = $seats_row['booked_seats'];
-   return $booked_seats;
+   $sql = "SELECT COALESCE(SUM(booking_seats),0) AS booked_seats FROM $bookings_table WHERE event_id = $event_id"; 
+   return $wpdb->get_var($sql);
 }
 function eme_are_seats_available_for($event_id, $seats) {
    #$event = eme_get_event($event_id);

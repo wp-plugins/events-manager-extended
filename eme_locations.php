@@ -974,7 +974,8 @@ function eme_single_location_map($location) {
 }
 
 function eme_events_in_location_list($location, $scope = "") {
-   $events = eme_get_events(0,$scope,"","",$location['location_id']);
+   $eme_event_list_number_events=get_option('eme_event_list_number_items' );
+   $events = eme_get_events($eme_event_list_number_events,$scope,"","",$location['location_id']);
    $list = "";
    if (count($events) > 0) {
       foreach($events as $event)
