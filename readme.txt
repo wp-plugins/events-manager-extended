@@ -521,3 +521,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: Fixed private events to be totally hidden
 * Bugfix: for correct RSS validation, <item> should start on a newline
 * Bugfix: escape some chars for RSS feeds
+
+= 3.3.6 = 
+* Feature: added option "use_end_date" to [events_list], to indicate you want the scopes to include end dates upon evaluation (like e.g. future events include events starting in the past, but ending in the future), or just the start date. Default: 1

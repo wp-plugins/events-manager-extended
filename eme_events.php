@@ -757,7 +757,7 @@ add_filter ( 'get_pages', 'eme_filter_get_pages' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "", $user_registered_only = 0) {
+function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "", $user_registered_only = 0, $use_end_date=1) {
    global $post;
    if ($limit === "") {
       $limit = get_option('eme_event_list_number_items' );
@@ -765,7 +765,7 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
       $eme_event_list_number_events=get_option('eme_event_list_number_items' );
-      $defaults = array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', 'paging'=>0, 'long_events' => 0, 'location_id' => 0);
+      $defaults = array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', 'paging'=>0, 'long_events' => 0, 'location_id' => 0, 'use_end_date' => 1);
       
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
@@ -886,9 +886,9 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
    if ($limit==0) {
-      $events = eme_get_events ( 0, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $extra_conditions );
+      $events = eme_get_events ( 0, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $use_end_date, $extra_conditions );
    } else {
-      $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $extra_conditions );
+      $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $use_end_date, $extra_conditions );
    }
    $events_count=count($events);
 
@@ -898,7 +898,7 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
       // for normal paging and there're no events, we go back to offset=0 and try again
       if ($events_count==0) {
          $offset=0;
-         $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $extra_conditions );
+         $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $use_end_date, $extra_conditions );
          $events_count=count($events);
       }
       $prev_text=__('Previous page','eme');
@@ -1065,7 +1065,7 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
 
 function eme_get_events_list_shortcode($atts) {
    $eme_event_list_number_events=get_option('eme_event_list_number_items' );
-   extract ( shortcode_atts ( array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0, 'user_registered_only' => 0 ), $atts ) );
+   extract ( shortcode_atts ( array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0, 'user_registered_only' => 0, 'use_end_date' => 1 ), $atts ) );
 
    // the filter list overrides the settings
    if (isset($_REQUEST['eme_eventAction']) && $_REQUEST['eme_eventAction'] == 'filter') {
@@ -1094,7 +1094,7 @@ function eme_get_events_list_shortcode($atts) {
       }
    }
 
-   $result = eme_get_events_list ( $limit,$scope,$order,$format,0,$category,$showperiod,$long_events,$author,$contact_person,$paging,$location_id,$user_registered_only );
+   $result = eme_get_events_list ( $limit,$scope,$order,$format,0,$category,$showperiod,$long_events,$author,$contact_person,$paging,$location_id,$user_registered_only,$use_end_date );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -1166,7 +1166,7 @@ function eme_count_events_newer_than($scope) {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = "", $author = "", $contact_person = "", $extra_conditions = "") {
+function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = "", $author = "", $contact_person = "",  $use_end_date=1, $extra_conditions = "") {
    global $wpdb, $wp_query;
 
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
@@ -1216,39 +1216,57 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
    }
    if (preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope )) {
       //$conditions [] = " event_start_date like '$scope'";
-      $conditions [] = " ((event_start_date  like '$scope') OR (event_start_date <= '$scope' AND event_end_date >= '$scope'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date LIKE '$scope') OR (event_start_date <= '$scope' AND event_end_date >= '$scope'))";
+      else
+         $conditions [] = " (event_start_date LIKE '$scope') ";
    } elseif (preg_match ( "/^0000-([0-9]{2})$/", $scope, $matches )) {
       $year=date('Y');
       $month=$matches[1];
       $number_of_days_month=eme_days_in_month($month,$year);
       $limit_start = "$year-$month-01";
       $limit_end   = "$year-$month-$number_of_days_month";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif ($scope == "this_week") {
       $day_offset=date('w');
       $start_day=time()-$day_offset*86400;
       $end_day=$start_day+6*86400;
       $limit_start = date('Y-m-d',$start_day);
       $limit_end   = date('Y-m-d',$end_day);
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif ($scope == "next_week") {
       $day_offset=date('w');
       $start_day=time()-$day_offset*86400+7*6400;
       $end_day=$start_day+6*86400;
       $limit_start = date('Y-m-d',$start_day);
       $limit_end   = date('Y-m-d',$end_day);
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif ($scope == "this_month") {
       $year=date('Y');
       $month=date('m');
       $number_of_days_month=eme_days_in_month($month,$year);
       $limit_start = "$year-$month-01";
       $limit_end   = "$year-$month-$number_of_days_month";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif ($scope == "this_year") {
       $limit_start = "$year-01-01";
       $limit_end = "$year-12-31";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif ($scope == "next_month") {
       // the year/month should be based on the first of the month, so if we are the 13th, we substract 12 days to get to day 1
       // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
@@ -1259,23 +1277,44 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       $number_of_days_month=eme_days_in_month($month,$year);
       $limit_start = "$year-$month-01";
       $limit_end   = "$year-$month-$number_of_days_month";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
-      $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$matches[2]') OR (event_end_date BETWEEN '$matches[1]' AND '$matches[2]'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$matches[2]') OR (event_end_date BETWEEN '$matches[1]' AND '$matches[2]'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$matches[1]' AND '$matches[2]')";
    } elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--today$/", $scope, $matches )) {
-      $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$today') OR (event_end_date BETWEEN '$matches[1]' AND '$today'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$today') OR (event_end_date BETWEEN '$matches[1]' AND '$today'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$matches[1]' AND '$today')";
    } elseif (preg_match ( "/^today--([0-9]{4}-[0-9]{2}-[0-9]{2})$/", $scope, $matches )) {
-      $conditions [] = " ((event_start_date BETWEEN '$today' AND '$matches[1]') OR (event_end_date BETWEEN '$today' AND '$matches[1]'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$today' AND '$matches[1]') OR (event_end_date BETWEEN '$today' AND '$matches[1]'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$today' AND '$matches[1]')";
    } elseif (preg_match ( "/^([0-9]{4}-[0-9]{2}-[0-9]{2})--today$/", $scope, $matches )) {
-      $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$today') OR (event_end_date BETWEEN '$matches[1]' AND '$today'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$matches[1]' AND '$today') OR (event_end_date BETWEEN '$matches[1]' AND '$today'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$matches[1]' AND '$today')";
    } elseif (preg_match ( "/^\+(\d+)d$/", $scope, $matches )) {
       $limit_start = $today;
       $limit_end=date('Y-m-d',time()+$matches[1]*86400);
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^\-(\d+)d$/", $scope, $matches )) {
       $limit_end = $today;
       $limit_start=date('Y-m-d',time()-$matches[1]*86400);
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^\+(\d+)m$/", $scope, $matches )) {
       // the year/month should be based on the first of the month, so if we are the 13th, we substract 12 days to get to day 1
       // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
@@ -1289,7 +1328,10 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       $end_month=date('m', strtotime("+$months_in_future month")-$day_offset*86400);
       $number_of_days_month=eme_days_in_month($end_month,$end_year);
       $limit_end = "$end_year-$end_month-$number_of_days_month";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^\-(\d+)m$/", $scope, $matches )) {
       // the year/month should be based on the first of the month, so if we are the 13th, we substract 12 days to get to day 1
       // Reason: monthly offsets needs to be calculated based on the first day of the current month, not the current day,
@@ -1303,7 +1345,10 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       $end_month=date('m', strtotime("-1 month")-$day_offset*86400);
       $number_of_days_month=eme_days_in_month($end_month,$end_year);
       $limit_end = "$end_year-$end_month-$number_of_days_month";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^(\-?\+?\d+)m--(\-?\+?\d+)m$/", $scope, $matches )) {
       $day_offset=date('j')-1;
       $start_year=date('Y', strtotime("$matches[1] month")-$day_offset*86400);
@@ -1313,58 +1358,90 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       $end_month=date('m', strtotime("$matches[2] month")-$day_offset*86400);
       $number_of_days_month=eme_days_in_month($end_month,$end_year);
       $limit_end = "$end_year-$end_month-$number_of_days_month";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^today--this_week$/", $scope)) {
       $day_offset=date('w');
       $start_day=time()-$day_offset*86400;
       $end_day=$start_day+6*86400;
       $limit_start = $today;
       $limit_end   = date('Y-m-d',$end_day);
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^today--this_month$/", $scope)) {
       $year=date('Y');
       $month=date('m');
       $number_of_days_month=eme_days_in_month($month,$year);
       $limit_start = $today;
       $limit_end   = "$year-$month-$number_of_days_month";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^today--this_year$/", $scope)) {
       $limit_start = $today;
       $limit_end = "$year-12-31";
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^this_week--today$/", $scope)) {
       $day_offset=date('w');
       $start_day=time()-$day_offset*86400;
       $limit_start = date('Y-m-d',$start_day);
       $limit_end = $today;
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^this_month--today$/", $scope)) {
       $year=date('Y');
       $month=date('m');
       $number_of_days_month=eme_days_in_month($month,$year);
       $limit_start = "$year-$month-01";
       $limit_end   = $today;
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif (preg_match ( "/^this_year--today$/", $scope)) {
       $limit_start = "$year-01-01";
       $limit_end = $today;
-      $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      if ($use_end_date)
+         $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
+      else
+         $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } else {
-      if (($scope != "past") && ($scope != "all") && ($scope != "today") && ($scope != "tomorrow"))
-         $scope = "future";
-      if ($scope == "future") {
-         //$conditions [] = " ((event_start_date = '$today' AND event_start_time >= '$this_time') OR (event_start_date > '$today') OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL) OR (event_end_date = '$today' AND event_end_time >= '$this_time'))";
-         // not taking the hour into account until we can enter timezone info as well
-         $conditions [] = " (event_start_date >= '$today' OR (event_end_date >= '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL))";
-      } elseif ($scope == "past") {
+      if ($scope == "past") {
          //$conditions [] = " (event_end_date < '$today' OR (event_end_date = '$today' and event_end_time < '$this_time' )) ";
          // not taking the hour into account until we can enter timezone info as well
-         $conditions [] = " event_start_date < '$today'";
+         if ($use_end_date)
+            $conditions [] = " event_end_date < '$today'";
+         else
+            $conditions [] = " event_start_date < '$today'";
       } elseif ($scope == "today") {
-         $conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
+         if ($use_end_date)
+            $conditions [] = " (event_start_date = '$today' OR (event_start_date <= '$today' AND event_end_date >= '$today'))";
+         else
+            $conditions [] = " (event_start_date = '$today')";
       } elseif ($scope == "tomorrow") {
          $tomorrow = date("Y-m-d",strtotime($today, "+1 day"));
-         $conditions [] = " (event_start_date = '$totomorrow' OR (event_start_date <= '$tomorrow' AND event_end_date >= '$tomorrow'))";
+         if ($use_end_date)
+            $conditions [] = " (event_start_date = '$totomorrow' OR (event_start_date <= '$tomorrow' AND event_end_date >= '$tomorrow'))";
+         else
+            $conditions [] = " (event_start_date = '$totomorrow')";
+      } else {
+         # else: future
+         //$conditions [] = " ((event_start_date = '$today' AND event_start_time >= '$this_time') OR (event_start_date > '$today') OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL) OR (event_end_date = '$today' AND event_end_time >= '$this_time'))";
+         // not taking the hour into account until we can enter timezone info as well
+         if ($use_end_date)
+            $conditions [] = " (event_start_date > '$today' OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL))";
+         else
+            $conditions [] = " (event_start_date > '$today')";
       }
    }
    
