@@ -770,13 +770,9 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
       $echo = (bool) $r ['echo'];
-      // for categories: the word "none" is also ok in the list, to indicate no category present for an event
       // for AND categories: the user enters "+" and this gets translated to " " by wp_parse_args
-      //$category = ( preg_match('/^([0-9][, ]?)+$/', $r ['category'] ) || $r ['category'] == "none" ) ? $r ['category'] : '' ;
-      //$location_id = ( preg_match('/^([0-9][, ]?)+$/', $r ['location_id'] ) ) ? $r ['location_id'] : '' ;
-      // authorID filter: you can use "1,3", but not "1+3" since an event can have only one author
-      //$authorID = ( preg_match('/^([0-9],?)+$/', $r ['authorID'] ) ) ? $r ['authorID'] : '' ;
-      //$author = $r ['author'] ? $r ['author'] : '' ;
+      // so we fix it again
+      $category = preg_replace("/ /","+",$category);
    }
    if ($scope == "")
       $scope = "future";
@@ -1488,8 +1484,8 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
             }
          }
          $conditions [] = "(".implode(' OR', $category_conditions).")";
-      } elseif ( preg_match('/ /', $category) ) {
-         $category = explode(' ', $category);
+      } elseif ( preg_match('/\+/', $category) ) {
+         $category = explode('+', $category);
          $category_conditions = array();
          foreach ($category as $cat) {
             if (is_numeric($cat) && $cat>0)
