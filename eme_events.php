@@ -2978,9 +2978,9 @@ Weblog Editor 2.0
          $title = eme_replace_placeholders ( $title_format, $event, "rss" );
          $description = eme_replace_placeholders ( $description_format, $event, "rss" );
          $event_link = eme_event_url($event);
-         echo "<item>";
+         echo "<item>\n";
          echo "<title>$title</title>\n";
-         echo "<link>$event_link</link>\n ";
+         echo "<link>$event_link</link>\n";
          echo "<description>$description</description>\n";
          if (get_option('eme_categories_enabled')) {
             $categories = eme_replace_placeholders ( "#_CATEGORIES", $event, "rss" );
