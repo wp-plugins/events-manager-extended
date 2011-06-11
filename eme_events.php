@@ -399,7 +399,7 @@ function eme_events_subpanel() {
          $extra_conditions = '';
       }
  
-      $events = eme_get_events ( $list_limit+1, $scope, $order, $offset, "", $category, '', '', $extra_conditions);
+      $events = eme_get_events ( $list_limit+1, $scope, $order, $offset, "", $category, '', '', 1, $extra_conditions);
       eme_events_table ( $events, $list_limit, $title, $scope, $offset, $category );
    }
 }
@@ -1412,7 +1412,16 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       else
          $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } else {
-      if ($scope == "past") {
+      if (($scope != "past") && ($scope != "all") && ($scope != "today") && ($scope != "tomorrow"))
+         $scope = "future";
+      if ($scope == "future") {
+         //$conditions [] = " ((event_start_date = '$today' AND event_start_time >= '$this_time') OR (event_start_date > '$today') OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL) OR (event_end_date = '$today' AND event_end_time >= '$this_time'))";
+         // not taking the hour into account until we can enter timezone info as well
+         if ($show_ongoing)
+            $conditions [] = " (event_start_date > '$today' OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL))";
+         else
+            $conditions [] = " (event_start_date > '$today')";
+      } elseif ($scope == "past") {
          //$conditions [] = " (event_end_date < '$today' OR (event_end_date = '$today' and event_end_time < '$this_time' )) ";
          // not taking the hour into account until we can enter timezone info as well
          if ($show_ongoing)
@@ -1430,14 +1439,6 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
             $conditions [] = " (event_start_date = '$totomorrow' OR (event_start_date <= '$tomorrow' AND event_end_date >= '$tomorrow'))";
          else
             $conditions [] = " (event_start_date = '$totomorrow')";
-      } else {
-         # else: future
-         //$conditions [] = " ((event_start_date = '$today' AND event_start_time >= '$this_time') OR (event_start_date > '$today') OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL) OR (event_end_date = '$today' AND event_end_time >= '$this_time'))";
-         // not taking the hour into account until we can enter timezone info as well
-         if ($show_ongoing)
-            $conditions [] = " (event_start_date > '$today' OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL))";
-         else
-            $conditions [] = " (event_start_date > '$today')";
       }
    }
    
