@@ -526,3 +526,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added option "show_ongoing" to [events_list], to indicate you want the scopes to include end dates (ongoing events) upon evaluation (like e.g. future events include events starting in the past, but ending in the future), or just the start date. Default: 1
 * Bugfix: AND categories for [events_list] were no longer working and resulted in all categories being used
 * Bugfix: some filtering fixes in admin panel
+* Bugfix: scope=this_week/next_week now takes the "start day of week" WP setting into account

@@ -1227,7 +1227,10 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       else
          $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif ($scope == "this_week") {
-      $day_offset=date('w');
+      // this comes from global wordpress preferences
+      $start_of_week = get_option('start_of_week');
+      $day_offset=date('w')-$start_of_week;
+      if ($day_offset<0) $day_offset+=7;
       $start_day=time()-$day_offset*86400;
       $end_day=$start_day+6*86400;
       $limit_start = date('Y-m-d',$start_day);
@@ -1237,7 +1240,10 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       else
          $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
    } elseif ($scope == "next_week") {
-      $day_offset=date('w');
+      // this comes from global wordpress preferences
+      $start_of_week = get_option('start_of_week');
+      $day_offset=date('w')-$start_of_week;
+      if ($day_offset<0) $day_offset+=7;
       $start_day=time()-$day_offset*86400+7*6400;
       $end_day=$start_day+6*86400;
       $limit_start = date('Y-m-d',$start_day);
