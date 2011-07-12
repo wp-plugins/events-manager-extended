@@ -112,7 +112,7 @@ function eme_client_clock_callback() {
 }
 
 // Setting constants
-define('EME_DB_VERSION', 15);
+define('EME_DB_VERSION', 16);
 define('EME_PLUGIN_URL', plugins_url('',plugin_basename(__FILE__)).'/'); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -646,12 +646,20 @@ function eme_create_bookings_table($charset,$collate) {
          booking_seats mediumint(9) NOT NULL,
          booking_approved bool DEFAULT 0,
          booking_comment text DEFAULT NULL,
+         creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         creation_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          UNIQUE KEY  (booking_id)
          ) $charset $collate;";
       dbDelta($sql);
    } else {
       maybe_add_column($table_name, 'booking_comment', "ALTER TABLE $table_name add booking_comment text DEFAULT NULL;"); 
       maybe_add_column($table_name, 'booking_approved', "ALTER TABLE $table_name add booking_approved bool DEFAULT 0;"); 
+      maybe_add_column($table_name, 'creation_date', "alter table $table_name add creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'creation_date_gmt', "alter table $table_name add creation_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'modif_date', "alter table $table_name add modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'modif_date_gmt', "alter table $table_name add modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       if ($db_version<3) {
          $wpdb->query("ALTER TABLE $table_name MODIFY event_id mediumint(9) NOT NULL;");
          $wpdb->query("ALTER TABLE $table_name MODIFY person_id mediumint(9) NOT NULL;");
@@ -763,7 +771,18 @@ function eme_add_options($reset=0) {
    'eme_rsvp_addbooking_min_spaces' => 1,
    'eme_rsvp_addbooking_max_spaces' => 10,
    'eme_rsvp_delbooking_submit_string' => DEFAULT_RSVP_DELBOOKINGFORM_SUBMIT_STRING,
-   'eme_categories_enabled' => DEFAULT_CATEGORIES_ENABLED);
+   'eme_categories_enabled' => DEFAULT_CATEGORIES_ENABLED,
+   'eme_cap_add_event' => MIN_CAPABILITY, 
+   'eme_cap_author_event' => AUTHOR_CAPABILITY, 
+   'eme_cap_edit_events' => EDIT_CAPABILITY,
+   'eme_cap_locations' => EDIT_CAPABILITY,
+   'eme_cap_categories' => SETTING_CAPABILITY,
+   'eme_cap_people' => MIN_CAPABILITY,
+   'eme_cap_approve' => EDIT_CAPABILITY,
+   'eme_cap_registrations' => EDIT_CAPABILITY,
+   'eme_cap_cleanup' => SETTING_CAPABILITY,
+   'eme_cap_settings' => SETTING_CAPABILITY
+   );
    
    foreach($eme_options as $key => $value){
       eme_add_option($key, $value, $reset);
@@ -787,7 +806,7 @@ function eme_add_option($key, $value, $reset) {
 // WP options registration/deletion
 ////////////////////////////////////
 function eme_options_delete() {
-   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat','eme_show_period_yearly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_gmap_zooming', 'eme_seo_permalink', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_mail_receiver_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_tables','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_conversion_needed','eme_donation_done','eme_hello_to_user','eme_filter_form_format','eme_rsvp_addbooking_min_seats','eme_rsvp_addbooking_max_seats','eme_shortcodes_in_widgets','eme_load_js_in_header','eme_use_client_clock','eme_event_list_number_items');
+   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat','eme_show_period_yearly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_gmap_zooming', 'eme_seo_permalink', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_mail_receiver_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_tables','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_conversion_needed','eme_donation_done','eme_hello_to_user','eme_filter_form_format','eme_rsvp_addbooking_min_seats','eme_rsvp_addbooking_max_seats','eme_shortcodes_in_widgets','eme_load_js_in_header','eme_use_client_clock','eme_event_list_number_items', 'eme_cap_add_event', 'eme_cap_author_event', 'eme_cap_edit_events', 'eme_cap_locations', 'eme_cap_categories', 'eme_cap_people', 'eme_cap_approve', 'eme_cap_registrations', 'eme_cap_cleanup', 'eme_cap_settings');
    foreach ( $options as $opt ) {
       delete_option ( $opt );
       $old_opt=preg_replace("/eme_/","dbem_",$opt);
@@ -799,7 +818,7 @@ function eme_options_register() {
 
    // only the options you want changed in the Settings page, not eg. eme_hello_to_user, eme_donation_done,eme_conversion_needed
 
-   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat','eme_show_period_yearly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_gmap_zooming', 'eme_seo_permalink', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_filter_form_format','eme_rsvp_addbooking_min_spaces','eme_rsvp_addbooking_max_spaces','eme_shortcodes_in_widgets','eme_load_js_in_header','eme_use_client_clock','eme_event_list_number_items');
+   $options = array ('eme_events_page', 'eme_display_calendar_in_events_page', 'eme_event_list_item_format_header', 'eme_event_list_item_format', 'eme_event_list_item_format_footer', 'eme_event_page_title_format', 'eme_single_event_format', 'eme_list_events_page', 'eme_events_page_title', 'eme_no_events_message', 'eme_location_page_title_format', 'eme_location_baloon_format', 'eme_single_location_format', 'eme_location_event_list_item_format', 'eme_show_period_monthly_dateformat','eme_show_period_yearly_dateformat', 'eme_location_no_events_message', 'eme_gmap_is_active', 'eme_gmap_zooming', 'eme_seo_permalink', 'eme_rss_main_title', 'eme_rss_main_description', 'eme_rss_title_format', 'eme_rss_description_format', 'eme_rsvp_mail_notify_is_active', 'eme_contactperson_email_body', 'eme_respondent_email_body', 'eme_mail_sender_name', 'eme_smtp_username', 'eme_smtp_password', 'eme_default_contact_person','eme_captcha_for_booking', 'eme_mail_sender_address', 'eme_smtp_host', 'eme_rsvp_mail_send_method', 'eme_rsvp_mail_port', 'eme_rsvp_mail_SMTPAuth', 'eme_rsvp_registered_users_only', 'eme_rsvp_reg_for_new_events', 'eme_rsvp_default_number_spaces', 'eme_rsvp_addbooking_submit_string', 'eme_rsvp_delbooking_submit_string', 'eme_image_max_width', 'eme_image_max_height', 'eme_image_max_size', 'eme_full_calendar_event_format', 'eme_use_select_for_locations', 'eme_attributes_enabled', 'eme_recurrence_enabled','eme_rsvp_enabled','eme_categories_enabled','eme_small_calendar_event_title_format','eme_small_calendar_event_title_seperator','eme_registration_pending_email_body','eme_registration_denied_email_body','eme_registration_cancelled_email_body','eme_attendees_list_format','eme_uninstall_drop_data','eme_time_remove_leading_zeros','eme_rsvp_hide_full_events','eme_events_admin_limit','eme_filter_form_format','eme_rsvp_addbooking_min_spaces','eme_rsvp_addbooking_max_spaces','eme_shortcodes_in_widgets','eme_load_js_in_header','eme_use_client_clock','eme_event_list_number_items', 'eme_cap_add_event', 'eme_cap_author_event', 'eme_cap_edit_events', 'eme_cap_locations', 'eme_cap_categories', 'eme_cap_people', 'eme_cap_approve', 'eme_cap_registrations', 'eme_cap_cleanup', 'eme_cap_settings');
    foreach ( $options as $opt ) {
       register_setting ( 'eme-options', $opt, '' );
    }
@@ -834,29 +853,29 @@ function eme_create_events_submenu () {
       add_action('admin_notices', "eme_explain_deactivation_needed");
 
    if(function_exists('add_submenu_page')) {
-      add_object_page(__('Events', 'eme'),__('Events', 'eme'),MIN_CAPABILITY,'events-manager','eme_events_subpanel', EME_PLUGIN_URL.'images/calendar-16.png');
+      add_object_page(__('Events', 'eme'),__('Events', 'eme'),get_option('eme_cap_author_event'),'events-manager','eme_events_subpanel', EME_PLUGIN_URL.'images/calendar-16.png');
       // Add a submenu to the custom top-level menu: 
-      $plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),MIN_CAPABILITY,'events-manager','eme_events_subpanel');
+      $plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),get_option('eme_cap_author_event'),'events-manager','eme_events_subpanel');
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
-      $plugin_page = add_submenu_page('events-manager', __('Add new', 'eme'), __('Add new','eme'), MIN_CAPABILITY, 'events-manager-new_event', "eme_new_event_page");
+      $plugin_page = add_submenu_page('events-manager', __('Add new', 'eme'), __('Add new','eme'), get_option('eme_cap_add_event'), 'events-manager-new_event', "eme_new_event_page");
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-      $plugin_page = add_submenu_page('events-manager', __('Locations', 'eme'), __('Locations', 'eme'), EDIT_CAPABILITY, 'events-manager-locations', "eme_locations_page");
+      $plugin_page = add_submenu_page('events-manager', __('Locations', 'eme'), __('Locations', 'eme'), get_option('eme_cap_locations'), 'events-manager-locations', "eme_locations_page");
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
       if (get_option('eme_categories_enabled')) {
-         $plugin_page = add_submenu_page('events-manager', __('Event Categories','eme'),__('Categories','eme'), SETTING_CAPABILITY, "events-manager-categories", 'eme_categories_subpanel');
+         $plugin_page = add_submenu_page('events-manager', __('Event Categories','eme'),__('Categories','eme'), get_option('eme_cap_categories'), "events-manager-categories", 'eme_categories_subpanel');
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
       }
       if (get_option('eme_rsvp_enabled')) {
-         $plugin_page = add_submenu_page('events-manager', __('People', 'eme'), __('People', 'eme'), MIN_CAPABILITY, 'events-manager-people', "eme_people_page");
+         $plugin_page = add_submenu_page('events-manager', __('People', 'eme'), __('People', 'eme'), get_option('eme_cap_people'), 'events-manager-people', "eme_people_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-         $plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'eme'), __('Pending Approvals', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-approval', "eme_registration_approval_page");
+         $plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'eme'), __('Pending Approvals', 'eme'), get_option('eme_cap_approve'), 'events-manager-registration-approval', "eme_registration_approval_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-         $plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), EDIT_CAPABILITY, 'events-manager-registration-seats', "eme_registration_seats_page");
+         $plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), get_option('eme_cap_edit_registrations'), 'events-manager-registration-seats', "eme_registration_seats_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-         $plugin_page = add_submenu_page('events-manager', __('Cleanup', 'eme'), __('Cleanup', 'eme'), SETTING_CAPABILITY, 'events-manager-cleanup', "eme_cleanup_page");
-         add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
       }
-      $plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), SETTING_CAPABILITY, "events-manager-options", 'eme_options_subpanel');
+      $plugin_page = add_submenu_page('events-manager', __('Cleanup', 'eme'), __('Cleanup', 'eme'), get_option('eme_cap_cleanup'), 'events-manager-cleanup', "eme_cleanup_page");
+      add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
+      $plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), get_option('eme_cap_settings'), "events-manager-options", 'eme_options_subpanel');
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
    }
 }
@@ -924,8 +943,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
       $replacement = "";
       // matches all fields placeholder
       if (preg_match('/#_EDITEVENTLINK$/', $result)) { 
-         if (current_user_can( EDIT_CAPABILITY) ||
-             (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
+         if (current_user_can( get_option('eme_cap_edit_events')) ||
+             (current_user_can( get_option('eme_cap_author_event')) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
             $replacement = "<a href=' ".admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event['event_id'])."'>".__('Edit')."</a>";
          }
 

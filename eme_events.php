@@ -2,7 +2,7 @@
 
 function eme_new_event_page() {
    // check the user is allowed to make changes
-   if ( !current_user_can( MIN_CAPABILITY  ) ) {
+   if ( !current_user_can( get_option('eme_cap_add_event')  ) ) {
       return;
    }
 
@@ -71,20 +71,20 @@ function eme_events_subpanel() {
 
    
    // check the user is allowed to do anything
-   if ( !current_user_can( MIN_CAPABILITY ) ) {
+   if ( !current_user_can( get_option('eme_cap_add_event') ) ) {
       $action="";
    }
    $current_userid=get_current_user_id();
 
    // Disable Hello to new user if requested
-   if (current_user_can( SETTING_CAPABILITY ) && isset ( $_GET ['disable_hello_to_user'] ) && $_GET ['disable_hello_to_user'] == 'true')
+   if (current_user_can( get_option('eme_cap_settings') ) && isset ( $_GET ['disable_hello_to_user'] ) && $_GET ['disable_hello_to_user'] == 'true')
       update_option('eme_hello_to_user', 0 );
 
-   if (current_user_can( SETTING_CAPABILITY ) && isset ( $_GET ['disable_donate_message'] ) && $_GET ['disable_donate_message'] == 'true')
+   if (current_user_can( get_option('eme_cap_settings') ) && isset ( $_GET ['disable_donate_message'] ) && $_GET ['disable_donate_message'] == 'true')
       update_option('eme_donation_done', 1 );
 
    // do the UTF-8 conversion if wanted
-   if (current_user_can( SETTING_CAPABILITY ) && isset ( $_GET ['do_character_conversion'] ) && $_GET ['do_character_conversion'] == 'true' && $wpdb->has_cap('collation')) {
+   if (current_user_can( get_option('eme_cap_settings') ) && isset ( $_GET ['do_character_conversion'] ) && $_GET ['do_character_conversion'] == 'true' && $wpdb->has_cap('collation')) {
                 if ( ! empty($wpdb->charset)) {
                         $charset = "CHARACTER SET $wpdb->charset";
          $collate="";
@@ -118,8 +118,8 @@ function eme_events_subpanel() {
       foreach ( $selectedEvents as $event_ID ) {
          $tmp_event = array();
          $tmp_event = eme_get_event ( $event_ID );
-         if (current_user_can( EDIT_CAPABILITY) ||
-             (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
+         if (current_user_can( get_option('eme_cap_edit_events')) ||
+             (current_user_can( get_option('eme_cap_author_event')) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
             if ($tmp_event['recurrence_id']>0) {
                eme_remove_recurrence ( $tmp_event['recurrence_id'] );
             } else {
@@ -137,7 +137,7 @@ function eme_events_subpanel() {
       $event = array ();
       $location = array ();
       $event ['event_name'] = isset($_POST ['event_name']) ? trim(stripslashes ( $_POST ['event_name'] )) : '';
-      if (!current_user_can( AUTHOR_CAPABILITY)) {
+      if (!current_user_can( get_option('eme_cap_author_event'))) {
          // user can create an event, but not approve it: status remains draft
          $event['event_status']=STATUS_DRAFT;   
       } else {
@@ -276,8 +276,8 @@ function eme_events_subpanel() {
             // something exists
             if ($recurrence_ID) {
                $tmp_recurrence = eme_get_recurrence ( $recurrence_ID );
-               if (current_user_can( EDIT_CAPABILITY) ||
-                   (current_user_can( MIN_CAPABILITY) && ($tmp_recurrence['event_author']==$current_userid || $tmp_recurrence['event_contactperson_id']==$current_userid))) {
+               if (current_user_can( get_option('eme_cap_edit_events')) ||
+                   (current_user_can( get_option('eme_cap_author_event')) && ($tmp_recurrence['event_author']==$current_userid || $tmp_recurrence['event_contactperson_id']==$current_userid))) {
                   // UPDATE old recurrence
                   $recurrence ['recurrence_id'] = $recurrence_ID;
                   //print_r($recurrence); 
@@ -292,8 +292,8 @@ function eme_events_subpanel() {
                }
             } else {
                $tmp_event = eme_get_event ( $event_ID );
-               if (current_user_can( EDIT_CAPABILITY) ||
-                   (current_user_can( MIN_CAPABILITY) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {
+               if (current_user_can( get_option('eme_cap_edit_events')) ||
+                   (current_user_can( get_option('eme_cap_author_event')) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {
                   if (isset($_POST ['repeated_event']) && $_POST ['repeated_event']) {
                      // we go from single event to recurrence: create the recurrence and delete the single event
                      eme_insert_recurrent_event ( $event, $recurrence );
@@ -336,8 +336,8 @@ function eme_events_subpanel() {
          eme_event_form ( $event, $title, $event_ID );
       } else {
          $event = eme_get_event ( $event_ID );
-         if (current_user_can( EDIT_CAPABILITY) ||
-             (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
+         if (current_user_can( get_option('eme_cap_edit_events')) ||
+             (current_user_can( get_option('eme_cap_author_event')) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
                      // UPDATE old event
             $title = __ ( "Edit Event", 'eme' ) . " '" . $event ['event_name'] . "'";
             eme_event_form ( $event, $title, $event_ID );
@@ -354,8 +354,8 @@ function eme_events_subpanel() {
    //Add duplicate event if requested
    if ($action == 'duplicate_event') {
       $event = eme_get_event ( $event_ID );
-      if (current_user_can( EDIT_CAPABILITY) ||
-          (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
+      if (current_user_can( get_option('eme_cap_edit_events')) ||
+          (current_user_can( get_option('eme_cap_author_event')) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid))) {
          eme_duplicate_event ( $event_ID );
       } else {
          $feedback_message = __('You have no right to update','eme'). " '" . $event ['event_name'] . "' !";
@@ -367,8 +367,8 @@ function eme_events_subpanel() {
    if ($action == 'edit_recurrence') {
       $event_ID = intval($_GET ['recurrence_id']);
       $recurrence = eme_get_recurrence ( $event_ID );
-      if (current_user_can( EDIT_CAPABILITY) ||
-          (current_user_can( MIN_CAPABILITY) && ($recurrence['event_author']==$current_userid || $recurrence['event_contactperson_id']==$current_userid))) {
+      if (current_user_can( get_option('eme_cap_edit_events')) ||
+          (current_user_can( get_option('eme_cap_author_event')) && ($recurrence['event_author']==$current_userid || $recurrence['event_contactperson_id']==$current_userid))) {
          $title = __ ( "Reschedule", 'eme' ) . " '" . $recurrence ['event_name'] . "'";
          eme_event_form ( $recurrence, $title, $event_ID );
       } else {
@@ -444,6 +444,22 @@ function eme_options_subpanel() {
    eme_options_radio_binary ( __ ( 'Use the client computer clock for the calendar', 'eme' ), 'eme_use_client_clock', __ ( 'Check this option if you want to use the clock of the client as base to calculate current day for the calendar.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Delete all EME data when upgrading or deactivating?', 'eme' ), 'eme_uninstall_drop_data', __ ( 'Check this option if you want to delete all EME data (database tables and options) when upgrading or deactivating the plugin.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Enable shortcodes in widgets', 'eme' ), 'eme_shortcodes_in_widgets', __ ( 'Check this option if you want to enable the use of shortcodes in widgets (affects shortcodes of any plugin used in widgets, so use with care).', 'eme' ) );
+   ?>
+</table>
+<h3><?php _e ( 'Access rights', 'eme' ); ?></h3>
+<p>Tip: Use a plugin like "Capability Manager" to add/edit capabilities and roles.</p>
+<table class="form-table">
+   <?php
+   eme_options_select ("Add event", 'eme_cap_add_event', eme_get_all_caps (), __('Permission needed to add a new event.','eme') );
+   eme_options_select ("Author event", 'eme_cap_author_event', eme_get_all_caps (), __('Permission needed to edit own events.','eme') );
+   eme_options_select ("Edit events", 'eme_cap_edit_events', eme_get_all_caps (), __('Permission needed to edit all events.','eme') );
+   eme_options_select ("Edit locations", 'eme_cap_locations', eme_get_all_caps (), __('Permission needed to edit all locations.','eme') );
+   eme_options_select ("Edit categories", 'eme_cap_categories', eme_get_all_caps (), __('Permission needed to edit all categories.','eme') );
+   eme_options_select ("View people", 'eme_cap_people', eme_get_all_caps (), __('Permission needed to view registered people info.','eme') );
+   eme_options_select ("Approve registrations", 'eme_cap_approve', eme_get_all_caps (), __('Permission needed to approve pending registrations.','eme') );
+   eme_options_select ("Edit registrations", 'eme_cap_registrations', eme_get_all_caps (), __('Permission needed to edit approved registrations.','eme') );
+   eme_options_select ("Cleanup", 'eme_cap_cleanup', eme_get_all_caps (), __('Permission needed to execute cleanup actions.','eme') );
+   eme_options_select ("Edit settings", 'eme_cap_settings', eme_get_all_caps (),__('Permission needed to edit settings.','eme') );
    ?>
 </table>
 <h3><?php _e ( 'Events page', 'eme' ); ?></h3>
@@ -1532,7 +1548,7 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
 
    // extra conditions for authors: if we're in the admin itf, return only the events for which you have the right to change anything
    $current_userid=get_current_user_id();
-   if (is_admin() && !current_user_can( EDIT_CAPABILITY) && current_user_can( MIN_CAPABILITY)) {
+   if (is_admin() && !current_user_can( get_option('eme_cap_edit_events')) && current_user_can( get_option('eme_cap_author_event'))) {
       $conditions [] = "(event_author = $current_userid OR event_contactperson_id= $current_userid)";
    }
    
@@ -2011,7 +2027,7 @@ function eme_event_form($event, $title, $element) {
             <!-- SIDEBAR -->
             <div id="side-info-column" class='inner-sidebar'>
                <div id='side-sortables' class="meta-box-sortables">
-                  <?php if(current_user_can( AUTHOR_CAPABILITY)) { ?>
+                  <?php if(current_user_can( get_option('eme_cap_author_event'))) { ?>
                   <!-- status postbox -->
                   <div class="postbox ">
                      <div class="handlediv" title="Click to toggle."><br />
@@ -3122,7 +3138,7 @@ function eme_db_delete_event($event) {
 add_filter ( 'favorite_actions', 'eme_favorite_menu' );
 function eme_favorite_menu($actions) {
    // add quick link to our favorite plugin
-   $actions ['admin.php?page=events-manager-new_event'] = array (__ ( 'Add an event', 'eme' ), MIN_CAPABILITY );
+   $actions ['admin.php?page=events-manager-new_event'] = array (__ ( 'Add an event', 'eme' ), get_option('eme_cap_add_event') );
    return $actions;
 }
 

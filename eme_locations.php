@@ -3,7 +3,7 @@ $feedback_message = "";
  
 function eme_locations_page() {
    $current_userid=get_current_user_id();
-   if (!current_user_can( EDIT_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
+   if (!current_user_can( get_option('eme_cap_locations')) && (isset($_GET['action']) || isset($_POST['action']))) {
       $message = __('You have no right to update locations!','eme');
       $locations = eme_get_locations();
       eme_locations_table_layout($locations, null, $message);
@@ -415,7 +415,6 @@ function eme_get_identical_location($location) {
    $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
    //$sql = "SELECT * FROM $locations_table WHERE location_name ='".$location['location_name']."' AND location_address ='".$location['location_address']."' AND location_town ='".$location['location_town']."';";
   $prepared_sql=$wpdb->prepare("SELECT * FROM $locations_table WHERE location_name = %s AND location_address = %s AND location_town = %s", stripcslashes($location['location_name']), stripcslashes($location['location_address']), stripcslashes($location['location_town']) );
-   //$wpdb->show_errors(true);
    $cached_location = $wpdb->get_row($prepared_sql, ARRAY_A);
    return $cached_location;
 }
@@ -456,13 +455,13 @@ function eme_update_location($location) {
    global $wpdb;
    $table_name = $wpdb->prefix.LOCATIONS_TBNAME;
    $where ['location_id'] = $location['location_id'];
-   $wpdb->show_errors(true);
-   if (!$wpdb->update ( $table_name, $location, $where )) {
-      $wpdb->print_error();
-      return false;
-   } else {
-      return true;
-   }
+   // we can't check the return code for wpdb->update,
+   // since sometimes the update returns 0 because of no rows
+   // updated (eg, when you just add an image)
+   // TODO: add modif timestamps, so that changes for each update,
+   // and then we can check for the return code again (as for events)
+   $wpdb->update ( $table_name, $location, $where );
+   return true;
 }
 
 function eme_insert_location($location) {

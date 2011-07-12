@@ -29,9 +29,10 @@ function eme_add_booking_form($event_id) {
    $event_start_datetime = strtotime($event['event_start_date']." ".$event['event_start_time']);
    if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_datetime ) {
       $ret_string = "";
+      $ret_string = "<div id='eme-rsvp-message'>";
       if(!empty($form_add_message))
-         $ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
-      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div>";
+         $ret_string .= "<div class='eme-rsvp-message'>$form_add_message</div>";
+      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div></div>";
    }
 
    // you can book the available number of seats, with a max of 10 per time
@@ -43,10 +44,10 @@ function eme_add_booking_form($event_id) {
    }
    // no seats anymore? No booking form then ...
    if ($max == 0) {
-      $ret_string = "";
+      $ret_string = "<div id='eme-rsvp-message'>";
       if(!empty($form_add_message))
-         $ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
-       return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div>";
+         $ret_string .= "<div class='eme-rsvp-message'>$form_add_message</div>";
+       return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div></div>";
    }
 
    $module = "";
@@ -117,14 +118,14 @@ function eme_delete_booking_form($event_id) {
    
    $event_start_datetime = strtotime($event['event_start_date']." ".$event['event_start_time']);
    if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_datetime ) {
-      $ret_string = "";
+      $ret_string = "<div id='eme-rsvp-message'>";
       if(!empty($form_delete_message))
-         $ret_string .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_delete_message</div>";
-      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div>";
+         $ret_string .= "<div class='eme-rsvp-message'>$form_delete_message</div>";
+      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div></div>";
    }
 
    if(!empty($form_delete_message))
-      $module .= "<div class='eme-rsvp-message'>$form_delete_message</div>";
+      $module .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_delete_message</div>";
 
    $module  .= "<form name='booking-delete-form' method='post' action='$destination'>
       <table class='eme-rsvp-form'>
@@ -195,13 +196,13 @@ function eme_cancel_seats($event) {
    }
    if ($booker) {
       $person_id = $booker['person_id'];
-      $booking = eme_get_booking_by_person_event_id($person_id,$event_id);
+      $booked_seats = eme_get_booked_seats_by_person_event_id($person_id,$event_id);
       if ( eme_delete_booking_by_person_event_id($person_id,$event_id) === false) {
          $result = __('Booking delete failed', 'eme');
       } else {
          $result = __('Booking deleted', 'eme');
          if($mailing_is_active) {
-            eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$booker['person_phone'],$booking['booking_seats'],"","cancelRegistration");
+            eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$booker['person_phone'],$booked_seats,"","cancelRegistration");
          } 
       }
    } else {
@@ -323,6 +324,11 @@ function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
    $booking['person_id']=$person_id;
    $booking['booking_seats']=$seats;
    $booking['booking_comment']=$comment;
+   $booking['creation_date']=current_time('mysql', false);
+   $booking['modif_date']=current_time('mysql', false);
+   $booking['creation_date_gmt']=current_time('mysql', true);
+   $booking['modif_date_gmt']=current_time('mysql', true);
+
    // checking whether the booker has already booked places
 // $sql = "SELECT * FROM $bookings_table WHERE event_id = '$event_id' and person_id = '$person_id'; ";
 // //echo $sql;
@@ -369,15 +375,30 @@ function eme_delete_booking($booking_id) {
 function eme_approve_booking($booking_id) {
    global $wpdb;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
-   $sql = "UPDATE $bookings_table SET booking_approved='1' WHERE booking_id = $booking_id";
-   $wpdb->query($sql);
+
+   $where = array();
+   $fields = array();
+   $where['booking_id'] =$booking_id;
+   $fields['booking_approved'] = 1;
+   $fields['modif_date']=current_time('mysql', false);
+   $fields['modif_date_gmt']=current_time('mysql', true);
+   $wpdb->update($bookings_table, $fields, $where);
+   //$sql = "UPDATE $bookings_table SET booking_approved='1' WHERE booking_id = $booking_id";
+   //$wpdb->query($sql);
    return __('Booking approved', 'eme');
 }
 function eme_update_booking_seats($booking_id,$seats) {
    global $wpdb;
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
-   $sql = "UPDATE $bookings_table SET booking_seats='$seats' WHERE booking_id = $booking_id";
-   $wpdb->query($sql);
+   $where = array();
+   $fields = array();
+   $where['booking_id'] =$booking_id;
+   $fields['booking_approved'] = 1;
+   $fields['modif_date']=current_time('mysql', false);
+   $fields['modif_date_gmt']=current_time('mysql', true);
+   $wpdb->update($bookings_table, $fields, $where);
+   //$sql = "UPDATE $bookings_table SET booking_seats='$seats' WHERE booking_id = $booking_id";
+   //$wpdb->query($sql);
    return __('Booking approved', 'eme');
 }
 
@@ -531,7 +552,7 @@ function eme_get_bookings_for($event_ids,$pending=0) {
 function eme_get_bookings_list_for($event_id) {
    global $wpdb; 
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
-   $sql = "SELECT DISTINCT person_id FROM $bookings_table WHERE event_id = $event_id";
+   $sql = $wpdb->prepare("SELECT DISTINCT person_id FROM $bookings_table WHERE event_id = %s",$event_id);
    $person_ids = $wpdb->get_col($sql);
    if ($person_ids) {
       $attendees=eme_get_persons($person_ids);
@@ -624,7 +645,7 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
 function eme_registration_seats_page() {
    global $wpdb;
 
-   if (current_user_can( EDIT_CAPABILITY)) {
+   if (current_user_can( get_option('eme_cap_registrations'))) {
       // do the actions if required
       if (isset($_GET['action']) && $_GET['action'] == "delete_bookings" && isset($_GET['bookings'])) {
          $bookings = $_GET['bookings'];
@@ -771,7 +792,7 @@ function eme_registration_seats_form_table($event_id=0) {
 function eme_registration_approval_page() {
         global $wpdb;
 
-   if (current_user_can( EDIT_CAPABILITY)) {
+   if (current_user_can( eme_get_option('eme_cap_approve'))) {
       // do the actions if required
       $action = isset($_POST ['action']) ? $_POST ['action'] : '';
       $pending_bookings = isset($_POST ['pending_bookings']) ? $_POST ['pending_bookings'] : array();
