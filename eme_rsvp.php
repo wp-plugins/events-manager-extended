@@ -50,33 +50,33 @@ function eme_add_booking_form($event_id) {
        return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div></div>";
    }
 
-   $module = "";
+   $form_html = "";
    if(!empty($form_add_message))
-      $module .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
+      $form_html .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
    $booked_places_options = array();
    for ( $i = $min; $i <= $max; $i++) 
       array_push($booked_places_options, "<option value='$i'>$i</option>");
    
-      $module  .= "<form id='eme-rsvp-form' name='booking-form' method='post' action='$destination'>
+      $form_html  .= "<form id='eme-rsvp-form' name='booking-form' method='post' action='$destination'>
          <table class='eme-rsvp-form'>
             <tr><th scope='row'>".__('Name', 'eme')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
             <tr><th scope='row'>".__('E-Mail', 'eme')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
             <tr><th scope='row'>".__('Phone number', 'eme')."$bookerPhone_required:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
             <tr><th scope='row'>".__('Seats', 'eme')."*:</th><td><select name='bookedSeats' >";
       foreach($booked_places_options as $option) {
-         $module .= $option."\n";
+         $form_html .= $option."\n";
       }
-      $module .= "</select></td></tr>
+      $form_html .= "</select></td></tr>
             <tr><th scope='row'>".__('Comment', 'eme').":</th><td><textarea name='bookerComment'></textarea></td></tr>";
       if (get_option('eme_captcha_for_booking')) {
-         $module .= "
+         $form_html .= "
             <tr><th scope='row'>".__('Please fill in the code displayed here', 'eme').":</th><td><img src='".EME_PLUGIN_URL."captcha.php'><br>
                   <input type='text' name='captcha_check' /></td></tr>
             ";
       }
       // also add a honeypot field: if it gets completed with data, 
       // it's a bot, since a humand can't see this (using CSS to render it invisible)
-      $module .= "
+      $form_html .= "
       </table>
       <span id='honeypot_check'>Keep this field blank: <input type='text' name='honeypot_check' value='' /></span>
       <p>".__('(* marks a required field)', 'eme')."</p>
@@ -84,19 +84,21 @@ function eme_add_booking_form($event_id) {
       <input type='hidden' name='event_id' value='$event_id'/>
       <input type='submit' value='".get_option('eme_rsvp_addbooking_submit_string')."'/>
    </form>";
-   // $module .= "dati inviati: ";
-   //    $module .= eme_sanitize_request($_POST['bookerName']);
+   // $form_html .= "dati inviati: ";
+   //    $form_html .= eme_sanitize_request($_POST['bookerName']);
    //print_r($_SERVER);
  
-   //$module .= eme_delete_booking_form();
+   //$form_html .= eme_delete_booking_form();
     
-   return $module;
+   if (has_filter('eme_add_booking_form_filter')) $form_html=apply_filters('eme_add_booking_form_filter',$form_html);
+   return $form_html;
    
 }
 
 function eme_delete_booking_form($event_id) {
    global $form_delete_message;
    
+   $form_html = "";
    $event = eme_get_event($event_id);
    $registration_wp_users_only=$event['registration_wp_users_only'];
    if ($registration_wp_users_only) {
@@ -125,9 +127,9 @@ function eme_delete_booking_form($event_id) {
    }
 
    if(!empty($form_delete_message))
-      $module .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_delete_message</div>";
+      $form_html .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_delete_message</div>";
 
-   $module  .= "<form name='booking-delete-form' method='post' action='$destination'>
+   $form_html  .= "<form name='booking-delete-form' method='post' action='$destination'>
       <table class='eme-rsvp-form'>
          <tr><th scope='row'>".__('Name', 'eme').":</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
          <tr><th scope='row'>".__('E-Mail', 'eme').":</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
@@ -136,10 +138,11 @@ function eme_delete_booking_form($event_id) {
       <input type='hidden' name='event_id' value='$event_id'/>
       <input type='submit' value='".get_option('eme_rsvp_delbooking_submit_string')."'/>
    </form>";
-   // $module .= "dati inviati: ";
-   //    $module .= $_POST['bookerName'];
+   // $form_html .= "dati inviati: ";
+   //    $form_html .= $_POST['bookerName'];
 
-   return $module;
+   if (has_filter('eme_delete_booking_form_filter')) $form_html=apply_filters('eme_delete_booking_form_filter',$form_html);
+   return $form_html;
 }
 
 function eme_catch_rsvp() {
