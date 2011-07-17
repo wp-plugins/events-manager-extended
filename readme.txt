@@ -526,6 +526,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added option "show_ongoing" to [events_list], to indicate you want the scopes to include end dates (ongoing events) upon evaluation (like e.g. future events include events starting in the past, but ending in the future), or just the start date. Default: 1
 * Feature: you can now set the desired capability a user must have in order to do things (access right management). Use a plugin like "Capability Manager" to add/edit capabilities and roles.
 * Feature: eme_add_booking_form_filter and eme_delete_booking_form_filter filters added, so you can change the form html to your liking
+* Feature: splitted the function eme_display_single_event_shortcode into 2 parts, creating the function eme_display_single_event() that takes as single argument the event id, returning the html output for that event
 * Bugfix: AND categories for [events_list] were no longer working and resulted in all categories being used
 * Bugfix: some filtering fixes in admin panel
 * Bugfix: scope=this_week/next_week now takes the "start day of week" WP setting into account
