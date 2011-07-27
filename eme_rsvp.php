@@ -96,7 +96,7 @@ function eme_add_booking_form($event_id) {
 }
 
 function eme_delete_booking_form($event_id) {
-   global $form_delete_message;
+   global $form_delete_message, $current_user;
    
    $form_html = "";
    $event = eme_get_event($event_id);
