@@ -121,9 +121,13 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    //print_r($matching_days);
    sort($matching_days);
 
+   $ConvertToTimeStamp_Date1 = strtotime($event['event_start_date']);
+   $ConvertToTimeStamp_Date2 = strtotime($event['event_end_date']);
+   $DateDifference = intval($ConvertToTimeStamp_Date2) - intval($ConvertToTimeStamp_Date1);
+   $duration_days_event = round($DateDifference/86400);
    foreach($matching_days as $day) {
       $event['event_start_date'] = date("Y-m-d", $day); 
-      $event['event_end_date'] = $event['event_start_date']; 
+      $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
       // in case the end time crosses midnight (and as such is lower than the start time), the end day should be the next day
       $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
       $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
@@ -170,6 +174,11 @@ function eme_update_events_for_recurrence($event,$recurrence) {
    //print_r($matching_days);  
    sort($matching_days);
 
+   $ConvertToTimeStamp_Date1 = strtotime($event['event_start_date']);
+   $ConvertToTimeStamp_Date2 = strtotime($event['event_end_date']);
+   $DateDifference = intval($ConvertToTimeStamp_Date2) - intval($ConvertToTimeStamp_Date1);
+   $duration_days_event = round($DateDifference/86400);
+
    // 2 steps for updating events for a recurrence:
    // First step: check the existing events and if they still match the recurrence days, update them
    //       otherwise delete the old event
@@ -190,7 +199,7 @@ function eme_update_events_for_recurrence($event,$recurrence) {
       if ($update_needed==1) {
          $where=array('event_id' => $existing_event['event_id']);
          $event['event_start_date'] = $existing_event['event_start_date'];
-         $event['event_end_date'] = $event['event_start_date'];
+         $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
          $event['modif_date']=$recurrence['modif_date'];
          $event['creation_date']=$recurrence['modif_date'];
          $event['creation_date_gmt']=$recurrence['modif_date_gmt'];
@@ -205,7 +214,7 @@ function eme_update_events_for_recurrence($event,$recurrence) {
    foreach($matching_days as $day) {
       $insert_needed=1;
       $event['event_start_date'] = date("Y-m-d", $day);
-      $event['event_end_date'] = $event['event_start_date'];
+      $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
       foreach($events as $existing_event) {
          if ($insert_needed && $existing_event['event_start_date'] == $event['event_start_date']) {
             $insert_needed=0;

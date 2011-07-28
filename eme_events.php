@@ -11,16 +11,20 @@ function eme_new_event_page() {
       "event_id" => '',
       "event_name" => '',
       "event_status" => STATUS_DRAFT,
-      "event_date" => '',
-      "event_day" => '',
-      "event_month" => '',
-      "event_year" => '',
-      "event_end_date" => '',
       "event_start_date" => '',
+      "event_start_day" => '',
+      "event_start_month" => '',
+      "event_start_year" => '',
       "event_start_time" => '',
       "event_start_12h_time" => '',
+      "event_start_24h_time" => '',
+      "event_end_date" => '',
+      "event_end_day" => '',
+      "event_end_month" => '',
+      "event_end_year" => '',
       "event_end_time" => '',
       "event_end_12h_time" => '',
+      "event_end_24h_time" => '',
       "event_notes" => '',
       "event_rsvp" => 0,
       "rsvp_number_days" => 0,
@@ -39,6 +43,8 @@ function eme_new_event_page() {
       "event_respondent_email_body" => '',
       "event_url" => '',
       "recurrence_id" => 0,
+      "recurrence_start_date" => '',
+      "recurrence_end_date" => '',
       "recurrence_interval" => '',
       "recurrence_byweekno" => '',
       "recurrence_byday" => '',
@@ -143,13 +149,14 @@ function eme_events_subpanel() {
       } else {
          $event ['event_status'] = isset($_POST ['event_status']) ? stripslashes ( $_POST ['event_status'] ) : STATUS_DRAFT;
       }
-      // Set event end time to event time if not valid
-      // if (!_eme_is_date_valid($event['event_end_date']))
-      //    $event['event_end_date'] = $event['event-date'];
-      $event ['event_start_date'] = isset($_POST ['event_date']) ? $_POST ['event_date'] : '';
+      $event ['event_start_date'] = isset($_POST ['event_start_date']) ? $_POST ['event_start_date'] : '';
+      // for compatibility: check also the POST variable event_date
+      $event ['event_start_date'] = isset($_POST ['event_date']) ? $_POST ['event_date'] : $event ['event_start_date'];
       $event ['event_end_date'] = isset($_POST ['event_end_date']) ? $_POST ['event_end_date'] : '';
-      if ($event ['event_end_date'] == '') 
-         $event['event_end_date'] = $event['event_start_date'];
+      if (!_eme_is_date_valid($event['event_start_date']))
+          $event['event_start_date'] = "";
+      if (!_eme_is_date_valid($event['event_end_date']))
+          $event['event_end_date'] = "";
       if (isset($_POST ['event_start_time']) && !empty($_POST ['event_start_time'])) {
          $event ['event_start_time'] = date ("H:i:00", strtotime ($_POST ['event_start_time']));
       } else {
@@ -160,8 +167,12 @@ function eme_events_subpanel() {
       } else {
          $event ['event_end_time'] = "00:00:00";
       }
-      $recurrence ['recurrence_start_date'] = $event ['event_start_date'];
-      $recurrence ['recurrence_end_date'] = $event ['event_end_date'];
+      $recurrence ['recurrence_start_date'] = isset($_POST ['recurrence_start_date']) ? $_POST ['recurrence_start_date'] : $event ['event_start_date'];
+      $recurrence ['recurrence_end_date'] = isset($_POST ['recurrence_end_date']) ? $_POST ['recurrence_end_date'] : $event ['event_end_date'];
+      if (!_eme_is_date_valid($recurrence['recurrence_start_date']))
+          $recurrence['recurrence_start_date'] = "";
+      if (!_eme_is_date_valid($recurrence['recurrence_end_date']))
+          $recurrence['recurrence_end_date'] = $recurrence['recurrence_end_date'];
       $recurrence ['recurrence_freq'] = isset($_POST['recurrence_freq']) ? $_POST['recurrence_freq'] : '';
       if ($recurrence ['recurrence_freq'] == 'weekly') {
          if (isset($_POST['recurrence_bydays'])) {
@@ -194,7 +205,7 @@ function eme_events_subpanel() {
       }
       
       //if (! _eme_is_time_valid ( $event_end_time ))
-      // $event_end_time = $event_time;
+      // $event_end_time = $event_start_time;
       
       $location ['location_name'] = isset($_POST ['location_name']) ? trim(stripslashes($_POST ['location_name'])) : '';
       $location ['location_address'] = isset($_POST ['location_address']) ? stripslashes($_POST ['location_address']) : '';
@@ -1561,14 +1572,20 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       $where = " WHERE " . $where;
    
    $sql = "SELECT *, 
-         DATE_FORMAT(event_start_date, '%e') AS 'event_day',
-         DATE_FORMAT(event_start_date, '%Y') AS 'event_year',
-         DATE_FORMAT(event_start_time, '%k') AS 'event_hh',
-         DATE_FORMAT(event_start_time, '%i') AS 'event_mm',
+         DATE_FORMAT(event_start_date, '%e') AS 'event_start_day',
+         DATE_FORMAT(event_start_date, '%m') AS 'event_start_month',
+         DATE_FORMAT(event_start_date, '%Y') AS 'event_start_year',
+         DATE_FORMAT(event_start_time, '%k') AS 'event_start_hh',
+         DATE_FORMAT(event_start_time, '%i') AS 'event_start_mm',
+         DATE_FORMAT(event_start_time, '%h:%i%p') AS 'event_start_12h_time', 
+         DATE_FORMAT(event_start_time, '%H:%i') AS 'event_start_24h_time', 
          DATE_FORMAT(event_end_date, '%e') AS 'event_end_day',
+         DATE_FORMAT(event_end_date, '%m') AS 'event_end_month',
          DATE_FORMAT(event_end_date, '%Y') AS 'event_end_year',
          DATE_FORMAT(event_end_time, '%k') AS 'event_end_hh',
-         DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm'
+         DATE_FORMAT(event_end_time, '%i') AS 'event_end_mm',
+         DATE_FORMAT(event_end_time, '%h:%i%p') AS 'event_end_12h_time',
+         DATE_FORMAT(event_end_time, '%H:%i') AS 'event_end_24h_time'
          FROM $events_table
          $where
          ORDER BY event_start_date $order , event_start_time $order
@@ -1626,15 +1643,13 @@ function eme_get_event($event_id) {
    if ($where != "")
       $where = " WHERE " . $where;
    $sql = "SELECT *, 
-            DATE_FORMAT(event_start_date, '%Y-%m-%e') AS 'event_date', 
-         DATE_FORMAT(event_start_date, '%e') AS 'event_day',
-         DATE_FORMAT(event_start_date, '%m') AS 'event_month',
-         DATE_FORMAT(event_start_date, '%Y') AS 'event_year',
-         DATE_FORMAT(event_start_time, '%k') AS 'event_hh',
-         DATE_FORMAT(event_start_time, '%i') AS 'event_mm',
+         DATE_FORMAT(event_start_date, '%e') AS 'event_start_day',
+         DATE_FORMAT(event_start_date, '%m') AS 'event_start_month',
+         DATE_FORMAT(event_start_date, '%Y') AS 'event_start_year',
+         DATE_FORMAT(event_start_time, '%k') AS 'event_start_hh',
+         DATE_FORMAT(event_start_time, '%i') AS 'event_start_mm',
          DATE_FORMAT(event_start_time, '%h:%i%p') AS 'event_start_12h_time', 
          DATE_FORMAT(event_start_time, '%H:%i') AS 'event_start_24h_time', 
-         DATE_FORMAT(event_end_date, '%Y-%m-%e') AS 'event_end_date', 
          DATE_FORMAT(event_end_date, '%e') AS 'event_end_day',
          DATE_FORMAT(event_end_date, '%m') AS 'event_end_month',
          DATE_FORMAT(event_end_date, '%Y') AS 'event_end_year',
@@ -1702,6 +1717,14 @@ function eme_duplicate_event($event_id) {
 }
 
 function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $o_category=0) {
+   global $localised_date_formats;
+   $locale_code = substr ( get_locale (), 0, 2 );
+   if (isset($localised_date_formats [$locale_code])) {
+      $localised_date_format = $localised_date_formats [$locale_code];
+   } else {
+      $localised_date_format = $localised_date_formats ["en"];
+   }
+
    $events_count = count ( $events );
    ?>
 
@@ -1799,8 +1822,26 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
          if ($limit && $i>$limit)
             break;
          $class = ($i % 2) ? ' class="alternate"' : '';
-         $localised_start_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_start_date']));
-         $localised_end_date = date_i18n ( __ ( 'D d M Y' ), strtotime($event ['event_end_date']));
+
+         if ($event['event_start_date'] != "") {
+            preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event['event_start_date'], $matches );
+            $year = $matches [1];
+            $month = sprintf("%02d",$matches [2]);
+            $day = sprintf("%02d",$matches [3]);
+            $localised_start_date = str_replace ( "yy", $year, str_replace ( "mm", $month, str_replace ( "dd", $day, $localised_date_format ) ) );
+         } else {
+            $localised_start_date = "";
+         }
+         if ($event['event_end_date'] != "") {
+            preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event['event_end_date'], $matches );
+            $end_year = $matches [1];
+            $end_month = sprintf("%02d",$matches [2]);
+            $end_day = sprintf("%02d",$matches [3]);
+            $localised_end_date = str_replace ( "yy", $end_year, str_replace ( "mm", $end_month, str_replace ( "dd", $end_day, $localised_date_format ) ) );
+         } else {
+            $localised_end_date = "";
+         }
+
          $today = date ( "Y-m-d" );
          
          if (isset($event ['location_name']))
@@ -1852,7 +1893,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
              <?php echo $location_summary; ?>
          </td>
          <td>
-            <?php echo $localised_start_date; if ($localised_end_date !='') echo " - " . $localised_end_date; ?><br />
+            <?php echo $localised_start_date; if ($localised_end_date !='' && $localised_end_date!=$localised_start_date) echo " - " . $localised_end_date; ?><br />
             <?php echo substr ( $event ['event_start_time'], 0, 5 ) . " - " . substr ( $event ['event_end_time'], 0, 5 ); ?>
          </td>
          <td>
@@ -1957,23 +1998,43 @@ function eme_event_form($event, $title, $element) {
    $localised_example = str_replace ( "yy", "2008", str_replace ( "mm", "11", str_replace ( "dd", "28", $localised_date_format ) ) );
    $localised_end_example = str_replace ( "yy", "2008", str_replace ( "mm", "11", str_replace ( "dd", "28", $localised_date_format ) ) );
    
-   if ($event [$pref . 'start_date'] != "") {
-      preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event [$pref. 'start_date'], $matches );
+   if ($event['event_start_date'] != "") {
+      preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event['event_start_date'], $matches );
       $year = $matches [1];
       $month = sprintf("%02d",$matches [2]);
       $day = sprintf("%02d",$matches [3]);
-      $localised_date = str_replace ( "yy", $year, str_replace ( "mm", $month, str_replace ( "dd", $day, $localised_date_format ) ) );
+      $localised_start_date = str_replace ( "yy", $year, str_replace ( "mm", $month, str_replace ( "dd", $day, $localised_date_format ) ) );
    } else {
-      $localised_date = "";
+      $localised_start_date = "";
    }
-   if ($event [$pref . 'end_date'] != "") {
-      preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event [$pref . 'end_date'], $matches );
+   if ($event['event_end_date'] != "") {
+      preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event['event_end_date'], $matches );
       $end_year = $matches [1];
       $end_month = sprintf("%02d",$matches [2]);
       $end_day = sprintf("%02d",$matches [3]);
       $localised_end_date = str_replace ( "yy", $end_year, str_replace ( "mm", $end_month, str_replace ( "dd", $end_day, $localised_date_format ) ) );
    } else {
       $localised_end_date = "";
+   }
+   if (!isset($event['recurrence_start_date'])) $event['recurrence_start_date']="";
+   if ($event['recurrence_start_date'] != "") {
+      preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event['recurrence_start_date'], $matches );
+      $year = $matches [1];
+      $month = sprintf("%02d",$matches [2]);
+      $day = sprintf("%02d",$matches [3]);
+      $localised_rec_start_date = str_replace ( "yy", $year, str_replace ( "mm", $month, str_replace ( "dd", $day, $localised_date_format ) ) );
+   } else {
+      $localised_rec_start_date = "";
+   }
+   if (!isset($event['recurrence_end_date'])) $event['recurrence_end_date']="";
+   if ($event['recurrence_end_date'] != "") {
+      preg_match ( "/(\d{4})-(\d\d?)-(\d\d?)/", $event['recurrence_end_date'], $matches );
+      $end_year = $matches [1];
+      $end_month = sprintf("%02d",$matches [2]);
+      $end_day = sprintf("%02d",$matches [3]);
+      $localised_rec_end_date = str_replace ( "yy", $end_year, str_replace ( "mm", $end_month, str_replace ( "dd", $end_day, $localised_date_format ) ) );
+   } else {
+      $localised_rec_end_date = "";
    }
    //if($event[$pref.'rsvp'])
     //   echo (eme_bookings_table($event[$pref.'id']));
@@ -2232,30 +2293,37 @@ function eme_event_form($event, $title, $element) {
                         <?php _e ( 'The event name. Example: Birthday party', 'eme' )?>
                      </div>
                   </div>
-                  <div id="div_event_start_date" class="stuffbox">
+                  <div id="div_event_date" class="stuffbox">
                      <h3 id='event-date-title'>
                         <?php _e ( 'Event date', 'eme' ); ?>
                      </h3>
+                     <div class="inside">
+                        <input id="localised-start-date" type="text" name="localised_event_start_date" value="<?php echo $localised_start_date?>" style="display: none;" readonly="readonly" />
+                        <input id="start-date-to-submit" type="text" name="event_start_date" value="<?php echo $event ['event_start_date']?>" style="background: #FCFFAA" />
+                        <input id="localised-end-date" type="text" name="localised_event_end_date" value="<?php echo $localised_end_date?>" style="display: none;" readonly="readonly" />
+                        <input id="end-date-to-submit" type="text" name="event_end_date" value="<?php echo $event ['event_end_date']?>" style="background: #FCFFAA" />
+                        <br />
+                        <span id='event-date-explanation'>
+                        <?php _e ( 'The event date.', 'eme' ); ?>
+                        </span>
+                     </div>
+                  </div>
+                  <div id="div_recurrence_date" class="stuffbox">
                      <h3 id='recurrence-dates-title'>
                         <?php _e ( 'Recurrence dates', 'eme' ); ?>
                      </h3>
                      <div class="inside">
-                        <input id="localised-date" type="text" name="localised_event_date" value="<?php echo $localised_date?>" style="display: none;" readonly="readonly" />
-                        <input id="date-to-submit" type="text" name="event_date" value="<?php echo $event [$pref . 'start_date']?>" style="background: #FCFFAA" />
-                        <input id="localised-end-date" type="text" name="localised_event_end_date" value="<?php echo $localised_end_date?>" style="display: none;" readonly="readonly" />
-                        <input id="end-date-to-submit" type="text" name="event_end_date" value="<?php echo $event [$pref . 'end_date']?>" style="background: #FCFFAA" />
+                        <input id="localised-rec-start-date" type="text" name="localised_recurrence_date" value="<?php echo $localised_rec_start_date?>" readonly="readonly" />
+                        <input id="rec-start-date-to-submit" type="text" name="recurrence_start_date" value="<?php echo $event ['recurrence_start_date']?>" style="background: #FCFFAA" />
+                        <input id="localised-rec-end-date" type="text" name="localised_recurrence_end_date" value="<?php echo $localised_rec_end_date?>" readonly="readonly" />
+                        <input id="rec-end-date-to-submit" type="text" name="recurrence_end_date" value="<?php echo $event ['recurrence_end_date']?>" style="background: #FCFFAA" />
                         <br />
-                        <span id='event-date-explanation'>
-                        <?php
-                           _e ( 'The event date.', 'eme' );
-                           echo " ";
-                           _e ( 'When not recurring, this event spans between the beginning and end date.', 'eme' );
-                        ?>
-                        </span><span id='recurrence-dates-explanation'>
+                        <span id='recurrence-dates-explanation'>
                         <?php _e ( 'The recurrence beginning and end date.', 'eme' ); ?>
-                        </span> </div>
+                        </span>
+                     </div>
                   </div>
-                  <div id="div_event_end_day" class="stuffbox">
+                  <div id="div_event_time" class="stuffbox">
                      <h3>
                         <?php _e ( 'Event time', 'eme' ); ?>
                      </h3>
@@ -2570,19 +2638,10 @@ function updateIntervalSelectors () {
 function updateShowHideRecurrence () {
    if($j_eme_event('input#event-recurrence').attr("checked")) {
       $j_eme_event("#event_recurrence_pattern").fadeIn();
-      //Edited this and the one below so dates always can have an end date
-      //$j_eme_event("input#localised-end-date").fadeIn();
-      $j_eme_event("#event-date-explanation").hide();
-      $j_eme_event("#recurrence-dates-explanation").show();
-      $j_eme_event("h3#recurrence-dates-title").show();
-      $j_eme_event("h3#event-date-title").hide();
+      $j_eme_event("div#div_recurrence_date").show();
    } else {
       $j_eme_event("#event_recurrence_pattern").hide();
-      //$j_eme_event("input#localised-end-date").hide();
-      $j_eme_event("#recurrence-dates-explanation").hide();
-      $j_eme_event("#event-date-explanation").show();
-      $j_eme_event("h3#recurrence-dates-title").hide();
-      $j_eme_event("h3#event-date-title").show();
+      $j_eme_event("div#div_recurrence_date").hide();
    }
 }
 
@@ -2597,19 +2656,29 @@ function updateShowHideRsvp () {
 $j_eme_event(document).ready( function() {
    locale_format = "ciao";
  
-   $j_eme_event("#recurrence-dates-explanation").hide();
-   $j_eme_event("#localised-date").show();
+   $j_eme_event("#div_recurrence_date").hide();
+   $j_eme_event("#localised-start-date").show();
    $j_eme_event("#localised-end-date").show();
 
-   $j_eme_event("#date-to-submit").hide();
+   $j_eme_event("#start-date-to-submit").hide();
    $j_eme_event("#end-date-to-submit").hide(); 
-   $j_eme_event("#localised-date").datepicker($j_eme_event.extend({},
+   $j_eme_event("#rec-start-date-to-submit").hide();
+   $j_eme_event("#rec-end-date-to-submit").hide(); 
+   $j_eme_event("#localised-start-date").datepicker($j_eme_event.extend({},
       ($j_eme_event.datepicker.regional["<?php echo $locale_code; ?>"], 
-      {altField: "#date-to-submit", 
+      {altField: "#start-date-to-submit", 
       altFormat: "yy-mm-dd"})));
    $j_eme_event("#localised-end-date").datepicker($j_eme_event.extend({},
       ($j_eme_event.datepicker.regional["<?php echo $locale_code; ?>"], 
       {altField: "#end-date-to-submit", 
+      altFormat: "yy-mm-dd"})));
+   $j_eme_event("#localised-rec-start-date").datepicker($j_eme_event.extend({},
+      ($j_eme_event.datepicker.regional["<?php echo $locale_code; ?>"], 
+      {altField: "#rec-start-date-to-submit", 
+      altFormat: "yy-mm-dd"})));
+   $j_eme_event("#localised-rec-end-date").datepicker($j_eme_event.extend({},
+      ($j_eme_event.datepicker.regional["<?php echo $locale_code; ?>"], 
+      {altField: "#rec-end-date-to-submit", 
       altFormat: "yy-mm-dd"})));
 
    $j_eme_event("#start-time").timeEntry({spinnerImage: '', show24Hours: <?php echo $show24Hours; ?> });
@@ -2734,10 +2803,10 @@ $j_eme_event(document).ready( function() {
       function validateEventForm(){
          errors = "";
       var recurring = $j_eme_event("input[name=repeated_event]:checked").val();
-      //requiredFields= new Array('event_name', 'localised_event_date', 'location_name','location_address','location_town');
-      requiredFields= new Array('event_name', 'localised_event_date');
+      //requiredFields= new Array('event_name', 'localised_event_start_date', 'location_name','location_address','location_town');
+      requiredFields= new Array('event_name', 'localised_event_start_date');
       var localisedRequiredFields = {'event_name':"<?php _e ( 'Name', 'eme' )?>",
-                      'localised_event_date':"<?php _e ( 'Date', 'eme' )?>"
+                      'localised_event_start_date':"<?php _e ( 'Date', 'eme' )?>"
                      };
       
       missingFields = new Array;

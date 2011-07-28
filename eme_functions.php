@@ -150,10 +150,12 @@ function eme_check_exists($event_id) {
    return $wpdb->get_var($sql);
 }
 
-function eme_is_date_valid($date) {
-   $year = substr ( $date, 0, 4 );
-   $month = substr ( $date, 5, 2 );
-   $day = substr ( $date, 8, 2 );
+function _eme_is_date_valid($date) {
+   if (strlen($date) != 10)
+      return false;
+   $year = intval(substr ( $date, 0, 4 ));
+   $month = intval(substr ( $date, 5, 2 ));
+   $day = intval(substr ( $date, 8 ));
    return (checkdate ( $month, $day, $year ));
 }
 function eme_is_time_valid($time) {
