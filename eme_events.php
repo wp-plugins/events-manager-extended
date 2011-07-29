@@ -3252,4 +3252,20 @@ function status_array() {
    return $event_status_array;
 }
 
+# return number of days until next event or until the specified event
+function eme_countdown() {
+   extract ( shortcode_atts ( array ('id'=>''), $atts ) );
+
+   $now = date("Y-m-d");
+   if ($id!="") {
+      $event=eme_get_event($id);
+   } else {
+      $newest_event_array=eme_get_events(1);
+      $event=$newest_event_array[0];
+   }
+   $end_date=$event['event_start_date'];
+   return eme_daydifference($now,$end_date);
+}
+add_shortcode('events_countdown', 'eme_countdown');
+
 ?>
