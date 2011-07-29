@@ -121,10 +121,7 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    //print_r($matching_days);
    sort($matching_days);
 
-   $ConvertToTimeStamp_Date1 = strtotime($event['event_start_date']);
-   $ConvertToTimeStamp_Date2 = strtotime($event['event_end_date']);
-   $DateDifference = intval($ConvertToTimeStamp_Date2) - intval($ConvertToTimeStamp_Date1);
-   $duration_days_event = round($DateDifference/86400);
+   $duration_days_event = eme_daydifference($event['event_start_date'],$event['event_end_date']);
    foreach($matching_days as $day) {
       $event['event_start_date'] = date("Y-m-d", $day); 
       $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
@@ -174,10 +171,7 @@ function eme_update_events_for_recurrence($event,$recurrence) {
    //print_r($matching_days);  
    sort($matching_days);
 
-   $ConvertToTimeStamp_Date1 = strtotime($event['event_start_date']);
-   $ConvertToTimeStamp_Date2 = strtotime($event['event_end_date']);
-   $DateDifference = intval($ConvertToTimeStamp_Date2) - intval($ConvertToTimeStamp_Date1);
-   $duration_days_event = round($DateDifference/86400);
+   $duration_days_event = eme_daydifference($event['event_start_date'],$event['event_end_date']);
 
    // 2 steps for updating events for a recurrence:
    // First step: check the existing events and if they still match the recurrence days, update them

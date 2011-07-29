@@ -190,4 +190,11 @@ function eme_get_all_caps() {
    return $capabilities;
 }
 
+function eme_daydifference($date1,$date2) {
+   $ConvertToTimeStamp_Date1 = strtotime($date1);
+   $ConvertToTimeStamp_Date2 = strtotime($date2);
+   $DateDifference = intval($ConvertToTimeStamp_Date2) - intval($ConvertToTimeStamp_Date1);
+   return abs(round($DateDifference/86400));
+}
+
 ?>
