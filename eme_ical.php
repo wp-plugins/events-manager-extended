@@ -108,7 +108,7 @@ function eme_ical() {
       $event=eme_get_event(intval($_GET ['event_id']));
       echo eme_ical_single_event($event,$title_format,$description_format);
    } elseif (isset ( $_GET ['eme_ical'] ) && $_GET ['eme_ical'] == 'public') {
-      if (isset( $_GET ['category'] ) {
+      if (isset( $_GET ['category'] )) {
          $events = eme_get_events ( 0,"future","ASC",0,"",$_GET ['category'] );
       } else {
          $events = eme_get_events ( 0 );
