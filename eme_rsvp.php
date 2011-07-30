@@ -795,7 +795,7 @@ function eme_registration_seats_form_table($event_id=0) {
 function eme_registration_approval_page() {
         global $wpdb;
 
-   if (current_user_can( eme_get_option('eme_cap_approve'))) {
+   if (current_user_can( get_option('eme_cap_approve'))) {
       // do the actions if required
       $action = isset($_POST ['action']) ? $_POST ['action'] : '';
       $pending_bookings = isset($_POST ['pending_bookings']) ? $_POST ['pending_bookings'] : array();
