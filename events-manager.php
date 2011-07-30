@@ -870,7 +870,7 @@ function eme_create_events_submenu () {
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
          $plugin_page = add_submenu_page('events-manager', __('Pending Approvals', 'eme'), __('Pending Approvals', 'eme'), get_option('eme_cap_approve'), 'events-manager-registration-approval', "eme_registration_approval_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
-         $plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), get_option('eme_cap_edit_registrations'), 'events-manager-registration-seats', "eme_registration_seats_page");
+         $plugin_page = add_submenu_page('events-manager', __('Change Registration', 'eme'), __('Change Registration', 'eme'), get_option('eme_cap_registrations'), 'events-manager-registration-seats', "eme_registration_seats_page");
          add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
       }
       $plugin_page = add_submenu_page('events-manager', __('Cleanup', 'eme'), __('Cleanup', 'eme'), get_option('eme_cap_cleanup'), 'events-manager-cleanup', "eme_cleanup_page");
