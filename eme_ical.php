@@ -45,10 +45,10 @@ function eme_ical_single_event($event, $title_format, $description_format) {
    return $res;
 }
 
-function eme_ical_link($justurl = 0, $echo = 1, $text = "ICAL") {
+function eme_ical_link($justurl = 0, $echo = 1, $text = "ICAL", $category = "") {
    if (strpos ( $justurl, "=" )) {
       // allows the use of arguments without breaking the legacy code
-      $defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'ICAL' );
+      $defaults = array ('justurl' => 0, 'echo' => 1, 'text' => 'ICAL', category=> '' );
 
       $r = wp_parse_args ( $justurl, $defaults );
       extract ( $r );
@@ -56,7 +56,11 @@ function eme_ical_link($justurl = 0, $echo = 1, $text = "ICAL") {
    }
    if ($text == '')
       $text = "ICAL";
-   $url = site_url ("/?eme_ical=public");
+   if (!empty($category)) {
+      $url = site_url ("/?eme_ical=public&category=$category");
+   } else {
+      $url = site_url ("/?eme_ical=public");
+   }
    $link = "<a href='$url'>$text</a>";
 
    if ($justurl)
@@ -70,8 +74,8 @@ function eme_ical_link($justurl = 0, $echo = 1, $text = "ICAL") {
 }
 
 function eme_ical_link_shortcode($atts) {
-   extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'ICAL' ), $atts ) );
-   $result = eme_ical_link ( "justurl=$justurl&echo=0&text=$text" );
+   extract ( shortcode_atts ( array ('justurl' => 0, 'text' => 'ICAL', 'category' => '' ), $atts ) );
+   $result = eme_ical_link ( "justurl=$justurl&echo=0&text=$text&category=$category" );
    return $result;
 }
 add_shortcode ( 'events_ical_link', 'eme_ical_link_shortcode' );
@@ -104,7 +108,11 @@ function eme_ical() {
       $event=eme_get_event(intval($_GET ['event_id']));
       echo eme_ical_single_event($event,$title_format,$description_format);
    } elseif (isset ( $_GET ['eme_ical'] ) && $_GET ['eme_ical'] == 'public') {
-      $events = eme_get_events ( 0 );
+      if (isset( $_GET ['category'] ) {
+         $events = eme_get_events ( 0,"future","ASC",0,"",$_GET ['category'] );
+      } else {
+         $events = eme_get_events ( 0 );
+      }
       foreach ( $events as $event ) {
          echo eme_ical_single_event($event,$title_format,$description_format);
       }
