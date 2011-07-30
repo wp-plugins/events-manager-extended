@@ -458,7 +458,7 @@ function eme_options_subpanel() {
    ?>
 </table>
 <h3><?php _e ( 'Access rights', 'eme' ); ?></h3>
-<p>Tip: Use a plugin like "Capability Manager" to add/edit capabilities and roles.</p>
+<p>Tip: Use a plugin like "User Role Editor" to add/edit capabilities and roles.</p>
 <table class="form-table">
    <?php
    eme_options_select ("Add event", 'eme_cap_add_event', eme_get_all_caps (), __('Permission needed to add a new event.','eme') );
