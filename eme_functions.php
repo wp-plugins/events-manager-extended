@@ -13,9 +13,9 @@ function eme_if_shortcode($atts,$content) {
    } elseif (is_numeric($gt) || !empty($gt)) {
       if ($tag>$gt) return do_shortcode($content);
    } elseif (is_numeric($contains) || !empty($contains)) {
-      if (strstr($tag,"$contains")) return do_shortcode($content);
+      if (strpos($tag,"$contains")!== false) return do_shortcode($content);
    } elseif (is_numeric($notcontains) || !empty($notcontains)) {
-      if (!strstr($tag,"$notcontains")) return do_shortcode($content);
+      if (strpos($tag,"$notcontains")===false) return do_shortcode($content);
    } else {
       if (!empty($tag)) return do_shortcode($content);
    }
