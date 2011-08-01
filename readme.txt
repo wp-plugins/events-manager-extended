@@ -530,6 +530,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: recurrent events can now span multiple days
 * Feature: new shortcode [events_countdown], with one optional parameter (event ID): returns the number of days until the next event or the event specified
 * Feature: the shortcode [events_ical_link] now also accepts category as an option
+* Improvement: the RSVP form now always prefills the name and email if you're logged in, if no WP membership is required you can change the values
 * Bugfix: AND categories for [events_list] were no longer working and resulted in all categories being used
 * Bugfix: some filtering fixes in admin panel
 * Bugfix: scope=this_week/next_week now takes the "start day of week" WP setting into account

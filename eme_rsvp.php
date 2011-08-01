@@ -5,20 +5,22 @@ $form_delete_message = "";
 function eme_add_booking_form($event_id) {
    global $form_add_message, $current_user;
 
-   $bookerName="";
-   $bookerEmail="";
+   if (is_user_logged_in()) {
+      get_currentuserinfo();
+      $bookerName=$current_user->display_name;
+      $bookerEmail=$current_user->user_email;
+   } else {
+      $bookerName="";
+      $bookerEmail="";
+   }
    $event = eme_get_event($event_id);
    $registration_wp_users_only=$event['registration_wp_users_only'];
    if ($registration_wp_users_only) {
-      $readonly="disabled='disabled'";
       // we require a user to be WP registered to be able to book
       if (!is_user_logged_in()) {
          return;
-      } else {
-         get_currentuserinfo();
-         $bookerName=$current_user->display_name;
-         $bookerEmail=$current_user->user_email;
       }
+      $readonly="disabled='disabled'";
       $bookerPhone_required="";
    } else {
       $readonly="";
@@ -98,23 +100,25 @@ function eme_add_booking_form($event_id) {
 function eme_delete_booking_form($event_id) {
    global $form_delete_message, $current_user;
    
+   if (is_user_logged_in()) {
+      get_currentuserinfo();
+      $bookerName=$current_user->display_name;
+      $bookerEmail=$current_user->user_email;
+   } else {
+      $bookerName="";
+      $bookerEmail="";
+   }
    $form_html = "";
    $event = eme_get_event($event_id);
    $registration_wp_users_only=$event['registration_wp_users_only'];
    if ($registration_wp_users_only) {
-      $readonly="disabled='disabled'";
       // we require a user to be WP registered to be able to book
       if (!is_user_logged_in()) {
          return;
-      } else {
-         get_currentuserinfo();
-         $bookerName=$current_user->display_name;
-         $bookerEmail=$current_user->user_email;
       }
+      $readonly="disabled='disabled'";
    } else {
       $readonly="";
-      $bookerName="";
-      $bookerEmail="";
    }
    $destination = "?".$_SERVER['QUERY_STRING']."#eme-rsvp-message";
    
