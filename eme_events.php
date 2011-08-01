@@ -1071,9 +1071,8 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
          $output =  $eme_event_list_item_format_header .  $output . $eme_event_list_item_format_footer;
       }
    } else {
-      $output = "<ul class='eme-no-events'><li>" . get_option('eme_no_events_message' ) . "</li></ul>";
+      $output = get_option('eme_no_events_message' );
    }
-   $events_count=count($events);
 
    // now add the pagination if needed
    if ($paging==1)
