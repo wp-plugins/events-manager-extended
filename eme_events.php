@@ -1116,6 +1116,12 @@ function eme_get_events_list_shortcode($atts) {
       }
    }
 
+   // for format: sometimes people want to give placeholders as options, but when using the shortcode inside
+   // another (e.g. when putting [events_list format="#_NAME"] inside the "display single event" setting,
+   // the replacement of the placeholders happens too soon (placeholders get replaced first, before any other
+   // shortcode is interpreted). So we add the option that people can use "#OTHER_", and we replace this with
+   // "#_" here
+   $format = preg_replace('/#OTHER_/', "#_", $format);
    $result = eme_get_events_list ( $limit,$scope,$order,$format,0,$category,$showperiod,$long_events,$author,$contact_person,$paging,$location_id,$user_registered_only,$show_ongoing );
    return $result;
 }
