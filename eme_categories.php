@@ -236,4 +236,13 @@ function eme_get_event_categories($event_id) {
    $category = $wpdb->get_col($sql);
    return $category;
 }
+
+function eme_get_location_categories($location_id) { 
+   global $wpdb;
+   $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
+   $categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
+   $sql = "SELECT category_name FROM $categories_table, $locations_table where location_id ='$location_id' AND FIND_IN_SET(category_id,location_category_ids)";
+   $category = $wpdb->get_col($sql);
+   return $category;
+}
 ?>

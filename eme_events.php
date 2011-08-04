@@ -464,7 +464,9 @@ function eme_options_subpanel() {
    eme_options_select ("Add event", 'eme_cap_add_event', eme_get_all_caps (), __('Permission needed to add a new event.','eme') );
    eme_options_select ("Author event", 'eme_cap_author_event', eme_get_all_caps (), __('Permission needed to edit own events.','eme') );
    eme_options_select ("Edit events", 'eme_cap_edit_events', eme_get_all_caps (), __('Permission needed to edit all events.','eme') );
-   eme_options_select ("Edit locations", 'eme_cap_locations', eme_get_all_caps (), __('Permission needed to edit all locations.','eme') );
+   eme_options_select ("Add location", 'eme_cap_add_locations', eme_get_all_caps (), __('Permission needed to add locations.','eme') );
+   eme_options_select ("Author location", 'eme_cap_author_locations', eme_get_all_caps (), __('Permission needed to edit own locations.','eme') );
+   eme_options_select ("Edit location", 'eme_cap_edit_locations', eme_get_all_caps (), __('Permission needed to edit all locations.','eme') );
    eme_options_select ("Edit categories", 'eme_cap_categories', eme_get_all_caps (), __('Permission needed to edit all categories.','eme') );
    eme_options_select ("View people", 'eme_cap_people', eme_get_all_caps (), __('Permission needed to view registered people info.','eme') );
    eme_options_select ("Approve registrations", 'eme_cap_approve', eme_get_all_caps (), __('Permission needed to approve pending registrations.','eme') );
@@ -1671,12 +1673,10 @@ function eme_get_event($event_id) {
 
    if ($event && count($event>0)) {
       $location = eme_get_location ( $event ['location_id'] );
-      $event ['location_name'] = $location ['location_name'];
-      $event ['location_address'] = $location ['location_address'];
-      $event ['location_town'] = $location ['location_town'];
-      $event ['location_latitude'] = $location ['location_latitude'];
-      $event ['location_longitude'] = $location ['location_longitude'];
-      $event ['location_image_url'] = $location ['location_image_url'];
+      // add all location info to the event
+      foreach ($location as $key => $value) {
+         $event [$key] = $value;
+      }
 
       $event ['event_attributes'] = @unserialize($event ['event_attributes']);
       $event ['event_attributes'] = (!is_array($event ['event_attributes'])) ?  array() : $event ['event_attributes'] ;
