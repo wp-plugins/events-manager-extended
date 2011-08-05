@@ -3106,10 +3106,13 @@ Weblog Editor 2.0
 add_action ( 'init', 'eme_rss' );
 function eme_general_head() {
    global $wp_query;
-   if (eme_is_single_event_page()) {
-      $event=eme_get_event($wp_query->query_vars ['event_id']);
-      echo '<title>' . eme_replace_placeholders ( "#ESC_TITLE",$event) . '</title>' . "\n";
-   }
+   // TODO: add code for meta tags here
+   //if (eme_is_single_event_page()) {
+   //   $event=eme_get_event($wp_query->query_vars ['event_id']);
+   //   $description = eme_replace_placeholders ( $description_format, $event, "rss" );
+   //   echo '<meta name="description" content="$description">';
+   //} elseif (eme_is_single_location_page()) {
+   //}
    $gmap_is_active = get_option('eme_gmap_is_active' );
    $load_js_in_header = get_option('eme_load_js_in_header' );
    if ($gmap_is_active && $load_js_in_header) {
