@@ -681,7 +681,7 @@ function eme_filter_events_page($data) {
 }
 add_filter ( 'the_content', 'eme_filter_events_page' );
 
-function eme_event_page_title($data) {
+function eme_page_title($data) {
    global $wp_query;
    $events_page_id = get_option('eme_events_page' );
    $events_page = get_page ( $events_page_id );
@@ -703,12 +703,6 @@ function eme_event_page_title($data) {
          }
       }
       
-      if (isset ( $wp_query->query_vars['location_id'] ) && $wp_query->query_vars['location_id'] != '') {
-         $location = eme_get_location ( intval($wp_query->query_vars['location_id']));
-         $stored_page_title_format = get_option('eme_location_page_title_format' );
-         $page_title = eme_replace_locations_placeholders ( $stored_page_title_format, $location );
-         return $page_title;
-      }
       if (eme_is_single_event_page()) {
          // single event page
          $event_ID = intval($wp_query->query_vars['event_id']);
@@ -720,6 +714,11 @@ function eme_event_page_title($data) {
          }
          $page_title = eme_replace_placeholders ( $stored_page_title_format, $event );
          return $page_title;
+      } elseif (eme_is_single_location_page()) {
+         $location = eme_get_location ( intval($wp_query->query_vars['location_id']));
+         $stored_page_title_format = get_option('eme_location_page_title_format' );
+         $page_title = eme_replace_locations_placeholders ( $stored_page_title_format, $location );
+         return $page_title;
       } else {
          // Multiple events page
          $page_title = get_option('eme_events_page_title' );
@@ -729,7 +728,7 @@ function eme_event_page_title($data) {
       return $data;
    }
 }
-add_filter ( 'single_post_title', 'eme_event_page_title' );
+add_filter ( 'single_post_title', 'eme_page_title' );
 
 function eme_filter_the_title($data) {
    if (in_the_loop() && eme_is_events_page()) {
@@ -3106,6 +3105,11 @@ Weblog Editor 2.0
 }
 add_action ( 'init', 'eme_rss' );
 function eme_general_head() {
+   global $wp_query;
+   if (eme_is_single_event_page()) {
+      $event=eme_get_event($wp_query->query_vars ['event_id']);
+      echo '<title>' . eme_replace_placeholders ( "#ESC_TITLE",$event) . '</title>' . "\n";
+   }
    $gmap_is_active = get_option('eme_gmap_is_active' );
    $load_js_in_header = get_option('eme_load_js_in_header' );
    if ($gmap_is_active && $load_js_in_header) {
