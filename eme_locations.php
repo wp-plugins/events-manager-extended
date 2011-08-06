@@ -205,6 +205,7 @@ function eme_locations_edit_layout($location, $message = "") {
         <?php if(get_option('eme_categories_enabled')) :?>
         <div class="form-field">
            <label for="location_category_ids"><?php _e('Category', 'eme') ?></label><br />
+           <br />
            <?php
            $categories = eme_get_categories();
            foreach ( $categories as $category) {
@@ -214,7 +215,7 @@ function eme_locations_edit_layout($location, $message = "") {
                  $selected = "";
               }
            ?>
-           <input type="checkbox" name="location_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?> /><?php echo $category['category_name']; ?><br />
+              <input type="checkbox" name="location_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?> /><?php echo $category['category_name']; ?><br />
            <?php
            }
            ?>
