@@ -732,7 +732,7 @@ add_filter ( 'single_post_title', 'eme_page_title' );
 
 function eme_filter_the_title($data) {
    if (in_the_loop() && eme_is_events_page()) {
-      return eme_event_page_title($data);
+      return eme_page_title($data);
    } else {
       return $data;
    }

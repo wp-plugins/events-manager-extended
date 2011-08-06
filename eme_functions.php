@@ -174,7 +174,7 @@ function eme_get_all_caps() {
 
    foreach ( $wp_roles->role_names as $role=>$name ) {
    	$role_caps = get_role($role);
-        $caps = array_merge($caps, $role_caps->capabilities);
+      $caps = array_merge($caps, $role_caps->capabilities);
    }
 
    $keys = array_keys($caps);
