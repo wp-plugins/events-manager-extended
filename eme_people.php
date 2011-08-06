@@ -241,7 +241,7 @@ function eme_people_table($message="") {
             <thead>
             <tr>
             <th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
-            <th class='manage-column ' scope='col'>Name</th>
+            <th class='manage-column' scope='col'>Name</th>
             <th scope='col'>E-mail</th>
             <th scope='col'>Phone number</th>
             </tr>
@@ -249,7 +249,7 @@ function eme_people_table($message="") {
             <tfoot>
             <tr>
             <th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
-            <th class='manage-column ' scope='col'>Name</th>
+            <th class='manage-column' scope='col'>Name</th>
             <th scope='col'>E-mail</th>
             <th scope='col'>Phone number</th>
             </tr>
