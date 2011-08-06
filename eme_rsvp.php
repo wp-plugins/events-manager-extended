@@ -483,6 +483,8 @@ function eme_bookings_compact_table($event_id) {
    $bookings =  eme_get_bookings_for($event_id);
    $destination = admin_url("edit.php"); 
    $available_seats = eme_get_available_seats($event_id);
+   $approved_seats = eme_get_approved_seats($event_id);
+   $pending_seats = eme_get_pending_seats($event_id);
    $booked_seats = eme_get_booked_seats($event_id);
    $printable_address = admin_url("/admin.php?page=events-manager-people&amp;action=booking_printable&amp;event_id=$event_id");
    $csv_address = admin_url("/admin.php?page=events-manager-people&amp;action=booking_csv&amp;event_id=$event_id");
@@ -501,7 +503,7 @@ function eme_bookings_compact_table($event_id) {
                </thead>
                <tfoot>
                   <tr>
-                     <th scope='row' colspan='2'>".__('Booked spaces','eme').":</th><td class='booking-result' id='booked-seats'>$booked_seats</td></tr>
+                     <th scope='row' colspan='2'>".__('Booked spaces','eme').":</th><td class='booking-result' id='booked-seats'>$booked_seats ($approved_seats ".__('approved','eme').", $pending_seats ".__('pending','eme')."</td></tr>
                   <tr><th scope='row' colspan='2'>".__('Available spaces','eme').":</th><td class='booking-result' id='available-seats'>$available_seats</td>
                   </tr>
                </tfoot>
