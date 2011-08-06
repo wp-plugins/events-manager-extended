@@ -412,14 +412,30 @@ function eme_update_booking_seats($booking_id,$seats) {
 function eme_get_available_seats($event_id) {
    $event = eme_get_event($event_id);
    $available_seats = $event['event_seats'] - eme_get_booked_seats($event_id);
-   return ($available_seats);
+   return $available_seats;
 }
+
 function eme_get_booked_seats($event_id) {
    global $wpdb; 
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
    $sql = "SELECT COALESCE(SUM(booking_seats),0) AS booked_seats FROM $bookings_table WHERE event_id = $event_id"; 
    return $wpdb->get_var($sql);
 }
+
+function eme_get_approved_seats($event_id) {
+   global $wpdb; 
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
+   $sql = "SELECT COALESCE(SUM(booking_seats),0) AS booked_seats FROM $bookings_table WHERE event_id = $event_id and booking_approved=1"; 
+   return $wpdb->get_var($sql);
+}
+
+function eme_get_pending_seats($event_id) {
+   global $wpdb; 
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
+   $sql = "SELECT COALESCE(SUM(booking_seats),0) AS booked_seats FROM $bookings_table WHERE event_id = $event_id and booking_approved=0"; 
+   return $wpdb->get_var($sql);
+}
+
 function eme_are_seats_available_for($event_id, $seats) {
    #$event = eme_get_event($event_id);
    $available_seats = eme_get_available_seats($event_id);
@@ -525,7 +541,7 @@ function eme_bookings_compact_table($event_id) {
    echo $table;
 }
 
-function eme_get_bookings_for($event_ids,$pending=0) {
+function eme_get_bookings_for($event_ids,$pending_approved=0) {
    global $wpdb; 
    $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
    
@@ -538,8 +554,10 @@ function eme_get_bookings_for($event_ids,$pending=0) {
    } else {
       $where="event_id = $event_ids";
    }
-   if ($pending) {
+   if ($pending_approved==1) {
       $sql = "SELECT * FROM $bookings_table WHERE $where AND booking_approved=0";
+   } elseif ($pending_approved==2) {
+      $sql = "SELECT * FROM $bookings_table WHERE $where AND booking_approved=1";
    } else {
       $sql = "SELECT * FROM $bookings_table WHERE $where";
    }
@@ -717,7 +735,7 @@ function eme_registration_seats_form_table($event_id=0) {
    $all_events=eme_get_events(0,"future");
    $events_with_bookings=array();
    foreach ( $all_events as $event ) {
-      if (eme_get_bookings_for($event['event_id'])) {
+      if (eme_get_approved_seats($event['event_id'])>0) {
          $events_with_bookings[]=$event['event_id'];
          $selected = "";
          if ($event_id && ($event['event_id'] == $event_id))
@@ -745,7 +763,7 @@ function eme_registration_seats_form_table($event_id=0) {
      <?php
       $i = 1;
       if ($event_id) {
-         $bookings = eme_get_bookings_for($event_id);
+         $bookings = eme_get_bookings_for($event_id,2);
       } else {
          $bookings = eme_get_bookings_for($events_with_bookings);
       }
@@ -766,6 +784,12 @@ function eme_registration_seats_form_table($event_id=0) {
          <td><strong>
          <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
          </strong>
+         <?php
+             $approved_seats = eme_get_approved_seats($event['event_id']);
+             $pending_seats = eme_get_pending_seats($event['event_id']);
+             $total_seats = $event ['event_seats'];
+             echo "<br />".__('Approved: ','eme' ).$approved_seats.", ".__('Pending: ','eme').$pending_seats.", ".__('Max: ','eme').$total_seats;
+         ?>
          </td>
          <td>
             <?php echo $localised_start_date; if ($localised_end_date !='') echo " - " . $localised_end_date; ?><br />
@@ -855,7 +879,7 @@ function eme_registration_approval_form_table($event_id=0) {
    $all_events=eme_get_events(0,"future");
    $events_with_pending_bookings=array();
    foreach ( $all_events as $event ) {
-      if ($event['registration_requires_approval'] && eme_get_bookings_for($event['event_id'],1)) {
+      if ($event['registration_requires_approval'] && eme_get_pending_seats($event['event_id'])>0) {
          $events_with_pending_bookings[]=$event['event_id'];
          $selected = "";
          if ($event_id && ($event['event_id'] == $event_id))
@@ -904,6 +928,12 @@ function eme_registration_approval_form_table($event_id=0) {
          <td><strong>
          <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
          </strong>
+         <?php
+             $approved_seats = eme_get_approved_seats($event['event_id']);
+             $pending_seats = eme_get_pending_seats($event['event_id']);
+             $total_seats = $event ['event_seats'];
+             echo "<br />".__('Approved: ','eme' ).$approved_seats.", ".__('Pending: ','eme').$pending_seats.", ".__('Max: ','eme').$total_seats;
+         ?>
          </td>
          <td>
             <?php echo $localised_start_date; if ($localised_end_date !='') echo " - " . $localised_end_date; ?><br />
