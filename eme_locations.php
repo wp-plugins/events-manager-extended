@@ -203,9 +203,8 @@ function eme_locations_edit_layout($location, $message = "") {
         </div>
  
         <?php if(get_option('eme_categories_enabled')) :?>
-        <div class="form-field">
+        <div>
            <label for="location_category_ids"><?php _e('Category', 'eme') ?></label><br />
-           <br />
            <?php
            $categories = eme_get_categories();
            foreach ( $categories as $category) {
