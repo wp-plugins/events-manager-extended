@@ -371,7 +371,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                         </div>
 
                         <?php if(get_option('eme_categories_enabled')) :?>
-                           <div class="form-field">
+                           <div>
                            <label for="location_category_ids"><?php _e('Category', 'eme') ?></label><br />
                            <?php
                            $categories = eme_get_categories();
