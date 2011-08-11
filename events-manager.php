@@ -887,7 +887,7 @@ function eme_create_events_submenu () {
 }
 
 function eme_replace_placeholders($format, $event, $target="html") {
-   global $eme_need_gmap_js;
+   global $wp_query, $eme_need_gmap_js;
 
    // some variables we'll use further down more than once
    $current_userid=get_current_user_id();
@@ -1219,6 +1219,21 @@ function eme_replace_placeholders($format, $event, $target="html") {
          } else {
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
+
+      } elseif (preg_match('/#_CALENDAR_DAY/', $result)) {
+         $day_key = $wp_query->query_vars ['calendar_day'];
+         $replacement = date_i18n (get_option('date_format'), strtotime($day_key));
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
+
+      } elseif (preg_match('/#_IS_SINGLE_DAY/', $result)) {
+         if (eme_is_single_day_page())
+            $replacement = 1;
+         else
+            $replacement = 0;
 
       } elseif (preg_match('/#_IS_SINGLE_EVENT/', $result)) {
          if (eme_is_single_event_page())
