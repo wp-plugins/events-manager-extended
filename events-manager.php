@@ -1176,18 +1176,37 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_CONTACTNAME$/', $result)) {
          $contact = eme_get_contact($event);
-         $replacement = $contact->display_name;
+         if ($contact)
+            $replacement = $contact->display_name;
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_CONTACTEMAIL$/', $result)) {
          $contact = eme_get_contact($event);
          // ascii encode for primitive harvesting protection ...
-         $replacement = eme_ascii_encode($contact->user_email);
+         if ($contact)
+            $replacement = eme_ascii_encode($contact->user_email);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_CONTACTPHONE$/', $result)) {
          $contact = eme_get_contact($event);
-         $phone = eme_get_user_phone($contact->ID);
-         // ascii encode for primitive harvesting protection ...
-         $replacement=eme_ascii_encode($phone);
+         if ($contact) {
+            $phone = eme_get_user_phone($contact->ID);
+            // ascii encode for primitive harvesting protection ...
+            $replacement=eme_ascii_encode($phone);
+         }
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_IMAGE$/', $result)) {
          if ($event['location_image_url'] != '')
@@ -1196,6 +1215,11 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_IMAGEURL$/', $result)) {
          if($location['location_image_url'] != '')
             $replacement = $location['location_image_url'];
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/^#[A-Za-z]$/', $result)) {
          // matches all PHP date placeholders for startdate-time

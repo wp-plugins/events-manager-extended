@@ -537,6 +537,9 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: for conditional tags, I added 1 extra shortcode:
   #_IS_SINGLE_DAY ('1' if you're viewing a single day, '0' otherwise)
 * Feature: new shortcode #_CALENDAR_DAY, returning the day being viewed when viewing a specific day on the calendar
+* Feature: added filter to do own email obfuscating: eme_email_filter. If defined, the standard ascii obfuscating won't take place and you can use your own
+  filters, eg. from an obfuscating plugin, if you define it it functions.php:
+  add_filter( 'eme_email_filter', 'c2c_obfuscate_email' );
 * Improvement: the RSVP form now always prefills the name and email if you're logged in, if no WP membership is required you can change the values
 * Improvement: the no-events-message needs to be formatted by the user, not in the code using ul/li constructs
 * Improvement: for format: sometimes people want to give placeholders as options, but when using the shortcode inside another (e.g. when putting [events_list format="#_NAME"] inside the "display single event" setting, the replacement of the placeholders happens too soon (placeholders get replaced first, before any other shortcode is interpreted). So we add the option that people can use "#OTHER" as prefix for any placeholder inside format (like #ESC works)
