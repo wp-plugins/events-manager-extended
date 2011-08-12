@@ -112,7 +112,7 @@ function eme_client_clock_callback() {
 }
 
 // Setting constants
-define('EME_DB_VERSION', 16);
+define('EME_DB_VERSION', 17);
 define('EME_PLUGIN_URL', plugins_url('',plugin_basename(__FILE__)).'/'); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -617,6 +617,10 @@ function eme_create_locations_table($charset,$collate) {
          location_description text DEFAULT NULL,
          location_author mediumint(9) DEFAULT 0,
          location_category_ids text default NULL,
+         location_creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         location_creation_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         location_modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         location_modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          UNIQUE KEY (location_id)
          ) $charset $collate;";
       dbDelta($sql);
@@ -630,6 +634,10 @@ function eme_create_locations_table($charset,$collate) {
    } else {
       maybe_add_column($table_name, 'location_author', "alter table $table_name add location_author mediumint(9) DEFAULT 0;"); 
       maybe_add_column($table_name, 'location_category_ids', "alter table $table_name add location_category_ids text DEFAULT NULL;"); 
+      maybe_add_column($table_name, 'location_creation_date', "alter table $table_name add creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'location_creation_date_gmt', "alter table $table_name add creation_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'location_modif_date', "alter table $table_name add modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'location_modif_date_gmt', "alter table $table_name add modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       if ($db_version<3) {
          $wpdb->query("ALTER TABLE $table_name MODIFY location_name text NOT NULL ;");
       }

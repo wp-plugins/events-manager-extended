@@ -2564,7 +2564,6 @@ function eme_event_form($event, $title, $element) {
 
 function eme_validate_event($event) {
    // Only for emergencies, when JS is disabled
-   // TODO make it fully functional without JS
    global $required_fields;
    $errors = Array ();
    foreach ( $required_fields as $field ) {

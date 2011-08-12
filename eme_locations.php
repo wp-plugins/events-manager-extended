@@ -597,10 +597,16 @@ function eme_update_location($location) {
    // we can't check the return code for wpdb->update,
    // since sometimes the update returns 0 because of no rows
    // updated (eg, when you just add an image)
-   // TODO: add modif timestamps, so that changes for each update,
+   // DONE: add modif timestamps, so that changes for each update,
    // and then we can check for the return code again (as for events)
-   $wpdb->update ( $table_name, $location, $where );
-   return true;
+   $location['location_modif_date']=current_time('mysql', false);
+   $location['location_modif_date_gmt']=current_time('mysql', true);
+   if (!$wpdb->update ( $table_name, $location, $where )) {
+      $wpdb->print_error();
+      return false;
+   } else {
+      return true;
+   }
 }
 
 function eme_insert_location($location) {
@@ -611,6 +617,12 @@ function eme_insert_location($location) {
       $location['location_longitude'] = 0;
    if (empty($location['location_latitude']))
       $location['location_latitude'] = 0;
+
+   $location['location_creation_date']=current_time('mysql', false);
+   $location['location_modif_date']=current_time('mysql', false);
+   $location['location_creation_date_gmt']=current_time('mysql', true);
+   $location['location_modif_date_gmt']=current_time('mysql', true);
+
    $wpdb->show_errors(true);
    if (!$wpdb->insert($table_name,$location)) {
       $wpdb->print_error();
