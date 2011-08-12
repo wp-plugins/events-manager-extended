@@ -4,7 +4,7 @@ $feedback_message = "";
 function eme_locations_page() {
    $current_userid=get_current_user_id();
    if (isset($_GET['action']) && $_GET['action'] == "edit") { 
-      $location_id = $_GET['location_ID'];
+      $location_id = intval($_GET['location_ID']);
       $location = eme_get_location($location_id);
       if (current_user_can( get_option('eme_cap_edit_locations')) ||
              (current_user_can( get_option('eme_cap_author_locations')) && ($location['location_author']==$current_userid))) {
@@ -17,11 +17,11 @@ function eme_locations_page() {
       }
    } elseif (isset($_POST['action']) && $_POST['action'] == "delete") { 
       $locations = $_POST['locations'];
-      foreach($locations as $location_ID) {
-         $location = eme_get_location($location_id);
+      foreach($locations as $location_id) {
+         $location = eme_get_location(intval($location_id));
          if (current_user_can( get_option('eme_cap_edit_locations')) ||
                (current_user_can( get_option('eme_cap_author_locations')) && ($location['location_author']==$current_userid))) {
-            eme_delete_location($location_ID);
+            eme_delete_location(intval($location_id));
          }
       }
       $locations = eme_get_locations();

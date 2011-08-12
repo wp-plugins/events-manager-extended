@@ -547,3 +547,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: canceled registrations reported the wrong number of seats cancelled in the mail
 * Bugfix: fix a mysql warning which wasn't one when updating a location without changing anything (wpdb->update returns 0 because 0 rows changed)
 * Bugfix: for the delete booking form, name of wordpress logged in users wasn't pre-filled
+* Bugfix: fixing a bug with quotes in category names

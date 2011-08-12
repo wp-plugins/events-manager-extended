@@ -34,7 +34,7 @@ function eme_is_events_page() {
    }
 }
 
-function eme_is_single_event_page() {
+function eme_is_single_day_page() {
    global $wp_query;
    return (eme_is_events_page () && (isset ( $wp_query->query_vars ['calendar_day'] ) && $wp_query->query_vars ['calendar_day'] != ''));
 }

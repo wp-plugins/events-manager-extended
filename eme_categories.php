@@ -16,8 +16,8 @@ function eme_categories_subpanel() {
       if (isset($_POST['action']) && $_POST['action'] == "edit" ) {
          // category update required  
          $category = array();
-         $category['category_name'] = $_POST['category_name'];
-         $validation_result = $wpdb->update( $categories_table, $category, array('category_id' => $_POST['category_ID']) );
+         $category['category_name'] = trim(stripslashes($_POST['category_name']));
+         $validation_result = $wpdb->update( $categories_table, $category, array('category_id' => intval($_POST['category_ID'])) );
       } elseif ( isset($_POST['action']) && $_POST['action'] == "add" ) {
          // Add a new category
          $category = array();
@@ -179,7 +179,7 @@ function eme_categories_edit_layout($message = "") {
          <table class='form-table'>
             <tr class='form-field form-required'>
                <th scope='row' valign='top'><label for='category_name'>".__('Category name', 'eme')."</label></th>
-               <td><input name='category_name' id='category-name' type='text' value='".$category['category_name']."' size='40'  /><br />
+               <td><input name='category_name' id='category-name' type='text' value='".eme_sanitize_html($category['category_name'])."' size='40'  /><br />
                  ".__('The name of the category', 'eme')."</td>
             </tr>
          </table>
