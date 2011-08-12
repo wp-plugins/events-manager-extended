@@ -544,7 +544,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: AND categories for [events_list] were no longer working and resulted in all categories being used
 * Bugfix: some filtering fixes in admin panel
 * Bugfix: scope=this_week/next_week now takes the "start day of week" WP setting into account
-* Bugfix: canceled registrations reported the wrong number of seats cancelled in the mail
+* Bugfix: cancelled registrations reported the wrong number of seats cancelled in the mail
 * Bugfix: fix a mysql warning which wasn't one when updating a location without changing anything (wpdb->update returns 0 because 0 rows changed)
 * Bugfix: for the delete booking form, name of wordpress logged in users wasn't pre-filled
 * Bugfix: fixing a bug with quotes in category names
