@@ -208,6 +208,7 @@ function eme_cancel_seats($event) {
          $result = __('Booking delete failed', 'eme');
       } else {
          $result = __('Booking deleted', 'eme');
+         $mailing_is_active = get_option('eme_rsvp_mail_notify_is_active');
          if($mailing_is_active) {
             eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$booker['person_phone'],$booked_seats,"","cancelRegistration");
          } 
