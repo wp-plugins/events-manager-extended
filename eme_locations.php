@@ -39,6 +39,7 @@ function eme_locations_page() {
          $location['location_latitude'] = $_POST['location_latitude'];
          $location['location_longitude'] = $_POST['location_longitude'];
          $location['location_description'] = stripslashes($_POST['content']);
+         $location['location_url'] = isset($_POST ['location_url']) ? eme_strip_tags ( $_POST ['location_url'] ) : '';
          // we don't change the author
          //$location['location_author'] = $current_userid;
          if (isset ($_POST['location_category_ids'])) {
@@ -94,6 +95,7 @@ function eme_locations_page() {
          $location['location_longitude'] = $_POST['location_longitude'];
          $location['location_description'] = stripslashes($_POST['content']);
          $location['location_author'] = $current_userid;
+         $location['location_url'] = isset($_POST ['location_url']) ? eme_strip_tags ( $_POST ['location_url'] ) : '';
          if (isset ($_POST['location_category_ids'])) {
             // the category id's need to begin and end with a comma
             // this is needed so we can later search for a specific
@@ -244,6 +246,11 @@ function eme_locations_edit_layout($location, $message = "") {
                <?php _e('A description of the Location. You may include any kind of info here.', 'eme') ?>
             </div>
          </div>
+         <div class="form-field">
+            <label for="location_url" ><?php _e ( 'External link', 'eme' ); ?></label>
+            <input name="location_url" id="location_url" type="text" value="<?php echo eme_sanitize_html($location['location_url']); ?>" size="40"  />
+            <p><?php _e ( 'If this is filled in, the single event URL will point to this url instead of the standard event page.', 'eme' )?></p>
+         </div>
          <p class="submit"><input type="submit" class="button-primary" name="submit" value="<?php _e('Update location', 'eme') ?>" /></p>
 
          </form>
@@ -262,6 +269,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
       $new_location['location_longitude'] = '';
       $new_location['location_description'] = '';
       $new_location['location_category_ids'] = '';
+      $new_location['location_url'] = '';
    }
 
    ob_start();
@@ -406,6 +414,11 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                                  <?php _e('A description of the Location. You may include any kind of info here.', 'eme') ?>
                               </div>
                            </div>
+         <div class="form-field">
+            <label for="location_url" ><?php _e ( 'External link', 'eme' ); ?></label>
+            <input name="location_url" id="location_url" type="text" value="<?php echo eme_sanitize_html($new_location['location_url']); ?>" size="40"  />
+            <p><?php _e ( 'If this is filled in, the single event URL will point to this url instead of the standard event page.', 'eme' )?></p>
+         </div>
                          <p class="submit"><input type="submit" class="button" name="submit" value="<?php _e('Add location', 'eme') ?>" /></p>
                       </form>
 

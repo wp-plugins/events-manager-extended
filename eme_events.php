@@ -221,7 +221,7 @@ function eme_events_subpanel() {
       $event ['event_single_event_format'] = isset($_POST ['event_single_event_format']) ? stripslashes ( $_POST ['event_single_event_format'] ) : '';
       $event ['event_contactperson_email_body'] = isset($_POST ['event_contactperson_email_body']) ? stripslashes ( $_POST ['event_contactperson_email_body'] ) : '';
       $event ['event_respondent_email_body'] = isset($_POST ['event_respondent_email_body']) ? stripslashes ( $_POST ['event_respondent_email_body'] ) : '';
-      $event ['event_url'] = isset($_POST ['event_url']) ? stripslashes ( $_POST ['event_url'] ) : '';
+      $event ['event_url'] = isset($_POST ['event_url']) ? eme_strip_tags ( $_POST ['event_url'] ) : '';
       if (isset ($_POST['event_category_ids'])) {
          // the category id's need to begin and end with a comma
          // this is needed so we can later search for a specific
