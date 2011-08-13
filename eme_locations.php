@@ -456,6 +456,7 @@ function eme_get_locations($eventful = false, $scope="all", $category = '', $off
                $this_location['location_longitude'] = $event['location_longitude'];
                $this_location['location_description'] = $event['location_description'];
                $this_location['location_category_ids'] = $event['location_category_ids'];
+               $this_location['location_url'] = $event['location_url'];
                $locations[$location_id]=$this_location;
             }
          }
@@ -519,6 +520,7 @@ function eme_get_location($location_id=0) {
       $location ['location_latitude']='';
       $location ['location_longitude']='';
       $location ['location_image_url']='';
+      $location ['location_url']='';
    } else {
       $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
       $sql = "SELECT * FROM $locations_table WHERE location_id ='$location_id'";

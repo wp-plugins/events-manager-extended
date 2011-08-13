@@ -53,7 +53,8 @@ function eme_new_event_page() {
       "location_town" => '',
       "location_latitude" => '',
       "location_longitude" => '',
-      "location_image_url" => ''
+      "location_image_url" => '',
+      "location_url" => ''
    );
    eme_event_form ($event, $title, '');
 }
