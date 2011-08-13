@@ -1223,8 +1223,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
               $replacement = "<img src='".$event['location_image_url']."' alt='".$event['location_name']."'/>";
 
       } elseif (preg_match('/#_IMAGEURL$/', $result)) {
-         if($location['location_image_url'] != '')
-            $replacement = $location['location_image_url'];
+         if($event['location_image_url'] != '')
+            $replacement = $event['location_image_url'];
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
