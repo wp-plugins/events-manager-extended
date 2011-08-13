@@ -553,3 +553,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: for the delete booking form, name of wordpress logged in users wasn't pre-filled
 * Bugfix: fixing a bug with quotes in category names
 * Bugfix: cancel emails were not being sent
+* Bugfix: #_IMAGEURL didn't return the location image url for events (it worked ok for locations itself)
