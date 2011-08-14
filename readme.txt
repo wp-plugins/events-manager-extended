@@ -534,6 +534,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: locations now also have an author, and people can have the right to add, edit own or edit all locations
 * Feature: #_CATEGORIES for locations now returns the categories a location is in (as for events)
 * Feature: new option link_showperiod for shortcode [events_list]: if showperiod=daily and link_showperiod=1, then the shown days are links that will go to events for just that day
+* Feature: new option notcategory for shortcode [events_list]: works as the category option but serves to exclude categories
 * Feature: for conditional tags, I added 1 extra shortcode:
   #_IS_SINGLE_DAY ('1' if you're viewing a single day, '0' otherwise)
 * Feature: new shortcode #_CALENDAR_DAY, returning the day being viewed when viewing a specific day on the calendar

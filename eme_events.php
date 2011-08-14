@@ -429,7 +429,7 @@ function eme_events_subpanel() {
          $extra_conditions = '';
       }
  
-      $events = eme_get_events ( $list_limit+1, $scope, $order, $offset, "", $category, '', '', 1, $extra_conditions);
+      $events = eme_get_events ( $list_limit+1, $scope, $order, $offset, "", $category, '', '', 1, '', $extra_conditions);
       eme_events_table ( $events, $list_limit, $title, $scope, $offset, $category );
    }
 }
@@ -812,7 +812,7 @@ add_filter ( 'get_pages', 'eme_filter_get_pages' );
 
 // exposed function, for theme  makers
    //Added a category option to the get events list method and shortcode
-function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "", $user_registered_only = 0, $show_ongoing=1, $link_showperiod=0) {
+function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format = '', $echo = 1, $category = '',$showperiod = '', $long_events = 0, $author = '', $contact_person='', $paging=0, $location_id = "", $user_registered_only = 0, $show_ongoing=1, $link_showperiod=0, $notcategory = '') {
    global $post;
    if ($limit === "") {
       $limit = get_option('eme_event_list_number_items' );
@@ -820,7 +820,7 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
    if (strpos ( $limit, "=" )) {
       // allows the use of arguments without breaking the legacy code
       $eme_event_list_number_events=get_option('eme_event_list_number_items' );
-      $defaults = array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', 'paging'=>0, 'long_events' => 0, 'location_id' => 0, 'show_ongoing' => 1, 'link_showperiod' => 0);
+      $defaults = array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'echo' => 1 , 'category' => '', 'showperiod' => '', $author => '', $contact_person => '', 'paging'=>0, 'long_events' => 0, 'location_id' => 0, 'show_ongoing' => 1, 'link_showperiod' => 0, 'notcategory' => '');
       $r = wp_parse_args ( $limit, $defaults );
       extract ( $r );
       $echo = (bool) $r ['echo'];
@@ -936,9 +936,9 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
    }
    // We request $limit+1 events, so we know if we need to show the pagination link or not.
    if ($limit==0) {
-      $events = eme_get_events ( 0, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $show_ongoing, $extra_conditions );
+      $events = eme_get_events ( 0, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $show_ongoing, $notcategory, $extra_conditions );
    } else {
-      $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $show_ongoing, $extra_conditions );
+      $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $show_ongoing, $notcategory, $extra_conditions );
    }
    $events_count=count($events);
 
@@ -948,7 +948,7 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
       // for normal paging and there're no events, we go back to offset=0 and try again
       if ($events_count==0) {
          $offset=0;
-         $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $show_ongoing, $extra_conditions );
+         $events = eme_get_events ( $limit+1, $scope, $order, $offset, $location_id, $category, $author, $contact_person, $show_ongoing, $notcategory, $extra_conditions );
          $events_count=count($events);
       }
       $prev_text=__('Previous page','eme');
@@ -1121,7 +1121,7 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
 
 function eme_get_events_list_shortcode($atts) {
    $eme_event_list_number_events=get_option('eme_event_list_number_items' );
-   extract ( shortcode_atts ( array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0, 'user_registered_only' => 0, 'show_ongoing' => 1, 'link_showperiod' => 0 ), $atts ) );
+   extract ( shortcode_atts ( array ('limit' => $eme_event_list_number_events, 'scope' => 'future', 'order' => 'ASC', 'format' => '', 'category' => '', 'showperiod' => '', 'author' => '', 'contact_person' => '', 'paging' => 0, 'long_events' => 0, 'location_id' => 0, 'user_registered_only' => 0, 'show_ongoing' => 1, 'link_showperiod' => 0, 'notcategory' => '' ), $atts ) );
 
    // the filter list overrides the settings
    if (isset($_REQUEST['eme_eventAction']) && $_REQUEST['eme_eventAction'] == 'filter') {
@@ -1156,7 +1156,7 @@ function eme_get_events_list_shortcode($atts) {
    // shortcode is interpreted). So we add the option that people can use "#OTHER_", and we replace this with
    // "#_" here
    $format = preg_replace('/#OTHER/', "#", $format);
-   $result = eme_get_events_list ( $limit,$scope,$order,$format,0,$category,$showperiod,$long_events,$author,$contact_person,$paging,$location_id,$user_registered_only,$show_ongoing,$link_showperiod );
+   $result = eme_get_events_list ( $limit,$scope,$order,$format,0,$category,$showperiod,$long_events,$author,$contact_person,$paging,$location_id,$user_registered_only,$show_ongoing,$link_showperiod,$notcategory );
    return $result;
 }
 add_shortcode ( 'events_list', 'eme_get_events_list_shortcode' );
@@ -1232,7 +1232,7 @@ function eme_count_events_newer_than($scope) {
 }
 
 // main function querying the database event table
-function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = "", $author = "", $contact_person = "",  $show_ongoing=1, $extra_conditions = "") {
+function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset = 0, $location_id = "", $category = "", $author = "", $contact_person = "",  $show_ongoing=1, $notcategory = "", $extra_conditions = "") {
    global $wpdb, $wp_query;
 
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
@@ -1549,7 +1549,7 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
          if ($category>0)
             $conditions [] = " FIND_IN_SET($category,event_category_ids)";
       } elseif ($category == "none") {
-         $conditions [] = "event_category_ids=''";
+         $conditions [] = "event_category_ids = ''";
       } elseif ( preg_match('/,/', $category) ) {
          $category = explode(',', $category);
          $category_conditions = array();
@@ -1557,7 +1557,7 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
             if (is_numeric($cat) && $cat>0) {
                $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
             } elseif ($cat == "none") {
-               $category_conditions[] = " event_category_ids=''";
+               $category_conditions[] = " event_category_ids = ''";
             }
          }
          $conditions [] = "(".implode(' OR', $category_conditions).")";
@@ -1567,6 +1567,34 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
          foreach ($category as $cat) {
             if (is_numeric($cat) && $cat>0)
                $category_conditions[] = " FIND_IN_SET($cat,event_category_ids)";
+         }
+         $conditions [] = "(".implode(' AND ', $category_conditions).")";
+      }
+   }
+
+   if (get_option('eme_categories_enabled')) {
+      if (is_numeric($notcategory)) {
+         if ($notcategory>0)
+            $conditions [] = " NOT FIND_IN_SET($notcategory,event_category_ids)";
+      } elseif ($notcategory == "none") {
+         $conditions [] = "event_category_ids != ''";
+      } elseif ( preg_match('/,/', $notcategory) ) {
+         $notcategory = explode(',', $notcategory);
+         $category_conditions = array();
+         foreach ($notcategory as $cat) {
+            if (is_numeric($cat) && $cat>0) {
+               $category_conditions[] = " NOT FIND_IN_SET($cat,event_category_ids)";
+            } elseif ($cat == "none") {
+               $category_conditions[] = " event_category_ids != ''";
+            }
+         }
+         $conditions [] = "(".implode(' OR', $category_conditions).")";
+      } elseif ( preg_match('/\+/', $notcategory) ) {
+         $notcategory = explode('+', $notcategory);
+         $category_conditions = array();
+         foreach ($notcategory as $cat) {
+            if (is_numeric($cat) && $cat>0)
+               $category_conditions[] = " NOT FIND_IN_SET($cat,event_category_ids)";
          }
          $conditions [] = "(".implode(' AND ', $category_conditions).")";
       }
