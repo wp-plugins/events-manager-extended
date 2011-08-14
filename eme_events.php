@@ -128,7 +128,13 @@ function eme_events_subpanel() {
          if (current_user_can( get_option('eme_cap_edit_events')) ||
              (current_user_can( get_option('eme_cap_author_event')) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
             if ($tmp_event['recurrence_id']>0) {
-               eme_remove_recurrence ( $tmp_event['recurrence_id'] );
+               # if the event is part of a recurrence and it is the last event of the recurrence, delete the recurrence
+               # else just delete the singe event
+               if (eme_recurrence_count($tmp_event['recurrence_id'])==1) {
+                  eme_remove_recurrence ( $tmp_event['recurrence_id'] );
+               } else {
+                  eme_db_delete_event ( $tmp_event );
+               }
             } else {
                eme_db_delete_event ( $tmp_event );
             }
@@ -138,6 +144,17 @@ function eme_events_subpanel() {
       $events = eme_get_events ( $list_limit+1, "future", $order, $offset );
       eme_events_table ( $events, $list_limit, __ ( 'Future events', 'eme' ), "future", $offset );
    }
+   if ($action == 'deleteRecurrence') {
+      foreach ( $selectedEvents as $event_ID ) {
+         $tmp_event = array();
+         $tmp_event = eme_get_event ( $event_ID );
+         if (current_user_can( get_option('eme_cap_edit_events')) ||
+             (current_user_can( get_option('eme_cap_author_event')) && ($tmp_event['event_author']==$current_userid || $tmp_event['event_contactperson_id']==$current_userid))) {  
+            if ($tmp_event['recurrence_id']>0) {
+               eme_remove_recurrence ( $tmp_event['recurrence_id'] );
+            }
+         }
+      }
 
    // UPDATE or CREATE action
    if ($action == 'update_event' || $action == 'update_recurrence') {
@@ -1779,7 +1796,8 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
    <div class="alignleft actions">
    <select name="action">
    <option value="-1" selected="selected"><?php _e ( 'Bulk Actions' ); ?></option>
-   <option value="deleteEvents"><?php _e ( 'Delete selected','eme' ); ?></option>
+   <option value="deleteEvents"><?php _e ( 'Delete selected events','eme' ); ?></option>
+   <option value="deleteRecurrence"><?php _e ( 'Delete selected recurrent events','eme' ); ?></option>
    </select>
    <input type="submit" value="<?php _e ( 'Apply' ); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
    <select name="scope">

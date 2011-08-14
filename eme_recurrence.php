@@ -325,6 +325,14 @@ function eme_get_recurrence_desc($recurrence_id) {
    return  $output;
 }
 
+function eme_recurrence_count($recurrence_id) {
+   # return the number of events for an recurrence
+   global $wpdb;
+   $events_table = $wpdb->prefix.EVENTS_TBNAME;
+   $sql = "SELECT COUNT(*) from $events_table WHERE recurrence_id='".$recurrence_id."'";
+   return $wpdb->get_var($sql);
+}
+
 function eme_iso_N_date_value($date) {
    // date("N", $cycle_date)
    $n = date("w", $date);
