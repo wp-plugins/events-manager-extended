@@ -586,6 +586,14 @@ function eme_options_subpanel() {
    ?>
 </table>
 
+<h3><?php _e ( 'Extra html headers', 'eme' ); ?></h3>
+<table class="form-table">
+   <?php
+   eme_options_textarea ( __ ( 'Extra event html headers', 'eme' ), 'eme_event_html_headers_format', __ ( 'Here you can define extra html headers when viewing a single event, typically used to add meta tags for facebook or SEO. All event placeholders can be used, but will be stripped from resulting html.', 'eme' ) );
+   eme_options_textarea ( __ ( 'Extra location html headers', 'eme' ), 'eme_location_html_headers_format', __ ( 'Here you can define extra html headers when viewing a single location, typically used to add meta tags for facebook or SEO. All location placeholders can be used, but will be stripped from resulting html.', 'eme' ) );
+   ?>
+</table>
+
 <p class="submit"><input type="submit" id="eme_options_submit" name="Submit" value="<?php _e ( 'Save Changes' )?>" /></p>
    <?php
    settings_fields ( 'eme-options' );
@@ -3106,17 +3114,37 @@ Weblog Editor 2.0
 add_action ( 'init', 'eme_rss' );
 function eme_general_head() {
    global $wp_query;
-   // TODO: add code for meta tags here
    if (eme_is_single_event_page()) {
       $event=eme_get_event($wp_query->query_vars ['event_id']);
+      // I don't know if the canonical rel-link is needed, but since WP adds it by default ...
       $canon_url=eme_event_url($event);
       echo "<link rel=\"canonical\" href=\"$canon_url\" />\n";
-   //   $description = eme_replace_placeholders ( $description_format, $event, "rss" );
-   //   echo '<meta name="description" content="$description">';
+      $extra_headers_format=get_option('eme_event_html_headers_format');
+      if ($extra_headers_format != "") {
+         $extra_headers_lines = explode ("\n",$extra_headers_format);
+         foreach ($extra_headers_lines as $extra_header_format) {
+            # the RSS format already removes most of html code, so let's use that
+            $extra_header = eme_replace_placeholders ($extra_header_format, $event, "rss" );
+            # the RSS format converts \n to \r\n but we want one line only
+            $extra_header = preg_replace('/\r\n/', "", $extra_header);
+            echo $extra_header."\n";
+         }
+      }
    } elseif (eme_is_single_location_page()) {
       $location=eme_get_location($wp_query->query_vars ['location_id']);
       $canon_url=eme_location_url($location);
       echo "<link rel=\"canonical\" href=\"$canon_url\" />\n";
+      $extra_headers_format=get_option('eme_location_html_headers_format');
+      if ($extra_headers_format != "") {
+         $extra_headers_lines = explode ("\n",$extra_headers_format);
+         foreach ($extra_headers_lines as $extra_header_format) {
+            # the RSS format already removes most of html code, so let's use that
+            $extra_header = eme_replace_locations_placeholders ($extra_header_format, $location, "rss" );
+            # the RSS format converts \n to \r\n but we want one line only
+            $extra_header = preg_replace('/\r\n/', "", $extra_header);
+            echo $extra_header."\n";
+         }
+      }
    }
    $gmap_is_active = get_option('eme_gmap_is_active' );
    $load_js_in_header = get_option('eme_load_js_in_header' );
