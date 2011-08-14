@@ -3127,7 +3127,8 @@ function eme_general_head() {
             $extra_header = eme_replace_placeholders ($extra_header_format, $event, "rss" );
             # the RSS format converts \n to \r\n but we want one line only
             $extra_header = preg_replace('/\r\n/', "", $extra_header);
-            echo $extra_header."\n";
+            if ($extra_header != "")
+               echo $extra_header."\n";
          }
       }
    } elseif (eme_is_single_location_page()) {
@@ -3142,7 +3143,8 @@ function eme_general_head() {
             $extra_header = eme_replace_locations_placeholders ($extra_header_format, $location, "rss" );
             # the RSS format converts \n to \r\n but we want one line only
             $extra_header = preg_replace('/\r\n/', "", $extra_header);
-            echo $extra_header."\n";
+            if ($extra_header != "")
+               echo $extra_header."\n";
          }
       }
    }
