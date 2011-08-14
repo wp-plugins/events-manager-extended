@@ -155,6 +155,7 @@ function eme_events_subpanel() {
             }
          }
       }
+   }
 
    // UPDATE or CREATE action
    if ($action == 'update_event' || $action == 'update_recurrence') {
