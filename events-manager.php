@@ -205,10 +205,11 @@ add_filter('eme_notes', 'convert_chars');
 add_filter('eme_notes', 'wpautop');
 add_filter('eme_notes', 'prepend_attachment');
 // RSS general filters
-add_filter('eme_general_rss', 'strip_tags');
+add_filter('eme_general_rss', 'wp_strip_all_tags');
 add_filter('eme_general_rss', 'ent2ncr', 8);
 //add_filter('eme_general_rss', 'esc_html');
 // RSS content filter
+add_filter('eme_notes_rss', 'wp_strip_all_tags');
 add_filter('eme_notes_rss', 'convert_chars', 8);
 add_filter('eme_notes_rss', 'ent2ncr', 8);
 
@@ -1009,10 +1010,18 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $replacement = "$hour:$minute $AMorPM";
 
       } elseif (preg_match('/#_MAP$/', $result)) {
-         $replacement = eme_single_location_map($event);
+         if ($target == "rss") {
+            $replacement = "";
+         } else {
+            $replacement = eme_single_location_map($event);
+         }
 
       } elseif (preg_match('/#_DIRECTIONS$/', $result)) {
-         $replacement = eme_add_directions_form($event);
+         if ($target == "rss") {
+            $replacement = "";
+         } else {
+            $replacement = eme_add_directions_form($event);
+         }
 
       } elseif (preg_match('/#_EVENTS_FILTERFORM$/', $result)) {
          if ($target == "rss" || eme_is_single_event_page()) {
@@ -1076,13 +1085,28 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_LINKEDNAME$/', $result)) {
          $event_link = eme_event_url($event);
          $replacement="<a href='$event_link' title='".eme_trans_sanitize_html($event['event_name'])."'>".eme_trans_sanitize_html($event['event_name'])."</a>";
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_ICALLINK$/', $result)) {
          $url = site_url ("/?eme_ical=public_single&amp;event_id=".$event['event_id']);
          $replacement = "<a href='$url'>ICAL</a>";
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_ICALURL$/', $result)) {
          $replacement = site_url ("/?eme_ical=public_single&amp;event_id=".$event['event_id']);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_EVENTPAGEURL\[(.+)\]/', $result, $matches)) {
          $events_page_link = eme_get_events_page(true, false);
@@ -1091,9 +1115,19 @@ function eme_replace_placeholders($format, $event, $target="html") {
          else
             $joiner = "?";
          $replacement = $events_page_link.$joiner."event_id=".intval($matches[1]);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_EVENTPAGEURL/', $result)) {
          $replacement = eme_event_url($event);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_NAME$/', $result)) {
          $field = "event_name";
@@ -1117,6 +1151,11 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_LOCATIONPAGEURL$/', $result)) { 
          $replacement = eme_location_url($event);
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_EVENTID$/', $result)) {
          $field = "event_id";

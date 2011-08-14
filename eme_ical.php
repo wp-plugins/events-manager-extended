@@ -10,6 +10,8 @@ function eme_ical_single_event($event, $title_format, $description_format) {
    // no html tags allowed in ical, but we can convert br to escaped newlines to maintain readable output
    $description = strip_tags(preg_replace('/<br(\s+)?\/?>/i', "\\n", $description));
    $location = eme_replace_placeholders ( "#_LOCATION, #_ADDRESS, #_TOWN", $event, "rss" );
+   $location = strip_tags($location);
+
    $event_link = eme_event_url($event);
    $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
    $dtstartdate=date_i18n("Ymd",$startstring);
