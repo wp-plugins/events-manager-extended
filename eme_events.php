@@ -3107,12 +3107,17 @@ add_action ( 'init', 'eme_rss' );
 function eme_general_head() {
    global $wp_query;
    // TODO: add code for meta tags here
-   //if (eme_is_single_event_page()) {
-   //   $event=eme_get_event($wp_query->query_vars ['event_id']);
+   if (eme_is_single_event_page()) {
+      $event=eme_get_event($wp_query->query_vars ['event_id']);
+      $canon_url=eme_event_url($event);
+      echo "<link rel=\"canonical\" href=\"$canon_url\" />\n";
    //   $description = eme_replace_placeholders ( $description_format, $event, "rss" );
    //   echo '<meta name="description" content="$description">';
-   //} elseif (eme_is_single_location_page()) {
-   //}
+   } elseif (eme_is_single_location_page()) {
+      $location=eme_get_location($wp_query->query_vars ['location_id']);
+      $canon_url=eme_location_url($location);
+      echo "<link rel=\"canonical\" href=\"$canon_url\" />\n";
+   }
    $gmap_is_active = get_option('eme_gmap_is_active' );
    $load_js_in_header = get_option('eme_load_js_in_header' );
    if ($gmap_is_active && $load_js_in_header) {
@@ -3123,6 +3128,14 @@ function eme_general_head() {
    }
 }
 add_action ( 'wp_head', 'eme_general_head' );
+
+function eme_change_canonical_url() {
+   if (eme_is_single_event_page() || eme_is_single_location_page()) {
+      remove_action( 'wp_head', 'rel_canonical' );
+   }
+}
+add_action( 'template_redirect', 'eme_change_canonical_url' );
+
 
 function eme_general_css() {
    $eme_css_url= EME_PLUGIN_URL."events_manager.css";
