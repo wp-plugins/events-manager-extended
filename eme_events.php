@@ -3126,7 +3126,7 @@ function eme_general_head() {
             # the RSS format already removes most of html code, so let's use that
             $extra_header = eme_replace_placeholders ($extra_header_format, $event, "rss" );
             # the RSS format converts \n to \r\n but we want one line only
-            $extra_header = preg_replace('/\r\n/', "", $extra_header);
+            $extra_header = trim(preg_replace('/\r\n/', "", $extra_header));
             if ($extra_header != "")
                echo $extra_header."\n";
          }
@@ -3142,7 +3142,7 @@ function eme_general_head() {
             # the RSS format already removes most of html code, so let's use that
             $extra_header = eme_replace_locations_placeholders ($extra_header_format, $location, "rss" );
             # the RSS format converts \n to \r\n but we want one line only
-            $extra_header = preg_replace('/\r\n/', "", $extra_header);
+            $extra_header = trim(preg_replace('/\r\n/', "", $extra_header));
             if ($extra_header != "")
                echo $extra_header."\n";
          }
