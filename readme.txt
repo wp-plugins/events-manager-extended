@@ -554,4 +554,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: fixing a bug with quotes in category names
 * Bugfix: cancel emails were not being sent
 * Bugfix: #_IMAGEURL didn't return the location image url for events (it worked ok for locations itself)
-* Bugfix: wordpress inserts canonical url's since 3.0, but these point to the page url. Fixed so the correct canonical url is inserted.
+* Bugfix: wordpress inserts canonical url's since 3.0, but these point to the page url. Fixed so the correct canonical url is inserted for single locations or events.
