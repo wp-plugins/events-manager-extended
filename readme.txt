@@ -544,6 +544,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: locations now also can point to an external url, as events can already
 * Feature: extra html headers can now be added, usefull for e.g. meta tags for facebook or seo
 * Feature: now you can delete events of an recurrence or the whole recurrence (no longer needed to take an event out of an recurrence before being able to delete just that event)
+* Feature: the permalink prefix for events and locations can now be changed in the settings page. After each change, you need to press save on the wordpress permalinks settings page before changes take effect.
 * Improvement: the RSVP form now always prefills the name and email if you're logged in, if no WP membership is required you can change the values
 * Improvement: the no-events-message needs to be formatted by the user, not in the code using ul/li constructs
 * Improvement: for format: sometimes people want to give placeholders as options, but when using the shortcode inside another (e.g. when putting [events_list format="#_NAME"] inside the "display single event" setting, the replacement of the placeholders happens too soon (placeholders get replaced first, before any other shortcode is interpreted). So we add the option that people can use "#OTHER" as prefix for any placeholder inside format (like #ESC works)

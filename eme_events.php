@@ -469,13 +469,22 @@ function eme_options_subpanel() {
    eme_options_radio_binary ( __ ( 'Use attributes?' ), 'eme_attributes_enabled', __ ( 'Select yes to enable the attributes feature.','eme' ) );
    eme_options_radio_binary ( __ ( 'Enable Google Maps integration?' ), 'eme_gmap_is_active', __ ( 'Check this option to enable Google Map integration.','eme' ) );
    eme_options_radio_binary ( __ ( 'Enable map scroll-wheel zooming?' ), 'eme_gmap_zooming', __ ( 'Yes, enables map scroll-wheel zooming. No, enables scroll-wheel page scrolling over maps. (It will be necessary to refresh your web browser on a map page to see the effect of this change.)', 'eme' ) );
-   eme_options_radio_binary ( __ ( 'Enable event permalinks if possible?' ), 'eme_seo_permalink', __ ( 'If Yes, EME will render SEO permalinks if permalinks are activated.', 'eme' ) . "<br \>" . __ ( 'In some cases it will be necessary to click \'Save Changes\' on the  WordPress \'Settings/Permalinks\' page and to refresh your web browser on website pages before you will see the effect of this change.','eme' ));
    eme_options_radio_binary ( __ ( 'Always include JS in header?' ), 'eme_load_js_in_header', __ ( 'Some themes are badely designed and can have issues showing the google maps or advancing in the calendar. If so, try activating this option which will cause the javascript to always be included in the header of every page (off by default).','eme' ) );
    eme_options_radio_binary ( __ ( 'Use the client computer clock for the calendar', 'eme' ), 'eme_use_client_clock', __ ( 'Check this option if you want to use the clock of the client as base to calculate current day for the calendar.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Delete all EME data when upgrading or deactivating?', 'eme' ), 'eme_uninstall_drop_data', __ ( 'Check this option if you want to delete all EME data (database tables and options) when upgrading or deactivating the plugin.', 'eme' ) );
    eme_options_radio_binary ( __ ( 'Enable shortcodes in widgets', 'eme' ), 'eme_shortcodes_in_widgets', __ ( 'Check this option if you want to enable the use of shortcodes in widgets (affects shortcodes of any plugin used in widgets, so use with care).', 'eme' ) );
    ?>
 </table>
+
+<h3><?php _e ( 'Permalink options', 'eme' ); ?></h3>
+<table class="form-table">
+   <?php
+   eme_options_radio_binary ( __ ( 'Enable event permalinks if possible?' ), 'eme_seo_permalink', __ ( 'If Yes, EME will render SEO permalinks if permalinks are activated.', 'eme' ) . "<br \><strong>" . __ ( 'It is necessary to click \'Save Changes\' on the  WordPress \'Settings/Permalinks\' page before you will see the effect of this change.','eme' )."</strong>");
+   eme_options_input_text ( __('Events permalink prefix', 'eme' ), 'eme_permalink_events_prefix', __( 'The permalink prefix used for events and the calendar.','eme') );
+   eme_options_input_text ( __('Locations permalink prefix', 'eme' ), 'eme_permalink_locations_prefix', __( 'The permalink prefix used for locations.','eme') );
+   ?>
+</table>
+
 <h3><?php _e ( 'Access rights', 'eme' ); ?></h3>
 <p>Tip: Use a plugin like "User Role Editor" to add/edit capabilities and roles.</p>
 <table class="form-table">
@@ -2847,6 +2856,7 @@ $j_eme_event(document).ready( function() {
    updateShowHideRecurrence();
    updateShowHideRsvp();
    $j_eme_event('input#event-recurrence').change(updateShowHideRecurrence);
+   $j_eme_event('input#eme_seo_permalink').change(updateShowHidePermalinksPrexix);
    $j_eme_event('input#rsvp-checkbox').change(updateShowHideRsvp);
    // recurrency elements
    $j_eme_event('input#recurrence-interval').keyup(updateIntervalDescriptor);
