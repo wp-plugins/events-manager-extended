@@ -526,11 +526,11 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added option "show_ongoing" to [events_list], to indicate you want the scopes to include end dates (ongoing events) upon evaluation (like e.g. future events include events starting in the past, but ending in the future), or just the start date. Default: 1
 * Feature: you can now set the desired capability a user must have in order to do things (access right management). Use a plugin like "User Role Editor" to add/edit capabilities and roles.
 * Feature: eme_add_booking_form_filter and eme_delete_booking_form_filter filters added, so you can change the form html to your liking
-* Feature: splitted the function eme_display_single_event_shortcode into 2 parts, creating the function eme_display_single_event() that takes as single argument the event id, returning the html output for that event
+* Feature: split the function eme_display_single_event_shortcode into 2 parts, creating the function eme_display_single_event() that takes as single argument the event id, returning the html output for that event
 * Feature: recurrent events can now span multiple days
 * Feature: new shortcode [events_countdown], with one optional parameter (event ID): returns the number of days until the next event or the event specified
 * Feature: the shortcode [events_ical_link] now also accepts category as an option
-* Feature: locations now also can have categories on their own, and the "category"-option in [events_list] will now show locations in those categories if the "eventful"-option is not set
+* Feature: locations now also can have categories on their own, and the "category"-option in [events_locations] will now show locations in those categories if the "eventful"-option is not set
 * Feature: locations now also have an author, and people can have the right to add, edit own or edit all locations
 * Feature: #_CATEGORIES for locations now returns the categories a location is in (as for events)
 * Feature: new option link_showperiod for shortcode [events_list]: if showperiod=daily and link_showperiod=1, then the shown days are links that will go to events for just that day
@@ -553,7 +553,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: some filtering fixes in admin panel
 * Bugfix: scope=this_week/next_week now takes the "start day of week" WP setting into account
 * Bugfix: cancelled registrations reported the wrong number of seats cancelled in the mail
-* Bugfix: fix a mysql warning which wasn't one when updating a location without changing anything (wpdb->update returns 0 because 0 rows changed)
+* Bugfix: an inappropriate mysql warning when updating a location without changing anything (wpdb->update returns 0 because 0 rows changed) has been eliminated
 * Bugfix: for the delete booking form, name of wordpress logged in users wasn't pre-filled
 * Bugfix: fixing a bug with quotes in category names
 * Bugfix: cancel emails were not being sent
