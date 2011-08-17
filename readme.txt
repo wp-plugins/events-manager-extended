@@ -555,7 +555,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: scope=this_week/next_week now takes the "start day of week" WP setting into account
 * Bugfix: cancelled registrations reported the wrong number of seats cancelled in the mail
 * Bugfix: an inappropriate mysql warning when updating a location without changing anything (wpdb->update returns 0 because 0 rows changed) has been eliminated
-* Bugfix: for the delete booking form, name of wordpress logged in users wasn't pre-filled
+* Bugfix: the names of users logged into WordPress were not pre-filled in the delete booking form
 * Bugfix: fixing a bug with quotes in category names
 * Bugfix: cancel emails were not being sent
 * Bugfix: #_IMAGEURL didn't return the location image url for events (it worked ok for locations itself)
