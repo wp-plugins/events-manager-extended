@@ -461,6 +461,7 @@ function eme_create_events_table($charset,$collate) {
          event_status mediumint(9) DEFAULT 1,
          event_author mediumint(9) DEFAULT 0,
          event_name text NOT NULL,
+         event_slug text default NULL,
          event_url text default NULL,
          event_start_time time NOT NULL,
          event_end_time time NOT NULL,
@@ -528,6 +529,7 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'event_contactperson_id', "alter table $table_name add event_contactperson_id mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'event_attributes', "alter table $table_name add event_attributes text NULL;"); 
       maybe_add_column($table_name, 'event_url', "alter table $table_name add event_url text DEFAULT NULL;"); 
+      maybe_add_column($table_name, 'event_slug', "alter table $table_name add event_slug text DEFAULT NULL;"); 
       maybe_add_column($table_name, 'event_category_ids', "alter table $table_name add event_category_ids text DEFAULT NULL;"); 
       maybe_add_column($table_name, 'event_page_title_format', "alter table $table_name add event_page_title_format text NULL;"); 
       maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
@@ -613,6 +615,7 @@ function eme_create_locations_table($charset,$collate) {
       $sql = "CREATE TABLE ".$table_name." (
          location_id mediumint(9) NOT NULL AUTO_INCREMENT,
          location_name text NOT NULL,
+         location_slug text default NULL,
          location_url text default NULL,
          location_address tinytext NOT NULL,
          location_town tinytext NOT NULL,
@@ -643,6 +646,7 @@ function eme_create_locations_table($charset,$collate) {
       maybe_add_column($table_name, 'location_modif_date', "alter table $table_name add location_modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       maybe_add_column($table_name, 'location_modif_date_gmt', "alter table $table_name add location_modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       maybe_add_column($table_name, 'location_url', "alter table $table_name add location_url text DEFAULT NULL;"); 
+      maybe_add_column($table_name, 'location_slug', "alter table $table_name add location_slug text DEFAULT NULL;"); 
       if ($db_version<3) {
          $wpdb->query("ALTER TABLE $table_name MODIFY location_name text NOT NULL ;");
       }

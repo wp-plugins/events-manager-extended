@@ -41,6 +41,7 @@ function eme_new_event_page() {
       "event_single_event_format" => '',
       "event_contactperson_email_body" => '',
       "event_respondent_email_body" => '',
+      "event_slug" => '',
       "event_url" => '',
       "recurrence_id" => 0,
       "recurrence_start_date" => '',
@@ -54,6 +55,7 @@ function eme_new_event_page() {
       "location_latitude" => '',
       "location_longitude" => '',
       "location_image_url" => '',
+      "location_slug" => '',
       "location_url" => ''
    );
    eme_event_form ($event, $title, '');
@@ -241,6 +243,7 @@ function eme_events_subpanel() {
       $event ['event_contactperson_email_body'] = isset($_POST ['event_contactperson_email_body']) ? stripslashes ( $_POST ['event_contactperson_email_body'] ) : '';
       $event ['event_respondent_email_body'] = isset($_POST ['event_respondent_email_body']) ? stripslashes ( $_POST ['event_respondent_email_body'] ) : '';
       $event ['event_url'] = isset($_POST ['event_url']) ? eme_strip_tags ( $_POST ['event_url'] ) : '';
+      $event ['event_slug'] = isset($_POST ['event_slug']) ? eme_permalink_convert(eme_strip_tags ( $_POST ['event_slug'] )) : eme_permalink_convert($event ['event_name']);
       if (isset ($_POST['event_category_ids'])) {
          // the category id's need to begin and end with a comma
          // this is needed so we can later search for a specific
@@ -2366,6 +2369,18 @@ function eme_event_form($event, $title, $element) {
                         <input type="text" id="title" name="event_name" value="<?php echo eme_sanitize_html($event ['event_name']); ?>" />
                         <br />
                         <?php _e ( 'The event name. Example: Birthday party', 'eme' )?>
+                        <br />
+                        <br />
+                        <?php if ($event ['event_name'] != "") {
+                                 _e ('Slug: ', 'eme' );
+                                 echo trailingslashit(home_url()).eme_permalink_convert(get_option ( 'eme_permalink_events_prefix')).$event['event_id']."/";
+                                 $slug = $event['event_slug'] ? $event['event_slug'] : $event['event_name'];
+				 $slug = untrailingslashit(eme_permalink_convert($slug));
+                        ?>
+                                 <input type="text" id="slug" name="event_slug" value="<?php echo $slug; ?>" /><?php echo user_trailingslashit(""); ?>
+                        <?php
+                              }
+                        ?>
                      </div>
                   </div>
                   <div id="div_event_date" class="stuffbox">

@@ -40,6 +40,7 @@ function eme_locations_page() {
          $location['location_longitude'] = $_POST['location_longitude'];
          $location['location_description'] = stripslashes($_POST['content']);
          $location['location_url'] = isset($_POST ['location_url']) ? eme_strip_tags ( $_POST ['location_url'] ) : '';
+         $location['location_slug'] = isset($_POST ['location_slug']) ? eme_permalink_convert(eme_strip_tags ( $_POST ['location_slug'] )) : eme_permalink_convert($location['location_name']);
          // we don't change the author
          //$location['location_author'] = $current_userid;
          if (isset ($_POST['location_category_ids'])) {
@@ -96,6 +97,7 @@ function eme_locations_page() {
          $location['location_description'] = stripslashes($_POST['content']);
          $location['location_author'] = $current_userid;
          $location['location_url'] = isset($_POST ['location_url']) ? eme_strip_tags ( $_POST ['location_url'] ) : '';
+         $location['location_slug'] = isset($_POST ['location_slug']) ? eme_permalink_convert(eme_strip_tags ( $_POST ['location_slug'] )) : eme_permalink_convert($location['location_name']);
          if (isset ($_POST['location_category_ids'])) {
             // the category id's need to begin and end with a comma
             // this is needed so we can later search for a specific
@@ -167,11 +169,22 @@ function eme_locations_edit_layout($location, $message = "") {
          <input type="hidden" name="location_ID" value="<?php echo $location['location_id'] ?>"/>
          
          <!-- we need titlediv and title for qtranslate as ID -->
-         <div id="titlediv" class="form-field form-required">
+         <div id="titlediv" class="form-required">
            <label><?php _e('Location name', 'eme') ?></label>
            <input name="location_name" id="title" type="text" value="<?php echo eme_sanitize_html($location['location_name']); ?>" size="40" />
            <input type="hidden" name="translated_location_name" value="<?php echo eme_trans_sanitize_html($location['location_name']); ?>" />
            <p><?php _e('The name of the location', 'eme') ?>.</p>
+                        <?php if ($location ['location_name'] != "") {
+                                 _e ('Slug: ', 'eme' );
+                                 echo trailingslashit(home_url()).eme_permalink_convert(get_option ( 'eme_permalink_events_prefix')).$location['location_id']."/";
+                                 $slug = $location['location_slug'] ? $location['location_slug'] : $location['location_name'];
+                                 $slug = untrailingslashit(eme_permalink_convert($slug));
+                        ?>
+                                 <input type="text" id="slug" name="location_slug" value="<?php echo $slug; ?>" /><?php echo user_trailingslashit(""); ?>
+                        <?php
+                              }
+                        ?>
+
          </div>
          <div class="form-field">
             <label for="location_address"><?php _e('Location address', 'eme') ?></label>
@@ -270,6 +283,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
       $new_location['location_description'] = '';
       $new_location['location_category_ids'] = '';
       $new_location['location_url'] = '';
+      $new_location['location_slug'] = '';
    }
 
    ob_start();
@@ -457,6 +471,7 @@ function eme_get_locations($eventful = false, $scope="all", $category = '', $off
                $this_location['location_description'] = $event['location_description'];
                $this_location['location_category_ids'] = $event['location_category_ids'];
                $this_location['location_url'] = $event['location_url'];
+               $this_location['location_slug'] = $event['location_slug'];
                $locations[$location_id]=$this_location;
             }
          }
@@ -521,6 +536,7 @@ function eme_get_location($location_id=0) {
       $location ['location_longitude']='';
       $location ['location_image_url']='';
       $location ['location_url']='';
+      $location ['location_slug']='';
    } else {
       $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
       $sql = "SELECT * FROM $locations_table WHERE location_id ='$location_id'";
