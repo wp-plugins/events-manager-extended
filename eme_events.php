@@ -2856,7 +2856,6 @@ $j_eme_event(document).ready( function() {
    updateShowHideRecurrence();
    updateShowHideRsvp();
    $j_eme_event('input#event-recurrence').change(updateShowHideRecurrence);
-   $j_eme_event('input#eme_seo_permalink').change(updateShowHidePermalinksPrexix);
    $j_eme_event('input#rsvp-checkbox').change(updateShowHideRsvp);
    // recurrency elements
    $j_eme_event('input#recurrence-interval').keyup(updateIntervalDescriptor);
