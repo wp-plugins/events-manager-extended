@@ -21,7 +21,7 @@ function eme_categories_subpanel() {
       } elseif ( isset($_POST['action']) && $_POST['action'] == "add" ) {
          // Add a new category
          $category = array();
-         $category['category_name'] = $_POST['category_name'];
+         $category['category_name'] = trim(stripslashes($_POST['category_name']));
          $validation_result = $wpdb->insert($categories_table, $category);
       } elseif ( isset($_POST['action']) && $_POST['action'] == "delete" ) {
          // Delete category or multiple
@@ -57,7 +57,7 @@ function eme_categories_subpanel() {
 } 
 
 function eme_categories_table_layout($message = "") {
-   $categories = eme_get_categories();
+   $categories = eme_get_categories(false,"",1);
    $destination = admin_url("admin.php?page=events-manager-categories"); 
    $table = "
       <div class='wrap nosubsub'>\n
@@ -193,10 +193,15 @@ function eme_categories_edit_layout($message = "") {
    echo $layout;
 }
 
-function eme_get_categories($eventful=false,$scope="future"){
+function eme_get_categories($eventful=false,$scope="future",$sorted=0){
    global $wpdb;
    $categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
    $categories = array();
+   if ($sorted) {
+      $orderby = " ORDER BY category_name ASC";
+   } else {
+      $orderby = "";
+   }
    if ($eventful) {
       $events = eme_get_events(0, $scope, "ASC");
       if ($events) {
@@ -213,10 +218,10 @@ function eme_get_categories($eventful=false,$scope="future"){
       }
       if (!empty($categories)) {
          $event_cats=join(",",$categories);
-         return $wpdb->get_results("SELECT * FROM $categories_table where category_id in ($event_cats)", ARRAY_A);
+         return $wpdb->get_results("SELECT * FROM $categories_table where category_id in ($event_cats) $orderby", ARRAY_A);
       }
    } else {
-      return $wpdb->get_results("SELECT * FROM $categories_table", ARRAY_A);
+      return $wpdb->get_results("SELECT * FROM $categories_table $orderby", ARRAY_A);
    }
 }
 
