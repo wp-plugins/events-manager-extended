@@ -31,7 +31,6 @@ function eme_new_event_page() {
       "registration_requires_approval" => 0,
       "registration_wp_users_only" => 0,
       "event_seats" => 0,
-      "event_freq" => '',
       "location_id" => 0,
       "event_author" => 0,
       "event_contactperson_id" => get_option('eme_default_contact_person'),
@@ -44,6 +43,7 @@ function eme_new_event_page() {
       "event_slug" => '',
       "event_url" => '',
       "recurrence_id" => 0,
+      "recurrence_freq" => '',
       "recurrence_start_date" => '',
       "recurrence_end_date" => '',
       "recurrence_interval" => '',
@@ -161,7 +161,7 @@ function eme_events_subpanel() {
 
    // UPDATE or CREATE action
    if ($action == 'update_event' || $action == 'update_recurrence') {
-      $event = array ();
+      $event = array();
       $location = array ();
       $event ['event_name'] = isset($_POST ['event_name']) ? trim(stripslashes ( $_POST ['event_name'] )) : '';
       if (!current_user_can( get_option('eme_cap_author_event'))) {
@@ -2057,7 +2057,16 @@ function eme_event_form($event, $title, $element) {
          # editing a single event of an recurrence: don't show the recurrence form
          $show_recurrent_form = 0;
       } else {
+         # for single non-recurrent events: we show the form, so we can make it recurrent if we want to
+         # but for that, we need to set the recurrence fields, otherwise we get warnings
          $show_recurrent_form = 1;
+         $event["recurrence_id"] = 0;
+         $event["recurrence_freq"] = '';
+         $event["recurrence_start_date"] = '';
+         $event["recurrence_end_date"] = '';
+         $event["recurrence_interval"] = '';
+         $event["recurrence_byweekno"] = '';
+         $event["recurrence_byday"] = '';
       }
    }
    
@@ -2220,7 +2229,7 @@ function eme_event_form($event, $title, $element) {
                         <div id="event_recurrence_pattern">
                            <p>Frequency:
                               <select id="recurrence-frequency" name="recurrence_freq">
-                                 <?php eme_option_items ( $freq_options, $event [$pref . 'freq'] ); ?>
+                                 <?php eme_option_items ( $freq_options, $event ['recurrence_freq'] ); ?>
                               </select>
                            </p>
                            <p>
