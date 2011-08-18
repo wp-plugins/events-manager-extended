@@ -2381,7 +2381,7 @@ function eme_event_form($event, $title, $element) {
                         <br />
                         <br />
                         <?php if ($event ['event_name'] != "") {
-                                 _e ('Slug: ', 'eme' );
+                                 _e ('Permalink: ', 'eme' );
                                  echo trailingslashit(home_url()).eme_permalink_convert(get_option ( 'eme_permalink_events_prefix')).$event['event_id']."/";
                                  $slug = $event['event_slug'] ? $event['event_slug'] : $event['event_name'];
 				 $slug = untrailingslashit(eme_permalink_convert($slug));

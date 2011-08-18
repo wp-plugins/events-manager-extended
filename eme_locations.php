@@ -175,7 +175,7 @@ function eme_locations_edit_layout($location, $message = "") {
            <input type="hidden" name="translated_location_name" value="<?php echo eme_trans_sanitize_html($location['location_name']); ?>" />
            <p><?php _e('The name of the location', 'eme') ?>.</p>
                         <?php if ($location ['location_name'] != "") {
-                                 _e ('Slug: ', 'eme' );
+                                 _e ('Permalink: ', 'eme' );
                                  echo trailingslashit(home_url()).eme_permalink_convert(get_option ( 'eme_permalink_events_prefix')).$location['location_id']."/";
                                  $slug = $location['location_slug'] ? $location['location_slug'] : $location['location_name'];
                                  $slug = untrailingslashit(eme_permalink_convert($slug));
