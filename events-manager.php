@@ -127,6 +127,18 @@ define('MIN_CAPABILITY', 'edit_posts');   // Minimum user level to edit own even
 define('AUTHOR_CAPABILITY', 'publish_posts');   // Minimum user level to put an event in public/private state
 define('EDIT_CAPABILITY', 'edit_others_posts'); // Minimum user level to edit any event
 define('SETTING_CAPABILITY', 'activate_plugins');  // Minimum user level to edit settings
+define('DEFAULT_CAP_ADD_EVENT','edit_posts');
+define('DEFAULT_CAP_AUTHOR_EVENT','publish_posts');
+define('DEFAULT_CAP_EDIT_EVENTS','edit_others_posts');
+define('DEFAULT_CAP_ADD_LOCATION','edit_others_posts');
+define('DEFAULT_CAP_AUTHOR_LOCATION','edit_others_posts');
+define('DEFAULT_CAP_EDIT_LOCATIONS','edit_others_posts');
+define('DEFAULT_CAP_CATEGORIES','activate_plugins');
+define('DEFAULT_CAP_PEOPLE','edit_posts');
+define('DEFAULT_CAP_APPROVE','edit_others_posts');
+define('DEFAULT_CAP_REGISTRATIONS','edit_others_posts');
+define('DEFAULT_CAP_CLEANUP','activate_plugins');
+define('DEFAULT_CAP_SETTINGS','activate_plugins');
 define('DEFAULT_EVENT_LIST_ITEM_FORMAT', '<li>#j #M #Y - #H:#i<br /> #_LINKEDNAME<br />#_TOWN </li>');
 define('DEFAULT_SINGLE_EVENT_FORMAT', '<p>#j #M #Y - #H:#i</p><p>#_TOWN</p><p>#_NOTES</p>'); 
 define('DEFAULT_EVENTS_PAGE_TITLE',__('Events','eme') ) ;
@@ -794,18 +806,18 @@ function eme_add_options($reset=0) {
    'eme_rsvp_addbooking_max_spaces' => 10,
    'eme_rsvp_delbooking_submit_string' => DEFAULT_RSVP_DELBOOKINGFORM_SUBMIT_STRING,
    'eme_categories_enabled' => DEFAULT_CATEGORIES_ENABLED,
-   'eme_cap_add_event' => MIN_CAPABILITY, 
-   'eme_cap_author_event' => AUTHOR_CAPABILITY, 
-   'eme_cap_edit_events' => EDIT_CAPABILITY,
-   'eme_cap_add_locations' => EDIT_CAPABILITY,
-   'eme_cap_author_locations' => EDIT_CAPABILITY,
-   'eme_cap_edit_locations' => EDIT_CAPABILITY,
-   'eme_cap_categories' => SETTING_CAPABILITY,
-   'eme_cap_people' => MIN_CAPABILITY,
-   'eme_cap_approve' => EDIT_CAPABILITY,
-   'eme_cap_registrations' => EDIT_CAPABILITY,
-   'eme_cap_cleanup' => SETTING_CAPABILITY,
-   'eme_cap_settings' => SETTING_CAPABILITY,
+   'eme_cap_add_event' => DEFAULT_CAP_ADD_EVENT, 
+   'eme_cap_author_event' => DEFAULT_CAP_AUTHOR_EVENT, 
+   'eme_cap_edit_events' => DEFAULT_CAP_EDIT_EVENTS,
+   'eme_cap_add_locations' => DEFAULT_CAP_ADD_LOCATION,
+   'eme_cap_author_locations' => DEFAULT_CAP_AUTHOR_LOCATION,
+   'eme_cap_edit_locations' => DEFAULT_CAP_EDIT_LOCATIONS,
+   'eme_cap_categories' => DEFAULT_CAP_CATEGORIES,
+   'eme_cap_people' => DEFAULT_CAP_PEOPLE,
+   'eme_cap_approve' => DEFAULT_CAP_APPROVE,
+   'eme_cap_registrations' => DEFAULT_CAP_REGISTRATIONS,
+   'eme_cap_cleanup' => DEFAULT_CAP_CLEANUP,
+   'eme_cap_settings' => DEFAULT_CAP_SETTINGS,
    'eme_event_html_headers_format' => '',
    'eme_location_html_headers_format' => ''
    );
