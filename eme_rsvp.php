@@ -487,6 +487,11 @@ function eme_bookings_compact_table($event_id) {
    $approved_seats = eme_get_approved_seats($event_id);
    $pending_seats = eme_get_pending_seats($event_id);
    $booked_seats = eme_get_booked_seats($event_id);
+   if ($pending_seats>0) {
+      $booked_seats_info="$booked_seats ($approved_seats ".__('approved','eme').", $pending_seats ".__('pending','eme');
+   } else {
+      $booked_seats_info=$booked_seats;
+   }
    $printable_address = admin_url("/admin.php?page=events-manager-people&amp;action=booking_printable&amp;event_id=$event_id");
    $csv_address = admin_url("/admin.php?page=events-manager-people&amp;action=booking_csv&amp;event_id=$event_id");
    $count_respondents=count($bookings);
@@ -504,7 +509,7 @@ function eme_bookings_compact_table($event_id) {
                </thead>
                <tfoot>
                   <tr>
-                     <th scope='row' colspan='2'>".__('Booked spaces','eme').":</th><td class='booking-result' id='booked-seats'>$booked_seats ($approved_seats ".__('approved','eme').", $pending_seats ".__('pending','eme')."</td></tr>
+                     <th scope='row' colspan='2'>".__('Booked spaces','eme').":</th><td class='booking-result' id='booked-seats'>$booked_seats_info</td></tr>
                   <tr><th scope='row' colspan='2'>".__('Available spaces','eme').":</th><td class='booking-result' id='available-seats'>$available_seats</td>
                   </tr>
                </tfoot>
@@ -662,7 +667,7 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
    } else {
       // send different mails depending on approval or not
       if ($event['registration_requires_approval']) {
-         eme_send_mail(sprintf(__("Approval required for new booking fir '%s'",'eme'),$event_name), $contact_body, $contact_email, $contact_name, $contact_email, $contact_name);
+         eme_send_mail(sprintf(__("Approval required for new booking for '%s'",'eme'),$event_name), $contact_body, $contact_email, $contact_name, $contact_email, $contact_name);
          eme_send_mail(sprintf(__("Reservation for '%s' is pending",'eme'),$event_name),$pending_body, $bookerEmail, $bookerName, $contact_email, $contact_name);
       } else {
          eme_send_mail(sprintf(__("New booking for '%s'",'eme'),$event_name), $contact_body, $contact_email,$contact_name, $contact_email, $contact_name);
