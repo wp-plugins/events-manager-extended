@@ -142,22 +142,22 @@ define('DEFAULT_CAP_SETTINGS','activate_plugins');
 define('DEFAULT_EVENT_LIST_ITEM_FORMAT', '<li>#j #M #Y - #H:#i<br /> #_LINKEDNAME<br />#_TOWN </li>');
 define('DEFAULT_SINGLE_EVENT_FORMAT', '<p>#j #M #Y - #H:#i</p><p>#_TOWN</p><p>#_NOTES</p>'); 
 define('DEFAULT_EVENTS_PAGE_TITLE',__('Events','eme') ) ;
-define('DEFAULT_EVENT_PAGE_TITLE_FORMAT', '#_NAME'); 
+define('DEFAULT_EVENT_PAGE_TITLE_FORMAT', '#_EVENTNAME'); 
 define('DEFAULT_RSS_DESCRIPTION_FORMAT',"#j #M #y - #H:#i <br />#_LOCATION <br />#_ADDRESS <br />#_TOWN");
-define('DEFAULT_RSS_TITLE_FORMAT',"#_NAME");
+define('DEFAULT_RSS_TITLE_FORMAT',"#_EVENTNAME");
 define('DEFAULT_MAP_TEXT_FORMAT', '<strong>#_LOCATION</strong><p>#_ADDRESS</p><p>#_TOWN</p>');
 define('DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT','<li>#_LINKEDNAME<ul><li>#j #M #y</li><li>#_TOWN</li></ul></li>');
 define('DEFAULT_NO_EVENTS_MESSAGE', __('No events', 'eme'));
 define('DEFAULT_SINGLE_LOCATION_FORMAT', '<p>#_ADDRESS</p><p>#_TOWN</p>#_DESCRIPTION #_MAP'); 
-define('DEFAULT_LOCATION_PAGE_TITLE_FORMAT', '#_NAME'); 
-define('DEFAULT_LOCATION_BALLOON_FORMAT', "<strong>#_NAME</strong><br />#_ADDRESS - #_TOWN<br /><a href='#_LOCATIONPAGEURL'>Details</a>");
-define('DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT', "<li>#_NAME - #j #M #Y - #H:#i</li>");
+define('DEFAULT_LOCATION_PAGE_TITLE_FORMAT', '#_EVENTNAME'); 
+define('DEFAULT_LOCATION_BALLOON_FORMAT', "<strong>#_EVENTNAME</strong><br />#_ADDRESS - #_TOWN<br /><a href='#_LOCATIONPAGEURL'>Details</a>");
+define('DEFAULT_LOCATION_EVENT_LIST_ITEM_FORMAT', "<li>#_EVENTNAME - #j #M #Y - #H:#i</li>");
 define('DEFAULT_LOCATION_NO_EVENTS_MESSAGE', __('<li>No events in this location</li>', 'eme'));
 define('DEFAULT_IMAGE_MAX_WIDTH', 700);
 define('DEFAULT_IMAGE_MAX_HEIGHT', 700);
 define('DEFAULT_IMAGE_MAX_SIZE', 204800); 
 define('DEFAULT_FULL_CALENDAR_EVENT_FORMAT', '<li>#_LINKEDNAME</li>');
-define('DEFAULT_SMALL_CALENDAR_EVENT_TITLE_FORMAT', "#_NAME" );
+define('DEFAULT_SMALL_CALENDAR_EVENT_TITLE_FORMAT', "#_EVENTNAME" );
 define('DEFAULT_SMALL_CALENDAR_EVENT_TITLE_SEPARATOR', ", ");
 define('DEFAULT_USE_SELECT_FOR_LOCATIONS', false);
 define('DEFAULT_ATTRIBUTES_ENABLED', true);
@@ -165,7 +165,7 @@ define('DEFAULT_RECURRENCE_ENABLED', true);
 define('DEFAULT_RSVP_ENABLED', true);
 define('DEFAULT_RSVP_ADDBOOKINGFORM_SUBMIT_STRING', __('Send your booking', 'eme'));
 define('DEFAULT_RSVP_DELBOOKINGFORM_SUBMIT_STRING', __('Cancel your booking', 'eme'));
-define('DEFAULT_ATTENDEES_LIST_FORMAT','<li>#_NAME</li>');
+define('DEFAULT_ATTENDEES_LIST_FORMAT','<li>#_EVENTNAME</li>');
 define('DEFAULT_CATEGORIES_ENABLED', true);
 define('DEFAULT_GMAP_ENABLED', true);
 define('DEFAULT_GMAP_ZOOMING', true);
@@ -496,6 +496,7 @@ function eme_create_events_table($charset,$collate) {
          event_single_event_format text NULL, 
          event_contactperson_email_body text NULL, 
          event_respondent_email_body text NULL, 
+         event_registration_pending_body text NULL, 
          registration_requires_approval bool DEFAULT 0,
          registration_wp_users_only bool DEFAULT 0,
          UNIQUE KEY (event_id)
@@ -547,6 +548,7 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
       maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
       maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
+      maybe_add_column($table_name, 'event_registration_pending_body', "alter table $table_name add event_registration_pending_body text NULL;"); 
       maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
       $registration_wp_users_only=get_option('eme_rsvp_registered_users_only');
       maybe_add_column($table_name, 'registration_wp_users_only', "alter table $table_name add registration_wp_users_only bool DEFAULT $registration_wp_users_only;"); 
@@ -739,11 +741,11 @@ function eme_create_categories_table($charset,$collate) {
 }
 
 function eme_add_options($reset=0) {
-   $contact_person_email_body_localizable = __("#_RESPNAME (#_RESPEMAIL) will attend #_NAME on #m #d, #Y. He wants to reserve #_SPACES space(s).<br/>Now there are #_RESERVEDSPACES space(s) reserved, #_AVAILABLESPACES are still available.<br/><br/>Yours faithfully,<br/>Events Manager",'eme') ;
-   $respondent_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>you have successfully reserved #_SPACES space(s) for #_NAME.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
-   $registration_pending_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
-   $registration_cancelled_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME has been cancelled.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
-   $registration_denied_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_NAME has been denied.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
+   $contact_person_email_body_localizable = __("#_RESPNAME (#_RESPEMAIL) will attend #_EVENTNAME on #m #d, #Y. He wants to reserve #_SPACES space(s).<br/>Now there are #_RESERVEDSPACES space(s) reserved, #_AVAILABLESPACES are still available.<br/><br/>Yours faithfully,<br/>Events Manager",'eme') ;
+   $respondent_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>you have successfully reserved #_SPACES space(s) for #_EVENTNAME.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
+   $registration_pending_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_EVENTNAME is pending.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
+   $registration_cancelled_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_EVENTNAME has been cancelled.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
+   $registration_denied_email_body_localizable = __("Dear #_RESPNAME,<br/><br/>your request to reserve #_SPACES space(s) for #_EVENTNAME has been denied.<br/><br/>Yours faithfully,<br/>#_CONTACTPERSON",'eme');
    
    $eme_options = array('eme_event_list_item_format' => DEFAULT_EVENT_LIST_ITEM_FORMAT,
    'eme_display_calendar_in_events_page' => 0,
@@ -1151,7 +1153,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
 
-      } elseif (preg_match('/#_NAME$/', $result)) {
+      } elseif (preg_match('/#_(NAME|EVENTNAME)$/', $result)) {
          $field = "event_name";
          if (isset($event[$field]))  $replacement = $event[$field];
          $replacement = eme_trans_sanitize_html($replacement);
@@ -1199,7 +1201,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
 
-      } elseif (preg_match('/#_LOCATION$/', $result)) {
+      } elseif (preg_match('/#_(LOCATION|LOCATIONNAME)$/', $result)) {
          $field = "location_name";
          if (isset($event[$field])) {
             $replacement = $event[$field];
@@ -1245,7 +1247,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             }
          }
 
-      } elseif (preg_match('/#_CONTACTNAME$/', $result)) {
+      } elseif (preg_match('/#_(CONTACTNAME|CONTACTPERSON)$/', $result)) {
          $contact = eme_get_contact($event);
          if ($contact)
             $replacement = $contact->display_name;
@@ -1255,15 +1257,16 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
 
-      } elseif (preg_match('/#_CONTACTEMAIL$/', $result)) {
+      } elseif (preg_match('/#_(CONTACTEMAIL|PLAIN_CONTACTEMAIL)$/', $result)) {
          $contact = eme_get_contact($event);
          // ascii encode for primitive harvesting protection ...
-         if ($contact)
-            $replacement = eme_ascii_encode($contact->user_email);
-         if ($target == "html") {
-            $replacement = apply_filters('eme_general', $replacement); 
-         } else {
-            $replacement = apply_filters('eme_general_rss', $replacement);
+         if ($contact) {
+            if ($target == "html") {
+               $replacement = eme_ascii_encode($contact->user_email);
+               $replacement = apply_filters('eme_general', $replacement); 
+            } else {
+               $replacement = apply_filters('eme_general_rss', $replacement);
+            }
          }
 
       } elseif (preg_match('/#_CONTACTPHONE$/', $result)) {

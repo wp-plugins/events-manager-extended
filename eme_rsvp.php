@@ -623,15 +623,16 @@ function eme_replace_attendees_placeholders($format, $attendee, $event_id, $targ
 
 function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,$action="") {
    $event = eme_get_event($event_id);
+   $event_name = $event['event_name'];
    $contact = eme_get_contact ($event);
    $contact_email = $contact->user_email;
    $contact_name = $contact->display_name;
    
    $contact_body = ( $event['event_contactperson_email_body'] != '' ) ? $event['event_contactperson_email_body'] : get_option('eme_contactperson_email_body' );
    $contact_body = eme_replace_placeholders($contact_body, $event, "text");
-   $booker_body = ( $event['event_respondent_email_body'] != '' ) ? $event['event_respondent_email_body'] : get_option('eme_respondent_email_body' );
-   $booker_body = eme_replace_placeholders($booker_body, $event, "text");
-   $pending_body = get_option('eme_registration_pending_email_body' );
+   $confirmed_body = ( $event['event_respondent_email_body'] != '' ) ? $event['event_respondent_email_body'] : get_option('eme_respondent_email_body' );
+   $confirmed_body = eme_replace_placeholders($confirmed_body, $event, "text");
+   $pending_body = ( $event['event_registration_pending_email_body'] != '' ) ? $event['event_registration_pending_email_body'] : get_option('eme_registration_pending_email_body' );
    $pending_body = eme_replace_placeholders($pending_body, $event, "text");
    $denied_body = get_option('eme_registration_denied_email_body' );
    $denied_body = eme_replace_placeholders($denied_body, $event, "text");
@@ -639,7 +640,7 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
    $cancelled_body = eme_replace_placeholders($cancelled_body, $event, "text");
    
    // rsvp specific placeholders
-   $placeholders = array('#_CONTACTPERSON'=> $contact_name, '#_PLAIN_CONTACTEMAIL'=> $contact_email, '#_RESPNAME' => $bookerName, '#_RESPEMAIL' => $bookerEmail, '#_RESPPHONE' => $bookerPhone, '#_SPACES' => $bookedSeats,'#_COMMENT' => $bookerComment );
+   $placeholders = array('#_RESPNAME' => $bookerName, '#_RESPEMAIL' => $bookerEmail, '#_RESPPHONE' => $bookerPhone, '#_SPACES' => $bookedSeats,'#_COMMENT' => $bookerComment );
 
    foreach($placeholders as $key => $value) {
       $contact_body = str_replace($key, $value, $contact_body);
@@ -651,21 +652,21 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
 
    if($action!="") {
       if ($action == 'approveRegistration') {
-         eme_send_mail(__('Reservation confirmed','eme'),$booker_body, $bookerEmail);
+         eme_send_mail(sprintf(__("Reservation for '%s' confirmed",'eme'),$event_name),$confirmed_body, $bookerEmail, $bookerName, $contact_email, $contact_name);
       } elseif ($action == 'denyRegistration') {
-         eme_send_mail(__('Reservation denied','eme'),$denied_body, $bookerEmail);
+         eme_send_mail(sprintf(__("Reservation for '%s' denied",'eme'),$event_name),$denied_body, $bookerEmail, $bookerName, $contact_email, $contact_name);
       } elseif ($action == 'cancelRegistration') {
-         eme_send_mail(__('Reservation cancelled','eme'),$cancelled_body, $bookerEmail);
-         eme_send_mail(__('A reservation has been cancelled','eme'), $contact_body, $contact_email);
+         eme_send_mail(sprintf(__("Reservation for '%s' cancelled",'eme'),$event_name),$cancelled_body, $bookerEmail, $bookerName, $contact_email, $contact_name);
+         eme_send_mail(sprintf(__("A reservation has been cancelled for '%s'",'eme'),$event_name), $contact_body, $contact_email, $contact_name, $contact_email, $contact_name);
       }
    } else {
       // send different mails depending on approval or not
       if ($event['registration_requires_approval']) {
-         eme_send_mail(__("Approval required for new booking",'eme'), $contact_body, $contact_email);
-         eme_send_mail(__('Reservation pending','eme'),$pending_body, $bookerEmail);
+         eme_send_mail(sprintf(__("Approval required for new booking fir '%s'",'eme'),$event_name), $contact_body, $contact_email, $contact_name, $contact_email, $contact_name);
+         eme_send_mail(sprintf(__("Reservation for '%s' is pending",'eme'),$event_name),$pending_body, $bookerEmail, $bookerName, $contact_email, $contact_name);
       } else {
-         eme_send_mail(__("New booking",'eme'), $contact_body, $contact_email);
-         eme_send_mail(__('Reservation confirmed','eme'),$booker_body, $bookerEmail);
+         eme_send_mail(sprintf(__("New booking for '%s'",'eme'),$event_name), $contact_body, $contact_email,$contact_name, $contact_email, $contact_name);
+         eme_send_mail(sprintf(__("Reservation for '%s' confirmed",'eme'),$event_name),$confirmed_body, $bookerEmail, $bookerName, $contact_email, $contact_name);
       }
    }
 } 

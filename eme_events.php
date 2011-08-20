@@ -1163,7 +1163,7 @@ function eme_get_events_list_shortcode($atts) {
    }
 
    // for format: sometimes people want to give placeholders as options, but when using the shortcode inside
-   // another (e.g. when putting [events_list format="#_NAME"] inside the "display single event" setting,
+   // another (e.g. when putting [events_list format="#_EVENTNAME"] inside the "display single event" setting,
    // the replacement of the placeholders happens too soon (placeholders get replaced first, before any other
    // shortcode is interpreted). So we add the option that people can use "#OTHER_", and we replace this with
    // "#_" here
@@ -2512,7 +2512,24 @@ function eme_event_form($event, $title, $element) {
                         </p>
                      </div>
                   </div>
-                  <div id="div_location_name" class="stuffbox">
+                  <div id="div_event_registration_pending_body" class="postbox <?php if ($event['event_registration_pending_body']=="") echo "closed"; ?>">
+                     <div class="handlediv" title="Click to toggle">
+                        <br />
+                     </div>
+                     <h3 class='hndle'><span>
+                        <?php _e ( 'Registration Pending Email Format', 'eme' ); ?>
+                        </span>
+                     </h3>
+                     <div class="inside">
+                        <textarea name="event_registration_pending_body" id="event_registration_pending_body" rows="6" cols="60"><?php echo eme_sanitize_html($event['event_registration_pending_body']);?></textarea>
+                        <br />
+                        <p><?php _e ( 'The format of the email which will be sent to the respondent if the registration is pending.','eme');?>
+                        <br />
+                        <?php _e ('Only fill this in if you want to override the default settings.', 'eme' );?>
+                        </p>
+                     </div>
+                  </div>
+                   <div id="div_location_name" class="stuffbox">
                      <h3>
                         <?php _e ( 'Location', 'eme' ); ?>
                      </h3>
@@ -2789,7 +2806,7 @@ $j_eme_event(document).ready( function() {
          $j_eme_event('input.row-selector').attr('checked', false);
    });
 
-   // if any of event_single_event_format,event_page_title_format,event_contactperson_email_body,event_respondent_email_body
+   // if any of event_single_event_format,event_page_title_format,event_contactperson_email_body,event_respondent_email_body,event_registration_pending_body
    // is empty: display default value on focus, and if the value hasn't changed from the default: empty it on blur
 
    $j_eme_event('textarea#event_page_title_format').focus(function(){
@@ -2836,6 +2853,18 @@ $j_eme_event(document).ready( function() {
    }); 
    $j_eme_event('textarea#event_respondent_email_body').blur(function(){
       var tmp_value='<?php echo rawurlencode(get_option('eme_respondent_email_body' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
+      if($j_eme_event(this).val() == tmp_value)
+         $j_eme_event(this).val('');
+   }); 
+   $j_eme_event('textarea#event_registration_pending_body').focus(function(){
+      var tmp_value='<?php echo rawurlencode(get_option('eme_registration_pending_body' )); ?>';
+      tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
+      if($j_eme_event(this).val() == '')
+         $j_eme_event(this).val(tmp_value);
+   }); 
+   $j_eme_event('textarea#event_registration_pending_body').blur(function(){
+      var tmp_value='<?php echo rawurlencode(get_option('eme_registration_pending_body' )); ?>';
       tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == tmp_value)
          $j_eme_event(this).val('');
