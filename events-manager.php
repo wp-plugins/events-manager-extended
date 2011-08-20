@@ -1156,20 +1156,22 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_(NAME|EVENTNAME)$/', $result)) {
          $field = "event_name";
          if (isset($event[$field]))  $replacement = $event[$field];
-         $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
+            $replacement = eme_trans_sanitize_html($replacement);
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
+            $replacement = eme_trans_sanitize_html($replacement,0);
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
 
       } elseif (preg_match('/#_(ADDRESS|TOWN)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
          if (isset($event[$field]))  $replacement = $event[$field];
-         $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
+            $replacement = eme_trans_sanitize_html($replacement);
             $replacement = apply_filters('eme_general', $replacement); 
          } else { 
+            $replacement = eme_trans_sanitize_html($replacement,0);
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
 
