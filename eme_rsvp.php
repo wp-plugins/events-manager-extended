@@ -649,7 +649,7 @@ function eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,
 
    foreach($placeholders as $key => $value) {
       $contact_body = str_replace($key, $value, $contact_body);
-      $booker_body = str_replace($key, $value, $booker_body);
+      $confirmed_body = str_replace($key, $value, $confirmed_body);
       $pending_body = str_replace($key, $value, $pending_body);
       $denied_body = str_replace($key, $value, $denied_body);
       $cancelled_body = str_replace($key, $value, $cancelled_body);

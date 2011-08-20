@@ -40,6 +40,7 @@ function eme_new_event_page() {
       "event_single_event_format" => '',
       "event_contactperson_email_body" => '',
       "event_respondent_email_body" => '',
+      "event_registration_pending_email_body" => '',
       "event_slug" => '',
       "event_url" => '',
       "recurrence_id" => 0,

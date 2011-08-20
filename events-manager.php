@@ -496,7 +496,7 @@ function eme_create_events_table($charset,$collate) {
          event_single_event_format text NULL, 
          event_contactperson_email_body text NULL, 
          event_respondent_email_body text NULL, 
-         event_registration_pending_body text NULL, 
+         event_registration_pending_email_body text NULL, 
          registration_requires_approval bool DEFAULT 0,
          registration_wp_users_only bool DEFAULT 0,
          UNIQUE KEY (event_id)
@@ -548,7 +548,7 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'event_single_event_format', "alter table $table_name add event_single_event_format text NULL;"); 
       maybe_add_column($table_name, 'event_contactperson_email_body', "alter table $table_name add event_contactperson_email_body text NULL;"); 
       maybe_add_column($table_name, 'event_respondent_email_body', "alter table $table_name add event_respondent_email_body text NULL;"); 
-      maybe_add_column($table_name, 'event_registration_pending_body', "alter table $table_name add event_registration_pending_body text NULL;"); 
+      maybe_add_column($table_name, 'event_registration_pending_email_body', "alter table $table_name add event_registration_pending_email_body text NULL;"); 
       maybe_add_column($table_name, 'registration_requires_approval', "alter table $table_name add registration_requires_approval bool DEFAULT 0;"); 
       $registration_wp_users_only=get_option('eme_rsvp_registered_users_only');
       maybe_add_column($table_name, 'registration_wp_users_only', "alter table $table_name add registration_wp_users_only bool DEFAULT $registration_wp_users_only;"); 
