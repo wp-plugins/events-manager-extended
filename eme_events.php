@@ -2858,13 +2858,13 @@ $j_eme_event(document).ready( function() {
          $j_eme_event(this).val('');
    }); 
    $j_eme_event('textarea#event_registration_pending_body').focus(function(){
-      var tmp_value='<?php echo rawurlencode(get_option('eme_registration_pending_body' )); ?>';
+      var tmp_value='<?php echo rawurlencode(get_option('eme_registration_pending_email_body' )); ?>';
       tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == '')
          $j_eme_event(this).val(tmp_value);
    }); 
    $j_eme_event('textarea#event_registration_pending_body').blur(function(){
-      var tmp_value='<?php echo rawurlencode(get_option('eme_registration_pending_body' )); ?>';
+      var tmp_value='<?php echo rawurlencode(get_option('eme_registration_pending_email_body' )); ?>';
       tmp_value=unescape(tmp_value).replace(/\r\n/g,"\n");
       if($j_eme_event(this).val() == tmp_value)
          $j_eme_event(this).val('');
