@@ -1186,7 +1186,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_EVENTID$/', $result)) {
          $field = "event_id";
          $replacement = $event[$field];
-         $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
@@ -1196,7 +1195,6 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
          $replacement = $event[$field];
-         $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
@@ -1207,10 +1205,11 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $field = "location_name";
          if (isset($event[$field])) {
             $replacement = $event[$field];
-            $replacement = eme_trans_sanitize_html($replacement);
             if ($target == "html") {
+               $replacement = eme_trans_sanitize_html($replacement);
                $replacement = apply_filters('eme_general', $replacement); 
             } else {
+               $replacement = eme_trans_sanitize_html($replacement,0);
                $replacement = apply_filters('eme_general_rss', $replacement); 
             }
          }
@@ -1253,6 +1252,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
          $contact = eme_get_contact($event);
          if ($contact)
             $replacement = $contact->display_name;
+         $replacement = eme_trans_sanitize_html($replacement);
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
@@ -1313,10 +1313,11 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/^#_CATEGORIES$/', $result) && get_option('eme_categories_enabled')) {
          $categories = eme_get_event_categories($event['event_id']);
-         $replacement = eme_trans_sanitize_html(join(", ",$categories));
          if ($target == "html") {
+            $replacement = eme_trans_sanitize_html(join(", ",$categories));
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
+            $replacement = eme_trans_sanitize_html(join(", ",$categories),0);
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
 
