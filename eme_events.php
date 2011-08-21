@@ -1863,7 +1863,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
    <select id="event_status" name="event_status">
       <option value="0"><?php _e('Event Status','eme'); ?></option>
       <?php foreach($event_status_array as $event_status_key => $event_status_value): ?>
-         <option value="<?php echo $event_status_key; ?>" <?php if($_GET['event_status'] == $event_status_key) echo 'selected="selected"'; ?>><?php echo $event_status_value; ?></option>
+         <option value="<?php echo $event_status_key; ?>" <?php if (isset($_GET['event_status']) && ($_GET['event_status'] == $event_status_key)) echo 'selected="selected"'; ?>><?php echo $event_status_value; ?></option>
       <?php endforeach; ?>
    </select>
    <select name="category">
@@ -2562,7 +2562,7 @@ function eme_event_form($event, $title, $element) {
                         </p>
                      </div>
                   </div>
-                  <div id="div_event_registration_pending_body" class="postbox <?php if ($event['event_registration_pending_body']=="") echo "closed"; ?>">
+                  <div id="div_event_registration_pending_email_body" class="postbox <?php if ($event['event_registration_pending_email_body']=="") echo "closed"; ?>">
                      <div class="handlediv" title="Click to toggle">
                         <br />
                      </div>
@@ -2571,7 +2571,7 @@ function eme_event_form($event, $title, $element) {
                         </span>
                      </h3>
                      <div class="inside">
-                        <textarea name="event_registration_pending_body" id="event_registration_pending_body" rows="6" cols="60"><?php echo eme_sanitize_html($event['event_registration_pending_body']);?></textarea>
+                        <textarea name="event_registration_pending_email_body" id="event_registration_pending_email_body" rows="6" cols="60"><?php echo eme_sanitize_html($event['event_registration_pending_email_body']);?></textarea>
                         <br />
                         <p><?php _e ( 'The format of the email which will be sent to the respondent if the registration is pending.','eme');?>
                         <br />

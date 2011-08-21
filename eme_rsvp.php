@@ -350,6 +350,11 @@ function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
    $booking['modif_date']=current_time('mysql', false);
    $booking['creation_date_gmt']=current_time('mysql', true);
    $booking['modif_date_gmt']=current_time('mysql', true);
+   if ($event['registration_requires_approval']) {
+      $booking['booking_approved']=0;
+   } else {
+      $booking['booking_approved']=1;
+   }
 
    // checking whether the booker has already booked places
 // $sql = "SELECT * FROM $bookings_table WHERE event_id = '$event_id' and person_id = '$person_id'; ";
@@ -415,7 +420,7 @@ function eme_update_booking_seats($booking_id,$seats) {
    $where = array();
    $fields = array();
    $where['booking_id'] =$booking_id;
-   $fields['booking_approved'] = 1;
+   $fields['booking_seats'] = $seats;
    $fields['modif_date']=current_time('mysql', false);
    $fields['modif_date_gmt']=current_time('mysql', true);
    $wpdb->update($bookings_table, $fields, $where);
@@ -788,7 +793,7 @@ function eme_registration_seats_form_table($event_id=0) {
       if ($event_id) {
          $bookings = eme_get_bookings_for($event_id,2);
       } else {
-         $bookings = eme_get_bookings_for($events_with_bookings);
+         $bookings = eme_get_bookings_for($events_with_bookings,2);
       }
       foreach ( $bookings as $event_booking ) {
          $event=eme_get_event($event_booking['event_id']);
@@ -902,7 +907,7 @@ function eme_registration_approval_form_table($event_id=0) {
    $all_events=eme_get_events(0,"future");
    $events_with_pending_bookings=array();
    foreach ( $all_events as $event ) {
-      if ($event['registration_requires_approval'] && eme_get_pending_seats($event['event_id'])>0) {
+      if (eme_get_pending_seats($event['event_id'])>0) {
          $events_with_pending_bookings[]=$event['event_id'];
          $selected = "";
          if ($event_id && ($event['event_id'] == $event_id))
@@ -1000,90 +1005,90 @@ function eme_paypal_form($event,$booking_id) {
    $form_html = "<div id='eme-rsvp-message' class='eme-rsvp-message'>".__('Payment handling','eme')."</div>";
    $form_html = "<p>".__("You can pay for this event via paypal. If you which to do so, click the 'Pay via Paypal' button below.",'eme')."</p>";
    require "paypal/Paypal.php";
-$p = new Paypal;
+   $p = new Paypal;
 
-// the paypal or paypal sandbox url
-$p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+   // the paypal or paypal sandbox url
+   $p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 
-// the timeout in seconds before the button form is submitted to paypal
-// this needs the included addevent javascript function
-// 0 = no delay
-// false = disable auto submission
-$p->timeout = false;
+   // the timeout in seconds before the button form is submitted to paypal
+   // this needs the included addevent javascript function
+   // 0 = no delay
+   // false = disable auto submission
+   $p->timeout = false;
 
-// the button label
-// false to disable button (if you want to rely only on the javascript auto-submission) not recommended
-$p->button = 'Pay via Paypal';
+   // the button label
+   // false to disable button (if you want to rely only on the javascript auto-submission) not recommended
+   $p->button = 'Pay via Paypal';
 
-// use encryption (strongly recommended!)
-$p->encrypt = false;
+   // use encryption (strongly recommended!)
+   $p->encrypt = false;
 
-// the actual button parameters
-// https://www.paypal.com/IntegrationCenter/ic_std-variable-reference.html
-$p->add_field('charset','utf-8');
-$p->add_field('business', 'liedek_1313941377_biz@telenet.be');
-$p->add_field('return', eme_event_url($event));
-$p->add_field('cancel_return', eme_event_url($event));
-$p->add_field('notify_url', $ipn_link);
-$p->add_field('item_name', "Booking for '".eme_sanitize_html($event['event_name'])."'");
-$p->add_field('item_number', $booking_id);
-$p->add_field('amount', $event['price']);
-$p->add_field('currency_code',$event['currency']);
-$p->add_field('quantity', $booking['booking_seats']);
-   
+   // the actual button parameters
+   // https://www.paypal.com/IntegrationCenter/ic_std-variable-reference.html
+   $p->add_field('charset','utf-8');
+   $p->add_field('business', 'liedek_1313941377_biz@telenet.be');
+   $p->add_field('return', eme_event_url($event));
+   $p->add_field('cancel_return', eme_event_url($event));
+   $p->add_field('notify_url', $ipn_link);
+   $p->add_field('item_name', "Booking for '".eme_sanitize_html($event['event_name'])."'");
+   $p->add_field('item_number', $booking_id);
+   $p->add_field('amount', $event['price']);
+   $p->add_field('currency_code',$event['currency']);
+   $p->add_field('quantity', $booking['booking_seats']);
+
    $form_html .= $p->get_button();
    return $form_html;
 }
 
 function eme_paypal_ipn() {
-require 'paypal/IPN.php';
-$ipn = new IPN;
+   require 'paypal/IPN.php';
+   $ipn = new IPN;
 
-// the paypal url, or the sandbox url, or the ipn test url
-//$ipn->paypal_url = 'https://www.paypal.com/cgi-bin/webscr';
-$ipn->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+   // the paypal url, or the sandbox url, or the ipn test url
+   //$ipn->paypal_url = 'https://www.paypal.com/cgi-bin/webscr';
+   $ipn->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 
-// your paypal email (the one that receives the payments)
-$ipn->paypal_email = 'liedek_1313941377_biz@telenet.be';
+   // your paypal email (the one that receives the payments)
+   $ipn->paypal_email = 'liedek_1313941377_biz@telenet.be';
 
-// log to file options
-$ipn->log_to_file = false;					// write logs to file
-$ipn->log_filename = '/path/to/ipn.log';  	// the log filename (should NOT be web accessible and should be writable)
+   // log to file options
+   $ipn->log_to_file = false;					// write logs to file
+   $ipn->log_filename = '/path/to/ipn.log';  	// the log filename (should NOT be web accessible and should be writable)
 
-// log to e-mail options
-$ipn->log_to_email = true;					// send logs by e-mail
-$ipn->log_email = 'liedekef@telenet.be';		// where you want to receive the logs
-$ipn->log_subject = 'IPN Log: ';			// prefix for the e-mail subject
+   // log to e-mail options
+   $ipn->log_to_email = true;					// send logs by e-mail
+   $ipn->log_email = 'liedekef@telenet.be';		// where you want to receive the logs
+   $ipn->log_subject = 'IPN Log: ';			// prefix for the e-mail subject
 
-// database information
-$ipn->log_to_db = false;						// false not recommended
-$ipn->db_host = 'localhost';				// database host
-$ipn->db_user = 'some_user';				// database user
-$ipn->db_pass = 'some_password';			// database password
-$ipn->db_name = 'ipn';						// database name
+   // database information
+   $ipn->log_to_db = false;						// false not recommended
+   $ipn->db_host = 'localhost';				// database host
+   $ipn->db_user = 'some_user';				// database user
+   $ipn->db_pass = 'some_password';			// database password
+   $ipn->db_name = 'ipn';						// database name
 
-// array of currencies accepted or false to disable
-$ipn->currencies = array('USD','EUR');
+   // array of currencies accepted or false to disable
+   $ipn->currencies = array('USD','EUR');
 
-// date format on log headers (default: dd/mm/YYYY HH:mm:ss)
-// see http://php.net/date
-$ipn->date_format = 'd/m/Y H:i:s';
+   // date format on log headers (default: dd/mm/YYYY HH:mm:ss)
+   // see http://php.net/date
+   $ipn->date_format = 'd/m/Y H:i:s';
 
-// Prefix for file and mail logs
-$ipn->pretty_ipn = "IPN Values received:\n\n";
+   // Prefix for file and mail logs
+   $ipn->pretty_ipn = "IPN Values received:\n\n";
 
 
-// configuration ended, do the actual check
+   // configuration ended, do the actual check
 
-if($ipn->ipn_is_valid()) {
-	/*
-		A valid ipn was received and passed preliminary validations
-		You can now do any custom validations you wish to ensure the payment was correct
-		You can access the IPN data with $ipn->ipn['value']
-		The complete() method below logs the valid IPN to the places you choose
-	*/
-	$ipn->complete();
-}
+   if($ipn->ipn_is_valid()) {
+      /*
+         A valid ipn was received and passed preliminary validations
+         You can now do any custom validations you wish to ensure the payment was correct
+         You can access the IPN data with $ipn->ipn['value']
+         The complete() method below logs the valid IPN to the places you choose
+       */
+      $ipn->complete();
+   }
 }
 
 // template function
