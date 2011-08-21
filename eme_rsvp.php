@@ -4,6 +4,7 @@ $form_delete_message = "";
 
 function eme_add_booking_form($event_id) {
    global $form_add_message, $current_user;
+   global $booking_id_done;
 
    if (is_user_logged_in()) {
       get_currentuserinfo();
@@ -37,6 +38,11 @@ function eme_add_booking_form($event_id) {
       return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div></div>";
    }
 
+   # you did a registration, so now we decide wether to show the form again, or the paypal form
+   if(!empty($form_add_message) && $event['use_paypal']) {
+      return eme_paypal_form($event,$booking_id_done);
+   }
+
    // you can book the available number of seats, with a max of 10 per time
    $min = intval(get_option('eme_rsvp_addbooking_min_spaces'));
    $max_allowed = intval(get_option('eme_rsvp_addbooking_max_spaces'));
@@ -45,7 +51,7 @@ function eme_add_booking_form($event_id) {
       $max = $max_allowed;
    }
    // no seats anymore? No booking form then ...
-   if ($max == 0) {
+   if ($max == 0 && $max_allowed>0) {
       $ret_string = "<div id='eme-rsvp-message'>";
       if(!empty($form_add_message))
          $ret_string .= "<div class='eme-rsvp-message'>$form_add_message</div>";
@@ -153,8 +159,12 @@ function eme_catch_rsvp() {
    global $current_user;
    global $form_add_message;
    global $form_delete_message; 
+   global $booking_id_done;
    $result = "";
 
+   if (isset($_GET['eme_eventAction']) && $_GET['eme_eventAction']=="ipn") {
+      return eme_paypal_ipn();
+   }
    // make sure we don't get too far without proper info
    if (!(isset($_POST['eme_eventAction']) && isset($_POST['event_id']))) {
       return;
@@ -174,7 +184,9 @@ function eme_catch_rsvp() {
    }
 
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'add_booking') { 
-      $result = eme_book_seats($event);
+      $booking_res = eme_book_seats($event);
+      $result=$booking_res[0];
+      $booking_id_done=$booking_res[1];
       $form_add_message = $result;
    } 
 
@@ -247,7 +259,7 @@ function eme_book_seats($event) {
       $msg = response_check_captcha("captcha_check",1);
    }
    $min_allowed = intval(get_option('eme_rsvp_addbooking_min_spaces'));
-   $max_allowed = intval(get_option('eme_rsvp_addbooking_max_spaces'));
+   $max_allowed = intval(get_option('eme_rsvp_addbooking_max_spaces')) || 10;
    if(!empty($msg)) {
       $result = __('You entered an incorrect code','eme');
    } elseif ($honeypot_check != "") {
@@ -268,7 +280,7 @@ function eme_book_seats($event) {
          if (!$booker) {
             $booker = eme_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id, $registration_wp_users_only);
          }
-         eme_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
+         $booking_id=eme_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
       
          $result = __('Your booking has been recorded','eme');
          $mailing_is_active = get_option('eme_rsvp_mail_notify_is_active');
@@ -279,7 +291,9 @@ function eme_book_seats($event) {
          $result = __('Booking cannot be made: not enough seats available!', 'eme');
       }
    }
-   return $result;
+
+   $res = array(0=>$result,1=>$booking_id);
+   return $res;
 }
 
 function eme_get_booking($booking_id) {
@@ -972,6 +986,104 @@ function eme_registration_approval_form_table($event_id=0) {
    </form>
 </div>
 <?php
+}
+
+function eme_paypal_form($event,$booking_id) {
+   $booking = eme_get_booking($booking_id);
+   $events_page_link = eme_get_events_page(true, false);
+   if (stristr ( $events_page_link, "?" ))
+      $joiner = "&amp;";
+   else
+      $joiner = "?";
+   $ipn_link = $events_page_link.$joiner."eme_eventAction=ipn";
+
+   $form_html = "<div id='eme-rsvp-message' class='eme-rsvp-message'>".__('Payment handling','eme')."</div>";
+   $form_html = "<p>".__("You can pay for this event via paypal. If you which to do so, click the 'Pay via Paypal' button below.",'eme')."</p>";
+   require "paypal/Paypal.php";
+$p = new Paypal;
+
+// the paypal or paypal sandbox url
+$p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+
+// the timeout in seconds before the button form is submitted to paypal
+// this needs the included addevent javascript function
+// 0 = no delay
+// false = disable auto submission
+$p->timeout = false;
+
+// the button label
+// false to disable button (if you want to rely only on the javascript auto-submission) not recommended
+$p->button = 'Pay via Paypal';
+
+// use encryption (strongly recommended!)
+$p->encrypt = false;
+
+// the actual button parameters
+// https://www.paypal.com/IntegrationCenter/ic_std-variable-reference.html
+$p->add_field('charset','utf-8');
+$p->add_field('business', 'liedek_1313941377_biz@telenet.be');
+$p->add_field('return', eme_event_url($event));
+$p->add_field('cancel_return', eme_event_url($event));
+$p->add_field('notify_url', $ipn_link);
+$p->add_field('item_name', "Booking for '".eme_sanitize_html($event['event_name'])."'");
+$p->add_field('item_number', $booking_id);
+$p->add_field('amount', $event['price']);
+$p->add_field('currency_code',$event['currency']);
+$p->add_field('quantity', $booking['booking_seats']);
+   
+   $form_html .= $p->get_button();
+   return $form_html;
+}
+
+function eme_paypal_ipn() {
+require 'paypal/IPN.php';
+$ipn = new IPN;
+
+// the paypal url, or the sandbox url, or the ipn test url
+//$ipn->paypal_url = 'https://www.paypal.com/cgi-bin/webscr';
+$ipn->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+
+// your paypal email (the one that receives the payments)
+$ipn->paypal_email = 'liedek_1313941377_biz@telenet.be';
+
+// log to file options
+$ipn->log_to_file = false;					// write logs to file
+$ipn->log_filename = '/path/to/ipn.log';  	// the log filename (should NOT be web accessible and should be writable)
+
+// log to e-mail options
+$ipn->log_to_email = true;					// send logs by e-mail
+$ipn->log_email = 'liedekef@telenet.be';		// where you want to receive the logs
+$ipn->log_subject = 'IPN Log: ';			// prefix for the e-mail subject
+
+// database information
+$ipn->log_to_db = false;						// false not recommended
+$ipn->db_host = 'localhost';				// database host
+$ipn->db_user = 'some_user';				// database user
+$ipn->db_pass = 'some_password';			// database password
+$ipn->db_name = 'ipn';						// database name
+
+// array of currencies accepted or false to disable
+$ipn->currencies = array('USD','EUR');
+
+// date format on log headers (default: dd/mm/YYYY HH:mm:ss)
+// see http://php.net/date
+$ipn->date_format = 'd/m/Y H:i:s';
+
+// Prefix for file and mail logs
+$ipn->pretty_ipn = "IPN Values received:\n\n";
+
+
+// configuration ended, do the actual check
+
+if($ipn->ipn_is_valid()) {
+	/*
+		A valid ipn was received and passed preliminary validations
+		You can now do any custom validations you wish to ensure the payment was correct
+		You can access the IPN data with $ipn->ipn['value']
+		The complete() method below logs the valid IPN to the places you choose
+	*/
+	$ipn->complete();
+}
 }
 
 // template function

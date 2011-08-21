@@ -27,6 +27,9 @@ function eme_new_event_page() {
       "event_end_24h_time" => '',
       "event_notes" => '',
       "event_rsvp" => 0,
+      "use_paypal" => 0,
+      "price" => 0,
+      "currency" => "EUR",
       "rsvp_number_days" => 0,
       "registration_requires_approval" => 0,
       "registration_wp_users_only" => 0,
@@ -220,6 +223,10 @@ function eme_events_subpanel() {
       $event ['registration_wp_users_only'] = (isset ($_POST ['registration_wp_users_only']) && is_numeric($_POST ['registration_wp_users_only'])) ? $_POST ['registration_wp_users_only']:0;
       $event ['event_seats'] = (isset ($_POST ['event_seats']) && is_numeric($_POST ['event_seats'])) ? $_POST ['event_seats']:0;
       
+      $event ['use_paypal'] = (isset ($_POST ['use_paypal']) && is_numeric($_POST ['use_paypal'])) ? $_POST ['use_paypal']:0;
+      $event ['price'] = (isset ($_POST ['price']) && is_numeric($_POST ['price'])) ? $_POST ['price']:0;
+      $event ['currency'] = isset ($_POST ['currency']) ? $_POST ['currency']:"EUR";
+
       if (isset ( $_POST ['event_contactperson_id'] ) && $_POST ['event_contactperson_id'] != '') {
          $event ['event_contactperson_id'] = $_POST ['event_contactperson_id'];
       } else {
@@ -1825,6 +1832,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
    $scope_names ['future'] = __ ( 'Future events', 'eme' );
 
    $event_status_array = status_array ();
+
    ?> 
       
    <form id="posts-filter" action="" method="get">
@@ -2036,6 +2044,27 @@ function eme_event_form($event, $title, $element) {
    }
    $event_status_array = status_array ();
    $saved_bydays = array();
+   $currency_array = array ();
+   $currency_array ['AUD'] = __ ( 'Australian Dollar', 'eme' );
+   $currency_array ['CAD'] = __ ( 'Canadian Dollar', 'eme' );
+   $currency_array ['CZK'] = __ ( 'Czech Koruna', 'eme' );
+   $currency_array ['DKK'] = __ ( 'Danish Krone', 'eme' );
+   $currency_array ['EUR'] = __ ( 'Euro', 'eme' );
+   $currency_array ['HKD'] = __ ( 'Hong Kong Dollar', 'eme' );
+   $currency_array ['HUF'] = __ ( 'Hungarian Forint', 'eme' );
+   $currency_array ['ILS'] = __ ( 'Israeli New Sheqel', 'eme' );
+   $currency_array ['JPY'] = __ ( 'Japanese Yen', 'eme' );
+   $currency_array ['MXN'] = __ ( 'Mexican Peso', 'eme' );
+   $currency_array ['NOK'] = __ ( 'Norwegian Krone', 'eme' );
+   $currency_array ['NZD'] = __ ( 'New Zealand Dollar', 'eme' );
+   $currency_array ['PHP'] = __ ( 'Philippine Peso', 'eme' );
+   $currency_array ['PLN'] = __ ( 'Polish Zloty', 'eme' );
+   $currency_array ['GBP'] = __ ( 'Pound Sterling', 'eme' );
+   $currency_array ['SGD'] = __ ( 'Singapore Dollar', 'eme' );
+   $currency_array ['SEK'] = __ ( 'Swedish Krona', 'eme' );
+   $currency_array ['CHF'] = __ ( 'Swiss Franc', 'eme' );
+   $currency_array ['THB'] = __ ( 'Thai Baht', 'eme' );
+   $currency_array ['USD'] = __ ( 'U.S. Dollar', 'eme' );
 
    // let's determine if it is a new event, handy
    if (! $element) {
@@ -2149,6 +2178,7 @@ function eme_event_form($event, $title, $element) {
       $event ['registration_wp_users_only'] ? $registration_wp_users_only = "checked='checked'" : $registration_wp_users_only = '';
    }
    $event ['registration_requires_approval'] ? $registration_requires_approval = "checked='checked'" : $registration_requires_approval = '';
+   $event ['use_paypal'] ? $use_paypal_checked = "checked='checked'" : $use_paypal_checked = '';
    
    ob_start();
    ?>
@@ -2331,6 +2361,25 @@ function eme_event_form($event, $title, $element) {
                               <?php _e ( 'Allow RSVP until ','eme' ); ?>
                               <input id="rsvp_number_days" type="text" name="rsvp_number_days" maxlength='2' size='2' value="<?php echo $event ['rsvp_number_days']; ?>" />
                               <?php _e ( ' days before the event starts.','eme' ); ?>
+                           <br />
+                              <?php _e ( 'Use paypal','eme' ); ?>
+                              <input id="paypal-checkbox" name='use_paypal' value='1' type='checkbox' <?php echo $use_paypal_checked; ?> />
+                              <div id='paypal-data'>
+                              <?php _e ( 'Price: ','eme' ); ?>
+                              <input id="price" type="text" name="price" maxlength='2' size='2' value="<?php echo $event ['price']; ?>" />
+                              <select id="currency" name="currency">
+                              <?php
+                                 foreach ( $currency_array as $key=>$value) {
+                                    if ($event['currency'] && ($event['currency']==$key)) {
+                                       $selected = "selected='selected'";
+                                    } else {
+                                       $selected = "";
+                                    }
+                                    echo "<option value='$key' $selected>$value</option>";
+                                 }
+                              ?>
+                              </select><br />
+                              </div>
                            </p>
                            <?php if ($event ['event_rsvp']) {
                                  eme_bookings_compact_table ( $event['event_id'] );
@@ -2769,6 +2818,14 @@ function updateShowHideRsvp () {
    }
 }
 
+function updateShowHidePaypal () {
+   if($j_eme_event('input#paypal-checkbox').attr("checked")) {
+      $j_eme_event("div#paypal-data").fadeIn();
+   } else {
+      $j_eme_event("div#paypal-data").hide();
+   }
+}
+
 $j_eme_event(document).ready( function() {
    locale_format = "ciao";
  
@@ -2909,8 +2966,10 @@ $j_eme_event(document).ready( function() {
    updateIntervalSelectors();
    updateShowHideRecurrence();
    updateShowHideRsvp();
+   updateShowHidePaypal();
    $j_eme_event('input#event-recurrence').change(updateShowHideRecurrence);
    $j_eme_event('input#rsvp-checkbox').change(updateShowHideRsvp);
+   $j_eme_event('input#paypal-checkbox').change(updateShowHidePaypal);
    // recurrency elements
    $j_eme_event('input#recurrence-interval').keyup(updateIntervalDescriptor);
    $j_eme_event('select#recurrence-frequency').change(updateIntervalDescriptor);

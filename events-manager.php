@@ -485,6 +485,9 @@ function eme_create_events_table($charset,$collate) {
          modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          event_notes longtext DEFAULT NULL,
          event_rsvp bool DEFAULT 0,
+         use_paypal bool DEFAULT 0,
+         price mediumint(9) DEFAULT 0,
+         currency text DEFAULT NULL,
          rsvp_number_days tinyint unsigned DEFAULT 0,
          event_seats mediumint(9) DEFAULT 0,
          event_contactperson_id mediumint(9) DEFAULT 0,
@@ -535,7 +538,10 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'event_start_time', "alter table $table_name add event_start_time time NOT NULL;"); 
       maybe_add_column($table_name, 'event_end_time', "alter table $table_name add event_end_time time NOT NULL;"); 
       maybe_add_column($table_name, 'event_rsvp', "alter table $table_name add event_rsvp bool DEFAULT 0;");
+      maybe_add_column($table_name, 'use_paypal', "alter table $table_name add use_paypal bool DEFAULT 0;");
       maybe_add_column($table_name, 'rsvp_number_days', "alter table $table_name add rsvp_number_days tinyint unsigned DEFAULT 0;");
+      maybe_add_column($table_name, 'price', "alter table $table_name add price mediumint(9) DEFAULT 0;");
+      maybe_add_column($table_name, 'currency', "alter table $table_name add currency text DEFAULT NULL;");
       maybe_add_column($table_name, 'event_seats', "alter table $table_name add event_seats mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'recurrence_id', "alter table $table_name add recurrence_id mediumint(9) DEFAULT 0;"); 
@@ -684,12 +690,14 @@ function eme_create_bookings_table($charset,$collate) {
          creation_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
+         booking_payed bool DEFAULT 0,
          UNIQUE KEY  (booking_id)
          ) $charset $collate;";
       dbDelta($sql);
    } else {
       maybe_add_column($table_name, 'booking_comment', "ALTER TABLE $table_name add booking_comment text DEFAULT NULL;"); 
       maybe_add_column($table_name, 'booking_approved', "ALTER TABLE $table_name add booking_approved bool DEFAULT 0;"); 
+      maybe_add_column($table_name, 'booking_payed', "ALTER TABLE $table_name add booking_payed bool DEFAULT 0;"); 
       maybe_add_column($table_name, 'creation_date', "alter table $table_name add creation_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       maybe_add_column($table_name, 'creation_date_gmt', "alter table $table_name add creation_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       maybe_add_column($table_name, 'modif_date', "alter table $table_name add modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
