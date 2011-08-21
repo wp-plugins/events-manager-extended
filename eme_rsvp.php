@@ -259,7 +259,7 @@ function eme_book_seats($event) {
       $msg = response_check_captcha("captcha_check",1);
    }
    $min_allowed = intval(get_option('eme_rsvp_addbooking_min_spaces'));
-   $max_allowed = intval(get_option('eme_rsvp_addbooking_max_spaces')) || 10;
+   $max_allowed = intval(get_option('eme_rsvp_addbooking_max_spaces'));
    if(!empty($msg)) {
       $result = __('You entered an incorrect code','eme');
    } elseif ($honeypot_check != "") {
@@ -398,6 +398,12 @@ function eme_delete_booking($booking_id) {
    $sql = "DELETE FROM $bookings_table WHERE booking_id = $booking_id";
    $wpdb->query($sql);
    return __('Booking deleted', 'eme');
+}
+function eme_update_booking_payed($booking_id,$value) {
+   global $wpdb;
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME; 
+   $sql = $wpdb->prepare("UPDATE $bookings_table set booking_payed=$value WHERE booking_id = %s",$booking_id);
+   return $wpdb->query($sql);
 }
 function eme_approve_booking($booking_id) {
    global $wpdb;
@@ -712,6 +718,7 @@ function eme_registration_seats_page() {
          $bookings = isset($_POST ['bookings']) ? $_POST ['bookings'] : array();
          $selected_bookings = isset($_POST ['selected_bookings']) ? $_POST ['selected_bookings'] : array();
          $bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
+         $bookings_payed = isset($_POST ['bookings_payed']) ? $_POST ['bookings_payed'] : array();
          foreach ( $bookings as $key=>$booking_id ) {
             if (!in_array($booking_id,$selected_bookings)) {
                continue;
@@ -723,9 +730,13 @@ function eme_registration_seats_page() {
             // 0 seats is not possible, then you should remove the booking
             if ($bookings_seats[$key]==0)
                $bookings_seats[$key]=1;
-            if ($action == 'approveRegistration' && $booking['booking_seats']!= $bookings_seats[$key]) {
-               eme_update_booking_seats($booking_id,$bookings_seats[$key]);
-               eme_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
+            if ($action == 'approveRegistration') {
+               if ($booking['booking_payed']!= intval($bookings_payed[$key]))
+                  eme_update_booking_payed($booking_id,intval($bookings_payed[$key]));
+               if ($booking['booking_seats']!= $bookings_seats[$key]) {
+                  eme_update_booking_seats($booking_id,$bookings_seats[$key]);
+                  eme_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
+               }
             } elseif ($action == 'denyRegistration') {
                eme_delete_booking($booking_id);
                eme_email_rsvp_booking($booking['event_id'],$person['person_name'],$person['person_email'],$person['person_phone'],$bookings_seats[$key],$booking['booking_comment'],$action);
@@ -785,6 +796,7 @@ function eme_registration_seats_form_table($event_id=0) {
          <th><?php _e ( 'Date and time', 'eme' ); ?></th>
          <th><?php _e ('Booker','eme'); ?></th>
          <th><?php _e ('Seats','eme'); ?></th>
+         <th><?php _e ('Payed','eme'); ?></th>
       </tr>
    </thead>
    <tbody>
@@ -829,6 +841,9 @@ function eme_registration_seats_form_table($event_id=0) {
          <td>
             <input type="text" name="bookings_seats[]" value="<?php echo $event_booking['booking_seats'];?>" />
          </td>
+         <td>
+            <?php echo eme_ui_select_binary($event_booking['booking_payed'],"bookings_payed[]"); ?>
+         </td>
       </tr>
       <?php
          $i++;
@@ -857,6 +872,7 @@ function eme_registration_approval_page() {
       $pending_bookings = isset($_POST ['pending_bookings']) ? $_POST ['pending_bookings'] : array();
       $selected_bookings = isset($_POST ['selected_bookings']) ? $_POST ['selected_bookings'] : array();
       $bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
+      $bookings_payed = isset($_POST ['bookings_payed']) ? $_POST ['bookings_payed'] : array();
       foreach ( $pending_bookings as $key=>$booking_id ) {
          if (!in_array($booking_id,$selected_bookings)) {
             continue;
@@ -869,8 +885,11 @@ function eme_registration_approval_page() {
             // 0 seats is not possible, then you should remove the booking
             if ($bookings_seats[$key]==0)
                $bookings_seats[$key]=1;
-            if ($booking['booking_seats']!= intval($bookings_seats[$key]))
+            if ($booking['booking_payed']!= intval($bookings_payed[$key]))
+               eme_update_booking_payed($booking_id,intval($bookings_payed[$key]));
+            if ($booking['booking_seats']!= intval($bookings_seats[$key])) {
                eme_update_booking_seats($booking_id,intval($bookings_seats[$key]));
+            }
          } elseif ($action == 'denyRegistration') {
             eme_delete_booking($booking_id);
          }
@@ -929,6 +948,7 @@ function eme_registration_approval_form_table($event_id=0) {
          <th><?php _e ( 'Date and time', 'eme' ); ?></th>
          <th><?php _e ('Booker','eme'); ?></th>
          <th><?php _e ('Seats','eme'); ?></th>
+         <th><?php _e ('Payed','eme'); ?></th>
       </tr>
    </thead>
    <tbody>
@@ -972,6 +992,9 @@ function eme_registration_approval_form_table($event_id=0) {
          </td>
          <td>
             <input type="text" name="bookings_seats[]" value="<?php echo $event_booking['booking_seats'];?>" />
+         </td>
+         <td>
+            <?php echo eme_ui_select_binary($event_booking['booking_payed'],"bookings_payed[]"); ?>
          </td>
       </tr>
       <?php
@@ -1063,9 +1086,9 @@ function eme_paypal_ipn() {
    // database information
    $ipn->log_to_db = false;						// false not recommended
    $ipn->db_host = 'localhost';				// database host
-   $ipn->db_user = 'some_user';				// database user
-   $ipn->db_pass = 'some_password';			// database password
-   $ipn->db_name = 'ipn';						// database name
+   $ipn->db_user = '';				// database user
+   $ipn->db_pass = '';			// database password
+   $ipn->db_name = '';						// database name
 
    // array of currencies accepted or false to disable
    $ipn->currencies = array('USD','EUR');
@@ -1077,7 +1100,6 @@ function eme_paypal_ipn() {
    // Prefix for file and mail logs
    $ipn->pretty_ipn = "IPN Values received:\n\n";
 
-
    // configuration ended, do the actual check
 
    if($ipn->ipn_is_valid()) {
@@ -1087,6 +1109,8 @@ function eme_paypal_ipn() {
          You can access the IPN data with $ipn->ipn['value']
          The complete() method below logs the valid IPN to the places you choose
        */
+      $booking_id=$ipn->ipn['item_number'];
+      eme_update_booking_payed($booking_id,1);
       $ipn->complete();
    }
 }

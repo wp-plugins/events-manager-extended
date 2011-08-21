@@ -98,6 +98,20 @@ function eme_options_select($title, $name, $list, $description) {
 <?php 
 }
 
+function eme_ui_select_binary ($option_value, $name) {
+   $val = "<select name='$name'>";
+   $selected_YES="";
+   $selected_NO="";
+   if ($option_value==1)
+      $selected_YES = "selected='selected'";
+   else
+      $selected_NO = "selected='selected'";
+   $val.= "<option value='0' $selected_NO>".__('No')."</option>";
+   $val.= "<option value='1' $selected_YES>".__('Yes')."</option>";
+   $val.=" </select>";
+   return $val;
+}
+
 function eme_ui_select($option_value, $name, $list) {
      $val = "<select name='$name'>";
      foreach($list as $key => $value) {
