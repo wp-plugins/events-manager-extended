@@ -597,7 +597,7 @@ function eme_options_subpanel() {
 
 <h3><?php _e ( 'RSVP: mail options', 'eme' ); ?></h3>
 <table class='form-table'>
-     <?php
+   <?php
    eme_options_radio_binary ( __ ( 'Enable the RSVP e-mail notifications?', 'eme' ), 'eme_rsvp_mail_notify_is_active', __ ( 'Check this option if you want to receive an email when someone books places for your events.', 'eme' ) );
    eme_options_textarea ( __ ( 'Contact person email format', 'eme' ), 'eme_contactperson_email_body', __ ( 'The format of the email which will be sent to the contact person. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code>, <code>#_RESPEMAIL</code> and <code>#_RESPPHONE</code> to display respectively the name, e-mail, address and phone of the respondent.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment. <br/> Use <code>#_RESERVEDSPACES</code> and <code>#_AVAILABLESPACES</code> to display respectively the number of booked and available seats.', 'eme' ) );
    eme_options_textarea ( __ ( 'Respondent email format', 'eme' ), 'eme_respondent_email_body', __ ( 'The format of the email which will be sent to the respondent. Follow the events formatting instructions. <br/>Use <code>#_RESPNAME</code> to display the name of the respondent.<br/>Use <code>#_CONTACTNAME</code> and <code>#_PLAIN_CONTACTEMAIL</code> to display respectively the name and e-mail of the contact person.<br/>Use <code>#_SPACES</code> to display the number of spaces reserved by the respondent. Use <code>#_COMMENT</code> to display the respondent\'s comment.', 'eme' ) );
@@ -612,6 +612,14 @@ function eme_options_subpanel() {
    eme_options_radio_binary ( __ ( 'Use SMTP authentication?', 'eme' ), 'eme_rsvp_mail_SMTPAuth', __ ( 'SMTP authentication is often needed. If you use Gmail, make sure to set this parameter to Yes', 'eme' ) );
    eme_options_input_text ( __ ( 'SMTP username', 'eme' ), 'eme_smtp_username', __ ( "Insert the username to be used to access your SMTP server.", 'eme' ) );
    eme_options_input_password ( __ ( 'SMTP password', 'eme' ), "eme_smtp_password", __ ( "Insert the password to be used to access your SMTP server", 'eme' ) );
+   ?>
+</table>
+
+<h3><?php _e ( 'RSVP: paypal options', 'eme' ); ?></h3>
+<table class='form-table'>
+   <?php
+      eme_options_input_text (__('PayPal url','eme'),'eme_paypal_url', sprintf(__("The URL for paypal payments. The default is: %s",'eme'),DEFAULT_PAYPAL_URL));
+      eme_options_input_text (__('PayPal business info','eme'),'eme_paypal_business', __("Paypal business ID or email.",'eme'));
    ?>
 </table>
 

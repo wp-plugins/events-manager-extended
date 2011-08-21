@@ -1031,7 +1031,8 @@ function eme_paypal_form($event,$booking_id) {
    $p = new Paypal;
 
    // the paypal or paypal sandbox url
-   $p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+   //$p->paypal_url = 'https://www.paypal.com/cgi-bin/webscr';
+   $p->paypal_url = get_option('eme_paypal_url');
 
    // the timeout in seconds before the button form is submitted to paypal
    // this needs the included addevent javascript function
@@ -1041,7 +1042,7 @@ function eme_paypal_form($event,$booking_id) {
 
    // the button label
    // false to disable button (if you want to rely only on the javascript auto-submission) not recommended
-   $p->button = 'Pay via Paypal';
+   $p->button = __('Pay via Paypal','eme');
 
    // use encryption (strongly recommended!)
    $p->encrypt = false;
@@ -1049,11 +1050,11 @@ function eme_paypal_form($event,$booking_id) {
    // the actual button parameters
    // https://www.paypal.com/IntegrationCenter/ic_std-variable-reference.html
    $p->add_field('charset','utf-8');
-   $p->add_field('business', 'liedek_1313941377_biz@telenet.be');
+   $p->add_field('business', get_option('eme_paypal_business'));
    $p->add_field('return', eme_event_url($event));
    $p->add_field('cancel_return', eme_event_url($event));
    $p->add_field('notify_url', $ipn_link);
-   $p->add_field('item_name', "Booking for '".eme_sanitize_html($event['event_name'])."'");
+   $p->add_field('item_name', sprintf(__("Booking for '%s'","eme"),eme_sanitize_html($event['event_name'])));
    $p->add_field('item_number', $booking_id);
    $p->add_field('amount', $event['price']);
    $p->add_field('currency_code',$event['currency']);
@@ -1069,10 +1070,10 @@ function eme_paypal_ipn() {
 
    // the paypal url, or the sandbox url, or the ipn test url
    //$ipn->paypal_url = 'https://www.paypal.com/cgi-bin/webscr';
-   $ipn->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+   $ipn->paypal_url = get_option('eme_paypal_url');
 
    // your paypal email (the one that receives the payments)
-   $ipn->paypal_email = 'liedek_1313941377_biz@telenet.be';
+   $ipn->paypal_email = get_option('eme_paypal_business');
 
    // log to file options
    $ipn->log_to_file = false;					// write logs to file
