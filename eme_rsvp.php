@@ -1080,8 +1080,8 @@ function eme_paypal_ipn() {
    $ipn->log_filename = '/path/to/ipn.log';  	// the log filename (should NOT be web accessible and should be writable)
 
    // log to e-mail options
-   $ipn->log_to_email = true;					// send logs by e-mail
-   $ipn->log_email = 'liedekef@telenet.be';		// where you want to receive the logs
+   $ipn->log_to_email = false;					// send logs by e-mail
+   $ipn->log_email = '';		// where you want to receive the logs
    $ipn->log_subject = 'IPN Log: ';			// prefix for the e-mail subject
 
    // database information
