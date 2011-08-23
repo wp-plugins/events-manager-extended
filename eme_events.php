@@ -618,7 +618,8 @@ function eme_options_subpanel() {
 <h3><?php _e ( 'RSVP: paypal options', 'eme' ); ?></h3>
 <table class='form-table'>
    <?php
-      eme_options_input_text (__('PayPal url','eme'),'eme_paypal_url', sprintf(__("The URL for paypal payments. The default is: %s",'eme'),DEFAULT_PAYPAL_URL));
+      eme_options_select ( __('PayPal live or test','eme'), 'eme_paypal_url', array ('https://www.sandbox.paypal.com/cgi-bin/webscr' => __('Paypal Sandbox (for testing)','eme'), 'https://www.paypal.com/cgi-bin/webscr' => __ ( 'Paypal Live', 'eme' )), __('Choose wether you want to test paypal in a paypal sandbox or go live and really use paypal.','eme') );
+     # eme_options_input_text (__('PayPal url','eme'),'eme_paypal_url', sprintf(__("The URL for paypal payments. The default is: %s",'eme'),DEFAULT_PAYPAL_URL));
       eme_options_input_text (__('PayPal business info','eme'),'eme_paypal_business', __("Paypal business ID or email.",'eme'));
    ?>
 </table>
