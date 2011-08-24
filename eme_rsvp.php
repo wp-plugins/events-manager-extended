@@ -350,6 +350,7 @@ function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
    $booking['modif_date']=current_time('mysql', false);
    $booking['creation_date_gmt']=current_time('mysql', true);
    $booking['modif_date_gmt']=current_time('mysql', true);
+   $event = eme_get_event($event_id);
    if ($event['registration_requires_approval']) {
       $booking['booking_approved']=0;
    } else {
