@@ -4,7 +4,7 @@ Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 3.0.0
 Tested up to: 3.2.1
-Stable tag: 3.3.5
+Stable tag: 4.0.0
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. SEO compatible.
              
@@ -522,7 +522,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: for correct RSS validation, <item> should start on a newline
 * Bugfix: escape some chars for RSS feeds
 
-= 3.3.6 = 
+= 4.0.0 = 
 * Feature: added option "show_ongoing" to [events_list], to indicate you want the scopes to include end dates (ongoing events) upon evaluation (like e.g. future events include events starting in the past, but ending in the future), or just the start date. Default: 1
 * Feature: you can now set the desired capability a user must have in order to do things (access right management). Use a plugin like "User Role Editor" to add/edit capabilities and roles.
 * Feature: eme_add_booking_form_filter and eme_delete_booking_form_filter filters added, so you can change the form html to your liking
