@@ -207,6 +207,9 @@ function eme_cancel_seats($event) {
       // we require a user to be WP registered to be able to book
       get_currentuserinfo();
       $booker_wp_id=$current_user->ID;
+      // we also need name and email for sending the mail
+      $bookerName = $current_user->display_name;
+      $bookerEmail = $current_user->user_email;
       $booker = eme_get_person_by_wp_id($booker_wp_id); 
    } else {
       $bookerName = eme_strip_tags($_POST['bookerName']);
@@ -244,13 +247,13 @@ function eme_book_seats($event) {
       get_currentuserinfo();
       $booker_wp_id=$current_user->ID;
       // we also need name and email for sending the mail
-      $bookerEmail = $current_user->user_email;
       $bookerName = $current_user->display_name;
+      $bookerEmail = $current_user->user_email;
       $booker = eme_get_person_by_wp_id($booker_wp_id); 
    } else {
       $booker_wp_id=0;
-      $bookerEmail = eme_strip_tags($_POST['bookerEmail']);
       $bookerName = eme_strip_tags($_POST['bookerName']);
+      $bookerEmail = eme_strip_tags($_POST['bookerEmail']);
       $booker = eme_get_person_by_name_and_email($bookerName, $bookerEmail); 
    }
    
