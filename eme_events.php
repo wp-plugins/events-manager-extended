@@ -161,6 +161,8 @@ function eme_events_subpanel() {
             }
          }
       }
+      $events = eme_get_events ( $list_limit+1, "future", $order, $offset );
+      eme_events_table ( $events, $list_limit, __ ( 'Future events', 'eme' ), "future", $offset );
    }
 
    // UPDATE or CREATE action
