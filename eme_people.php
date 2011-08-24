@@ -2,7 +2,7 @@
 function eme_people_page() {
    $message="";
    // Managing AJAX booking removal
-   if (!current_user_can( SETTING_CAPABILITY) && isset($_REQUEST['action'])) {
+   if (!current_user_can( get_option('eme_cap_people')) && isset($_REQUEST['action'])) {
       $message = __('You have no right to update people!','eme');
    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'remove_booking') {
       if(isset($_REQUEST['booking_id']))
@@ -117,8 +117,8 @@ function fputcsv2 ($fh, $fields, $delimiter = ',', $enclosure = '"', $mysql_null
 function eme_csv_booking_report($event_id) {
    $event = eme_get_event($event_id);
    $current_userid=get_current_user_id();
-   if (!(current_user_can( EDIT_CAPABILITY) ||
-        (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
+   if (!(current_user_can( get_option('eme_cap_edit_events')) ||
+        (current_user_can( get_option('eme_cap_author_event')) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
         echo "No access";
         die;
    }
@@ -154,8 +154,8 @@ function eme_csv_booking_report($event_id) {
 function eme_printable_booking_report($event_id) {
    $event = eme_get_event($event_id);
    $current_userid=get_current_user_id();
-   if (!(current_user_can( EDIT_CAPABILITY) ||
-        (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
+   if (!(current_user_can( get_option('eme_cap_edit_events')) ||
+        (current_user_can( get_option('eme_cap_author_event')) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
         echo "No access";
         die;
    }
@@ -241,7 +241,7 @@ function eme_people_table($message="") {
             <thead>
             <tr>
             <th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
-            <th class='manage-column ' scope='col'>Name</th>
+            <th class='manage-column' scope='col'>Name</th>
             <th scope='col'>E-mail</th>
             <th scope='col'>Phone number</th>
             </tr>
@@ -249,7 +249,7 @@ function eme_people_table($message="") {
             <tfoot>
             <tr>
             <th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
-            <th class='manage-column ' scope='col'>Name</th>
+            <th class='manage-column' scope='col'>Name</th>
             <th scope='col'>E-mail</th>
             <th scope='col'>Phone number</th>
             </tr>

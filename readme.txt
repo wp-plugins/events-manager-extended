@@ -3,8 +3,8 @@ Contributors: liedekef
 Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
 Requires at least: 3.0.0
-Tested up to: 3.1.3
-Stable tag: 3.3.5
+Tested up to: 3.2.1
+Stable tag: 4.0.0
 
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. SEO compatible.
              
@@ -522,8 +522,48 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: for correct RSS validation, <item> should start on a newline
 * Bugfix: escape some chars for RSS feeds
 
-= 3.3.6 = 
+= 4.0.0 = 
 * Feature: added option "show_ongoing" to [events_list], to indicate you want the scopes to include end dates (ongoing events) upon evaluation (like e.g. future events include events starting in the past, but ending in the future), or just the start date. Default: 1
+* Feature: you can now set the desired capability a user must have in order to do things (access right management). Use a plugin like "User Role Editor" to add/edit capabilities and roles.
+* Feature: eme_add_booking_form_filter and eme_delete_booking_form_filter filters added, so you can change the form html to your liking
+* Feature: split the function eme_display_single_event_shortcode into 2 parts, creating the function eme_display_single_event() that takes as single argument the event id, returning the html output for that event
+* Feature: recurrent events can now span multiple days
+* Feature: new shortcode [events_countdown], with one optional parameter (event ID): returns the number of days until the next event or the event specified
+* Feature: the shortcode [events_ical_link] now also accepts category as an option
+* Feature: locations now also can have categories on their own, and the "category"-option in [events_locations] will now show locations in those categories if the "eventful"-option is not set
+* Feature: locations now also have an author, and people can have the right to add, edit own or edit all locations
+* Feature: #_CATEGORIES for locations now returns the categories a location is in (as for events)
+* Feature: new option link_showperiod for shortcode [events_list]: if showperiod=daily and link_showperiod=1, then the shown days are links that will go to events for just that day
+* Feature: new option notcategory for shortcode [events_list]: works as the category option but serves to exclude categories
+* Feature: for conditional tags, I added 1 extra shortcode:
+  #_IS_SINGLE_DAY ('1' if you're viewing a single day, '0' otherwise)
+* Feature: new shortcode #_CALENDAR_DAY, returning the day being viewed when viewing a specific day on the calendar
+* Feature: added filter to do own email obfuscating: eme_email_filter. If defined, the standard ascii obfuscating won't take place and you can use your own
+  filters, eg. from an obfuscating plugin, if you define it it functions.php:
+  add_filter( 'eme_email_filter', 'c2c_obfuscate_email' );
+* Feature: locations now also can point to an external url, as events can already
+* Feature: extra html headers can now be added, usefull for e.g. meta tags for facebook or seo
+* Feature: now you can delete events of an recurrence or the whole recurrence (no longer needed to take an event out of an recurrence before being able to delete just that event)
+* Feature: the permalink prefix for events and locations can now be changed in the settings page. After each change, you need to press save on the wordpress permalinks settings page before changes take effect.
+* Feature: the event or location permalink slug can now be changed manually, but for now the event/location ID remains required
+* Feature: the pending email body text can now also be changed per event
+* Feature: basic Paypal integration
+* Improvement: the RSVP form now always prefills the name and email if you're logged in, if no WP membership is required you can change the values
+* Improvement: the no-events-message needs to be formatted by the user, not in the code using ul/li constructs
+* Improvement: for format: sometimes people want to give placeholders as options, but when using the shortcode inside another (e.g. when putting [events_list format="#_EVENTNAME"] inside the "display single event" setting, the replacement of the placeholders happens too soon (placeholders get replaced first, before any other shortcode is interpreted). So we add the option that people can use "#OTHER" as prefix for any placeholder inside format (like #ESC works)
+* Improvement: "change registrations" now only shows the approved registrations, not pending ones
+* Improvement: in the events/locations admin section (add/edit), the categories are now sorted alphabetically
+* Improvement: #_NAME has been deprecated in favor of #_EVENTNAME
+* Improvement: #_LOCATION has been deprecated in favor of #_LOCATIONNAME
+* Improvement: #_PLAIN_CONTACTEMAIL has been deprecated in favor of the existing #_CONTACTEMAIL
 * Bugfix: AND categories for [events_list] were no longer working and resulted in all categories being used
 * Bugfix: some filtering fixes in admin panel
 * Bugfix: scope=this_week/next_week now takes the "start day of week" WP setting into account
+* Bugfix: cancelled registrations reported the wrong number of seats cancelled in the mail
+* Bugfix: an inappropriate mysql warning when updating a location without changing anything (wpdb->update returns 0 because 0 rows changed) has been eliminated
+* Bugfix: the names of users logged into WordPress were not pre-filled in the delete booking form
+* Bugfix: fixing a bug with quotes in category names
+* Bugfix: cancel emails were not being sent
+* Bugfix: #_IMAGEURL didn't return the location image url for events (it worked ok for locations itself)
+* Bugfix: wordpress inserts canonical url's since 3.0, but these point to the page url. Fixed so the correct canonical url is inserted for single locations or events.
+* Bugfix: get rid of some php notices in the event creation form

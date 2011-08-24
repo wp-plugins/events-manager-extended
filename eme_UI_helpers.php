@@ -61,13 +61,17 @@ function eme_options_textarea($title, $name, $description) {
 }
 
 function eme_options_radio_binary($title, $name, $description) {
-      $list_events_page = get_option($name); ?>
+      $option_value = get_option($name);
+      if ($name == "eme_permalink_events_prefix" || $name == "eme_permalink_locations_prefix") {
+         $option_value = eme_permalink_convert($option_value);
+      }
+?>
        
          <tr valign="top" id='<?php echo $name;?>_row'>
             <th scope="row"><?php _e($title,'eme'); ?></th>
             <td>
-            <input id="<?php echo $name ?>_yes" name="<?php echo $name ?>" type="radio" value="1" <?php if($list_events_page) echo "checked='checked'"; ?> /><?php _e('Yes'); ?> <br />
-            <input  id="<?php echo $name ?>_no" name="<?php echo $name ?>" type="radio" value="0" <?php if(!$list_events_page) echo "checked='checked'"; ?> /><?php _e('No'); ?> <br />
+            <input id="<?php echo $name ?>_yes" name="<?php echo $name ?>" type="radio" value="1" <?php if($option_value) echo "checked='checked'"; ?> /><?php _e('Yes'); ?> <br />
+            <input  id="<?php echo $name ?>_no" name="<?php echo $name ?>" type="radio" value="0" <?php if(!$option_value) echo "checked='checked'"; ?> /><?php _e('No'); ?> <br />
             <?php echo $description; ?>
          </td>
          </tr>
@@ -92,6 +96,20 @@ function eme_options_select($title, $name, $list, $description) {
          </td>
          </tr>
 <?php 
+}
+
+function eme_ui_select_binary ($option_value, $name) {
+   $val = "<select name='$name'>";
+   $selected_YES="";
+   $selected_NO="";
+   if ($option_value==1)
+      $selected_YES = "selected='selected'";
+   else
+      $selected_NO = "selected='selected'";
+   $val.= "<option value='0' $selected_NO>".__('No')."</option>";
+   $val.= "<option value='1' $selected_YES>".__('Yes')."</option>";
+   $val.=" </select>";
+   return $val;
 }
 
 function eme_ui_select($option_value, $name, $list) {

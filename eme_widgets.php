@@ -29,8 +29,8 @@ class WP_Widget_eme_list extends WP_Widget {
          echo $before_title . $title . $after_title;
 
       $events_list = eme_get_events_list($limit,$scope,$order,$format,false,$category,$showperiod,$author);
-      if ($events_list == __('No events', 'eme'))
-         echo "<ul><li>$events_list</li></ul>";
+      if ($events_list == get_option('eme_no_events_message' ))
+         echo $events_list;
       else
          echo $header.$events_list.$footer;
       echo $after_widget;

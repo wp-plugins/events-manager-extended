@@ -3,7 +3,7 @@ function eme_categories_subpanel() {
    global $wpdb;
    
    admin_show_warnings();
-   if (!current_user_can( SETTING_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
+   if (!current_user_can( get_option('eme_cap_categories')) && (isset($_GET['action']) || isset($_POST['action']))) {
       $message = __('You have no right to update categories!','eme');
       eme_categories_table_layout($message);
    } elseif (isset($_GET['action']) && $_GET['action'] == "editcat") { 
@@ -16,12 +16,12 @@ function eme_categories_subpanel() {
       if (isset($_POST['action']) && $_POST['action'] == "edit" ) {
          // category update required  
          $category = array();
-         $category['category_name'] = $_POST['category_name'];
-         $validation_result = $wpdb->update( $categories_table, $category, array('category_id' => $_POST['category_ID']) );
+         $category['category_name'] = trim(stripslashes($_POST['category_name']));
+         $validation_result = $wpdb->update( $categories_table, $category, array('category_id' => intval($_POST['category_ID'])) );
       } elseif ( isset($_POST['action']) && $_POST['action'] == "add" ) {
          // Add a new category
          $category = array();
-         $category['category_name'] = $_POST['category_name'];
+         $category['category_name'] = trim(stripslashes($_POST['category_name']));
          $validation_result = $wpdb->insert($categories_table, $category);
       } elseif ( isset($_POST['action']) && $_POST['action'] == "delete" ) {
          // Delete category or multiple
@@ -57,7 +57,7 @@ function eme_categories_subpanel() {
 } 
 
 function eme_categories_table_layout($message = "") {
-   $categories = eme_get_categories();
+   $categories = eme_get_categories(false,"",1);
    $destination = admin_url("admin.php?page=events-manager-categories"); 
    $table = "
       <div class='wrap nosubsub'>\n
@@ -179,7 +179,7 @@ function eme_categories_edit_layout($message = "") {
          <table class='form-table'>
             <tr class='form-field form-required'>
                <th scope='row' valign='top'><label for='category_name'>".__('Category name', 'eme')."</label></th>
-               <td><input name='category_name' id='category-name' type='text' value='".$category['category_name']."' size='40'  /><br />
+               <td><input name='category_name' id='category-name' type='text' value='".eme_sanitize_html($category['category_name'])."' size='40'  /><br />
                  ".__('The name of the category', 'eme')."</td>
             </tr>
          </table>
@@ -193,10 +193,15 @@ function eme_categories_edit_layout($message = "") {
    echo $layout;
 }
 
-function eme_get_categories($eventful=false,$scope="future"){
+function eme_get_categories($eventful=false,$scope="future",$sorted=0){
    global $wpdb;
    $categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
    $categories = array();
+   if ($sorted) {
+      $orderby = " ORDER BY category_name ASC";
+   } else {
+      $orderby = "";
+   }
    if ($eventful) {
       $events = eme_get_events(0, $scope, "ASC");
       if ($events) {
@@ -213,10 +218,10 @@ function eme_get_categories($eventful=false,$scope="future"){
       }
       if (!empty($categories)) {
          $event_cats=join(",",$categories);
-         return $wpdb->get_results("SELECT * FROM $categories_table where category_id in ($event_cats)", ARRAY_A);
+         return $wpdb->get_results("SELECT * FROM $categories_table where category_id in ($event_cats) $orderby", ARRAY_A);
       }
    } else {
-      return $wpdb->get_results("SELECT * FROM $categories_table", ARRAY_A);
+      return $wpdb->get_results("SELECT * FROM $categories_table $orderby", ARRAY_A);
    }
 }
 
@@ -233,6 +238,15 @@ function eme_get_event_categories($event_id) {
    $event_table = $wpdb->prefix.EVENTS_TBNAME; 
    $categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
    $sql = "SELECT category_name FROM $categories_table, $event_table where event_id ='$event_id' AND FIND_IN_SET(category_id,event_category_ids)";
+   $category = $wpdb->get_col($sql);
+   return $category;
+}
+
+function eme_get_location_categories($location_id) { 
+   global $wpdb;
+   $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
+   $categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
+   $sql = "SELECT category_name FROM $categories_table, $locations_table where location_id ='$location_id' AND FIND_IN_SET(category_id,location_category_ids)";
    $category = $wpdb->get_col($sql);
    return $category;
 }
