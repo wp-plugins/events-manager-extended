@@ -570,3 +570,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 4.0.1 = 
 * Bugfix: price can now be more than two digits
+* Bugfix: fixed two small issuess in eme_rsvp.php
