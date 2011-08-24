@@ -567,3 +567,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: #_IMAGEURL didn't return the location image url for events (it worked ok for locations itself)
 * Bugfix: wordpress inserts canonical url's since 3.0, but these point to the page url. Fixed so the correct canonical url is inserted for single locations or events.
 * Bugfix: get rid of some php notices in the event creation form
+
+= 4.0.1 = 
+* Bugfix: price can now be more than two digits
