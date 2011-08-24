@@ -539,7 +539,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
   #_IS_SINGLE_DAY ('1' if you're viewing a single day, '0' otherwise)
 * Feature: new shortcode #_CALENDAR_DAY, returning the day being viewed when viewing a specific day on the calendar
 * Feature: added filter to do own email obfuscating: eme_email_filter. If defined, the standard ascii obfuscating won't take place and you can use your own
-  filters, eg. from an obfuscating plugin, if you define it it functions.php:
+  filters, eg. from an obfuscating plugin, if you define it in functions.php:
   add_filter( 'eme_email_filter', 'c2c_obfuscate_email' );
 * Feature: locations now also can point to an external url, as events can already
 * Feature: extra html headers can now be added, usefull for e.g. meta tags for facebook or seo
