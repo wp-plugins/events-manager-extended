@@ -2381,7 +2381,7 @@ function eme_event_form($event, $title, $element) {
                               <input id="paypal-checkbox" name='use_paypal' value='1' type='checkbox' <?php echo $use_paypal_checked; ?> />
                               <div id='paypal-data'>
                               <?php _e ( 'Price: ','eme' ); ?>
-                              <input id="price" type="text" name="price" maxlength='2' size='2' value="<?php echo $event ['price']; ?>" />
+                              <input id="price" type="text" name="price" maxlength='9' size='3' value="<?php echo $event ['price']; ?>" />
                               <select id="currency" name="currency">
                               <?php
                                  foreach ( $currency_array as $key=>$value) {
