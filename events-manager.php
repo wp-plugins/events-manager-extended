@@ -1202,6 +1202,16 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
 
+      } elseif (preg_match('/#_EVENTPRICE$/', $result)) {
+         $field = "price";
+         $replacement = $event[$field];
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement); 
+         }
+
+
       } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
          $replacement = $event[$field];

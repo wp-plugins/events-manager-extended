@@ -569,5 +569,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: get rid of some php notices in the event creation form
 
 = 4.0.1 = 
+* Feature: added placeholder #_EVENTPRICE, so you can show the price for an event
 * Bugfix: price can now be more than two digits
 * Bugfix: fixed two small issuess in eme_rsvp.php
