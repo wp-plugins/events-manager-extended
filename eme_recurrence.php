@@ -15,7 +15,7 @@ function eme_get_recurrence_days($recurrence){
    $last_week_start = array(25, 22, 25, 24, 25, 24, 25, 25, 24, 25, 24, 25);
    
    $weekdays = explode(",", $recurrence['recurrence_byday']);
-   //print_r($weekdays);
+//   print_r($weekdays);
    
    $counter = 0;
    $daycounter = 0;
@@ -36,9 +36,10 @@ function eme_get_recurrence_days($recurrence){
       }
 
       if($recurrence['recurrence_freq'] == 'weekly') {
-         if (!$recurrence['recurrence_byday']) {
+         if (!$recurrence['recurrence_byday'] && eme_iso_N_date_value($cycle_date)==eme_iso_N_date_value($start_date)) {
          // no specific days given, so we use 7 days as interval
-            if($daycounter % 7*$recurrence['recurrence_interval'] == 0 )
+            //if($daycounter % 7*$recurrence['recurrence_interval'] == 0 ) {
+            if($weekcounter % $recurrence['recurrence_interval'] == 0 )
                array_push($matching_days, $cycle_date);
          } elseif (in_array(eme_iso_N_date_value($cycle_date), $weekdays )) {
          // specific days, so we only check for those days
@@ -118,10 +119,14 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    global $wpdb;
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
    $matching_days = eme_get_recurrence_days($recurrence);
-   //print_r($matching_days);
+//   print_r($matching_days);
    sort($matching_days);
 
-   $duration_days_event = eme_daydifference($event['event_start_date'],$event['event_end_date']);
+   if ($event['event_end_date']=='') {
+      $duration_days_event = 0;
+   } else {
+      $duration_days_event = eme_daydifference($event['event_start_date'],$event['event_end_date']);
+   }
    foreach($matching_days as $day) {
       $event['event_start_date'] = date("Y-m-d", $day); 
       $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
@@ -171,7 +176,11 @@ function eme_update_events_for_recurrence($event,$recurrence) {
    //print_r($matching_days);  
    sort($matching_days);
 
-   $duration_days_event = eme_daydifference($event['event_start_date'],$event['event_end_date']);
+   if ($event['event_end_date']=='') {
+      $duration_days_event = 0;
+   } else {
+      $duration_days_event = eme_daydifference($event['event_start_date'],$event['event_end_date']);
+   }
 
    // 2 steps for updating events for a recurrence:
    // First step: check the existing events and if they still match the recurrence days, update them

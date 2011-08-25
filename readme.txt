@@ -572,4 +572,5 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added placeholder #_EVENTPRICE, so you can show the price for an event
 * Bugfix: price can now be more than two digits
 * Bugfix: fixed two small issuess in eme_rsvp.php
-* Bugfix: the $event array for the insert_new_event filter didn't have the event ID
+* Bugfix: the array for the eme_insert_event_action action hook didn't have the event ID
+* Bugfix: fixed a recurrence insert when the day of the week was not checked

@@ -2298,7 +2298,7 @@ function eme_event_form($event, $title, $element) {
                            <p class="alternate-selector" id="weekly-selector">
                               <?php eme_checkbox_items ( 'recurrence_bydays[]', $days_names, $saved_bydays ); ?>
                               <br />
-                              <?php _e ( 'If you leave this empty, the event start date will be used as a reference.', 'eme' )?>
+                              <?php _e ( 'If you leave this empty, the recurrence start date will be used as a reference.', 'eme' )?>
                            </p>
                            <p class="alternate-selector" id="monthly-selector">
                               <?php _e ( 'Every', 'eme' )?>
@@ -2315,6 +2315,9 @@ function eme_event_form($event, $title, $element) {
                         </div>
                         <p id="recurrence-tip">
                            <?php _e ( 'Check if your event happens more than once according to a regular pattern', 'eme' )?>
+                        </p>
+                        <p id="recurrence-tip-2">
+                           <?php _e ( 'The event start and end date only define the duration of an event in case of a recurrence.', 'eme' )?>
                         </p>
                      </div>
                   </div>
@@ -2745,8 +2748,8 @@ function eme_validate_event($event) {
    $error_message = "";
    if (count ( $errors ) > 0)
       $error_message = __ ( 'Missing fields: ','eme' ) . implode ( ", ", $errors ) . ". ";
-   if (isset($_POST ['repeated_event']) && $_POST ['repeated_event'] == "1" && (!isset($_POST ['event_end_date']) || $_POST ['event_end_date'] == ""))
-      $error_message .= __ ( 'Since the event is repeated, you must specify an event date.', 'eme' );
+   if (isset($_POST ['repeated_event']) && $_POST ['repeated_event'] == "1" && (!isset($_POST ['recurrence_end_date']) || $_POST ['recurrence_end_date'] == ""))
+      $error_message .= __ ( 'Since the event is repeated, you must specify an event date for the recurrence.', 'eme' );
    if ($error_message != "")
       return $error_message;
    else
@@ -2819,9 +2822,13 @@ function updateShowHideRecurrence () {
    if($j_eme_event('input#event-recurrence').attr("checked")) {
       $j_eme_event("#event_recurrence_pattern").fadeIn();
       $j_eme_event("div#div_recurrence_date").show();
+      $j_eme_event("p#recurrence-tip").hide();
+      $j_eme_event("p#recurrence-tip-2").show();
    } else {
       $j_eme_event("#event_recurrence_pattern").hide();
       $j_eme_event("div#div_recurrence_date").hide();
+      $j_eme_event("p#recurrence-tip").show();
+      $j_eme_event("p#recurrence-tip-2").hide();
    }
 }
 
@@ -3025,11 +3032,11 @@ $j_eme_event(document).ready( function() {
          if (missingFields.length > 0) {
           errors = "<?php echo _e ( 'Some required fields are missing:', 'eme' )?> " + missingFields.join(", ") + ".\n";
       }
-      if(recurring && $j_eme_event("input[name=localised_event_end_date]").val() == "") {
+      if(recurring && $j_eme_event("input[name=localised_recurrence_end_date]").val() == "") {
          errors = errors +  "<?php _e ( 'Since the event is repeated, you must specify an end date', 'eme' )?>."; 
-         $j_eme_event("input[name=localised_event_end_date]").css('border','2px solid red');
+         $j_eme_event("input[name=localised_recurrence_end_date]").css('border','2px solid red');
       } else {
-         $j_eme_event("input[name=localised_event_end_date]").css('border','1px solid #DFDFDF');
+         $j_eme_event("input[name=localised_recurrence_end_date]").css('border','1px solid #DFDFDF');
       }
       if(errors != "") {
          alert(errors);
