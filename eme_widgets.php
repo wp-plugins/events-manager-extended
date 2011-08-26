@@ -85,12 +85,8 @@ class WP_Widget_eme_list extends WP_Widget {
     <input type="text" id="<?php echo $this->get_field_id('limit'); ?>" name="<?php echo $this->get_field_name('limit'); ?>" value="<?php echo $limit;?>" />
   </p>
   <p>
-    <label for="<?php echo $this->get_field_id('scope'); ?>"><?php _e('Scope of the events','eme'); ?>:</label><br />
-   <select id="<?php echo $this->get_field_id('scope'); ?>" name="<?php echo $this->get_field_name('scope'); ?>">
-         <option value="future" <?php selected( $scope, 'future' ); ?>><?php _e('Future events','eme'); ?></option>
-         <option value="all" <?php selected( $scope, 'all' ); ?>><?php _e('All events','eme'); ?></option>
-         <option value="past" <?php selected( $scope, 'past' ); ?>><?php _e('Past events','eme'); ?></option>
-    </select>
+    <label for="<?php echo $this->get_field_id('scope'); ?>"><?php _e('Scope of the events','eme'); ?><br /><?php _e('(See the doc for &#91;events_list] for all possible values)'); ?>:</label><br />
+    <input type="text" id="<?php echo $this->get_field_id('scope'); ?>" name="<?php echo $this->get_field_name('scope'); ?>" value="<?php echo $scope;?>" />
   </p>
   <p>
     <label for="<?php echo $this->get_field_id('showperiod'); ?>"><?php _e('Show events per period','eme'); ?>:</label><br />
