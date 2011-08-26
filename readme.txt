@@ -574,3 +574,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: fixed two small issuess in eme_rsvp.php
 * Bugfix: the array for the eme_insert_event_action action hook didn't have the event ID
 * Bugfix: fixed a recurrence insert when the day of the week was not checked
+* Bugfix: fixed a recurrence insert when the end day of the single event wasn't set (it resulted in a 2-day event)

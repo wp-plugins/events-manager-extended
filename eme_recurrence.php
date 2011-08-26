@@ -129,20 +129,8 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    }
    foreach($matching_days as $day) {
       $event['event_start_date'] = date("Y-m-d", $day); 
-      $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
-      // in case the end time crosses midnight (and as such is lower than the start time), the end day should be the next day
-      $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
-      $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
-      if ($endstring<=$startstring) {
-         // one day = 86400 seconds
-         $event['event_end_date'] = date("Y-m-d", $day+86400);
-      }
-      $event['creation_date']=$recurrence['creation_date'];
-      $event['modif_date']=$recurrence['modif_date'];
-      $event['creation_date_gmt']=$recurrence['creation_date_gmt'];
-      $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
-   //$wpdb->show_errors(true);
-      $wpdb->insert($events_table, $event);
+      $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days"));
+      eme_db_insert_event($event,1);
    }
 }
 
@@ -203,13 +191,9 @@ function eme_update_events_for_recurrence($event,$recurrence) {
          $where=array('event_id' => $existing_event['event_id']);
          $event['event_start_date'] = $existing_event['event_start_date'];
          $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
-         $event['modif_date']=$recurrence['modif_date'];
-         $event['creation_date']=$recurrence['modif_date'];
-         $event['creation_date_gmt']=$recurrence['modif_date_gmt'];
-         $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
-         $wpdb->update($events_table, $event, $where); 
+         eme_db_update_event($event, $where, 1); 
       } else {
-            $sql = "DELETE FROM $events_table WHERE event_id = '".$existing_event['event_id']."';";
+         $sql = "DELETE FROM $events_table WHERE event_id = '".$existing_event['event_id']."';";
          $wpdb->query($sql);
       }
    }
@@ -224,11 +208,7 @@ function eme_update_events_for_recurrence($event,$recurrence) {
          }
       }
       if ($insert_needed==1) {
-         $event['creation_date']=$recurrence['modif_date'];
-         $event['modif_date']=$recurrence['modif_date'];
-         $event['creation_date_gmt']=$recurrence['modif_date_gmt'];
-         $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
-         $wpdb->insert($events_table, $event);        
+         eme_db_insert_event($event,1);
       }
    }
    return 1;

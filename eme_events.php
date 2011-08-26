@@ -3382,7 +3382,7 @@ function eme_general_footer() {
 }
 add_action('wp_footer', 'eme_general_footer');
 
-function eme_db_insert_event($event) {
+function eme_db_insert_event($event,$event_is_part_of_recurrence=0) {
    global $wpdb;
    $table_name = $wpdb->prefix . EVENTS_TBNAME;
 
@@ -3392,6 +3392,9 @@ function eme_db_insert_event($event) {
    $event['modif_date_gmt']=current_time('mysql', true);
 
    // some sanity checks
+   if (isset($event['event_id'])) {
+      unset($event['event_id']);
+   }
    if ($event['event_end_date']<$event['event_start_date']) {
       $event['event_end_date']=$event['event_start_date'];
    }
@@ -3414,12 +3417,13 @@ function eme_db_insert_event($event) {
    } else {
       $event_ID = $wpdb->insert_id;
       $event['event_id']=$event_ID;
-      if (has_action('eme_insert_event_action')) do_action('eme_insert_event_action',$event);
+      // the eme_insert_event_action is only executed for single events, not those part of a recurrence
+      if (!$event_is_part_of_recurrence && has_action('eme_insert_event_action')) do_action('eme_insert_event_action',$event);
       return $event_ID;
    }
 }
 
-function eme_db_update_event($event,$where) {
+function eme_db_update_event($event,$where,$event_is_part_of_recurrence=0) {
    global $wpdb;
    $table_name = $wpdb->prefix . EVENTS_TBNAME;
 
@@ -3447,7 +3451,8 @@ function eme_db_update_event($event,$where) {
       $wpdb->print_error();
       return false;
    } else {
-      if (has_action('eme_update_event_action')) do_action('eme_update_event_action',$event);
+      // the eme_update_event_action is only executed for single events, not those part of a recurrence
+      if (!$event_is_part_of_recurrence && has_action('eme_update_event_action')) do_action('eme_update_event_action',$event);
       return true;
    }
 }
