@@ -163,6 +163,7 @@ function eme_printable_booking_report($event_id) {
    $bookings =  eme_get_bookings_for($event_id);
    $available_seats = eme_get_available_seats($event_id);
    $booked_seats = eme_get_booked_seats($event_id);
+   $pending_seats = eme_get_pending_seats($event_id);
    $stylesheet = EME_PLUGIN_URL."events_manager.css";
    ?>
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -186,6 +187,7 @@ function eme_printable_booking_report($event_id) {
                <th scope='col'><?php _e('E-mail', 'eme')?></th>
                <th scope='col'><?php _e('Phone number', 'eme')?></th> 
                <th scope='col'><?php _e('Seats', 'eme')?></th>
+               <th scope='col'><?php _e('Payed', 'eme')?></th>
                <th scope='col'><?php _e('Comment', 'eme')?></th> 
             <?php
             foreach($bookings as $booking) {
@@ -199,18 +201,19 @@ function eme_printable_booking_report($event_id) {
                <td><?php echo $booking['person_email']?></td>
                <td><?php echo $booking['person_phone']?></td>
                <td class='seats-number'><?php echo $booking['booking_seats']." ".$pending_string?></td>
+               <td><?php echo $booking['booking_payed']?></td>
                <td><?=$booking['booking_comment'] ?></td> 
             </tr>
                <?php } ?>
             <tr id='booked-seats'>
                <td colspan='3'>&nbsp;</td>
                <td class='total-label'><?php _e('Booked', 'eme')?>:</td>
-               <td class='seats-number'><?php echo $booked_seats; ?></td>
+               <td colspan='2' class='seats-number'><?php echo $booked_seats; echo "($pending_seats) ".__('Pending','eme');?></td>
             </tr>
             <tr id='available-seats'>
                <td colspan='3'>&nbsp;</td> 
                <td class='total-label'><?php _e('Available', 'eme')?>:</td>
-               <td class='seats-number'><?php echo $available_seats; ?></td>
+               <td colspan='2' class='seats-number'><?php echo $available_seats; ?></td>
             </tr>
          </table>
          </div>
