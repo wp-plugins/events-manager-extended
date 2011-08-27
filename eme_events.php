@@ -1518,7 +1518,7 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
          $conditions [] = " ((event_start_date BETWEEN '$limit_start' AND '$limit_end') OR (event_end_date BETWEEN '$limit_start' AND '$limit_end'))";
       else
          $conditions [] = " (event_start_date BETWEEN '$limit_start' AND '$limit_end')";
-   } elseif ($scope == "nottoday--future") {
+   } elseif ($scope == "tomorrow--future") {
       if ($show_ongoing)
          $conditions [] = " (event_start_date > '$today' OR (event_end_date > '$today' AND event_end_date != '0000-00-00' AND event_end_date IS NOT NULL))";
       else

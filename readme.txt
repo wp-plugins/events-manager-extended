@@ -571,7 +571,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 = 4.0.1 = 
 * Feature: added placeholder #_EVENTPRICE, so you can show the price for an event
 * Feature: you can now specify any scope in the events list widget
-* Feature: added scope='nottoday--future', so you can show events in the future but not happening today. The normal scope=future once again shows events happening today as well
+* Feature: added scope='tomorrow--future', so you can show events in the future but not happening today. The normal scope=future once again shows events happening today as well
 * Bugfix: price can now be more than two digits
 * Bugfix: fixed two small issuess in eme_rsvp.php
 * Bugfix: the array for the eme_insert_event_action action hook didn't have the event ID
