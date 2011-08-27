@@ -234,15 +234,34 @@ function eme_cancel_seats($event) {
    return $result;
 }
 
+// the eme_book_seats can also be called from the admin backend, that's why for certain things, we check using is_admin where we are
 function eme_book_seats($event) {
    global $current_user;
-   $bookedSeats = intval($_POST['bookedSeats']);
-   $bookerPhone = eme_strip_tags($_POST['bookerPhone']); 
-   $bookerComment = eme_strip_tags($_POST['bookerComment']);
-   $honeypot_check = stripslashes($_POST['honeypot_check']);
+   $booking_id = 0;
+
+   if (isset($_POST['bookerPhone']))
+      $bookedSeats = intval($_POST['bookedSeats']);
+   else
+      $bookedSeats = 0;
+
+   if (isset($_POST['bookerPhone']))
+      $bookerPhone = eme_strip_tags($_POST['bookerPhone']); 
+   else
+      $bookerPhone = "";
+   if (isset($_POST['bookerComment']))
+      $bookerComment = eme_strip_tags($_POST['bookerComment']);
+   else
+      $bookerComment = "";
+
+   if (isset($_POST['honeypot_check']))
+      $honeypot_check = stripslashes($_POST['honeypot_check']);
+   else
+      $honeypot_check = "";
+
    $event_id = $event['event_id'];
    $registration_wp_users_only=$event['registration_wp_users_only'];
-   if ($registration_wp_users_only) {
+   // if we're booking via the admin backend, we don't care about registration_wp_users_only
+   if (!is_admin() && $registration_wp_users_only) {
       // we require a user to be WP registered to be able to book
       get_currentuserinfo();
       $booker_wp_id=$current_user->ID;
@@ -258,7 +277,7 @@ function eme_book_seats($event) {
    }
    
    $msg="";
-   if (get_option('eme_captcha_for_booking')) {
+   if (!is_admin() && get_option('eme_captcha_for_booking')) {
       $msg = response_check_captcha("captcha_check",1);
    }
    $min_allowed = intval(get_option('eme_rsvp_addbooking_min_spaces'));
@@ -273,9 +292,8 @@ function eme_book_seats($event) {
       // if any of name, email or bookedseats are empty: return an error
       $result = __('Please fill in all the required fields','eme');
    } elseif ($bookedSeats < $min_allowed || $bookedSeats>$max_allowed) {
-      // if any of name, email or bookedseats are empty: return an error
       $result = __('Please fill in a correct number of spaces to reserve','eme');
-   } elseif (!$registration_wp_users_only && !$bookerPhone) {
+   } elseif (!is_admin() && !$registration_wp_users_only && !$bookerPhone) {
       // no member of wordpress: we need a phonenumber then
       $result = __('Please fill in all the required fields','eme');
    } else {
@@ -354,7 +372,8 @@ function eme_record_booking($event_id, $person_id, $seats, $comment = "") {
    $booking['creation_date_gmt']=current_time('mysql', true);
    $booking['modif_date_gmt']=current_time('mysql', true);
    $event = eme_get_event($event_id);
-   if ($event['registration_requires_approval']) {
+   // only if we're not adding a booking in the admin backend, check for approval needed
+   if (!is_admin() && $event['registration_requires_approval']) {
       $booking['booking_approved']=0;
    } else {
       $booking['booking_approved']=1;
@@ -719,6 +738,18 @@ function eme_registration_seats_page() {
          }
       } else {
          $action = isset($_POST ['action']) ? $_POST ['action'] : '';
+
+         if ($action == 'addRegistration') {
+            $event_id = intval($_POST['event_id']);
+            $booking_payed = isset($_POST ['booking_payed']) ? intval($_POST ['booking_payed']) : 0;
+            $event = eme_get_event($event_id);
+            $booking_res = eme_book_seats($event);
+            $result=$booking_res[0];
+            $booking_id_done=$booking_res[1];
+            eme_update_booking_payed($booking_id_done,$booking_payed);
+            print $result;
+         }
+
          $bookings = isset($_POST ['bookings']) ? $_POST ['bookings'] : array();
          $selected_bookings = isset($_POST ['selected_bookings']) ? $_POST ['selected_bookings'] : array();
          $bookings_seats = isset($_POST ['bookings_seats']) ? $_POST ['bookings_seats'] : array();
@@ -761,6 +792,35 @@ function eme_registration_seats_form_table($event_id=0) {
 </div>
 <h2><?php _e ('Change reserved spaces or cancel registrations','eme'); ?></h2>
 <?php admin_show_warnings();?>
+   <form id='add-booking' action="" method="post">
+   <input type='hidden' name='page' value='events-manager-registration-seats' />
+   <input type='hidden' name='action' value='addRegistration' />
+   <table class="widefat">
+   <tbody>
+            <tr><th scope='row'><?php _e('Name', 'eme'); ?>*:</th><td><input type='text' name='bookerName' value='' /></td></tr>
+            <tr><th scope='row'><?php _e('E-Mail', 'eme'); ?>*:</th><td><input type='text' name='bookerEmail' value='' /></td></tr>
+            <tr><th scope='row'><?php _e('Phone number', 'eme'); ?>:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
+            <tr><th scope='row'><?php _e('Event', 'eme'); ?>*:</th><td>
+   <select name="event_id">
+   <?php
+   $all_events=eme_get_events(0,"future");
+   $events_with_pending_bookings=array();
+   foreach ( $all_events as $event ) {
+         echo "<option value='".$event['event_id']."' >".$event['event_name']."</option>  ";
+   }
+   ?>
+   </select>
+                </td>
+            </tr>
+            <tr><th scope='row'><?php _e('Seats', 'eme'); ?>*:</th><td><input type='text' name='bookedSeats' value='' /></td></tr>
+            <tr><th scope='row'><?php _e('Payed', 'eme'); ?>:</th><td><?php echo eme_ui_select_binary(0,"booking_payed"); ?></td></tr>
+   </tbody>
+   </table>
+   <input id="post-query-submit" class="button-secondary" type="submit" value="<?php _e ( 'Register booking' )?>" />
+   </form>
+
+   <div class="clear"></div>
+
    <form id="posts-filter" action="" method="post">
    <input type='hidden' name='page' value='events-manager-registration-seats' />
    <div class="tablenav">

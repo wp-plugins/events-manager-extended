@@ -1,12 +1,12 @@
 === Events Manager Extended ===  
 Contributors: liedekef
 Donate link: http://www.e-dynamics.be/wordpress
-Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging  
+Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging, paypal  
 Requires at least: 3.0.0
 Tested up to: 3.2.1
 Stable tag: 4.0.0
 
-Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds. SEO compatible.
+Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds; PAYPAL support. SEO compatible.
              
 == Description ==
 Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports public, private, draft and recurring events, locations management, RSVP (+ approval if wanted) and maps. With Events Manager Extended you can plan and publish your event, or let people reserve spaces for your weekly meetings. You can add events list, calendars and description to your blog using multiple sidebar widgets or shortcodes; if you are a web designer you can simply employ the template tags provided by Events Manager Extended. 
@@ -15,6 +15,8 @@ Events Manager Extended (EME) is a fork (NOT an extension) of the older Events M
 Events Manager Extended integrates with Google Maps; thanks the geocoding, Events Manager Extended can find the location of your events, and accordingly display a map. 
 
 Events Manager Extended provides also a RSS and ICAL feed, to keep your subscribers updated about the events you're organising. 
+
+Events Manager Extended also integrates payments for events using paypal. 
 
 Events Manager Extended is fully customisable; you can customise the amount of data displayed and their format in events lists, pages and in the RSS/ICAL feed. You can choose to show or hide the events page, and change its title.  
 
@@ -572,6 +574,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added placeholder #_EVENTPRICE, so you can show the price for an event
 * Feature: you can now specify any scope in the events list widget
 * Feature: added scope='tomorrow--future', so you can show events in the future but not happening today. The normal scope=future once again shows events happening today as well
+* Feature: you can now add a registration in the backend
 * Improvement: for location formatting, #_NAME has been deprecated in favor of #_LOCATIONNAME
 * Bugfix: price can now be more than two digits
 * Bugfix: fixed two small issuess in eme_rsvp.php
