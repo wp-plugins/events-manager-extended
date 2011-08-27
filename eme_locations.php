@@ -966,8 +966,18 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       } elseif (preg_match('/#_ALLEVENTS$/', $result)) {
          $replacement = eme_events_in_location_list($location, "all");
 
-      } elseif (preg_match('/#_(NAME|ADDRESS|TOWN)$/', $result)) {
+      } elseif (preg_match('/#_(ADDRESS|TOWN)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
+         if (isset($location[$field]))
+            $replacement = $location[$field];
+         $replacement = eme_trans_sanitize_html($replacement);
+         if ($target == "html")
+            $replacement = apply_filters('eme_general', $replacement); 
+         else 
+            $replacement = apply_filters('eme_general_rss', $replacement); 
+
+      } elseif (preg_match('/#_(NAME|LOCATIONNAME)$/', $result)) {
+         $field = "location_name";
          if (isset($location[$field]))
             $replacement = $location[$field];
          $replacement = eme_trans_sanitize_html($replacement);
