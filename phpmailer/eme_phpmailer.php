@@ -33,17 +33,21 @@ function eme_send_mail($subject="no title",$body="No message specified", $receiv
       }
       $mail->Body = $body;
       $mail->Subject = $subject;
-      $mail->AddAddress($receiveremail,$receivername);
       if ($replytoemail != "")
          $mail->AddReplyTo($replytoemail,$replytoname);
 
-      //$mail->SMTPDebug = true;        
-      if(!$mail->Send()){   
-         echo "Message was not sent<br/ >";   
-         echo "Mailer Error: " . $mail->ErrorInfo;
-         // print_r($mail);
-      } else {   
-         // echo "Message has been sent";                          
+      if ($receiveremail != "") {
+         $mail->AddAddress($receiveremail,$receivername);
+         //$mail->SMTPDebug = true;        
+         if(!$mail->Send()){   
+            echo "Message was not sent<br/ >";   
+            echo "Mailer Error: " . $mail->ErrorInfo;
+            return false;
+         } else {
+            return true;
+         }
+      } else {
+         return false;
       }
    }
 }
