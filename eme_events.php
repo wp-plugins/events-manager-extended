@@ -2713,9 +2713,10 @@ function eme_event_form($event, $title, $element) {
                         <?php _e ( 'Attributes', 'eme' ); ?>
                      </h3>
                      <div class="inside">
-                        <?php eme_attributes_form($event) ?>
+                        <?php eme_attributes_form($event); ?>
                      </div>
                   </div>
+                  <?php endif; ?>
                   <div id="urldiv" class="stuffbox">
                      <h3>
                         <?php _e ( 'External link', 'eme' ); ?>
@@ -2726,13 +2727,11 @@ function eme_event_form($event, $title, $element) {
                         <?php _e ( 'If this is filled in, the single event URL will point to this url instead of the standard event page.', 'eme' )?>
                      </div>
                   </div>
-                  <?php endif; ?>
                </div>
                <p class="submit">
                   <input type="submit" name="events_update" value="<?php _e ( 'Submit Event', 'eme' ); ?> &raquo;" />
                </p>
 
-               </div>
             </div>
          </div>
       </div>
