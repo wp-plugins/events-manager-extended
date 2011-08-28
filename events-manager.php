@@ -1204,7 +1204,8 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_EVENTPRICE|PRICE$/', $result)) {
          $field = "price";
-         $replacement = $event[$field];
+         if ($event[$field])
+            $replacement = $event[$field];
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
@@ -1213,7 +1214,9 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_CURRENCY/', $result)) {
          $field = "currency";
-         $replacement = $event[$field];
+         // currency is only important if the price is not empty as well
+         if ($event['price'])
+            $replacement = $event[$field];
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
