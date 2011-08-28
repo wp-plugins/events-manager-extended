@@ -2,7 +2,7 @@
 function eme_people_page() {
    $message="";
    // Managing AJAX booking removal
-   if (!current_user_can( SETTING_CAPABILITY) && isset($_REQUEST['action'])) {
+   if (!current_user_can( get_option('eme_cap_people')) && isset($_REQUEST['action'])) {
       $message = __('You have no right to update people!','eme');
    } elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'remove_booking') {
       if(isset($_REQUEST['booking_id']))
@@ -117,8 +117,8 @@ function fputcsv2 ($fh, $fields, $delimiter = ',', $enclosure = '"', $mysql_null
 function eme_csv_booking_report($event_id) {
    $event = eme_get_event($event_id);
    $current_userid=get_current_user_id();
-   if (!(current_user_can( EDIT_CAPABILITY) ||
-        (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
+   if (!(current_user_can( get_option('eme_cap_edit_events')) ||
+        (current_user_can( get_option('eme_cap_author_event')) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
         echo "No access";
         die;
    }
@@ -154,8 +154,8 @@ function eme_csv_booking_report($event_id) {
 function eme_printable_booking_report($event_id) {
    $event = eme_get_event($event_id);
    $current_userid=get_current_user_id();
-   if (!(current_user_can( EDIT_CAPABILITY) ||
-        (current_user_can( MIN_CAPABILITY) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
+   if (!(current_user_can( get_option('eme_cap_edit_events')) ||
+        (current_user_can( get_option('eme_cap_author_event')) && ($event['event_author']==$current_userid || $event['event_contactperson_id']==$current_userid)))) {
         echo "No access";
         die;
    }
@@ -163,6 +163,7 @@ function eme_printable_booking_report($event_id) {
    $bookings =  eme_get_bookings_for($event_id);
    $available_seats = eme_get_available_seats($event_id);
    $booked_seats = eme_get_booked_seats($event_id);
+   $pending_seats = eme_get_pending_seats($event_id);
    $stylesheet = EME_PLUGIN_URL."events_manager.css";
    ?>
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -172,13 +173,14 @@ function eme_printable_booking_report($event_id) {
          <meta http-equiv="Content-type" content="text/html; charset=utf-8">
          <title>Bookings for <?php echo $event['event_name'];?></title>
           <link rel="stylesheet" href="<?php echo $stylesheet; ?>" type="text/css" media="screen" />
-         
       </head>
       <body id="printable">
          <div id="container">
          <h1>Bookings for <?php echo $event['event_name'];?></h1> 
-         <p><?php echo eme_replace_placeholders("#d #M #Y", $event)?></p>
-         <p><?php echo eme_replace_placeholders("#_LOCATION, #_ADDRESS, #_TOWN", $event)?></p>
+         <p><?php echo date_i18n (get_option('date_format'), strtotime($event['event_start_date'])); ?></p>
+         <p><?php echo eme_replace_placeholders("#_LOCATIONNAME, #_ADDRESS, #_TOWN", $event); ?></p>
+         <?php if ($event['price']) ?>
+            <p><?php _e ( 'Price: ','eme' ); echo eme_replace_placeholders("#_CURRENCY #_PRICE", $event)?></p>
          <h2><?php _e('Bookings data', 'eme');?></h2>
          <table id="bookings-table">
             <tr>
@@ -186,6 +188,7 @@ function eme_printable_booking_report($event_id) {
                <th scope='col'><?php _e('E-mail', 'eme')?></th>
                <th scope='col'><?php _e('Phone number', 'eme')?></th> 
                <th scope='col'><?php _e('Seats', 'eme')?></th>
+               <th scope='col'><?php _e('Payed', 'eme')?></th>
                <th scope='col'><?php _e('Comment', 'eme')?></th> 
             <?php
             foreach($bookings as $booking) {
@@ -199,18 +202,24 @@ function eme_printable_booking_report($event_id) {
                <td><?php echo $booking['person_email']?></td>
                <td><?php echo $booking['person_phone']?></td>
                <td class='seats-number'><?php echo $booking['booking_seats']." ".$pending_string?></td>
+               <td><?php if ($booking['booking_payed']) _e('Yes'); else _e('No'); ?></td>
                <td><?=$booking['booking_comment'] ?></td> 
             </tr>
                <?php } ?>
             <tr id='booked-seats'>
-               <td colspan='3'>&nbsp;</td>
+               <td colspan='2'>&nbsp;</td>
                <td class='total-label'><?php _e('Booked', 'eme')?>:</td>
-               <td class='seats-number'><?php echo $booked_seats; ?></td>
+               <td colspan='3' class='seats-number'><?php
+			echo $booked_seats;
+			if ($pending_seats>0)
+				echo " ".sprintf( __('(%s pending)','eme'), $pending_seats);
+			?>
+		</td>
             </tr>
             <tr id='available-seats'>
-               <td colspan='3'>&nbsp;</td> 
+               <td colspan='2'>&nbsp;</td> 
                <td class='total-label'><?php _e('Available', 'eme')?>:</td>
-               <td class='seats-number'><?php echo $available_seats; ?></td>
+               <td colspan='3' class='seats-number'><?php echo $available_seats; ?></td>
             </tr>
          </table>
          </div>
@@ -241,7 +250,7 @@ function eme_people_table($message="") {
             <thead>
             <tr>
             <th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
-            <th class='manage-column ' scope='col'>Name</th>
+            <th class='manage-column' scope='col'>Name</th>
             <th scope='col'>E-mail</th>
             <th scope='col'>Phone number</th>
             </tr>
@@ -249,7 +258,7 @@ function eme_people_table($message="") {
             <tfoot>
             <tr>
             <th class='manage-column column-cb check-column' scope='col'>&nbsp;</th>
-            <th class='manage-column ' scope='col'>Name</th>
+            <th class='manage-column' scope='col'>Name</th>
             <th scope='col'>E-mail</th>
             <th scope='col'>Phone number</th>
             </tr>

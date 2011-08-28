@@ -306,12 +306,6 @@ function eme_get_calendar($args="") {
          if ($event ['event_status'] == STATUS_PRIVATE && !is_user_logged_in()) {
             continue;
          }
-         if ($event ['location_id'] ) {
-            $this_location = eme_get_location ( $event ['location_id'] );
-            $event ['location_name'] = $this_location ['location_name'];
-            $event ['location_address'] = $this_location ['location_address'];
-            $event ['location_town'] = $this_location ['location_town'];
-         }
 
          if( $long_events ) {
             //If $long_events is set then show a date as eventful if there is an multi-day event which runs during that day

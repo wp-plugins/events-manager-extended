@@ -15,7 +15,7 @@ function eme_get_recurrence_days($recurrence){
    $last_week_start = array(25, 22, 25, 24, 25, 24, 25, 25, 24, 25, 24, 25);
    
    $weekdays = explode(",", $recurrence['recurrence_byday']);
-   //print_r($weekdays);
+//   print_r($weekdays);
    
    $counter = 0;
    $daycounter = 0;
@@ -36,9 +36,10 @@ function eme_get_recurrence_days($recurrence){
       }
 
       if($recurrence['recurrence_freq'] == 'weekly') {
-         if (!$recurrence['recurrence_byday']) {
+         if (!$recurrence['recurrence_byday'] && eme_iso_N_date_value($cycle_date)==eme_iso_N_date_value($start_date)) {
          // no specific days given, so we use 7 days as interval
-            if($daycounter % 7*$recurrence['recurrence_interval'] == 0 )
+            //if($daycounter % 7*$recurrence['recurrence_interval'] == 0 ) {
+            if($weekcounter % $recurrence['recurrence_interval'] == 0 )
                array_push($matching_days, $cycle_date);
          } elseif (in_array(eme_iso_N_date_value($cycle_date), $weekdays )) {
          // specific days, so we only check for those days
@@ -118,25 +119,18 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    global $wpdb;
    $events_table = $wpdb->prefix.EVENTS_TBNAME;
    $matching_days = eme_get_recurrence_days($recurrence);
-   //print_r($matching_days);
+//   print_r($matching_days);
    sort($matching_days);
 
+   if ($event['event_end_date']=='') {
+      $duration_days_event = 0;
+   } else {
+      $duration_days_event = eme_daydifference($event['event_start_date'],$event['event_end_date']);
+   }
    foreach($matching_days as $day) {
       $event['event_start_date'] = date("Y-m-d", $day); 
-      $event['event_end_date'] = $event['event_start_date']; 
-      // in case the end time crosses midnight (and as such is lower than the start time), the end day should be the next day
-      $startstring=strtotime($event['event_start_date']." ".$event['event_start_time']);
-      $endstring=strtotime($event['event_end_date']." ".$event['event_end_time']);
-      if ($endstring<=$startstring) {
-         // one day = 86400 seconds
-         $event['event_end_date'] = date("Y-m-d", $day+86400);
-      }
-      $event['creation_date']=$recurrence['creation_date'];
-      $event['modif_date']=$recurrence['modif_date'];
-      $event['creation_date_gmt']=$recurrence['creation_date_gmt'];
-      $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
-   //$wpdb->show_errors(true);
-      $wpdb->insert($events_table, $event);
+      $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days"));
+      eme_db_insert_event($event,1);
    }
 }
 
@@ -170,6 +164,12 @@ function eme_update_events_for_recurrence($event,$recurrence) {
    //print_r($matching_days);  
    sort($matching_days);
 
+   if ($event['event_end_date']=='') {
+      $duration_days_event = 0;
+   } else {
+      $duration_days_event = eme_daydifference($event['event_start_date'],$event['event_end_date']);
+   }
+
    // 2 steps for updating events for a recurrence:
    // First step: check the existing events and if they still match the recurrence days, update them
    //       otherwise delete the old event
@@ -190,14 +190,10 @@ function eme_update_events_for_recurrence($event,$recurrence) {
       if ($update_needed==1) {
          $where=array('event_id' => $existing_event['event_id']);
          $event['event_start_date'] = $existing_event['event_start_date'];
-         $event['event_end_date'] = $event['event_start_date'];
-         $event['modif_date']=$recurrence['modif_date'];
-         $event['creation_date']=$recurrence['modif_date'];
-         $event['creation_date_gmt']=$recurrence['modif_date_gmt'];
-         $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
-         $wpdb->update($events_table, $event, $where); 
+         $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
+         eme_db_update_event($event, $where, 1); 
       } else {
-            $sql = "DELETE FROM $events_table WHERE event_id = '".$existing_event['event_id']."';";
+         $sql = "DELETE FROM $events_table WHERE event_id = '".$existing_event['event_id']."';";
          $wpdb->query($sql);
       }
    }
@@ -205,18 +201,14 @@ function eme_update_events_for_recurrence($event,$recurrence) {
    foreach($matching_days as $day) {
       $insert_needed=1;
       $event['event_start_date'] = date("Y-m-d", $day);
-      $event['event_end_date'] = $event['event_start_date'];
+      $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
       foreach($events as $existing_event) {
          if ($insert_needed && $existing_event['event_start_date'] == $event['event_start_date']) {
             $insert_needed=0;
          }
       }
       if ($insert_needed==1) {
-         $event['creation_date']=$recurrence['modif_date'];
-         $event['modif_date']=$recurrence['modif_date'];
-         $event['creation_date_gmt']=$recurrence['modif_date_gmt'];
-         $event['modif_date_gmt']=$recurrence['modif_date_gmt'];
-         $wpdb->insert($events_table, $event);        
+         eme_db_insert_event($event,1);
       }
    }
    return 1;
@@ -320,6 +312,14 @@ function eme_get_recurrence_desc($recurrence_id) {
    }
    $output .= $freq_desc;
    return  $output;
+}
+
+function eme_recurrence_count($recurrence_id) {
+   # return the number of events for an recurrence
+   global $wpdb;
+   $events_table = $wpdb->prefix.EVENTS_TBNAME;
+   $sql = "SELECT COUNT(*) from $events_table WHERE recurrence_id='".$recurrence_id."'";
+   return $wpdb->get_var($sql);
 }
 
 function eme_iso_N_date_value($date) {

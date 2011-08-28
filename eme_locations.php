@@ -3,79 +3,141 @@ $feedback_message = "";
  
 function eme_locations_page() {
    $current_userid=get_current_user_id();
-   if (!current_user_can( EDIT_CAPABILITY) && (isset($_GET['action']) || isset($_POST['action']))) {
-      $message = __('You have no right to update locations!','eme');
-      $locations = eme_get_locations();
-      eme_locations_table_layout($locations, null, $message);
-   } elseif (isset($_GET['action']) && $_GET['action'] == "edit") { 
-      // edit location
-      $location_id = $_GET['location_ID'];
+   if (isset($_GET['action']) && $_GET['action'] == "edit") { 
+      $location_id = intval($_GET['location_ID']);
       $location = eme_get_location($location_id);
-      eme_locations_edit_layout($location);
+      if (current_user_can( get_option('eme_cap_edit_locations')) ||
+             (current_user_can( get_option('eme_cap_author_locations')) && ($location['location_author']==$current_userid))) {
+         // edit location
+         eme_locations_edit_layout($location);
+      } else {
+         $message = __('You have no right to edit this location!','eme');
+         $locations = eme_get_locations();
+         eme_locations_table_layout($locations, null, $message);
+      }
    } elseif (isset($_POST['action']) && $_POST['action'] == "delete") { 
       $locations = $_POST['locations'];
-      foreach($locations as $location_ID) {
-         eme_delete_location($location_ID);
+      foreach($locations as $location_id) {
+         $location = eme_get_location(intval($location_id));
+         if (current_user_can( get_option('eme_cap_edit_locations')) ||
+               (current_user_can( get_option('eme_cap_author_locations')) && ($location['location_author']==$current_userid))) {
+            eme_delete_location(intval($location_id));
+         }
       }
       $locations = eme_get_locations();
       eme_locations_table_layout($locations, null, "");
    } elseif (isset($_POST['action']) && $_POST['action'] == "editedlocation") { 
-      // location update required
-      $location = array();
-      $location['location_id'] = $_POST['location_ID'];
-      $location['location_name'] = trim(stripslashes($_POST['location_name']));
-      $location['location_address'] = stripslashes($_POST['location_address']); 
-      $location['location_town'] = stripslashes($_POST['location_town']); 
-      $location['location_latitude'] = $_POST['location_latitude'];
-      $location['location_longitude'] = $_POST['location_longitude'];
-      $location['location_description'] = stripslashes($_POST['content']);
-      $location['location_author'] = $current_userid;
-      
-      if(empty($location['location_latitude'])) {
-         $location['location_latitude']  = 0;
-         $location['location_longitude'] = 0;
-      }
-      
-      $validation_result = eme_validate_location($location);
-      if ($validation_result == "OK") {
-         if (eme_update_location($location)) {
-            $message = __('The location has been updated.', 'eme');
-            if ($_FILES['location_image']['size'] > 0 )
-               eme_upload_location_picture($location);
+      $orig_location=eme_get_location(intval($_POST['location_ID']));
+      if (current_user_can( get_option('eme_cap_edit_locations')) ||
+            (current_user_can( get_option('eme_cap_author_locations')) && ($orig_location['location_author']==$current_userid))) {
+         // location update required
+         $location = array();
+         $location['location_id'] = intval($_POST['location_ID']);
+         $location['location_name'] = trim(stripslashes($_POST['location_name']));
+         $location['location_address'] = stripslashes($_POST['location_address']); 
+         $location['location_town'] = stripslashes($_POST['location_town']); 
+         $location['location_latitude'] = $_POST['location_latitude'];
+         $location['location_longitude'] = $_POST['location_longitude'];
+         $location['location_description'] = stripslashes($_POST['content']);
+         $location['location_url'] = isset($_POST ['location_url']) ? eme_strip_tags ( $_POST ['location_url'] ) : '';
+         $location['location_slug'] = isset($_POST ['location_slug']) ? eme_permalink_convert(eme_strip_tags ( $_POST ['location_slug'] )) : eme_permalink_convert($location['location_name']);
+         // we don't change the author
+         //$location['location_author'] = $current_userid;
+         if (isset ($_POST['location_category_ids'])) {
+            // the category id's need to begin and end with a comma
+            // this is needed so we can later search for a specific
+            // cat using LIKE '%,$cat,%'
+            $location ['location_category_ids']="";
+            foreach ($_POST['location_category_ids'] as $cat) {
+               if (is_numeric($cat)) {
+                  if (empty($location ['location_category_ids'])) {
+                     $location ['location_category_ids'] = "$cat";
+                  } else {
+                     $location ['location_category_ids'] .= ",$cat";
+                  }
+               }
+            }
          } else {
-            $message = __('The location update failed.', 'eme');
+            $location ['location_category_ids']="";
          }
-         $locations = eme_get_locations();
-         eme_locations_table_layout($locations, $location, $message);
+
+         if(empty($location['location_latitude'])) {
+            $location['location_latitude']  = 0;
+            $location['location_longitude'] = 0;
+         }
+
+         $validation_result = eme_validate_location($location);
+         if ($validation_result == "OK") {
+            if (eme_update_location($location)) {
+               $message = __('The location has been updated.', 'eme');
+               if ($_FILES['location_image']['size'] > 0 )
+                  eme_upload_location_picture($location);
+            } else {
+               $message = __('The location update failed.', 'eme');
+            }
+            $locations = eme_get_locations();
+            eme_locations_table_layout($locations, $location, $message);
+         } else {
+            $message = $validation_result;
+            eme_locations_edit_layout($location, $message);
+         }
       } else {
-         $message = $validation_result;
-         eme_locations_edit_layout($location, $message);
+         $message = __('You have no right to edit this location!','eme');
+         $locations = eme_get_locations();
+         eme_locations_table_layout($locations, null, $message);
       }
    } elseif(isset($_POST['action']) && $_POST['action'] == "addlocation") {
-      $location = array();
-      $location['location_name'] = trim(stripslashes($_POST['location_name']));
-      $location['location_address'] = stripslashes($_POST['location_address']);
-      $location['location_town'] = stripslashes($_POST['location_town']); 
-      $location['location_latitude'] = $_POST['location_latitude'];
-      $location['location_longitude'] = $_POST['location_longitude'];
-      $location['location_description'] = stripslashes($_POST['content']);
-      $validation_result = eme_validate_location($location);
-      if ($validation_result == "OK") {
-         $new_location = eme_insert_location($location);
-         if ($new_location) {
-            $message = __('The location has been added.', 'eme'); 
-            // uploading the image
-            if ($_FILES['location_image']['size'] > 0 )
-               eme_upload_location_picture($new_location);
+      if (current_user_can( get_option('eme_cap_add_locations'))) {
+         $location = array();
+         $location['location_name'] = trim(stripslashes($_POST['location_name']));
+         $location['location_address'] = stripslashes($_POST['location_address']);
+         $location['location_town'] = stripslashes($_POST['location_town']); 
+         $location['location_latitude'] = $_POST['location_latitude'];
+         $location['location_longitude'] = $_POST['location_longitude'];
+         $location['location_description'] = stripslashes($_POST['content']);
+         $location['location_author'] = $current_userid;
+         $location['location_url'] = isset($_POST ['location_url']) ? eme_strip_tags ( $_POST ['location_url'] ) : '';
+         $location['location_slug'] = isset($_POST ['location_slug']) ? eme_permalink_convert(eme_strip_tags ( $_POST ['location_slug'] )) : eme_permalink_convert($location['location_name']);
+         if (isset ($_POST['location_category_ids'])) {
+            // the category id's need to begin and end with a comma
+            // this is needed so we can later search for a specific
+            // cat using LIKE '%,$cat,%'
+            $location ['location_category_ids']="";
+            foreach ($_POST['location_category_ids'] as $cat) {
+               if (is_numeric($cat)) {
+                  if (empty($location ['location_category_ids'])) {
+                     $location ['location_category_ids'] = "$cat";
+                  } else {
+                     $location ['location_category_ids'] .= ",$cat";
+                  }
+               }
+            }
          } else {
-            $message = __('There has been a problem adding the location.', 'eme'); 
-         }      
-         $locations = eme_get_locations();
-         eme_locations_table_layout($locations, null,$message);
+            $location ['location_category_ids']="";
+         }
+
+         $validation_result = eme_validate_location($location);
+         if ($validation_result == "OK") {
+            $new_location = eme_insert_location($location);
+            if ($new_location) {
+               $message = __('The location has been added.', 'eme'); 
+               // uploading the image
+               if ($_FILES['location_image']['size'] > 0 )
+                  eme_upload_location_picture($new_location);
+            } else {
+               $message = __('There has been a problem adding the location.', 'eme'); 
+            }      
+            $locations = eme_get_locations();
+            eme_locations_table_layout($locations, null,$message);
+         } else {
+            $message = $validation_result;
+            $locations = eme_get_locations();
+            eme_locations_table_layout($locations, $location, $message);
+         }
       } else {
-         $message = $validation_result;
+         $message = __('You have no right to add a location!','eme');
          $locations = eme_get_locations();
-         eme_locations_table_layout($locations, $location, $message);
+         eme_locations_table_layout($locations, null, $message);
       }
    } else {
       // no action, just a locations list
@@ -107,11 +169,22 @@ function eme_locations_edit_layout($location, $message = "") {
          <input type="hidden" name="location_ID" value="<?php echo $location['location_id'] ?>"/>
          
          <!-- we need titlediv and title for qtranslate as ID -->
-         <div id="titlediv" class="form-field form-required">
+         <div id="titlediv" class="form-required">
            <label><?php _e('Location name', 'eme') ?></label>
            <input name="location_name" id="title" type="text" value="<?php echo eme_sanitize_html($location['location_name']); ?>" size="40" />
            <input type="hidden" name="translated_location_name" value="<?php echo eme_trans_sanitize_html($location['location_name']); ?>" />
            <p><?php _e('The name of the location', 'eme') ?>.</p>
+                        <?php if ($location ['location_name'] != "") {
+                                 _e ('Permalink: ', 'eme' );
+                                 echo trailingslashit(home_url()).eme_permalink_convert(get_option ( 'eme_permalink_events_prefix')).$location['location_id']."/";
+                                 $slug = $location['location_slug'] ? $location['location_slug'] : $location['location_name'];
+                                 $slug = untrailingslashit(eme_permalink_convert($slug));
+                        ?>
+                                 <input type="text" id="slug" name="location_slug" value="<?php echo $slug; ?>" /><?php echo user_trailingslashit(""); ?>
+                        <?php
+                              }
+                        ?>
+
          </div>
          <div class="form-field">
             <label for="location_address"><?php _e('Location address', 'eme') ?></label>
@@ -142,7 +215,27 @@ function eme_locations_edit_layout($location, $message = "") {
                      echo "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
                   }
             ?>
-         </div>
+        </div>
+ 
+        <?php if(get_option('eme_categories_enabled')) :?>
+        <div>
+           <label for="location_category_ids"><?php _e('Category', 'eme') ?></label><br />
+           <?php
+           $categories = eme_get_categories(false,"",1);
+           foreach ( $categories as $category) {
+              if ($location['location_category_ids'] && in_array($category['category_id'],explode(",",$location['location_category_ids']))) {
+                 $selected = "checked='checked'";
+              } else {
+                 $selected = "";
+              }
+           ?>
+              <input type="checkbox" name="location_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?> /><?php echo $category['category_name']; ?><br />
+           <?php
+           }
+           ?>
+        </div>
+        <?php endif; ?>
+
          <?php 
             $gmap_is_active = get_option('eme_gmap_is_active');
             if ($gmap_is_active) :
@@ -166,6 +259,11 @@ function eme_locations_edit_layout($location, $message = "") {
                <?php _e('A description of the Location. You may include any kind of info here.', 'eme') ?>
             </div>
          </div>
+         <div class="form-field">
+            <label for="location_url" ><?php _e ( 'External link', 'eme' ); ?></label>
+            <input name="location_url" id="location_url" type="text" value="<?php echo eme_sanitize_html($location['location_url']); ?>" size="40"  />
+            <p><?php _e ( 'If this is filled in, the single event URL will point to this url instead of the standard event page.', 'eme' )?></p>
+         </div>
          <p class="submit"><input type="submit" class="button-primary" name="submit" value="<?php _e('Update location', 'eme') ?>" /></p>
 
          </form>
@@ -183,6 +281,9 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
       $new_location['location_latitude'] = '';
       $new_location['location_longitude'] = '';
       $new_location['location_description'] = '';
+      $new_location['location_category_ids'] = '';
+      $new_location['location_url'] = '';
+      $new_location['location_slug'] = '';
    }
 
    ob_start();
@@ -290,6 +391,26 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                            <input id="location_image" name="location_image" type="file" size="35" />
                             <p><?php _e('Select an image to upload', 'eme') ?>.</p>
                         </div>
+
+                        <?php if(get_option('eme_categories_enabled')) :?>
+                           <div>
+                           <label for="location_category_ids"><?php _e('Category', 'eme') ?></label><br />
+                           <?php
+                           $categories = eme_get_categories(false,"",1);
+                           foreach ( $categories as $category) {
+                              if ($new_location['location_category_ids'] && in_array($category['category_id'],explode(",",$new_location['location_category_ids']))) {
+                                 $selected = "checked='checked'";
+                              } else {
+                                 $selected = "";
+                              }
+                           ?>
+                           <input type="checkbox" name="location_category_ids[]" value="<?php echo $category['category_id']; ?>" <?php echo $selected ?> /><?php echo $category['category_name']; ?><br />
+                           <?php
+                           }
+                           ?>
+                           </div>
+                        <?php endif; ?>
+
                         <?php 
                            $gmap_is_active = get_option('eme_gmap_is_active');
                               if ($gmap_is_active) :
@@ -307,6 +428,11 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                                  <?php _e('A description of the Location. You may include any kind of info here.', 'eme') ?>
                               </div>
                            </div>
+         <div class="form-field">
+            <label for="location_url" ><?php _e ( 'External link', 'eme' ); ?></label>
+            <input name="location_url" id="location_url" type="text" value="<?php echo eme_sanitize_html($new_location['location_url']); ?>" size="40"  />
+            <p><?php _e ( 'If this is filled in, the single event URL will point to this url instead of the standard event page.', 'eme' )?></p>
+         </div>
                          <p class="submit"><input type="submit" class="button" name="submit" value="<?php _e('Add location', 'eme') ?>" /></p>
                       </form>
 
@@ -343,12 +469,54 @@ function eme_get_locations($eventful = false, $scope="all", $category = '', $off
                $this_location['location_latitude'] = $event['location_latitude'];
                $this_location['location_longitude'] = $event['location_longitude'];
                $this_location['location_description'] = $event['location_description'];
+               $this_location['location_category_ids'] = $event['location_category_ids'];
+               $this_location['location_url'] = $event['location_url'];
+               $this_location['location_slug'] = $event['location_slug'];
                $locations[$location_id]=$this_location;
             }
          }
       }
    } else {
-      $sql = "SELECT * FROM $locations_table WHERE location_name != '' ORDER BY location_name";
+      $conditions = array ();
+      if (get_option('eme_categories_enabled')) {
+         if (is_numeric($category)) {
+            if ($category>0)
+               $conditions [] = " FIND_IN_SET($category,location_category_ids)";
+         } elseif ($category == "none") {
+            $conditions [] = "event_category_ids=''";
+         } elseif ( preg_match('/,/', $category) ) {
+            $category = explode(',', $category);
+            $category_conditions = array();
+            foreach ($category as $cat) {
+               if (is_numeric($cat) && $cat>0) {
+                  $category_conditions[] = " FIND_IN_SET($cat,location_category_ids)";
+               } elseif ($cat == "none") {
+                  $category_conditions[] = " location_category_ids=''";
+               }
+            }
+            $conditions [] = "(".implode(' OR', $category_conditions).")";
+         } elseif ( preg_match('/\+/', $category) ) {
+            $category = explode('+', $category);
+            $category_conditions = array();
+            foreach ($category as $cat) {
+               if (is_numeric($cat) && $cat>0)
+                  $category_conditions[] = " FIND_IN_SET($cat,location_category_ids)";
+            }
+            $conditions [] = "(".implode(' AND ', $category_conditions).")";
+         }
+      }
+
+      // extra conditions for authors: if we're in the admin itf, return only the locations for which you have the right to change anything
+      $current_userid=get_current_user_id();
+      if (is_admin() && !current_user_can( get_option('eme_cap_edit_locations')) && current_user_can( get_option('eme_cap_author_locations'))) {
+         $conditions [] = "(location_author = $current_userid)";
+      }
+
+      $where = implode ( " AND ", $conditions );
+      if ($where != "")
+         $where = " AND " . $where;
+
+      $sql = "SELECT * FROM $locations_table WHERE location_name != '' $where ORDER BY location_name";
       $locations = $wpdb->get_results($sql, ARRAY_A); 
    }
    if (has_filter('eme_location_list_filter')) $locations=apply_filters('eme_location_list_filter',$locations);
@@ -367,6 +535,8 @@ function eme_get_location($location_id=0) {
       $location ['location_latitude']='';
       $location ['location_longitude']='';
       $location ['location_image_url']='';
+      $location ['location_url']='';
+      $location ['location_slug']='';
    } else {
       $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
       $sql = "SELECT * FROM $locations_table WHERE location_id ='$location_id'";
@@ -415,7 +585,6 @@ function eme_get_identical_location($location) {
    $locations_table = $wpdb->prefix.LOCATIONS_TBNAME; 
    //$sql = "SELECT * FROM $locations_table WHERE location_name ='".$location['location_name']."' AND location_address ='".$location['location_address']."' AND location_town ='".$location['location_town']."';";
   $prepared_sql=$wpdb->prepare("SELECT * FROM $locations_table WHERE location_name = %s AND location_address = %s AND location_town = %s", stripcslashes($location['location_name']), stripcslashes($location['location_address']), stripcslashes($location['location_town']) );
-   //$wpdb->show_errors(true);
    $cached_location = $wpdb->get_row($prepared_sql, ARRAY_A);
    return $cached_location;
 }
@@ -456,7 +625,13 @@ function eme_update_location($location) {
    global $wpdb;
    $table_name = $wpdb->prefix.LOCATIONS_TBNAME;
    $where ['location_id'] = $location['location_id'];
-   $wpdb->show_errors(true);
+   // we can't check the return code for wpdb->update,
+   // since sometimes the update returns 0 because of no rows
+   // updated (eg, when you just add an image)
+   // DONE: add modif timestamps, so that changes for each update,
+   // and then we can check for the return code again (as for events)
+   $location['location_modif_date']=current_time('mysql', false);
+   $location['location_modif_date_gmt']=current_time('mysql', true);
    if (!$wpdb->update ( $table_name, $location, $where )) {
       $wpdb->print_error();
       return false;
@@ -473,6 +648,12 @@ function eme_insert_location($location) {
       $location['location_longitude'] = 0;
    if (empty($location['location_latitude']))
       $location['location_latitude'] = 0;
+
+   $location['location_creation_date']=current_time('mysql', false);
+   $location['location_modif_date']=current_time('mysql', false);
+   $location['location_creation_date_gmt']=current_time('mysql', true);
+   $location['location_modif_date_gmt']=current_time('mysql', true);
+
    $wpdb->show_errors(true);
    if (!$wpdb->insert($table_name,$location)) {
       $wpdb->print_error();
@@ -711,8 +892,8 @@ function get_locations_shortcode($atts) {
    $locations = eme_get_locations($eventful, $scope, $category, $offset);
 
    $out = "<ul id=\"eme_locations\" {$class}>";
-   if (!$link)
-      $out .= "<li class=\"location-0\">All</li>";
+   //if (!$link)
+   //   $out .= "<li class=\"location-0\">All</li>";
    foreach ($locations as $location) {
       $location_name = $location['location_name'];
       if ($link) {
@@ -725,18 +906,18 @@ function get_locations_shortcode($atts) {
    $out .= <<<EOD
       <script type="text/javascript">
       //<![CDATA[
-      var $j_eme_loc_cal=jQuery.noConflict();
+      var \$j_eme_loc_cal=jQuery.noConflict();
 
-      $j_eme_loc_cal(document).ready(function() {
-         $j_eme_loc_cal('#eme_locations.calendar li').each(function(){
-               $j_eme_loc_cal(this).click(function(){
-                  location_id = $j_eme_loc_cal(this).attr('class').replace('location-','');
-                  $j_eme_loc_cal('.location_chosen').text(location_id);
-                  prev_month_link = $j_eme_loc_cal('.prev-month:first');
-                  tableDiv = $j_eme_loc_cal(prev_month_link).closest('table').parent();
-                  ($j_eme_loc_cal(prev_month_link).hasClass('full-link')) ?
+      \$j_eme_loc_cal(document).ready(function() {
+         \$j_eme_loc_cal('#eme_locations.calendar li').each(function(){
+               \$j_eme_loc_cal(this).click(function(){
+                  location_id = \$j_eme_loc_cal(this).attr('class').replace('location-','');
+                  \$j_eme_loc_cal('.location_chosen').text(location_id);
+                  prev_month_link = \$j_eme_loc_cal('.prev-month:first');
+                  tableDiv = \$j_eme_loc_cal(prev_month_link).closest('table').parent();
+                  (\$j_eme_loc_cal(prev_month_link).hasClass('full-link')) ?
                      fullcalendar = 1 : fullcalendar = 0;
-                  ($j_eme_loc_cal(prev_month_link).hasClass('long_events')) ?
+                  (\$j_eme_loc_cal(prev_month_link).hasClass('long_events')) ?
                      long_events = 1 : long_events = 0;
                   loadCalendar(tableDiv, fullcalendar, long_events);
                } );
@@ -785,8 +966,18 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       } elseif (preg_match('/#_ALLEVENTS$/', $result)) {
          $replacement = eme_events_in_location_list($location, "all");
 
-      } elseif (preg_match('/#_(NAME|ADDRESS|TOWN)$/', $result)) {
+      } elseif (preg_match('/#_(ADDRESS|TOWN)$/', $result)) {
          $field = "location_".ltrim(strtolower($result), "#_");
+         if (isset($location[$field]))
+            $replacement = $location[$field];
+         $replacement = eme_trans_sanitize_html($replacement);
+         if ($target == "html")
+            $replacement = apply_filters('eme_general', $replacement); 
+         else 
+            $replacement = apply_filters('eme_general_rss', $replacement); 
+
+      } elseif (preg_match('/#_(NAME|LOCATIONNAME)$/', $result)) {
+         $field = "location_name";
          if (isset($location[$field]))
             $replacement = $location[$field];
          $replacement = eme_trans_sanitize_html($replacement);
@@ -838,6 +1029,15 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
       } elseif (preg_match('/#_DIRECTIONS/', $result)) {
          $replacement = eme_add_directions_form($location);
+
+      } elseif (preg_match('/^#_CATEGORIES$/', $result) && get_option('eme_categories_enabled')) {
+         $categories = eme_get_location_categories($location['location_id']);
+         $replacement = eme_trans_sanitize_html(join(", ",$categories));
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement);
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement);
+         }
 
       } elseif (preg_match('/#_IS_SINGLE_LOC/', $result)) {
          if (eme_is_single_location_page())

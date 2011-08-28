@@ -108,12 +108,14 @@ function eme_attributes_form($event) {
             ?>
          </tbody>
       </table>
-   </div>
    <?php
    } else {
    ?>
       <p><?php _e('No attributes defined yet. If you want attributes, you first need to define/use some in the Settings page. See the section about custom attributes on the documention site for more info.','eme'); ?></p>
    <?php
    } //endif count attributes
+   ?>
+   </div>
+<?php
 }
 ?>

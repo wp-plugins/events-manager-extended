@@ -8,7 +8,7 @@ function eme_cleanup_page() {
    $recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 
    $message="";
-   if (current_user_can( SETTING_CAPABILITY)) {
+   if (current_user_can( get_option('eme_cap_cleanup'))) {
       // do the actions if required
       if (isset($_POST['eme_action']) && $_POST['eme_action'] == "eme_cleanup" && isset($_POST['eme_number']) && isset($_POST['eme_period'])) {
          $eme_number = intval($_POST['eme_number']);
