@@ -173,13 +173,14 @@ function eme_printable_booking_report($event_id) {
          <meta http-equiv="Content-type" content="text/html; charset=utf-8">
          <title>Bookings for <?php echo $event['event_name'];?></title>
           <link rel="stylesheet" href="<?php echo $stylesheet; ?>" type="text/css" media="screen" />
-         
       </head>
       <body id="printable">
          <div id="container">
          <h1>Bookings for <?php echo $event['event_name'];?></h1> 
-         <p><?php echo eme_replace_placeholders("#d #M #Y", $event)?></p>
-         <p><?php echo eme_replace_placeholders("#_LOCATION, #_ADDRESS, #_TOWN", $event)?></p>
+         <p><?php echo date_i18n (get_option('date_format'), strtotime($event['event_start_date'])); ?></p>
+         <p><?php echo eme_replace_placeholders("#_LOCATIONNAME, #_ADDRESS, #_TOWN", $event); ?></p>
+         <?php if ($event['price']) ?>
+            <p><?php _e ( 'Price: ','eme' ); echo eme_replace_placeholders("#_CURRENCY #_PRICE", $event)?></p>
          <h2><?php _e('Bookings data', 'eme');?></h2>
          <table id="bookings-table">
             <tr>
@@ -201,19 +202,24 @@ function eme_printable_booking_report($event_id) {
                <td><?php echo $booking['person_email']?></td>
                <td><?php echo $booking['person_phone']?></td>
                <td class='seats-number'><?php echo $booking['booking_seats']." ".$pending_string?></td>
-               <td><?php echo $booking['booking_payed']?></td>
+               <td><?php if ($booking['booking_payed']) _e('Yes'); else _e('No'); ?></td>
                <td><?=$booking['booking_comment'] ?></td> 
             </tr>
                <?php } ?>
             <tr id='booked-seats'>
-               <td colspan='3'>&nbsp;</td>
+               <td colspan='2'>&nbsp;</td>
                <td class='total-label'><?php _e('Booked', 'eme')?>:</td>
-               <td colspan='2' class='seats-number'><?php echo $booked_seats; echo "($pending_seats) ".__('Pending','eme');?></td>
+               <td colspan='3' class='seats-number'><?php
+			echo $booked_seats;
+			if ($pending_seats>0)
+				echo " ".sprintf( __('(%s pending)','eme'), $pending_seats);
+			?>
+		</td>
             </tr>
             <tr id='available-seats'>
-               <td colspan='3'>&nbsp;</td> 
+               <td colspan='2'>&nbsp;</td> 
                <td class='total-label'><?php _e('Available', 'eme')?>:</td>
-               <td colspan='2' class='seats-number'><?php echo $available_seats; ?></td>
+               <td colspan='3' class='seats-number'><?php echo $available_seats; ?></td>
             </tr>
          </table>
          </div>

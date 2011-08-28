@@ -1202,7 +1202,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
 
-      } elseif (preg_match('/#_EVENTPRICE$/', $result)) {
+      } elseif (preg_match('/#_EVENTPRICE|PRICE$/', $result)) {
          $field = "price";
          $replacement = $event[$field];
          if ($target == "html") {
@@ -1211,6 +1211,14 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
 
+      } elseif (preg_match('/#_CURRENCY/', $result)) {
+         $field = "currency";
+         $replacement = $event[$field];
+         if ($target == "html") {
+            $replacement = apply_filters('eme_general', $replacement); 
+         } else {
+            $replacement = apply_filters('eme_general_rss', $replacement); 
+         }
 
       } elseif (preg_match('/#_LOCATIONID$/', $result)) {
          $field = "location_id";
