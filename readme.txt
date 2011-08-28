@@ -571,7 +571,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: get rid of some php notices in the event creation form
 
 = 4.0.1 = 
-* Feature: added placeholder #_EVENTPRICE, so you can show the price for an event
+* Feature: added placeholders #_PRICE and #_CURRENCY, so you can show the price for an event
 * Feature: you can now specify any scope in the events list widget
 * Feature: added scope='tomorrow--future', so you can show events in the future but not happening today. The normal scope=future once again shows events happening today as well
 * Feature: you can now add a registration in the backend
