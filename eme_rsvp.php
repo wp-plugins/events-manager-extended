@@ -806,7 +806,8 @@ function eme_registration_seats_form_table($event_id=0) {
    $all_events=eme_get_events(0,"future");
    $events_with_pending_bookings=array();
    foreach ( $all_events as $event ) {
-         echo "<option value='".$event['event_id']."' >".$event['event_name']."</option>  ";
+         if ($event ['event_rsvp'])
+            echo "<option value='".$event['event_id']."' >".$event['event_name']."</option>  ";
    }
    ?>
    </select>
