@@ -585,3 +585,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 
 = 4.0.2 =
 * Improvement: when adding a registration in the backend, you can now only choose from events that have RSVP activated
+* Improvement: when the setting "Max number of spaces to book" is empty, it is now ignored

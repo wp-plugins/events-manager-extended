@@ -47,7 +47,7 @@ function eme_add_booking_form($event_id) {
    $min = intval(get_option('eme_rsvp_addbooking_min_spaces'));
    $max_allowed = intval(get_option('eme_rsvp_addbooking_max_spaces'));
    $max = eme_get_available_seats($event_id);
-   if ($max > $max_allowed) {
+   if ($max > $max_allowed && $max_allowed>0) {
       $max = $max_allowed;
    }
    // no seats anymore? No booking form then ...
@@ -291,7 +291,9 @@ function eme_book_seats($event) {
    } elseif (!$bookerName || !$bookerEmail) {
       // if any of name, email or bookedseats are empty: return an error
       $result = __('Please fill in all the required fields','eme');
-   } elseif ($bookedSeats < $min_allowed || $bookedSeats>$max_allowed) {
+   } elseif ($bookedSeats < $min_allowed) {
+      $result = __('Please fill in a correct number of spaces to reserve','eme');
+   } elseif ($max_allowed>0 && $bookedSeats>$max_allowed) {
       $result = __('Please fill in a correct number of spaces to reserve','eme');
    } elseif (!is_admin() && !$registration_wp_users_only && !$bookerPhone) {
       // no member of wordpress: we need a phonenumber then
