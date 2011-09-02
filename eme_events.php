@@ -1004,6 +1004,8 @@ function eme_get_events_list($limit, $scope = "future", $order = "ASC", $format 
       $eme_filters["eme_scope_filter"]=1;
       foreach ($_REQUEST as $key => $item) {
          if (isset($eme_filters[$key])) {
+            # if you selected multiple items, $item is an array, but rawurlencode needs a string
+            if (is_array($item)) $item=join(',',eme_sanitize_request($item));
             $this_page_url.=$joiner.rawurlencode($key)."=".rawurlencode($item);
             $joiner = "&amp;";
          }
