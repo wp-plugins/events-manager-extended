@@ -665,7 +665,7 @@ function eme_replace_attendees_placeholders($format, $attendee, $event_id, $targ
             $replacement = apply_filters('eme_general_rss', $replacement); 
 
       } elseif (preg_match('/#_USER_(RESERVEDSPACES|BOOKEDSEATS)$/', $result)) {
-         $replacement = eme_get_booked_seats_by_person_event_id($attendee['person_id'],$event['event_id']);
+         $replacement = eme_get_booked_seats_by_person_event_id($attendee['person_id'],$event_id);
       } else {
          $found = 0;
       }
