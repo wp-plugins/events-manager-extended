@@ -112,7 +112,7 @@ function eme_client_clock_callback() {
 }
 
 // Setting constants
-define('EME_DB_VERSION', 17);
+define('EME_DB_VERSION', 18);
 define('EME_PLUGIN_URL', plugins_url('',plugin_basename(__FILE__)).'/'); //PLUGIN DIRECTORY
 define('EME_PLUGIN_DIR', ABSPATH.PLUGINDIR.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__))); //PLUGIN DIRECTORY
 define('EVENTS_TBNAME','dbem_events'); //TABLE NAME
@@ -486,7 +486,7 @@ function eme_create_events_table($charset,$collate) {
          event_notes longtext DEFAULT NULL,
          event_rsvp bool DEFAULT 0,
          use_paypal bool DEFAULT 0,
-         price mediumint(9) DEFAULT 0,
+         price DECIMAL(7,2) DEFAULT 0,
          currency text DEFAULT NULL,
          rsvp_number_days tinyint unsigned DEFAULT 0,
          event_seats mediumint(9) DEFAULT 0,
@@ -540,7 +540,7 @@ function eme_create_events_table($charset,$collate) {
       maybe_add_column($table_name, 'event_rsvp', "alter table $table_name add event_rsvp bool DEFAULT 0;");
       maybe_add_column($table_name, 'use_paypal', "alter table $table_name add use_paypal bool DEFAULT 0;");
       maybe_add_column($table_name, 'rsvp_number_days', "alter table $table_name add rsvp_number_days tinyint unsigned DEFAULT 0;");
-      maybe_add_column($table_name, 'price', "alter table $table_name add price mediumint(9) DEFAULT 0;");
+      maybe_add_column($table_name, 'price', "alter table $table_name add price DECIMAL(7,2) DEFAULT 0;");
       maybe_add_column($table_name, 'currency', "alter table $table_name add currency text DEFAULT NULL;");
       maybe_add_column($table_name, 'event_seats', "alter table $table_name add event_seats mediumint(9) DEFAULT 0;");
       maybe_add_column($table_name, 'location_id', "alter table $table_name add location_id mediumint(9) DEFAULT 0;");
@@ -582,6 +582,9 @@ function eme_create_events_table($charset,$collate) {
       if ($db_version<11) {
          $wpdb->query("ALTER TABLE $table_name DROP COLUMN event_author;");
          $wpdb->query("ALTER TABLE $table_name CHANGE event_creator_id event_author mediumint(9) DEFAULT 0;");
+      }
+      if ($db_version<18) {
+         $wpdb->query("ALTER TABLE $table_name MODIFY price DECIMAL(7,2) DEFAULT 0;");
       }
    }
 }

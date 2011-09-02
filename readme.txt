@@ -588,3 +588,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: when the setting "Max number of spaces to book" is empty, it is now ignored
 * Bugfix: attributes weren't taken into account for the new email formats pending, cancelled, denied
 * Bugfix: the filtering threw an error when selecting multiple items
+* Bugfix: price can be a decimal number as well
