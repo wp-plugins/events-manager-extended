@@ -444,8 +444,8 @@ add_action('wp_footer', 'eme_ajaxize_calendar');
 
 function eme_filter_calendar_ajax() {
    if(isset($_GET['eme_ajaxCalendar']) && $_GET['eme_ajaxCalendar'] == true) {
-      (isset($_GET['full']) && $_GET['full'] == 1) ? $full = 1 : $full = 0;
-      (isset($_GET['long_events']) && $_GET['long_events'] == 1) ? $long_events = 1 : $long_events = 0;
+      (isset($_GET['full']) && $_GET['full']) ? $full = 1 : $full = 0;
+      (isset($_GET['long_events']) && $_GET['long_events']) ? $long_events = 1 : $long_events = 0;
       (isset($_GET['category'])) ? $category = $_GET['category'] : $category = 0;
       (isset($_GET['calmonth'])) ? $month = eme_sanitize_request($_GET['calmonth']) : $month = ''; 
       (isset($_GET['calyear'])) ? $year = eme_sanitize_request($_GET['calyear']) : $year = ''; 
