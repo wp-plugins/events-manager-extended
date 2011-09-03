@@ -590,3 +590,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: the filtering threw an error when selecting multiple items
 * Bugfix: price can be a decimal number as well
 * Bugfix: the attendee list didn't return the correct number of booked seats
+* Bugfix: for the filter form, the selected items were not highlighted upon submit
