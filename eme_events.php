@@ -2604,7 +2604,7 @@ function eme_event_form($event, $title, $element) {
                         </p>
                      </div>
                   </div>
-                   <div id="div_location_name" class="stuffbox">
+                   <div id="div_location_name" class="stuffbox" style='overflow: hidden;'>
                      <h3>
                         <?php _e ( 'Location', 'eme' ); ?>
                      </h3>
@@ -2648,14 +2648,13 @@ function eme_event_form($event, $title, $element) {
                               $gmap_is_active = get_option('eme_gmap_is_active' );
                               if ($gmap_is_active) {
                            ?>
-                              <td rowspan='6'><div id='map-not-found'
-               style='width: 400px; font-size: 140%; text-align: center; margin-top: 100px; display: hide'>
+                              <td rowspan='6'>
+                                 <div id='eme-admin-map-not-found'>
                                     <p>
                                        <?php _e ( 'Map not found','eme' ); ?>
                                     </p>
                                  </div>
-                                 <div id='event-map'
-               style='width: 400px; height: 300px; background: green; display: hide; margin-right: 8px'></div></td>
+                                 <div id='eme-admin-location-map'></div></td>
                               <?php
          }
          ; // end of IF_GMAP_ACTIVE ?>
@@ -3104,8 +3103,8 @@ function eme_admin_map_script() {
                },
                mapTypeId: google.maps.MapTypeId.ROADMAP
             }
-            $j_eme_admin("#event-map").show();
-            var map = new google.maps.Map(document.getElementById("event-map"), myOptions);
+            $j_eme_admin("#eme-admin-location-map").show();
+            var map = new google.maps.Map(document.getElementById("eme-admin-location-map"), myOptions);
             var geocoder = new google.maps.Geocoder();
             if (address !="") {
                searchKey = address + ", " + town;
@@ -3127,11 +3126,11 @@ function eme_admin_map_script() {
                   infowindow.open(map,marker);
                   $j_eme_admin('input#location_latitude').val(results[0].geometry.location.lat());
                   $j_eme_admin('input#location_longitude').val(results[0].geometry.location.lng());
-                  $j_eme_admin("#event-map").show();
-                  $j_eme_admin('#map-not-found').hide();
+                  $j_eme_admin("#eme-admin-location-map").show();
+                  $j_eme_admin('#eme-admin-map-not-found').hide();
                } else {
-                  $j_eme_admin("#event-map").hide();
-                  $j_eme_admin('#map-not-found').show();
+                  $j_eme_admin("#eme-admin-location-map").hide();
+                  $j_eme_admin('#eme-admin-map-not-found').show();
                }
             });
             }
