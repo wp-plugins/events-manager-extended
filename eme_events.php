@@ -839,6 +839,20 @@ function eme_filter_get_pages($data) {
 }
 add_filter ( 'get_pages', 'eme_filter_get_pages' );
 
+//filter out the events page in the admin section
+function exclude_this_page( $query ) {
+   if( !is_admin() )
+      return $query;
+
+   global $pagenow;
+   $events_page_id = get_option('eme_events_page' );
+
+   if( 'edit.php' == $pagenow && ( get_query_var('post_type') && 'page' == get_query_var('post_type') ) )
+      $query->set( 'post__not_in', array($events_page_id) );
+   return $query;
+}
+add_action( 'pre_get_posts' ,'exclude_this_page' );
+
 // TEMPLATE TAGS
 
 // exposed function, for theme  makers
