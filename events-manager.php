@@ -1173,7 +1173,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = eme_trans_sanitize_html($replacement);
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
-            $replacement = eme_trans_sanitize_html($replacement,0);
+            $replacement = eme_translate($replacement);
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
 
@@ -1184,7 +1184,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = eme_trans_sanitize_html($replacement);
             $replacement = apply_filters('eme_general', $replacement); 
          } else { 
-            $replacement = eme_trans_sanitize_html($replacement,0);
+            $replacement = eme_translate($replacement);
             $replacement = apply_filters('eme_general_rss', $replacement); 
          }
 
@@ -1243,7 +1243,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
                $replacement = eme_trans_sanitize_html($replacement);
                $replacement = apply_filters('eme_general', $replacement); 
             } else {
-               $replacement = eme_trans_sanitize_html($replacement,0);
+               $replacement = eme_translate($replacement);
                $replacement = apply_filters('eme_general_rss', $replacement); 
             }
          }
@@ -1351,7 +1351,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             $replacement = eme_trans_sanitize_html(join(", ",$categories));
             $replacement = apply_filters('eme_general', $replacement); 
          } else {
-            $replacement = eme_trans_sanitize_html(join(", ",$categories),0);
+            $replacement = eme_translate(join(", ",$categories));
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
 
@@ -1452,7 +1452,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
          //$field_value = apply_filters('the_content', $field_value); - chucks a wobbly if we do this.
          // we call the sanitize_html function so the qtranslate
          // does it's thing anyway
-         $replacement = eme_trans_sanitize_html($replacement,0);
+         $replacement = eme_translate($replacement);
       } else {
          if ($target == "map") {
             $replacement = apply_filters('eme_notes_map', $replacement);
@@ -1465,7 +1465,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
             } else {
                if (isset($event[$field])) $replacement = $event[$field];
             }
-            $replacement = eme_trans_sanitize_html($replacement,0);
+            $replacement = eme_translate($replacement);
             $replacement = apply_filters('eme_notes_rss', $replacement);
             $replacement = apply_filters('the_content_rss', $replacement);
          }
@@ -1547,12 +1547,19 @@ function sort_stringlenth($a,$b){
 
 
 function eme_trans_sanitize_html( $value, $do_convert=1 ) {
-   if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage')) $value = qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
+   $value = eme_translate( $value);
    if ($do_convert) {
       return eme_sanitize_html($value);
    } else {
       return $value;
    }
+}
+
+function eme_translate ( $value) {
+   if (function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage'))
+      return qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage($value);
+   else
+      return $value;
 }
 
 function eme_sanitize_html( $value ) {

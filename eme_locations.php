@@ -1091,7 +1091,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
 
       // no real sanitizing needed, but possible translation
       // this is the same as for an event in fact
-      $replacement = eme_trans_sanitize_html($replacement,0);
+      $replacement = eme_translate($replacement);
       if ($target == "html")
          $replacement = apply_filters('eme_notes', $replacement);
       else
