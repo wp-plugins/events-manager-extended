@@ -851,7 +851,9 @@ function exclude_this_page( $query ) {
       $query->set( 'post__not_in', array($events_page_id) );
    return $query;
 }
-add_action( 'pre_get_posts' ,'exclude_this_page' );
+// it works just fine, but then people can't disable comments on this page
+// TODO: until I figure this out, we put this in comment
+// add_action( 'pre_get_posts' ,'exclude_this_page' );
 
 // TEMPLATE TAGS
 
@@ -3493,8 +3495,9 @@ function eme_favorite_menu($actions) {
 }
 
 function eme_alert_events_page() {
+   global $pagenow;
    $events_page_id = get_option('eme_events_page' );
-   if (strpos ( $_SERVER ['SCRIPT_NAME'], 'post.php' ) && isset ( $_GET ['action'] ) && $_GET ['action'] == 'edit' && isset ( $_GET ['post'] ) && $_GET ['post'] == "$events_page_id") {
+   if ($pagenow == 'post.php' && ( get_query_var('post_type') && 'page' == get_query_var('post_type') ) && isset ( $_GET ['action'] ) && $_GET ['action'] == 'edit' && isset ( $_GET ['post'] ) && $_GET ['post'] == "$events_page_id") {
       $message = sprintf ( __ ( "This page corresponds to <strong>Events Manager Extended</strong> events page. Its content will be overriden by <strong>Events Manager Extended</strong>. If you want to display your content, you can can assign another page to <strong>Events Manager Extended</strong> in the the <a href='%s'>Settings</a>. ", 'eme' ), 'admin.php?page=events-manager-options' );
       $notice = "<div class='error'><p>$message</p></div>";
       echo $notice;

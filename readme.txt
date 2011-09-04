@@ -587,7 +587,6 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: when adding a registration in the backend, you can now only choose from events that have RSVP activated
 * Improvement: when the setting "Max number of spaces to book" is empty, it is now ignored
 * Improvement/fix: price can be a decimal number as well
-* Improvement: the special events page is now hidden in the admin edit-page menu, so people can't delete it by accident anymore
 * Bugfix: attributes weren't taken into account for the new email formats pending, cancelled, denied
 * Bugfix: the filtering threw an error when selecting multiple items
 * Bugfix: the attendee list didn't return the correct number of booked seats
