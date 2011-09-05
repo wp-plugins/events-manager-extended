@@ -929,7 +929,12 @@ function eme_create_events_submenu () {
       }
       $plugin_page = add_submenu_page('events-manager', __('Cleanup', 'eme'), __('Cleanup', 'eme'), get_option('eme_cap_cleanup'), 'events-manager-cleanup', "eme_cleanup_page");
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
-      $plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), get_option('eme_cap_settings'), "events-manager-options", 'eme_options_subpanel');
+      # just in case: make sure the Settings page can be reached if something is not correct with the security settings
+      if (get_option('eme_cap_settings') =='') {
+         $plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), DEFAULT_CAP_SETTINGS, "events-manager-options", 'eme_options_subpanel');
+      } else {
+         $plugin_page = add_submenu_page('events-manager', __('Events Manager Settings','eme'),__('Settings','eme'), get_option('eme_cap_settings'), "events-manager-options", 'eme_options_subpanel');
+      }
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
    }
 }
