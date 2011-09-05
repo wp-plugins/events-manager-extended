@@ -237,7 +237,8 @@ function eme_get_recurrence($recurrence_id) {
    $recurrence = $wpdb->get_row($sql, ARRAY_A);
 
    // now add the info that has no column in the recurrence table
-   $sql = "SELECT event_id FROM $events_table WHERE recurrence_id = '$recurrence_id' LIMIT 1;";
+   // for that, we take the info from the first occurence
+   $sql = "SELECT event_id FROM $events_table WHERE recurrence_id = '$recurrence_id' ORDER BY event_start_date ASC LIMIT 1;";
    $event_id = $wpdb->get_var($sql);
    $event = eme_get_event($event_id);
    foreach ($event as $key=>$val) {
