@@ -1903,7 +1903,7 @@ function eme_events_table($events, $limit, $title, $scope="future", $offset=0, $
    <select name="category">
    <option value='0'><?php _e('All categories','eme'); ?></option>
    <?php
-   $categories = eme_get_categories(false,"",1);
+   $categories = eme_get_categories();
    foreach ( $categories as $category) {
       $selected = "";
       if ($o_category == $category['category_id'])
@@ -2439,7 +2439,7 @@ function eme_event_form($event, $title, $element) {
                         </span></h3>
                      <div class="inside">
                      <?php
-                     $categories = eme_get_categories(false,"",1);
+                     $categories = eme_get_categories();
                      foreach ( $categories as $category) {
                         if ($event['event_category_ids'] && in_array($category['category_id'],explode(",",$event['event_category_ids']))) {
                            $selected = "checked='checked'";

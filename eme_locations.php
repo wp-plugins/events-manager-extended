@@ -221,7 +221,7 @@ function eme_locations_edit_layout($location, $message = "") {
         <div>
            <label for="location_category_ids"><?php _e('Category', 'eme') ?></label><br />
            <?php
-           $categories = eme_get_categories(false,"",1);
+           $categories = eme_get_categories();
            foreach ( $categories as $category) {
               if ($location['location_category_ids'] && in_array($category['category_id'],explode(",",$location['location_category_ids']))) {
                  $selected = "checked='checked'";
@@ -396,7 +396,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                            <div>
                            <label for="location_category_ids"><?php _e('Category', 'eme') ?></label><br />
                            <?php
-                           $categories = eme_get_categories(false,"",1);
+                           $categories = eme_get_categories();
                            foreach ( $categories as $category) {
                               if ($new_location['location_category_ids'] && in_array($category['category_id'],explode(",",$new_location['location_category_ids']))) {
                                  $selected = "checked='checked'";

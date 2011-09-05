@@ -584,6 +584,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: fixed a recurrence insert when the end day of the single event wasn't set (it resulted in a 2-day event)
 
 = 4.0.2 =
+* Feature: added options 'category' and 'notcategory' to the shortcode [events_filterform], so you can choose to only show specific categories or exclude certain categories from the select box
 * Improvement: when adding a registration in the backend, you can now only choose from events that have RSVP activated
 * Improvement: when the setting "Max number of spaces to book" is empty, it is now ignored
 * Improvement/fix: price can be a decimal number as well

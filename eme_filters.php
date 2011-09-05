@@ -1,9 +1,9 @@
 <?php
 
 function eme_filter_form_shortcode($atts) {
-   extract ( shortcode_atts ( array ('multiple' => 0, 'multisize' => 5, 'scope_count' => 12, 'submit' => 'Submit', 'fields'=> 'all' ), $atts ) );
+   extract ( shortcode_atts ( array ('multiple' => 0, 'multisize' => 5, 'scope_count' => 12, 'submit' => 'Submit', 'fields'=> 'all', 'category' => '', 'notcategory' => '' ), $atts ) );
 
-   $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'),$multiple,$multisize,$scope_count,$fields);
+   $content=eme_replace_filter_form_placeholders(get_option('eme_filter_form_format'),$multiple,$multisize,$scope_count,$fields,$category,$notcategory);
    #$content=eme_replace_filter_form_placeholders("#_FILTER_CATS #_FILTER_LOCS #_FILTER_TOWNS",$multiple,$multisize,$scope_count);
    $this_page_url=$_SERVER['REQUEST_URI'];
    $form = "<form action='$this_page_url' method='POST'>";
@@ -63,7 +63,7 @@ function eme_create_year_scope($count) {
    return $scope;
 }
 
-function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $scope_count, $fields) {
+function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $scope_count, $fields, $category, $notcategory) {
    if ($fields == "all")
       $fields="categories,locations,towns,weeks,months";
 
@@ -100,6 +100,13 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
       $selected_category="---";
    }
 
+   $extra_conditions_arr=array();
+   if ($category != '')
+      $extra_conditions_arr[]="(category_id IN ($category))";
+   if ($notcategory != '')
+      $extra_conditions_arr[]="(category_id NOT IN ($notcategory))";
+   $extra_conditions = implode(' AND ',$extra_conditions_arr);
+
    foreach($placeholders[0] as $result) {
       $replacement = "";
       $eventful=0;
@@ -108,7 +115,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
             $eventful=1;
          }
 
-         $categories = eme_get_categories($eventful,"future");
+         $categories = eme_get_categories($eventful,"future",$extra_conditions_arr);
          if (strstr($fields,'categories') && $categories) {
             $cat_list = array();
             $cat_list[0]="---";

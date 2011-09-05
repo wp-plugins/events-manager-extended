@@ -57,7 +57,7 @@ function eme_categories_subpanel() {
 } 
 
 function eme_categories_table_layout($message = "") {
-   $categories = eme_get_categories(false,"",1);
+   $categories = eme_get_categories();
    $destination = admin_url("admin.php?page=events-manager-categories"); 
    $table = "
       <div class='wrap nosubsub'>\n
@@ -193,15 +193,11 @@ function eme_categories_edit_layout($message = "") {
    echo $layout;
 }
 
-function eme_get_categories($eventful=false,$scope="future",$sorted=0){
+function eme_get_categories($eventful=false,$scope="future",$extra_conditions=""){
    global $wpdb;
    $categories_table = $wpdb->prefix.CATEGORIES_TBNAME; 
    $categories = array();
-   if ($sorted) {
-      $orderby = " ORDER BY category_name ASC";
-   } else {
-      $orderby = "";
-   }
+   $orderby = " ORDER BY category_name ASC";
    if ($eventful) {
       $events = eme_get_events(0, $scope, "ASC");
       if ($events) {
@@ -218,10 +214,14 @@ function eme_get_categories($eventful=false,$scope="future",$sorted=0){
       }
       if (!empty($categories)) {
          $event_cats=join(",",$categories);
-         return $wpdb->get_results("SELECT * FROM $categories_table where category_id in ($event_cats) $orderby", ARRAY_A);
+         if ($extra_conditions !="")
+            $extra_conditions = " AND ($extra_conditions)";
+         return $wpdb->get_results("SELECT * FROM $categories_table where category_id in ($event_cats) $extra_conditions $orderby", ARRAY_A);
       }
    } else {
-      return $wpdb->get_results("SELECT * FROM $categories_table $orderby", ARRAY_A);
+      if ($extra_conditions !="")
+         $extra_conditions = " WHERE ($extra_conditions)";
+      return $wpdb->get_results("SELECT * FROM $categories_table $extra_conditions $orderby", ARRAY_A);
    }
 }
 
