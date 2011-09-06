@@ -115,7 +115,7 @@ function eme_replace_filter_form_placeholders($format, $multiple, $multisize, $s
             $eventful=1;
          }
 
-         $categories = eme_get_categories($eventful,"future",$extra_conditions_arr);
+         $categories = eme_get_categories($eventful,"future",$extra_conditions);
          if (strstr($fields,'categories') && $categories) {
             $cat_list = array();
             $cat_list[0]="---";
