@@ -996,11 +996,11 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
             $replacement = apply_filters('eme_general_rss', $replacement);
          }
 
-      } elseif (preg_match('/#_IMAGE$/', $result)) {
+      } elseif (preg_match('/#_(IMAGE|LOCATIONIMAGE)$/', $result)) {
          if($location['location_image_url'] != '')
             $replacement = "<img src='".$location['location_image_url']."' alt='".eme_trans_sanitize_html($location['location_name'])."'/>";
 
-      } elseif (preg_match('/#_IMAGEURL$/', $result)) {
+      } elseif (preg_match('/#_(IMAGEURL|LOCATIONIMAGEURL)$/', $result)) {
          if($location['location_image_url'] != '')
             $replacement = $location['location_image_url'];
 
@@ -1030,7 +1030,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       } elseif (preg_match('/#_DIRECTIONS/', $result)) {
          $replacement = eme_add_directions_form($location);
 
-      } elseif (preg_match('/^#_CATEGORIES$/', $result) && get_option('eme_categories_enabled')) {
+      } elseif (preg_match('/^#_CATEGORIES|#_LOCATIONCATEGORIES$/', $result) && get_option('eme_categories_enabled')) {
          $categories = eme_get_location_categories($location['location_id']);
          $replacement = eme_trans_sanitize_html(join(", ",$categories));
          if ($target == "html") {
@@ -1071,7 +1071,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
    }
 
    # we handle DESCRIPTION the last, so no placeholder replacement happens accidentaly in the text of #_DESCRIPTION
-   if (preg_match('/#_DESCRIPTION/', $format, $placeholders)) {
+   if (preg_match('/#_DESCRIPTION|#_LOCATIONDETAILS/', $format, $placeholders)) {
       $result=$placeholders[0];
       $need_escape = 0;
       $need_urlencode = 0;
