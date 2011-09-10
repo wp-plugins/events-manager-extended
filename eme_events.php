@@ -3075,23 +3075,15 @@ $j_eme_event(document).ready( function() {
 }
 
 function eme_admin_map_script() {
-   if ((isset ( $_REQUEST ['event_id'] ) && $_REQUEST ['event_id'] != '') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-new_event') || (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'edit_recurrence')) {
-      if (! (isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'eme_delete')) {
-         // single event page
-
+   # we also do this for locations, since the locations page also needs the loadMap javascript function
+   if ((isset ( $_GET ['page'] ) && ($_GET ['page'] == 'events-manager-locations' || $_GET ['page'] == 'events-manager-new_event')) ||
+       (isset ( $_REQUEST ['action'] ) && ($_REQUEST ['action'] == 'edit_event' || $_REQUEST ['action'] == 'edit_recurrence'))) {
          if (isset($_REQUEST ['event_id']))
             $event_ID = intval($_REQUEST ['event_id']);
          else
             $event_ID =0;
          $event = eme_get_event ( $event_ID );
          
-         if (isset($event ['location_town']) || (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-locations') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
-            if (isset($event ['location_address']) && $event ['location_address'] != "") {
-               $search_key = $event ['location_address'] . ", " . $event ['location_town'];
-            } else {
-               $search_key = $event ['location_name'] . ", " . $event ['location_town'];
-            }
-            
             ?>
 <style type="text/css">
 /* div#location_town, div#location_address, div#location_name {
@@ -3127,28 +3119,32 @@ function eme_admin_map_script() {
                searchKey =  location + ", " + town;
             }
                
-            var search = "<?php echo $search_key?>" ;
-            geocoder.geocode( { 'address': searchKey}, function(results, status) {
-               if (status == google.maps.GeocoderStatus.OK) {
-                  map.setCenter(results[0].geometry.location);
-                  var marker = new google.maps.Marker({
-                     map: map, 
-                     position: results[0].geometry.location
-                  });
-                  var infowindow = new google.maps.InfoWindow({
-                     content: '<div class=\"eme-location-balloon\"><strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p></div>'
-                  });
-                  infowindow.open(map,marker);
-                  $j_eme_admin('input#location_latitude').val(results[0].geometry.location.lat());
-                  $j_eme_admin('input#location_longitude').val(results[0].geometry.location.lng());
-                  $j_eme_admin("#eme-admin-location-map").show();
-                  $j_eme_admin('#eme-admin-map-not-found').hide();
-               } else {
-                  $j_eme_admin("#eme-admin-location-map").hide();
-                  $j_eme_admin('#eme-admin-map-not-found').show();
-               }
-            });
+            if (address !="" || town!="") {
+               geocoder.geocode( { 'address': searchKey}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                     map.setCenter(results[0].geometry.location);
+                     var marker = new google.maps.Marker({
+                        map: map, 
+                        position: results[0].geometry.location
+                     });
+                     var infowindow = new google.maps.InfoWindow({
+                        content: '<div class=\"eme-location-balloon\"><strong>' + location +'</strong><p>' + address + '</p><p>' + town + '</p></div>'
+                     });
+                     infowindow.open(map,marker);
+                     $j_eme_admin('input#location_latitude').val(results[0].geometry.location.lat());
+                     $j_eme_admin('input#location_longitude').val(results[0].geometry.location.lng());
+                     $j_eme_admin("#eme-admin-location-map").show();
+                     $j_eme_admin('#eme-admin-map-not-found').hide();
+                  } else {
+                     $j_eme_admin("#eme-admin-location-map").hide();
+                     $j_eme_admin('#eme-admin-map-not-found').show();
+                  }
+               });
+            } else {
+               $j_eme_admin("#eme-admin-location-map").hide();
+               $j_eme_admin('#eme-admin-map-not-found').show();
             }
+         }
  
          $j_eme_admin(document).ready(function() {
             <?php 
@@ -3158,7 +3154,7 @@ function eme_admin_map_script() {
             // We check on the new/edit event because this javascript is also executed for editing locations, and then we don't care
             // about the use_select_for_locations parameter
             if (
-               ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) && 
+               ((isset($_REQUEST['action']) && ($_REQUEST['action'] == 'edit_event' || $_REQUEST['action'] == 'edit_recurrence')) || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) && 
                      (get_option('eme_use_select_for_locations') || function_exists('qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage'))) { ?>
             eventLocation = $j_eme_admin("input[name='location-select-name']").val(); 
             eventTown = $j_eme_admin("input[name='location-select-town']").val();
@@ -3169,7 +3165,7 @@ function eme_admin_map_script() {
             eventTown = $j_eme_admin("input#location_town").val(); 
             eventAddress = $j_eme_admin("input#location_address").val();
                <?php } ?>
-            
+
             loadMap(eventLocation, eventTown, eventAddress);
          
             $j_eme_admin("input[name='location_name']").blur(function(){
@@ -3200,8 +3196,6 @@ function eme_admin_map_script() {
           //]]>
       </script>
 <?php
-         }
-      }
    }
 }
 $gmap_is_active = get_option('eme_gmap_is_active' );

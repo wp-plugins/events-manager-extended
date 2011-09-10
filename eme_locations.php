@@ -416,7 +416,7 @@ function eme_locations_table_layout($locations, $new_location, $message = "") {
                               if ($gmap_is_active) :
                          ?>   
                            <div id="eme-admin-map-not-found"><p><?php _e('Map not found','eme') ?></p></div>
-                           <div id="eme-admin-event-map"></div>
+                           <div id="eme-admin-location-map"></div>
                            <br style="clear:both;" />
                          <?php endif; ?>
                            <div id="loc_description">
@@ -1195,7 +1195,7 @@ function eme_locations_autocomplete() {
       $use_select_for_locations=1;
    }
 
-   if ((isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit_event') || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
+   if ((isset($_REQUEST['action']) && ($_REQUEST['action'] == 'edit_event' || $_REQUEST['action'] == 'edit_recurrence')) || (isset($_GET['page']) && $_GET['page'] == 'events-manager-new_event')) {
       ?>
       <link rel="stylesheet" href="<?php echo EME_PLUGIN_URL; ?>js/jquery-autocomplete/jquery.autocomplete.css" type="text/css"/>
 
