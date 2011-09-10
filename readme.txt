@@ -597,8 +597,12 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: for location formatting, #_CATEGORIES has been deprecated in favor of #_LOCATIONCATEGORIES
 * Improvement: for event formatting, #_NOTES, #_DETAILS and #_DESCRIPTION have been deprecated in favor of #_EVENTDETAILS
 * Improvement: for event formatting, #_CATEGORIES has been deprecated in favor of #_EVENTCATEGORIES
+* API change: eme_insert_recurrent_event renamed to eme_db_insert_recurrence (old function exists for backwards compatibility)
+* API change: eme_update_recurrence renamed to eme_db_update_recurrence (old function exists for backwards compatibility)
+* API change: function eme_db_update_event now takes the event_id as the second parameter (you can still use the where-array method directly, made it backwards compatible)
 * Bugfix: attributes weren't taken into account for the new email formats pending, cancelled, denied
 * Bugfix: the filtering threw an error when selecting multiple items
 * Bugfix: the attendee list didn't return the correct number of booked seats
 * Bugfix: for the filter form, the selected items were not highlighted upon submit
 * Bugfix: true and 1 now work as value for the options full and long_events
+* Bugfix: array in hook eme_update_event_action missed event_id and event_author

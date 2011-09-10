@@ -86,7 +86,12 @@ function eme_get_recurrence_days($recurrence){
 
 ///////////////////////////////////////////////
 
-function eme_insert_recurrent_event($event, $recurrence ){
+// backwards compatible: eme_insert_recurrent_event renamed to eme_db_insert_recurrence
+function eme_insert_recurrent_event($event, $recurrence) {
+   return eme_db_insert_recurrence($event, $recurrence);
+}
+
+function eme_db_insert_recurrence($event, $recurrence ){
    global $wpdb;
    $recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
       
@@ -134,7 +139,12 @@ function eme_insert_events_for_recurrence($event,$recurrence) {
    }
 }
 
+// backwards compatible: eme_update_recurrence renamed to eme_db_update_recurrence
 function eme_update_recurrence($event, $recurrence) {
+   return eme_db_update_recurrence($event, $recurrence);
+}
+
+function eme_db_update_recurrence($event, $recurrence) {
    global $wpdb;
    $recurrence_table = $wpdb->prefix.RECURRENCE_TBNAME;
 
@@ -188,13 +198,11 @@ function eme_update_events_for_recurrence($event,$recurrence) {
          }
       }
       if ($update_needed==1) {
-         $where=array('event_id' => $existing_event['event_id']);
          $event['event_start_date'] = $existing_event['event_start_date'];
          $event['event_end_date'] = date("Y-m-d", strtotime($event['event_start_date'] ." + $duration_days_event days")); 
-         eme_db_update_event($event, $where, 1); 
+         eme_db_update_event($event, $existing_event['event_id'], 1); 
       } else {
-         $sql = "DELETE FROM $events_table WHERE event_id = '".$existing_event['event_id']."';";
-         $wpdb->query($sql);
+         eme_db_delete_event($existing_event);
       }
    }
    // Doing step 2
