@@ -1341,8 +1341,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
    }
 
    # now handle all possible location placeholders
-   if ($event['location_id'])
-      $format = eme_replace_locations_placeholders ( $format, $event );
+   $format = eme_replace_locations_placeholders ( $format, $event );
 
    # we handle NOTES the last, so no placeholder replacement happens accidentaly in the text of #_NOTES
    if (preg_match('/#_(DETAILS|NOTES|EXCERPT|EVENTDETAILS)/', $format, $placeholders)) {

@@ -178,9 +178,9 @@ function eme_printable_booking_report($event_id) {
          <div id="container">
          <h1>Bookings for <?php echo $event['event_name'];?></h1> 
          <p><?php echo date_i18n (get_option('date_format'), strtotime($event['event_start_date'])); ?></p>
-         <p><?php echo eme_replace_placeholders("#_LOCATIONNAME, #_ADDRESS, #_TOWN", $event); ?></p>
+         <p><?php if ($event['location_id']) echo eme_replace_location_placeholders("#_LOCATIONNAME, #_ADDRESS, #_TOWN", $event); ?></p>
          <?php if ($event['use_paypal'] && $event['price']) ?>
-            <p><?php _e ( 'Price: ','eme' ); echo eme_replace_placeholders("#_CURRENCY #_PRICE", $event)?></p>
+            <p><?php _e ( 'Price: ','eme' ); echo $event['currency']." ".$event['price']; ?></p>
          <h2><?php _e('Bookings data', 'eme');?></h2>
          <table id="bookings-table">
             <tr>
