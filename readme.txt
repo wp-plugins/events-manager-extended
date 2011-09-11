@@ -597,6 +597,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: for location formatting, #_CATEGORIES has been deprecated in favor of #_LOCATIONCATEGORIES
 * Improvement: for event formatting, #_NOTES, #_DETAILS and #_DESCRIPTION have been deprecated in favor of #_EVENTDETAILS
 * Improvement: for event formatting, #_CATEGORIES has been deprecated in favor of #_EVENTCATEGORIES
+* Improvement: the html header now only shows the event name, and not the whole single event title format string
 * API change: eme_insert_recurrent_event renamed to eme_db_insert_recurrence (old function exists for backwards compatibility)
 * API change: eme_update_recurrence renamed to eme_db_update_recurrence (old function exists for backwards compatibility)
 * API change: function eme_db_update_event now takes the event_id as the second parameter (you can still use the where-array method directly, made it backwards compatible)

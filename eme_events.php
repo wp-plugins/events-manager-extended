@@ -740,12 +740,8 @@ add_filter ( 'the_content', 'eme_filter_events_page' );
 
 function eme_page_title($data) {
    global $wp_query;
-   $events_page_id = get_option('eme_events_page' );
-   $events_page = get_page ( $events_page_id );
-   $events_page_title = $events_page->post_title;
-   
-   //if (($data == $events_page_title) && (is_page ( $events_page_id ))) {
-   if (($data == $events_page_title) && eme_is_events_page()) {
+
+   if (in_the_loop() && eme_is_events_page()) {
       if (isset ( $wp_query->query_vars['calendar_day'] ) && $wp_query->query_vars['calendar_day'] != '') {
          
          $date = eme_sanitize_request($wp_query->query_vars['calendar_day']);
@@ -785,16 +781,48 @@ function eme_page_title($data) {
       return $data;
    }
 }
-add_filter ( 'single_post_title', 'eme_page_title' );
 
-function eme_filter_the_title($data) {
-   if (in_the_loop() && eme_is_events_page()) {
-      return eme_page_title($data);
+function eme_html_title($data) {
+   global $wp_query;
+
+   //$events_page_id = get_option('eme_events_page' );
+   if (eme_is_events_page()) {
+      if (isset ( $wp_query->query_vars['calendar_day'] ) && $wp_query->query_vars['calendar_day'] != '') {
+         
+         $date = eme_sanitize_request($wp_query->query_vars['calendar_day']);
+         $events_N = eme_events_count_for ( $date );
+         
+         if ($events_N == 1) {
+            $events = eme_get_events ( 0, eme_sanitize_request($wp_query->query_vars['calendar_day']));
+            $event = $events [0];
+            $page_title = eme_replace_placeholders ( "#_EVENTNAME", $event );
+            return $page_title;
+         }
+      }
+      if (eme_is_single_event_page()) {
+         // single event page
+         $event_ID = intval($wp_query->query_vars['event_id']);
+         $event = eme_get_event ( $event_ID );
+         $page_title = eme_replace_placeholders ( "#_EVENTNAME", $event );
+         return $page_title;
+      } elseif (eme_is_single_location_page()) {
+         $location = eme_get_location ( intval($wp_query->query_vars['location_id']));
+         $page_title = eme_replace_locations_placeholders ( "#_LOCATIONNAME", $location );
+         return $page_title;
+      } else {
+         // Multiple events page
+         $page_title = get_option('eme_events_page_title' );
+         return $page_title;
+      }
    } else {
       return $data;
    }
 }
-add_filter ( 'the_title', 'eme_filter_the_title' );
+
+// the filter single_post_title influences the html header title and the page title
+// we want to prevent html tags in the html header title (if you add html in the 'single event title format', it will show)
+add_filter ( 'single_post_title', 'eme_html_title' );
+add_filter ( 'the_title', 'eme_page_title' );
 
 function eme_template_redir() {
    global $wp_query;
