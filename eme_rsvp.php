@@ -820,7 +820,7 @@ function eme_registration_seats_form_table($event_id=0) {
                 </td>
             </tr>
             <tr><th scope='row'><?php _e('Seats', 'eme'); ?>*:</th><td><input type='text' name='bookedSeats' value='' /></td></tr>
-            <tr><th scope='row'><?php _e('Payed', 'eme'); ?>:</th><td><?php echo eme_ui_select_binary(0,"booking_payed"); ?></td></tr>
+            <tr><th scope='row'><?php _e('Paid', 'eme'); ?>:</th><td><?php echo eme_ui_select_binary(0,"booking_payed"); ?></td></tr>
    </tbody>
    </table>
    <input id="post-query-submit" class="button-secondary" type="submit" value="<?php _e ( 'Register booking' )?>" />
@@ -867,7 +867,7 @@ function eme_registration_seats_form_table($event_id=0) {
          <th><?php _e ( 'Date and time', 'eme' ); ?></th>
          <th><?php _e ('Booker','eme'); ?></th>
          <th><?php _e ('Seats','eme'); ?></th>
-         <th><?php _e ('Payed','eme'); ?></th>
+         <th><?php _e ('Paid','eme'); ?></th>
       </tr>
    </thead>
    <tbody>
@@ -1019,7 +1019,7 @@ function eme_registration_approval_form_table($event_id=0) {
          <th><?php _e ( 'Date and time', 'eme' ); ?></th>
          <th><?php _e ('Booker','eme'); ?></th>
          <th><?php _e ('Seats','eme'); ?></th>
-         <th><?php _e ('Payed','eme'); ?></th>
+         <th><?php _e ('Paid','eme'); ?></th>
       </tr>
    </thead>
    <tbody>

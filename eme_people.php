@@ -188,7 +188,7 @@ function eme_printable_booking_report($event_id) {
                <th scope='col'><?php _e('E-mail', 'eme')?></th>
                <th scope='col'><?php _e('Phone number', 'eme')?></th> 
                <th scope='col'><?php _e('Seats', 'eme')?></th>
-               <th scope='col'><?php _e('Payed', 'eme')?></th>
+               <th scope='col'><?php _e('Paid', 'eme')?></th>
                <th scope='col'><?php _e('Comment', 'eme')?></th> 
             <?php
             foreach($bookings as $booking) {
