@@ -6,14 +6,26 @@ function eme_add_booking_form($event_id) {
    global $form_add_message, $current_user;
    global $booking_id_done;
 
+   $bookerName="";
+   $bookerEmail="";
+   $bookerComment="";
+   $bookerPhone="";
+   $bookedSeats=0;
+
    if (is_user_logged_in()) {
       get_currentuserinfo();
       $bookerName=$current_user->display_name;
       $bookerEmail=$current_user->user_email;
-   } else {
-      $bookerName="";
-      $bookerEmail="";
    }
+
+   // check for previously filled in data
+   // this in case people entered a wrong captcha
+   if (isset($_POST['bookerName'])) $bookerName = eme_sanitize_html(eme_sanitize_request($_POST['bookerName']));
+   if (isset($_POST['bookerEmail'])) $bookerEmail = eme_sanitize_html(eme_sanitize_request($_POST['bookerEmail']));
+   if (isset($_POST['bookerPhone'])) $bookerPhone = eme_sanitize_html(eme_sanitize_request($_POST['bookerPhone']));
+   if (isset($_POST['bookerComment'])) $bookerComment = eme_sanitize_html(eme_sanitize_request($_POST['bookerComment']));
+   if (isset($_POST['bookedSeats'])) $bookedSeats = eme_sanitize_html(eme_sanitize_request($_POST['bookedSeats']));
+
    $event = eme_get_event($event_id);
    $registration_wp_users_only=$event['registration_wp_users_only'];
    if ($registration_wp_users_only) {
@@ -63,19 +75,17 @@ function eme_add_booking_form($event_id) {
       $form_html .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
    $booked_places_options = array();
    for ( $i = $min; $i <= $max; $i++) 
-      array_push($booked_places_options, "<option value='$i'>$i</option>");
+      array_push($booked_places_options, $i);
    
       $form_html  .= "<form id='eme-rsvp-form' name='booking-form' method='post' action='$destination'>
          <table class='eme-rsvp-form'>
             <tr><th scope='row'>".__('Name', 'eme')."*:</th><td><input type='text' name='bookerName' value='$bookerName' $readonly /></td></tr>
             <tr><th scope='row'>".__('E-Mail', 'eme')."*:</th><td><input type='text' name='bookerEmail' value='$bookerEmail' $readonly /></td></tr>
-            <tr><th scope='row'>".__('Phone number', 'eme')."$bookerPhone_required:</th><td><input type='text' name='bookerPhone' value='' /></td></tr>
-            <tr><th scope='row'>".__('Seats', 'eme')."*:</th><td><select name='bookedSeats' >";
-      foreach($booked_places_options as $option) {
-         $form_html .= $option."\n";
-      }
-      $form_html .= "</select></td></tr>
-            <tr><th scope='row'>".__('Comment', 'eme').":</th><td><textarea name='bookerComment'></textarea></td></tr>";
+            <tr><th scope='row'>".__('Phone number', 'eme')."$bookerPhone_required:</th><td><input type='text' name='bookerPhone' value='$bookerPhone' /></td></tr>
+            <tr><th scope='row'>".__('Seats', 'eme')."*:</th><td>";
+            $form_html .= eme_ui_select($bookedSeats,"bookedSeats",$booked_places_options);
+      $form_html .= "</td></tr>
+            <tr><th scope='row'>".__('Comment', 'eme').":</th><td><textarea name='bookerComment'>$bookerComment</textarea></td></tr>";
       if (get_option('eme_captcha_for_booking')) {
          $form_html .= "
             <tr><th scope='row'>".__('Please fill in the code displayed here', 'eme').":</th><td><img src='".EME_PLUGIN_URL."captcha.php'><br>
@@ -312,8 +322,16 @@ function eme_book_seats($event) {
          if($mailing_is_active) {
             eme_email_rsvp_booking($event_id,$bookerName,$bookerEmail,$bookerPhone,$bookedSeats,$bookerComment,"");
          } 
+         // everything ok, so we unset the variables entered, so when the form is shown again, all is defaulted again
+         unset($_POST['bookerName']);
+         unset($_POST['bookerEmail']);
+         unset($_POST['bookedSeats']);
+         unset($_POST['bookerComment']);
+         unset($_POST['bookerPhone']);
       } else {
          $result = __('Booking cannot be made: not enough seats available!', 'eme');
+         // here we only unset the number of seats entered, so the user doesn't have to fill in the rest again
+         unset($_POST['bookedSeats']);
       }
    }
 
