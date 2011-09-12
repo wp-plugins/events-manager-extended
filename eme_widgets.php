@@ -10,7 +10,7 @@ class WP_Widget_eme_list extends WP_Widget {
       extract($args);
       //$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Events','eme' ) : $instance['title'], $instance, $this->id_base);
       $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
-      $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
+      $limit = isset( $instance['limit'] ) ? intval($instance['limit']) : 5;
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
       $showperiod = empty( $instance['showperiod'] ) ? '' : $instance['showperiod'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
@@ -38,7 +38,7 @@ class WP_Widget_eme_list extends WP_Widget {
    function update( $new_instance, $old_instance ) {
       $instance = $old_instance;
       $instance['title'] = strip_tags($new_instance['title']);
-      $instance['limit'] = $new_instance['limit'];
+      $instance['limit'] = intval($new_instance['limit']);
       $instance['scope'] = $new_instance['scope'];
       if ( in_array( $new_instance['showperiod'], array( 'daily', 'monthly', 'yearly' ) ) ) {
          $instance['showperiod'] = $new_instance['showperiod'];
@@ -61,7 +61,7 @@ class WP_Widget_eme_list extends WP_Widget {
       //Defaults
       $instance = wp_parse_args( (array) $instance, array( 'limit' => 5, 'scope' => 'future', 'order' => 'ASC', 'format' => DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT, 'authorid' => '' ) );
       $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
-      $limit = empty( $instance['limit'] ) ? 5 : eme_sanitize_html($instance['limit']);
+      $limit = isset( $instance['limit'] ) ? intval($instance['limit']) : 5;
       $scope = empty( $instance['scope'] ) ? 'future' : eme_sanitize_html($instance['scope']);
       $showperiod = empty( $instance['showperiod'] ) ? '' : eme_sanitize_html($instance['showperiod']);
       $order = empty( $instance['order'] ) ? 'ASC' : eme_sanitize_html($instance['order']);
