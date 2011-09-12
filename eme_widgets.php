@@ -39,11 +39,7 @@ class WP_Widget_eme_list extends WP_Widget {
       $instance = $old_instance;
       $instance['title'] = strip_tags($new_instance['title']);
       $instance['limit'] = $new_instance['limit'];
-      if ( in_array( $new_instance['scope'], array( 'future', 'all', 'past' ) ) ) {
-         $instance['scope'] = $new_instance['scope'];
-      } else {
-         $instance['scope'] = 'future';
-      }
+      $instance['scope'] = $new_instance['scope'];
       if ( in_array( $new_instance['showperiod'], array( 'daily', 'monthly', 'yearly' ) ) ) {
          $instance['showperiod'] = $new_instance['showperiod'];
       } else {

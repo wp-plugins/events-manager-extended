@@ -610,3 +610,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: true and 1 now work as value for the options full and long_events
 * Bugfix: array in hook eme_update_event_action missed event_id and event_author
 * Bugfix: typo: payed => paid
+* Bugfix: the widget update refused anything different than future, past or all for scope
