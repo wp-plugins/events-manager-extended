@@ -75,7 +75,7 @@ function eme_add_booking_form($event_id) {
       $form_html .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
    $booked_places_options = array();
    for ( $i = $min; $i <= $max; $i++) 
-      array_push($booked_places_options, $i);
+      $booked_places_options[$i]=$i;
    
       $form_html  .= "<form id='eme-rsvp-form' name='booking-form' method='post' action='$destination'>
          <table class='eme-rsvp-form'>
