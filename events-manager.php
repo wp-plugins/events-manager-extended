@@ -1341,7 +1341,10 @@ function eme_replace_placeholders($format, $event, $target="html") {
    }
 
    # now handle all possible location placeholders
-   $format = eme_replace_locations_placeholders ( $format, $event );
+   # but the eme_replace_locations_placeholders can't do "do_shortcode" at the end, because
+   # this would cause [events_if] tags to be replaced here already, while some placeholders of the
+   # event haven't been replaced yet (like time placeholders, and event details)
+   $format = eme_replace_locations_placeholders ( $format, $event, $target, 0 );
 
    # we handle NOTES the last, so no placeholder replacement happens accidentaly in the text of #_NOTES
    if (preg_match('/#_(DETAILS|NOTES|EXCERPT|EVENTDETAILS)/', $format, $placeholders)) {

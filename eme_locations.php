@@ -931,7 +931,7 @@ EOD;
 }
 add_shortcode('events_locations','get_locations_shortcode');
 
-function eme_replace_locations_placeholders($format, $location, $target="html") {
+function eme_replace_locations_placeholders($format, $location, $target="html", $do_shortcode=1) {
 
    preg_match_all("/#(ESC|URL)?@?_?[A-Za-z0-9_\[\]]+/", $format, $placeholders);
    // make sure we set the largest matched placeholders first, otherwise if you found e.g.
@@ -1107,7 +1107,10 @@ function eme_replace_locations_placeholders($format, $location, $target="html") 
       $format = str_replace($orig_result, $replacement ,$format );
    }
 
-   return do_shortcode($format);   
+   if ($do_shortcode)
+      return do_shortcode($format);   
+   else
+      return $format;   
 }
 
 function eme_add_directions_form($location) {
