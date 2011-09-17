@@ -694,6 +694,7 @@ function eme_create_bookings_table($charset,$collate) {
          modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00', 
          booking_payed bool DEFAULT 0,
+         transfer_nbr_be97 varchar(20),
          UNIQUE KEY  (booking_id)
          ) $charset $collate;";
       dbDelta($sql);
@@ -705,6 +706,7 @@ function eme_create_bookings_table($charset,$collate) {
       maybe_add_column($table_name, 'creation_date_gmt', "alter table $table_name add creation_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       maybe_add_column($table_name, 'modif_date', "alter table $table_name add modif_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
       maybe_add_column($table_name, 'modif_date_gmt', "alter table $table_name add modif_date_gmt datetime NOT NULL DEFAULT '0000-00-00 00:00:00';"); 
+      maybe_add_column($table_name, 'transfer_nbr_be97', "alter table $table_name add transfer_nbr_be97 varchar(20);"); 
       if ($db_version<3) {
          $wpdb->query("ALTER TABLE $table_name MODIFY event_id mediumint(9) NOT NULL;");
          $wpdb->query("ALTER TABLE $table_name MODIFY person_id mediumint(9) NOT NULL;");
@@ -1193,7 +1195,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
 
       } elseif (preg_match('/#_EVENTPRICE|PRICE$/', $result)) {
          $field = "price";
-         if ($event['use_paypal'] && $event[$field])
+         if ($event[$field])
             $replacement = $event[$field];
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 
@@ -1204,7 +1206,7 @@ function eme_replace_placeholders($format, $event, $target="html") {
       } elseif (preg_match('/#_CURRENCY/', $result)) {
          $field = "currency";
          // currency is only important if the price is not empty as well
-         if ($event['use_paypal'] && $event['price'])
+         if ($event['price'])
             $replacement = $event[$field];
          if ($target == "html") {
             $replacement = apply_filters('eme_general', $replacement); 

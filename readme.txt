@@ -604,6 +604,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * API change: eme_insert_recurrent_event renamed to eme_db_insert_recurrence (old function exists for backwards compatibility)
 * API change: eme_update_recurrence renamed to eme_db_update_recurrence (old function exists for backwards compatibility)
 * API change: function eme_db_update_event now takes the event_id as the second parameter (you can still use the where-array method directly, made it backwards compatible)
+* API change: function eme_email_rsvp_booking now only takes booking_id as the first parameter and the action as the second
 * Bugfix: attributes weren't taken into account for the new email formats pending, cancelled, denied
 * Bugfix: the filtering threw an error when selecting multiple items
 * Bugfix: the attendee list didn't return the correct number of booked seats

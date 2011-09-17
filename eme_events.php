@@ -2430,9 +2430,6 @@ function eme_event_form($event, $title, $element) {
                               <input id="rsvp_number_days" type="text" name="rsvp_number_days" maxlength='2' size='2' value="<?php echo $event ['rsvp_number_days']; ?>" />
                               <?php _e ( ' days before the event starts.','eme' ); ?>
                            <br />
-                              <?php _e ( 'Use paypal','eme' ); ?>
-                              <input id="paypal-checkbox" name='use_paypal' value='1' type='checkbox' <?php echo $use_paypal_checked; ?> />
-                              <div id='paypal-data'>
                               <?php _e ( 'Price: ','eme' ); ?>
                               <input id="price" type="text" name="price" maxlength='9' size='3' value="<?php echo $event ['price']; ?>" />
                               <select id="currency" name="currency">
@@ -2447,7 +2444,9 @@ function eme_event_form($event, $title, $element) {
                                  }
                               ?>
                               </select><br />
-                              </div>
+                            <br />
+                              <?php _e ( 'Payment methods','eme' ); ?><br />
+                              <input id="paypal-checkbox" name='use_paypal' value='1' type='checkbox' <?php echo $use_paypal_checked; ?> /><?php _e ( 'Paypal ','eme' ); ?><br />
                            </p>
                            <?php if ($event ['event_rsvp']) {
                                  eme_bookings_compact_table ( $event['event_id'] );
@@ -2888,14 +2887,6 @@ function updateShowHideRsvp () {
    }
 }
 
-function updateShowHidePaypal () {
-   if($j_eme_event('input#paypal-checkbox').attr("checked")) {
-      $j_eme_event("div#paypal-data").fadeIn();
-   } else {
-      $j_eme_event("div#paypal-data").hide();
-   }
-}
-
 $j_eme_event(document).ready( function() {
    locale_format = "ciao";
  
@@ -3036,10 +3027,8 @@ $j_eme_event(document).ready( function() {
    updateIntervalSelectors();
    updateShowHideRecurrence();
    updateShowHideRsvp();
-   updateShowHidePaypal();
    $j_eme_event('input#event-recurrence').change(updateShowHideRecurrence);
    $j_eme_event('input#rsvp-checkbox').change(updateShowHideRsvp);
-   $j_eme_event('input#paypal-checkbox').change(updateShowHidePaypal);
    // recurrency elements
    $j_eme_event('input#recurrence-interval').keyup(updateIntervalDescriptor);
    $j_eme_event('select#recurrence-frequency').change(updateIntervalDescriptor);
