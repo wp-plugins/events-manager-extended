@@ -587,6 +587,7 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Feature: added options 'category' and 'notcategory' to the shortcode [events_filterform], so you can choose to only show specific categories or exclude certain categories from the select box
 * Feature: all location placeholders can now be used inside events (those that make sense of course). In order to make a distinction among event and location placeholders with the same name, some have been deprecated (see below)
 * Feature: the end time can now be the same as the start time, so you can test on this to not show end date/time info (for eg. events without end)
+* Feature: each booking now has a unique bank transfer number for belgian transfers, the placeholder "#_TRANSFER_NBR_BE97" can be used in booking mails
 * Improvement: when adding a registration in the backend, you can now only choose from events that have RSVP activated
 * Improvement: when the setting "Max number of spaces to book" is empty, it is now ignored so unlimited number of attendees is now possible
 * Improvement/fix: price can be a decimal number as well
