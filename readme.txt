@@ -613,3 +613,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: typo: payed => paid
 * Bugfix: the widget update refused anything different than future, past or all for scope
 * Bugfix: number of events can now be 0 in the widget
+* Bugfix: attribute values were not sanitized
