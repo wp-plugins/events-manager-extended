@@ -539,14 +539,16 @@ function eme_bookings_table($event_id) {
                      <h2>Bookings</h2>
                   <table id='eme-bookings-table' class='widefat post fixed'>";
    $result .="<thead>
-                     <tr><th class='manage-column column-cb check-column' scope='col'>&nbsp;</th><th class='manage-column ' scope='col'>Booker</th><th scope='col'>E-mail</th><th scope='col'>Phone number</th><th scope='col'>Seats</th></tr>
+                     <tr><th class='manage-column column-cb check-column' scope='col'>&nbsp;</th><th class='manage-column ' scope='col'>".__('Booker','eme')."</th><th scope='col'>".__('E-mail','eme')."</th><th scope='col'>".__('Phone number','eme')."</th><th scope='col'>".__('Seats','eme')."</th><th scope='col'>".__('Unique nbr','eme')."</th></tr>
                   </thead>" ;
    foreach ($bookings as $booking) {
       $result .= "<tr> <td><input type='checkbox' value='".$booking['booking_id']."' name='bookings[]'/></td>
                               <td>".eme_sanitize_html($booking['person_name'])."</td>
                               <td>".eme_sanitize_html($booking['person_email'])."</td>
                               <td>".eme_sanitize_html($booking['person_phone'])."</td>
-                              <td>".$booking['booking_seats']."</td></tr>";
+                              <td>".$booking['booking_seats']."</td>
+                              <td>".eme_sanitize_html($booking['transfer_nbr_be97'])."</td>
+                  </tr>";
    }
    $available_seats = eme_get_available_seats($event_id);
    $booked_seats = eme_get_booked_seats($event_id);
@@ -906,6 +908,7 @@ function eme_registration_seats_form_table($event_id=0) {
          <th><?php _e ( 'Date and time', 'eme' ); ?></th>
          <th><?php _e ('Booker','eme'); ?></th>
          <th><?php _e ('Seats','eme'); ?></th>
+         <th><?php _e ('Unique nbr','eme'); ?></th>
          <th><?php _e ('Paid','eme'); ?></th>
       </tr>
    </thead>
@@ -932,7 +935,7 @@ function eme_registration_seats_form_table($event_id=0) {
          <td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='selected_bookings[]' />
              <input type='hidden' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='bookings[]' /></td>
          <td><strong>
-         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
+         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event_booking ['event_id']); ?>"><?php echo eme_sanitize_html($event ['event_name']); ?></a>
          </strong>
          <?php
              $approved_seats = eme_get_approved_seats($event['event_id']);
@@ -946,10 +949,13 @@ function eme_registration_seats_form_table($event_id=0) {
             <?php echo substr ( $event['event_start_time'], 0, 5 ) . " - " . substr ( $event['event_end_time'], 0, 5 ); ?>
          </td>
          <td>
-            <?php echo $event_booking['person_name'] ."(".$event_booking['person_phone'].", ". $event_booking['person_email'].")";?>
+            <?php echo eme_sanitize_html($event_booking['person_name']) ."(".eme_sanitize_html($event_booking['person_phone']).", ". eme_sanitize_html($event_booking['person_email']).")";?>
          </td>
          <td>
             <input type="text" name="bookings_seats[]" value="<?php echo $event_booking['booking_seats'];?>" />
+         </td>
+         <td>
+            <?php echo eme_sanitize_html($event_booking['transfer_nbr_be97']); ?>
          </td>
          <td>
             <?php echo eme_ui_select_binary($event_booking['booking_payed'],"bookings_payed[]"); ?>
@@ -1058,6 +1064,7 @@ function eme_registration_approval_form_table($event_id=0) {
          <th><?php _e ( 'Date and time', 'eme' ); ?></th>
          <th><?php _e ('Booker','eme'); ?></th>
          <th><?php _e ('Seats','eme'); ?></th>
+         <th><?php _e ('Unique nbr','eme'); ?></th>
          <th><?php _e ('Paid','eme'); ?></th>
       </tr>
    </thead>
@@ -1084,7 +1091,7 @@ function eme_registration_approval_form_table($event_id=0) {
          <td><input type='checkbox' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='selected_bookings[]' /></td>
              <input type='hidden' class='row-selector' value='<?php echo $event_booking ['booking_id']; ?>' name='pending_bookings[]' /></td>
          <td><strong>
-         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event_booking ['event_id']); ?>"><?php echo ($event ['event_name']); ?></a>
+         <a class="row-title" href="<?php echo admin_url("admin.php?page=events-manager&amp;action=edit_event&amp;event_id=".$event_booking ['event_id']); ?>"><?php echo eme_sanitize_html($event ['event_name']); ?></a>
          </strong>
          <?php
              $approved_seats = eme_get_approved_seats($event['event_id']);
@@ -1098,10 +1105,13 @@ function eme_registration_approval_form_table($event_id=0) {
             <?php echo substr ( $event['event_start_time'], 0, 5 ) . " - " . substr ( $event['event_end_time'], 0, 5 ); ?>
          </td>
          <td>
-            <?php echo $event_booking['person_name'] ."(".$event_booking['person_phone'].", ". $event_booking['person_email'].")";?>
+            <?php echo eme_sanitize_html($event_booking['person_name']) ."(".eme_sanitize_html($event_booking['person_phone']).", ". eme_sanitize_html($event_booking['person_email']).")";?>
          </td>
          <td>
             <input type="text" name="bookings_seats[]" value="<?php echo $event_booking['booking_seats'];?>" />
+         </td>
+         <td>
+            <?php echo eme_sanitize_html($event_booking['transfer_nbr_be97']); ?>
          </td>
          <td>
             <?php echo eme_ui_select_binary($event_booking['booking_payed'],"bookings_payed[]"); ?>
