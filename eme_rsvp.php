@@ -521,6 +521,13 @@ function eme_get_pending_seats($event_id) {
    return $wpdb->get_var($sql);
 }
 
+function eme_get_pending_bookings($event_id) {
+   global $wpdb; 
+   $bookings_table = $wpdb->prefix.BOOKINGS_TBNAME;
+   $sql = "SELECT COUNT(*) AS pending_bookings FROM $bookings_table WHERE event_id = $event_id and booking_approved=0"; 
+   return $wpdb->get_var($sql);
+}
+
 function eme_are_seats_available_for($event_id, $seats) {
    #$event = eme_get_event($event_id);
    $available_seats = eme_get_available_seats($event_id);
@@ -807,9 +814,6 @@ function eme_registration_seats_page() {
             // make sure the seats are integers
             $bookings_seats[$key]=intval($bookings_seats[$key]);
             $booking = eme_get_booking ($booking_id);
-            // 0 seats is not possible, then you should remove the booking
-            if ($bookings_seats[$key]==0)
-               $bookings_seats[$key]=1;
             if ($action == 'approveRegistration') {
                if ($booking['booking_payed']!= intval($bookings_payed[$key]))
                   eme_update_booking_payed($booking_id,intval($bookings_payed[$key]));
@@ -1042,7 +1046,7 @@ function eme_registration_approval_form_table($event_id=0) {
    $all_events=eme_get_events(0,"future");
    $events_with_pending_bookings=array();
    foreach ( $all_events as $event ) {
-      if (eme_get_pending_seats($event['event_id'])>0) {
+      if (eme_get_pending_bookings($event['event_id'])>0) {
          $events_with_pending_bookings[]=$event['event_id'];
          $selected = "";
          if ($event_id && ($event['event_id'] == $event_id))
