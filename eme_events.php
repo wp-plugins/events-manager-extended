@@ -62,10 +62,15 @@ function eme_new_event_page() {
       "location_slug" => '',
       "location_url" => ''
    );
-   eme_event_form ($event, $title, '');
+
+   if (isset($_GET['action']) && $_GET['action'] == "insert_event") {
+      eme_events_page();
+   } else {
+      eme_event_form ($event, $title, '');
+   }
 }
 
-function eme_events_subpanel() {
+function eme_events_page() {
    global $wpdb;
 
    $extra_conditions = array();
@@ -82,7 +87,6 @@ function eme_events_subpanel() {
       $extra_conditions[] = 'event_status = '.$status;
    }
 
-   
    // check the user is allowed to do anything
    if ( !current_user_can( get_option('eme_cap_add_event') ) ) {
       $action="";
@@ -166,7 +170,7 @@ function eme_events_subpanel() {
    }
 
    // UPDATE or CREATE action
-   if ($action == 'update_event' || $action == 'update_recurrence') {
+   if ($action == 'insert_event' || $action == 'update_event' || $action == 'update_recurrence') {
       $event = array();
       $location = array ();
       $event ['event_name'] = isset($_POST ['event_name']) ? trim(stripslashes ( $_POST ['event_name'] )) : '';
@@ -2147,7 +2151,11 @@ function eme_event_form($event, $title, $element) {
       $show_recurrent_form = 1;
    } else {
       $pref = "event_";
-      $form_destination = "admin.php?page=events-manager&amp;action=update_event&amp;event_id=" . $element;
+      if ($is_new_event)
+         $form_destination = "admin.php?page=events-manager-new_event&amp;action=insert_event";
+      else
+         $form_destination = "admin.php?page=events-manager&amp;action=update_event&amp;event_id=" . $element;
+
       if ($event ['recurrence_id']) {
          # editing a single event of an recurrence: don't show the recurrence form
          $show_recurrent_form = 0;
@@ -3092,6 +3100,11 @@ $j_eme_event(document).ready( function() {
 }
 
 function eme_admin_map_script() {
+   // when the action is the POST of a new event, don't do the javascript
+   if (isset ( $_GET ['page'] ) && $_GET ['page'] == 'events-manager-new_event' && isset ( $_REQUEST ['action'] ) && $_REQUEST ['action'] == 'insert_event') {
+      return;
+   }
+
    # we also do this for locations, since the locations page also needs the loadMap javascript function
    if ((isset ( $_GET ['page'] ) && ($_GET ['page'] == 'events-manager-locations' || $_GET ['page'] == 'events-manager-new_event')) ||
        (isset ( $_REQUEST ['action'] ) && ($_REQUEST ['action'] == 'edit_event' || $_REQUEST ['action'] == 'edit_recurrence'))) {

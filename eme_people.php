@@ -21,7 +21,7 @@ function eme_people_page() {
                         $message.="<br>";
                      }
                   }
-                  $res.=eme_delete_person($person_id);
+                  $res=eme_delete_person($person_id);
                   if ($res) {
                      $message.=__("Deleted '".$person['person_name']."'", 'eme');
                      $message.="<br>";

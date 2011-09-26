@@ -906,12 +906,13 @@ function eme_create_events_submenu () {
    $db_version = get_option('eme_version');
    if ($db_version && $db_version < EME_DB_VERSION)
       add_action('admin_notices', "eme_explain_deactivation_needed");
+   add_action('admin_notices', "eme_explain_last_version");
 
    if(function_exists('add_submenu_page')) {
-      add_object_page(__('Events', 'eme'),__('Events', 'eme'),get_option('eme_cap_author_event'),'events-manager','eme_events_subpanel', EME_PLUGIN_URL.'images/calendar-16.png');
+      add_object_page(__('Events', 'eme'),__('Events', 'eme'),get_option('eme_cap_author_event'),'events-manager','eme_events_page', EME_PLUGIN_URL.'images/calendar-16.png');
       // Add a submenu to the custom top-level menu: 
       // edit event also needs just "author" as capability, otherwise you will not be able to edit own created events
-      $plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),get_option('eme_cap_author_event'),'events-manager','eme_events_subpanel');
+      $plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),get_option('eme_cap_author_event'),'events-manager','eme_events_page');
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
       $plugin_page = add_submenu_page('events-manager', __('Add new', 'eme'), __('Add new','eme'), get_option('eme_cap_add_event'), 'events-manager-new_event', "eme_new_event_page");
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
@@ -1544,6 +1545,13 @@ function admin_show_warnings() {
       if ($conversion_needed == 1)
          eme_explain_conversion_needed ();
    }
+}
+
+function eme_explain_last_version() {
+   $advice = __("Warning: the plugin 'Events Management Extended' is being renamed to 'Events Made Easy'. To switch to the renamed plugin: just deactivate the plugin 'Events Management Extended' and download and activate the new plugin 'Events Made Easy'.",'eme');
+   ?>
+   <div id="message" class="error"><p> <?php echo $advice; ?> </p></div>
+   <?php
 }
 
 function eme_explain_deactivation_needed() {
