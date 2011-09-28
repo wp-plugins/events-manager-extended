@@ -231,7 +231,7 @@ function eme_printable_booking_report($event_id) {
 } 
 
 function eme_people_table($message="") {
-   $people = eme_get_people();
+   $persons = eme_get_persons();
    $destination = admin_url("admin.php?page=events-manager-people");
    if (count($people) < 1 ) {
       _e("No people have responded to your events yet!", 'eme');
@@ -264,7 +264,7 @@ function eme_people_table($message="") {
             </tr>
             </tfoot>
          " ;
-      foreach ($people as $person) {
+      foreach ($persons as $person) {
             $result .= "<tr><td><input type='checkbox' class ='row-selector' value='".$person['person_id']."' name='persons[]'/></td>
                   <td>".$person['person_name']."</td>
                   <td>".$person['person_email']."</td>
@@ -334,21 +334,27 @@ function eme_get_person($person_id) {
       $user_info = get_userdata($result['wp_id']);
       $result['person_name']=$user_info->display_name;
       $result['person_email']=$user_info->user_email;
+      $result['person_phone']=eme_get_user_phone($result['wp_id']);
    }
    return $result;
 }
 
-function eme_get_persons($person_ids) {
+function eme_get_persons($person_ids="") {
    global $wpdb; 
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;
-   $tmp_ids=join(",",$person_ids);
-   $sql = "SELECT * FROM $people_table WHERE person_id IN ($tmp_ids);" ;
+   if ($person_ids != "") {
+      $tmp_ids=join(",",$person_ids);
+      $sql = "SELECT * FROM $people_table WHERE person_id IN ($tmp_ids);" ;
+   } else {
+      $sql = "SELECT *  FROM $people_table";
+   }
    $lines = $wpdb->get_results($sql, ARRAY_A);
    foreach ($lines as $line) {
       if (!is_null($line['wp_id']) && $line['wp_id']) {
          $user_info = get_userdata($line['wp_id']);
          $line['person_name']=$user_info->display_name;
          $line['person_email']=$user_info->user_email;
+         $line['person_phone']=eme_get_user_phone($line['wp_id']);
       }
       # to be able to sort on person names, we need a hash starting with the name
       # but some people might have the same name (or register more than once),
@@ -358,24 +364,6 @@ function eme_get_persons($person_ids) {
    }
    # now do the sorting
    ksort($result);
-   return $result;
-}
-
-
-function eme_get_people() {
-   global $wpdb; 
-   $people_table = $wpdb->prefix.PEOPLE_TBNAME;
-   $sql = "SELECT *  FROM $people_table";
-   $lines = $wpdb->get_results($sql, ARRAY_A);
-   $result = array();
-   foreach ($lines as $line) {
-      if (!is_null($line['wp_id']) && $line['wp_id']) {
-         $user_info = get_userdata($line['wp_id']);
-         $line['person_name']=$user_info->display_name;
-         $line['person_email']=$user_info->user_email;
-      }
-      $result[]=$line;
-   }
    return $result;
 }
 
@@ -417,15 +405,27 @@ function eme_phone_field($user) {
 }
 
 // when editing other profiles then your own
-add_action('edit_user_profile_update','eme_update_phone');
+add_action('edit_user_profile_update','eme_update_wp_phone');
 // when editing your own profile
-add_action('personal_options_update','eme_update_phone');
+add_action('personal_options_update','eme_update_wp_phone');
 
-function eme_update_phone($user_ID) {
+function eme_update_wp_phone($wp_user_ID) {
    if(isset($_POST['eme_phone']) && $_POST['eme_phone'] != '') {
-      update_user_meta($user_ID,'eme_phone', $_POST['eme_phone']);
+      update_user_meta($wp_user_ID,'eme_phone', $_POST['eme_phone']);
    }
    
+}
+
+function eme_update_phone($person,$phone) {
+   global $wpdb; 
+   $people_table = $wpdb->prefix.PEOPLE_TBNAME;
+   $phone = eme_sanitize_request($phone);
+   $sql = "UPDATE $people_table SET person_phone=$phone WHERE person_id=".$person['person_id'].";";
+   $wpdb->query($sql);
+
+   if (!is_null($person['wp_id']) && $person['wp_id']) {
+      update_user_meta($person['wp_id'],'eme_phone', $phone);
+   }
 }
 
 function eme_get_indexed_users() {

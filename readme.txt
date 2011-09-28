@@ -618,3 +618,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: attribute values were not sanitized
 * Bugfix: if the booked seats were 0, the pending screen wouldn't show the booking
 * Bugfix: the capability for adding events in draft wasn't working ok
+* Bugfix: when paypal was active, rsvp field validation results were ignored

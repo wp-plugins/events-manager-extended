@@ -1,9 +1,10 @@
 <?php
 $form_add_message = "";
+$form_error_message = "";
 $form_delete_message = "";
 
 function eme_add_booking_form($event_id) {
-   global $form_add_message, $current_user;
+   global $form_add_message, $form_error_message, $current_user;
    global $booking_id_done;
 
    $bookerName="";
@@ -47,11 +48,13 @@ function eme_add_booking_form($event_id) {
       $ret_string = "<div id='eme-rsvp-message'>";
       if(!empty($form_add_message))
          $ret_string .= "<div class='eme-rsvp-message'>$form_add_message</div>";
+      if(!empty($form_error_message))
+         $ret_string .= "<div class='eme-rsvp-message'>$form_error_message</div>";
       return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div></div>";
    }
 
-   # you did a registration, so now we decide wether to show the form again, or the paypal form
-   if(!empty($form_add_message) && $event['use_paypal']) {
+   # you did a successfull registration, so now we decide wether to show the form again, or the paypal form
+   if(!empty($form_add_message) && empty($form_error_message) && $event['use_paypal']) {
       return eme_paypal_form($event,$booking_id_done);
    }
 
@@ -67,12 +70,16 @@ function eme_add_booking_form($event_id) {
       $ret_string = "<div id='eme-rsvp-message'>";
       if(!empty($form_add_message))
          $ret_string .= "<div class='eme-rsvp-message'>$form_add_message</div>";
-       return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div></div>";
+      if(!empty($form_error_message))
+         $ret_string .= "<div class='eme-rsvp-message'>$form_error_message</div>";
+      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer possible: no seats available anymore', 'eme')."</div></div>";
    }
 
    $form_html = "";
    if(!empty($form_add_message))
       $form_html .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
+   if(!empty($form_error_message))
+      $ret_string .= "<div class='eme-rsvp-message'>$form_error_message</div>";
    $booked_places_options = array();
    for ( $i = $min; $i <= $max; $i++) 
       $booked_places_options[$i]=$i;
@@ -168,6 +175,7 @@ function eme_delete_booking_form($event_id) {
 function eme_catch_rsvp() {
    global $current_user;
    global $form_add_message;
+   global $form_error_message;
    global $form_delete_message; 
    global $booking_id_done;
    $result = "";
@@ -197,7 +205,11 @@ function eme_catch_rsvp() {
       $booking_res = eme_book_seats($event);
       $result=$booking_res[0];
       $booking_id_done=$booking_res[1];
-      $form_add_message = $result;
+      // no booking? then fill in global error var
+      if (!$booking_id_done)
+         $form_error_message = $result;
+      else
+         $form_add_message = $result;
    } 
 
    if (isset($_POST['eme_eventAction']) && $_POST['eme_eventAction'] == 'delete_booking') { 
@@ -315,6 +327,12 @@ function eme_book_seats($event) {
          if (!$booker) {
             $booker = eme_add_person($bookerName, $bookerEmail, $bookerPhone, $booker_wp_id, $registration_wp_users_only);
          }
+
+         // if the user enters a new phone numbe, update it
+         if ($booker['person_hone'] != $bookerPhone) {
+            eme_update_phone($booker,$bookerPhone);
+         }
+
          $booking_id=eme_record_booking($event_id, $booker['person_id'], $bookedSeats,$bookerComment);
       
          $result = __('Your booking has been recorded','eme');
