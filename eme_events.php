@@ -88,9 +88,9 @@ function eme_events_page() {
    }
 
    // check if the user is allowed to do anything
-   //if ( !current_user_can( get_option('eme_cap_add_event') ) ) {
-   //   $action="";
-   //}
+   if ( !current_user_can( get_option('eme_cap_add_event') ) ) {
+      $action="";
+   }
    $current_userid=get_current_user_id();
 
    // Disable Hello to new user if requested
