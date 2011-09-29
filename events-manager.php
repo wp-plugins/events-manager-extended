@@ -909,10 +909,10 @@ function eme_create_events_submenu () {
    add_action('admin_notices', "eme_explain_last_version");
 
    if(function_exists('add_submenu_page')) {
-      add_object_page(__('Events', 'eme'),__('Events', 'eme'),get_option('eme_cap_author_event'),'events-manager','eme_events_page', EME_PLUGIN_URL.'images/calendar-16.png');
+      add_object_page(__('Events', 'eme'),__('Events', 'eme'),get_option('eme_cap_add_event'),'events-manager','eme_events_page', EME_PLUGIN_URL.'images/calendar-16.png');
       // Add a submenu to the custom top-level menu: 
-      // edit event also needs just "author" as capability, otherwise you will not be able to edit own created events
-      $plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),get_option('eme_cap_author_event'),'events-manager','eme_events_page');
+      // edit event also needs just "add" as capability, otherwise you will not be able to edit own created events
+      $plugin_page = add_submenu_page('events-manager', __('Edit'),__('Edit'),get_option('eme_cap_add_event'),'events-manager','eme_events_page');
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' );
       $plugin_page = add_submenu_page('events-manager', __('Add new', 'eme'), __('Add new','eme'), get_option('eme_cap_add_event'), 'events-manager-new_event', "eme_new_event_page");
       add_action( 'admin_head-'. $plugin_page, 'eme_admin_general_script' ); 
