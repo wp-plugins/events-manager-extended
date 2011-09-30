@@ -79,7 +79,7 @@ function eme_add_booking_form($event_id) {
    if(!empty($form_add_message))
       $form_html .= "<div id='eme-rsvp-message' class='eme-rsvp-message'>$form_add_message</div>";
    if(!empty($form_error_message))
-      $ret_string .= "<div class='eme-rsvp-message'>$form_error_message</div>";
+      $form_html .= "<div class='eme-rsvp-message'>$form_error_message</div>";
    $booked_places_options = array();
    for ( $i = $min; $i <= $max; $i++) 
       $booked_places_options[$i]=$i;
@@ -329,7 +329,7 @@ function eme_book_seats($event) {
          }
 
          // if the user enters a new phone numbe, update it
-         if ($booker['person_hone'] != $bookerPhone) {
+         if ($booker['person_phone'] != $bookerPhone) {
             eme_update_phone($booker,$bookerPhone);
          }
 

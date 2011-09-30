@@ -60,10 +60,13 @@ function eme_is_multiple_locations_page() {
 }
 
 function eme_get_contact($event) {
-   $event['event_contactperson_id'] ? $contact_id = $event['event_contactperson_id'] : $contact_id = get_option('eme_default_contact_person');
+   if ($event['event_contactperson_id'] >0 )
+      $contact_id = $event['event_contactperson_id'];
+   else
+      $contact_id = get_option('eme_default_contact_person');
    // suppose the user has been deleted ...
    if (!get_userdata($contact_id)) $contact_id = get_option('eme_default_contact_person');
-   if ($contact_id == -1)
+   if ($contact_id < 1)
       $contact_id = $event['event_author'];
    $userinfo=get_userdata($contact_id);
    return $userinfo;
