@@ -420,7 +420,7 @@ function eme_update_phone($person,$phone) {
    global $wpdb; 
    $people_table = $wpdb->prefix.PEOPLE_TBNAME;
    $phone = eme_sanitize_request($phone);
-   $sql = "UPDATE $people_table SET person_phone=$phone WHERE person_id=".$person['person_id'].";";
+   $sql = "UPDATE $people_table SET person_phone='$phone' WHERE person_id=".$person['person_id'].";";
    $wpdb->query($sql);
 
    if (!is_null($person['wp_id']) && $person['wp_id']) {
