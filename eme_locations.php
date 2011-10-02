@@ -472,9 +472,13 @@ function eme_get_locations($eventful = false, $scope="all", $category = '', $off
                $this_location['location_category_ids'] = $event['location_category_ids'];
                $this_location['location_url'] = $event['location_url'];
                $this_location['location_slug'] = $event['location_slug'];
-               $locations[$location_id]=$this_location;
+               // the key is based on the location name first and the location id (if different locations have the same name)
+               // using this method we can then sort on the name
+               $locations[$this_location['location_name'].$location_id]=$this_location;
             }
          }
+         // sort on the key (name/id pair)
+         ksort($locations);
       }
    } else {
       $conditions = array ();
