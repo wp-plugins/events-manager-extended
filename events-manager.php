@@ -218,6 +218,7 @@ add_filter('eme_notes', 'wpautop');
 add_filter('eme_notes', 'prepend_attachment');
 // RSS general filters
 add_filter('eme_general_rss', 'wp_strip_all_tags');
+add_filter('eme_general_rss', 'convert_chars', 8);
 add_filter('eme_general_rss', 'ent2ncr', 8);
 //add_filter('eme_general_rss', 'esc_html');
 // RSS content filter
