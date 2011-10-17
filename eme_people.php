@@ -233,7 +233,7 @@ function eme_printable_booking_report($event_id) {
 function eme_people_table($message="") {
    $persons = eme_get_persons();
    $destination = admin_url("admin.php?page=events-manager-people");
-   if (count($people) < 1 ) {
+   if (count($persons) < 1 ) {
       _e("No people have responded to your events yet!", 'eme');
    } else { 
       $result = "<p>".__('This table shows the data about the people who responded to your events', 'eme')."</p>"; 
@@ -349,6 +349,7 @@ function eme_get_persons($person_ids="") {
       $sql = "SELECT *  FROM $people_table";
    }
    $lines = $wpdb->get_results($sql, ARRAY_A);
+   $result = array();
    foreach ($lines as $line) {
       if (!is_null($line['wp_id']) && $line['wp_id']) {
          $user_info = get_userdata($line['wp_id']);
@@ -398,7 +399,7 @@ function eme_phone_field($user) {
       <tr>
          <th><label for="eme_phone"><?php _e('Phone number','eme');?></label></th>
          <td><input type="text" name="eme_phone" id="eme_phone" value="<?php echo $eme_phone; ?>" class="regular-text" /> <br />
-         <?php _e('The phone number used by Events Manager Extended when the user is indicated as the contact person for an event.','eme');?></td>
+         <?php _e('The phone number used by Events Made Easy when the user is indicated as the contact person for an event.','eme');?></td>
       </tr>
    </table>
    <?php
