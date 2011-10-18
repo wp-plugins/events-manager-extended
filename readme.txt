@@ -603,6 +603,8 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Improvement: some rsvp info remains entered now if the user enters a wrong captcha
 * Improvement: updated German translation (thanks to Jorgo Ananiadis)
 * Improvement: locations are now also sorted alphabetically when using the eventfull option
+* Improvement: email body text can now contain qtranslate calls as well
+* Improvement: the paypal form now also shows that the registration was successfull
 * API change: eme_insert_recurrent_event renamed to eme_db_insert_recurrence (old function exists for backwards compatibility)
 * API change: eme_update_recurrence renamed to eme_db_update_recurrence (old function exists for backwards compatibility)
 * API change: function eme_db_update_event now takes the event_id as the second parameter (you can still use the where-array method directly, made it backwards compatible)
