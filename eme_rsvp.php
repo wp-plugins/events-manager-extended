@@ -45,17 +45,18 @@ function eme_add_booking_form($event_id) {
    $event_start_datetime = strtotime($event['event_start_date']." ".$event['event_start_time']);
    if (time()+$event['rsvp_number_days']*60*60*24 > $event_start_datetime ) {
       $ret_string = "";
-      $ret_string = "<div id='eme-rsvp-message'>";
       if(!empty($form_add_message))
          $ret_string .= "<div class='eme-rsvp-message'>$form_add_message</div>";
       if(!empty($form_error_message))
          $ret_string .= "<div class='eme-rsvp-message'>$form_error_message</div>";
-      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div></div>";
+      return $ret_string."<div class='eme-rsvp-message'>".__('Bookings no longer allowed on this date.', 'eme')."</div>";
    }
 
    # you did a successfull registration, so now we decide wether to show the form again, or the paypal form
    if(!empty($form_add_message) && empty($form_error_message) && $event['use_paypal']) {
-      return eme_paypal_form($event,$booking_id_done);
+      $ret_string = "<div class='eme-rsvp-message'>$form_add_message</div>";
+      $ret_string .= eme_paypal_form($event,$booking_id_done);
+      return $ret_string;
    }
 
    // you can book the available number of seats, with a max of 10 per time
