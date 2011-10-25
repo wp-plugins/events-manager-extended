@@ -623,3 +623,4 @@ At this stage, Events Manager Extended is only available in English and Italian.
 * Bugfix: the capability for adding events in draft wasn't working ok
 * Bugfix: when paypal was active, rsvp field validation results were ignored
 * Bugfix: ampersand character in event title breaks RSS feed
+* Bugfix: make sure that we apply the the_content filter only once

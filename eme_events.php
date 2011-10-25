@@ -730,11 +730,17 @@ function eme_events_count_for($date) {
 }
 
 // filter function to call the event page when appropriate
+// we need to make sure we do this only once. Reason being: other plugins can call the_content as well
+// Suppose you add a shortcode from another plugin to the detail part of an event and that other plugin
+// calls apply_filter('the_content'), then this would cause recursion since that call would call our filter again
+$eme_event_parsed=0;
 function eme_filter_events_page($data) {
+   global $eme_event_parsed;
    // we change the content of the page only if we're "in the loop",
    // otherwise this filter also gets applied if e.g. a widget calls
    // the_content or the_excerpt to get the content of a page
-   if (in_the_loop() && eme_is_events_page()) {
+   if (in_the_loop() && eme_is_events_page() && !$eme_event_parsed) {
+      $eme_event_parsed=1;
       return eme_events_page_content ();
    } else {
       return $data;
