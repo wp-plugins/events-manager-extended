@@ -1751,9 +1751,9 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
          $offset";
    $wpdb->show_errors = true;
    $events = $wpdb->get_results ( $sql, ARRAY_A );
+   $inflated_events = array ();
    if (! empty ( $events )) {
       //$wpdb->print_error(); 
-      $inflated_events = array ();
       foreach ( $events as $this_event ) {
          if ($this_event ['event_status'] == STATUS_PRIVATE && !is_user_logged_in()) {
             continue;
@@ -1776,10 +1776,8 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
          array_push ( $inflated_events, $this_event );
       }
       if (has_filter('eme_event_list_filter')) $inflated_events=apply_filters('eme_event_list_filter',$inflated_events);
-      return $inflated_events;
-   } else {
-      return null;
    }
+   return $inflated_events;
 }
 
 function eme_get_event($event_id) {
