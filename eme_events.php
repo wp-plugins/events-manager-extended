@@ -1591,7 +1591,7 @@ function eme_get_events($o_limit, $scope = "future", $order = "ASC", $o_offset =
       else
          $conditions [] = " (event_start_date = '$today')";
    } elseif ($scope == "tomorrow") {
-      $tomorrow = date("Y-m-d",strtotime($today, "+1 day"));
+      $tomorrow = date("Y-m-d",strtotime($today)+86400);
       if ($show_ongoing)
          $conditions [] = " (event_start_date = '$tomorrow' OR (event_start_date <= '$tomorrow' AND event_end_date >= '$tomorrow'))";
       else
