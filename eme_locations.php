@@ -980,7 +980,7 @@ function eme_replace_locations_placeholders($format, $location, $target="html", 
          else 
             $replacement = apply_filters('eme_general_rss', $replacement); 
 
-      } elseif (preg_match('/#_(NAME|LOCATIONNAME)$/', $result)) {
+      } elseif (preg_match('/#_(NAME|LOCATIONNAME|LOCATION)$/', $result)) {
          $field = "location_name";
          if (isset($location[$field]))
             $replacement = $location[$field];

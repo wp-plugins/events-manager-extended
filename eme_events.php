@@ -3336,6 +3336,7 @@ Weblog Editor 2.0
          echo "<item>\n";
          echo "<title>$title</title>\n";
          echo "<link>$event_link</link>\n";
+         echo "<pubDate>".date_i18n ('D, d M Y H:i:s +0000', strtotime($event['modif_date_gmt']))."</pubDate>\n";
          echo "<description>$description</description>\n";
          if (get_option('eme_categories_enabled')) {
             $categories = eme_replace_placeholders ( "#_CATEGORIES", $event, "rss" );
