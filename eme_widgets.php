@@ -10,7 +10,7 @@ class WP_Widget_eme_list extends WP_Widget {
       extract($args);
       //$title = apply_filters('widget_title', empty( $instance['title'] ) ? __( 'Events','eme' ) : $instance['title'], $instance, $this->id_base);
       $title = apply_filters('widget_title', $instance['title'], $instance, $this->id_base);
-      $limit = empty( $instance['limit'] ) ? 5 : $instance['limit'];
+      $limit = isset( $instance['limit'] ) ? intval($instance['limit']) : 5;
       $scope = empty( $instance['scope'] ) ? 'future' : $instance['scope'];
       $showperiod = empty( $instance['showperiod'] ) ? '' : $instance['showperiod'];
       $order = empty( $instance['order'] ) ? 'ASC' : $instance['order'];
@@ -29,8 +29,8 @@ class WP_Widget_eme_list extends WP_Widget {
          echo $before_title . $title . $after_title;
 
       $events_list = eme_get_events_list($limit,$scope,$order,$format,false,$category,$showperiod,$author);
-      if ($events_list == __('No events', 'eme'))
-         echo "<ul><li>$events_list</li></ul>";
+      if ($events_list == get_option('eme_no_events_message' ))
+         echo $events_list;
       else
          echo $header.$events_list.$footer;
       echo $after_widget;
@@ -38,12 +38,8 @@ class WP_Widget_eme_list extends WP_Widget {
    function update( $new_instance, $old_instance ) {
       $instance = $old_instance;
       $instance['title'] = strip_tags($new_instance['title']);
-      $instance['limit'] = $new_instance['limit'];
-      if ( in_array( $new_instance['scope'], array( 'future', 'all', 'past' ) ) ) {
-         $instance['scope'] = $new_instance['scope'];
-      } else {
-         $instance['scope'] = 'future';
-      }
+      $instance['limit'] = intval($new_instance['limit']);
+      $instance['scope'] = $new_instance['scope'];
       if ( in_array( $new_instance['showperiod'], array( 'daily', 'monthly', 'yearly' ) ) ) {
          $instance['showperiod'] = $new_instance['showperiod'];
       } else {
@@ -65,7 +61,7 @@ class WP_Widget_eme_list extends WP_Widget {
       //Defaults
       $instance = wp_parse_args( (array) $instance, array( 'limit' => 5, 'scope' => 'future', 'order' => 'ASC', 'format' => DEFAULT_WIDGET_EVENT_LIST_ITEM_FORMAT, 'authorid' => '' ) );
       $title = isset($instance['title']) ? esc_attr($instance['title']) : '';
-      $limit = empty( $instance['limit'] ) ? 5 : eme_sanitize_html($instance['limit']);
+      $limit = isset( $instance['limit'] ) ? intval($instance['limit']) : 5;
       $scope = empty( $instance['scope'] ) ? 'future' : eme_sanitize_html($instance['scope']);
       $showperiod = empty( $instance['showperiod'] ) ? '' : eme_sanitize_html($instance['showperiod']);
       $order = empty( $instance['order'] ) ? 'ASC' : eme_sanitize_html($instance['order']);
@@ -85,12 +81,8 @@ class WP_Widget_eme_list extends WP_Widget {
     <input type="text" id="<?php echo $this->get_field_id('limit'); ?>" name="<?php echo $this->get_field_name('limit'); ?>" value="<?php echo $limit;?>" />
   </p>
   <p>
-    <label for="<?php echo $this->get_field_id('scope'); ?>"><?php _e('Scope of the events','eme'); ?>:</label><br />
-   <select id="<?php echo $this->get_field_id('scope'); ?>" name="<?php echo $this->get_field_name('scope'); ?>">
-         <option value="future" <?php selected( $scope, 'future' ); ?>><?php _e('Future events','eme'); ?></option>
-         <option value="all" <?php selected( $scope, 'all' ); ?>><?php _e('All events','eme'); ?></option>
-         <option value="past" <?php selected( $scope, 'past' ); ?>><?php _e('Past events','eme'); ?></option>
-    </select>
+    <label for="<?php echo $this->get_field_id('scope'); ?>"><?php _e('Scope of the events','eme'); ?><br /><?php _e('(See the doc for &#91;events_list] for all possible values)'); ?>:</label><br />
+    <input type="text" id="<?php echo $this->get_field_id('scope'); ?>" name="<?php echo $this->get_field_name('scope'); ?>" value="<?php echo $scope;?>" />
   </p>
   <p>
     <label for="<?php echo $this->get_field_id('showperiod'); ?>"><?php _e('Show events per period','eme'); ?>:</label><br />

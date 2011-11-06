@@ -88,6 +88,9 @@ p#recurrence_warning {
 	font-weight: bold;
 	padding: 5px;
 }
+input#event_url {
+	width: 100%
+}
 div#icon-events{
 	background:url('images/calendar-32.png') no-repeat center;
 }
@@ -109,6 +112,21 @@ table#eme-location-data th {
 	font-size: 95%;  
 	line-height: 100%;
    margin-bottom: 1em;
+}
+/* this one influences the map appearance in the admin backend when editing events */
+div#eme-admin-map-not-found {
+   width: 400px;
+   font-size: 140%;
+   text-align: center;
+   margin-top: 100px;
+   display: hide;
+}
+div#eme-admin-location-map {
+   background: green;
+   width: 400px;
+   height: 300px;
+   display: hide;
+   margin-right: 8px;
 }
 /* for google maps to work ok in IE, we need at least 690px as max-width for the images */
 #eme_global_map img,

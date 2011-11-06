@@ -306,12 +306,6 @@ function eme_get_calendar($args="") {
          if ($event ['event_status'] == STATUS_PRIVATE && !is_user_logged_in()) {
             continue;
          }
-         if ($event ['location_id'] ) {
-            $this_location = eme_get_location ( $event ['location_id'] );
-            $event ['location_name'] = $this_location ['location_name'];
-            $event ['location_address'] = $this_location ['location_address'];
-            $event ['location_town'] = $this_location ['location_town'];
-         }
 
          if( $long_events ) {
             //If $long_events is set then show a date as eventful if there is an multi-day event which runs during that day
@@ -450,8 +444,8 @@ add_action('wp_footer', 'eme_ajaxize_calendar');
 
 function eme_filter_calendar_ajax() {
    if(isset($_GET['eme_ajaxCalendar']) && $_GET['eme_ajaxCalendar'] == true) {
-      (isset($_GET['full']) && $_GET['full'] == 1) ? $full = 1 : $full = 0;
-      (isset($_GET['long_events']) && $_GET['long_events'] == 1) ? $long_events = 1 : $long_events = 0;
+      (isset($_GET['full']) && $_GET['full']) ? $full = 1 : $full = 0;
+      (isset($_GET['long_events']) && $_GET['long_events']) ? $long_events = 1 : $long_events = 0;
       (isset($_GET['category'])) ? $category = $_GET['category'] : $category = 0;
       (isset($_GET['calmonth'])) ? $month = eme_sanitize_request($_GET['calmonth']) : $month = ''; 
       (isset($_GET['calyear'])) ? $year = eme_sanitize_request($_GET['calyear']) : $year = ''; 

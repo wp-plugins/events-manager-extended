@@ -13,7 +13,10 @@ function eme_attributes_form($event) {
       get_option('eme_small_calendar_event_title_format' ).
       get_option('eme_single_location_format' ).
       get_option('eme_contactperson_email_body' ).
-      get_option('eme_respondent_email_body' );
+      get_option('eme_respondent_email_body' ).
+      get_option('eme_registration_pending_email_body' ).
+      get_option('eme_registration_denied_email_body' ).
+      get_option('eme_registration_cancelled_email_body' );
       #get_option('eme_location_baloon_format' ).
       #get_option('eme_location_page_title_format' ).
 
@@ -69,7 +72,7 @@ function eme_attributes_form($event) {
                         <a href="#" rel="<?php echo $count ?>"><?php _e('Remove','eme'); ?></a>
                      </td>
                      <td>
-                        <input type="text" size="40" name="mtm_<?php echo $count ?>_name" value="<?php echo $value ?>" />
+                        <input type="text" size="40" name="mtm_<?php echo $count; ?>_name" value="<?php echo eme_sanitize_html($value); ?>" />
                      </td>
                   </tr>
                   <?php
@@ -90,7 +93,7 @@ function eme_attributes_form($event) {
                         <a href="#" rel="<?php echo $count ?>"><?php _e('Remove','eme'); ?></a>
                      </td>
                      <td>
-                        <input type="text" size="40" name="mtm_<?php echo $count ?>_name" value="" />
+                        <input type="text" size="40" name="mtm_<?php echo $count; ?>_name" value="" />
                      </td>
                   </tr>
                   <?php
@@ -108,12 +111,14 @@ function eme_attributes_form($event) {
             ?>
          </tbody>
       </table>
-   </div>
    <?php
    } else {
    ?>
       <p><?php _e('No attributes defined yet. If you want attributes, you first need to define/use some in the Settings page. See the section about custom attributes on the documention site for more info.','eme'); ?></p>
    <?php
    } //endif count attributes
+   ?>
+   </div>
+<?php
 }
 ?>
