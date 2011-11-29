@@ -1,4 +1,4 @@
-=== Events Manager Extended ===  
+=== Expired plugin Events Manager Extended, use Events Made Easy ===  
 Contributors: liedekef
 Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging, paypal  
@@ -9,7 +9,7 @@ Stable tag: 4.0.2
 Manage and display events. Includes recurring events; locations; widgets; Google maps; RSVP; ICAL and RSS feeds; PAYPAL support. SEO compatible.
              
 == Description ==
-This is the last version of 'Events Manager Extended'. The next version will have a new name, called 'Events Made Easy'. In order to switch: deactivate 'Events Manager Extended' and download and install 'Events Made Easy', all your events will be converted to the new plugin.
+This is the last version of 'Events Manager Extended'. The next version has a new name, called 'Events Made Easy'. In order to switch: deactivate 'Events Manager Extended' and download and install 'Events Made Easy', all your events will be converted to the new plugin.
 Events Manager Extended is a full-featured event management solution for Wordpress. Events Manager Extended supports public, private, draft and recurring events, locations management, RSVP (+ approval if wanted) and maps. With Events Manager Extended you can plan and publish your event, or let people reserve spaces for your weekly meetings. You can add events list, calendars and description to your blog using multiple sidebar widgets or shortcodes; if you are a web designer you can simply employ the template tags provided by Events Manager Extended. 
 
 Events Manager Extended (EME) is a fork (NOT an extension) of the older Events Manager (EM) version 2.2.2 (April 2010). After months, the original plugin came back to life with a new codebase, but I added so much features already that it is very hard to go back to being one plugin. Read here for the differences since 2.2.2: http://www.e-dynamics.be/wordpress/?page_id=2 
