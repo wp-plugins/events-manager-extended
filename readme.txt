@@ -1,4 +1,4 @@
-=== Expired plugin Events Manager Extended, use Events Made Easy ===  
+=== Expired plugin, use Events Made Easy ===  
 Contributors: liedekef
 Donate link: http://www.e-dynamics.be/wordpress
 Tags: events, manager, booking, calendar, gigs, concert, maps, geotagging, paypal  
